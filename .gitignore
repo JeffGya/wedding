@@ -1,0 +1,6 @@
+# .gitignore
+node_modules/
+.env
+apps/backend/database.sqlite
+dist/
+.vscode/
