@@ -33,7 +33,13 @@ const routes = [
         children: [
           { path: 'overview', name: 'admin-guests-overview', component: () => import('@/views/admin/guests/Overview.vue') },
           { path: 'rsvps', name: 'admin-guests-rsvps', component: () => import('@/views/admin/guests/RSVPs.vue') },
-          { path: 'messages', name: 'admin-guests-messages', component: () => import('@/views/admin/guests/Messages.vue') },
+          {
+            path: 'messages',
+            name: 'admin-guests-messages',
+            component: () => import('@/views/admin/guests/Messages.vue'),
+          },
+          { path: 'messages/new', name: 'admin-guests-messages-new', component: () => import('@/views/admin/guests/MessageCreate.vue') },
+          { path: 'messages/:id', name: 'admin-guests-messages-detail', component: () => import('@/views/admin/guests/MessageDetail.vue') },
         ]
       }
     ]
