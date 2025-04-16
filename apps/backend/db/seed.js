@@ -139,8 +139,38 @@ function seedDatabase() {
               1,
               () => {
                 emailSettingsInsert.finalize(() => {
-                  console.log('Email settings seeded successfully.');
-                  db.close();
+                  const templatesInsert = db.prepare(`INSERT INTO templates (name, subject, body_en, body_lt) VALUES (?, ?, ?, ?)`);
+                  templatesInsert.run(
+                    'Default Bilingual Template',
+                    'Default Template Subject',
+                    '<html><body><p>Hello {{ name }} from {{ groupLabel }}!</p><p>Please RSVP using this link: {{ rsvpLink }}</p></body></html>',
+                    '<html><body><p>Sveiki {{ name }} iš {{ groupLabel }}!</p><p>Prašome atsakyti į kvietimą naudodamiesi šia nuoroda: {{ rsvpLink }}</p></body></html>'
+                  );
+                  templatesInsert.finalize(() => {
+                    console.log('Templates seeded successfully.');
+                    const messagesInsert = db.prepare(`INSERT INTO messages (subject, body_en, body_lt, status) VALUES (?, ?, ?, ?)`);
+                    messagesInsert.run(
+                      'Save the Date – English',
+                      '<p>Hello {{ name }}, save the date! 🎉</p>',
+                      '<p>Sveiki {{ name }}, išsisaugok datą! 🎉</p>',
+                      'draft',
+                      () => {
+                        messagesInsert.finalize(() => {
+                          console.log('Messages seeded successfully.');
+                          const recipientsInsert = db.prepare(`INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))`);
+
+                          recipientsInsert.run(1, 1, 'sent', 'jeffrey@example.com', 'en');
+                          recipientsInsert.run(1, 2, 'failed', 'john@example.com', 'en');
+                          recipientsInsert.run(1, 3, 'pending', 'alice@example.com', 'lt');
+
+                          recipientsInsert.finalize(() => {
+                            console.log('Recipients seeded successfully.');
+                            db.close();
+                          });
+                        });
+                      }
+                    );
+                  });
                 });
               }
             );
@@ -153,9 +183,10 @@ function seedDatabase() {
 
             const guestInsert = db.prepare(`INSERT INTO guests (
               group_id, group_label, name, email, code,
-              can_bring_plus_one, num_kids
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)`);
+              can_bring_plus_one, num_kids, preferred_language
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
 
+            const languages = ['en', 'lt'];
             const insertNext = (i = 0) => {
               if (i >= groupData.guests.length) {
                 guestInsert.finalize(() => {
@@ -165,6 +196,7 @@ function seedDatabase() {
               }
 
               const guest = groupData.guests[i];
+              const preferredLanguage = guest.preferred_language || languages[Math.floor(Math.random() * languages.length)];
               guestInsert.run(
                 groupData.groupId,
                 groupData.groupLabel,
@@ -173,6 +205,7 @@ function seedDatabase() {
                 code,
                 guest.can_bring_plus_one || 0,
                 guest.num_kids || 0,
+                preferredLanguage,
                 () => insertNext(i + 1)
               );
             };

@@ -40,6 +40,9 @@ const emailSettingsRoutes = require('./routes/emailSettings');
 // Email settings route for sending and saving provider settings
 app.use('/api/settings/email', emailSettingsRoutes);
 
+const messageRoutes = require('./routes/messages');
+app.use('/api/messages', messageRoutes); // Added messages route
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
