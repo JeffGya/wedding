@@ -148,13 +148,21 @@ function seedDatabase() {
                   );
                   templatesInsert.finalize(() => {
                     console.log('Templates seeded successfully.');
-                    const messagesInsert = db.prepare(`INSERT INTO messages (subject, body_en, body_lt, status) VALUES (?, ?, ?, ?)`);
+                    const messagesInsert = db.prepare(`INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`);
                     messagesInsert.run(
-                      'Save the Date – English',
+                      'Save the Date – Scheduled',
                       '<p>Hello {{ name }}, save the date! 🎉</p>',
                       '<p>Sveiki {{ name }}, išsisaugok datą! 🎉</p>',
-                      'draft',
+                      'scheduled',
+                      '2025-05-01T12:00:00Z',
                       () => {
+                        messagesInsert.run(
+                          'Save the Date – Draft Only',
+                          '<p>Just a draft for now.</p>',
+                          '<p>Kol kas tik juodraštis.</p>',
+                          'draft',
+                          null
+                        );
                         messagesInsert.finalize(() => {
                           console.log('Messages seeded successfully.');
                           const recipientsInsert = db.prepare(`INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))`);

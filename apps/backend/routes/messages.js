@@ -8,11 +8,21 @@ router.use(requireAuth);
 
 // Create a new draft message
 router.post('/', (req, res) => {
-  const { subject, body_en, body_lt } = req.body;
-  const sql = `INSERT INTO messages (subject, body_en, body_lt, status) VALUES (?, ?, ?, 'draft')`;
+  const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
+  const scheduledForFinal = status === 'scheduled' ? scheduledAt : null;
+  console.log('🧪 Incoming message payload:', req.body);
+  console.log('📅 Final scheduled_for value:', scheduledForFinal);
+  const sql = `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`;
 
-  db.run(sql, [subject, body_en, body_lt], function (err) {
+  db.run(sql, [subject, body_en, body_lt, status, scheduledForFinal], function (err) {
     if (err) return res.status(500).json({ success: false, error: err.message });
+    console.log('✅ Message created with ID:', this.lastID);
+    if (status === 'scheduled') {
+      console.log('⏰ Scheduled for:', scheduledAt);
+    }
+    if (recipients && recipients.length) {
+      console.log('📩 Will be sent to recipient IDs:', recipients);
+    }
     res.json({ success: true, id: this.lastID });
   });
 });

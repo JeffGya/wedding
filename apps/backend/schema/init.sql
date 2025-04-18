@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS messages (
   body_en TEXT NOT NULL,
   body_lt TEXT,
   status TEXT NOT NULL DEFAULT 'draft', -- draft, scheduled, sent
-  scheduled_for DATETIME,
+  scheduled_for DATETIME, -- only used when status is 'scheduled'
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
