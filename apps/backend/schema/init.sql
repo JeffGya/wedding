@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS message_recipients (
   guest_id INTEGER NOT NULL,
   email TEXT, -- actual email used at send-time
   language TEXT DEFAULT 'en', -- language used at send-time
-  delivery_status TEXT DEFAULT 'pending',
+  delivery_status TEXT DEFAULT 'pending', -- 'pending' when message is created; updated on delivery attempt
   delivery_error TEXT,
   status TEXT DEFAULT 'pending', -- pending, sent, failed
   error_message TEXT,

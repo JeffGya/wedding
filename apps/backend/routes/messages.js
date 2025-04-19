@@ -22,6 +22,12 @@ router.post('/', (req, res) => {
     }
     if (recipients && recipients.length) {
       console.log('📩 Will be sent to recipient IDs:', recipients);
+      const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status) VALUES (?, ?, 'pending')`;
+      for (const guestId of recipients) {
+        db.run(insertRecipientSql, [this.lastID, guestId], err => {
+          if (err) console.error('❌ Failed to insert recipient:', guestId, err.message);
+        });
+      }
     }
     res.json({ success: true, id: this.lastID });
   });
@@ -78,17 +84,30 @@ router.get('/:id', (req, res) => {
   db.get(sql, [req.params.id], (err, row) => {
     if (err) return res.status(500).json({ success: false, error: err.message });
     if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
-    res.json({ success: true, message: row });
+
+    const status = row.status;
+    const recipientTable = (status === 'draft' || status === 'scheduled')
+      ? 'message_recipients'
+      : 'message_logs';
+
+    const recipientSql = `SELECT guest_id FROM message_recipients WHERE message_id = ?`;
+    db.all(recipientSql, [req.params.id], (err, recipients) => {
+      if (err) return res.status(500).json({ success: false, error: err.message });
+
+      const recipientIds = recipients.map(r => r.guest_id);
+      console.log('📬 Returning recipient IDs with message:', recipientIds);
+      res.json({ success: true, message: { ...row, recipients: recipientIds } });
+    });
   });
 });
 
 // Update a draft message
 router.put('/:id', (req, res) => {
-  const { subject, body_en, body_lt } = req.body;
+  const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
 
   // Basic validation
   if (!subject || !body_en || !body_lt) {
-    return res.status(400).json({ success: false, error: 'All fields are required' });
+    return res.status(400).json({ success: false, error: 'subject, body_en, and body_lt are required' });
   }
 
   // First, check if message exists and is a draft
@@ -96,21 +115,66 @@ router.put('/:id', (req, res) => {
   db.get(checkSql, [req.params.id], (err, row) => {
     if (err) return res.status(500).json({ success: false, error: err.message });
     if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
-    if (row.status !== 'draft') {
-      return res.status(400).json({ success: false, error: 'Only draft messages can be updated' });
+    if (row.status === 'sent') {
+      return res.status(400).json({ success: false, error: 'Sent messages cannot be updated' });
     }
 
-    // Proceed to update
-    const sql = `UPDATE messages SET subject = ?, body_en = ?, body_lt = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+    // Validate status change
+    const newStatus = status === 'scheduled' ? 'scheduled' : 'draft';
+    let scheduled_for = null;
 
-    db.run(sql, [subject, body_en, body_lt, req.params.id], function (err) {
+    if (newStatus === 'scheduled') {
+      if (!scheduledAt) {
+        return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages' });
+      }
+
+      const date = new Date(scheduledAt);
+      if (isNaN(date.getTime())) {
+        return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime' });
+      }
+      if (date < new Date()) {
+        return res.status(400).json({ success: false, error: 'Scheduled time must be in the future' });
+      }
+
+      scheduled_for = date.toISOString();
+    }
+
+    const updateSql = `
+      UPDATE messages 
+      SET subject = ?, body_en = ?, body_lt = ?, status = ?, scheduled_for = ?, updated_at = CURRENT_TIMESTAMP 
+      WHERE id = ?
+    `;
+    db.run(updateSql, [subject, body_en, body_lt, newStatus, scheduled_for, req.params.id], function (err) {
       if (err) return res.status(500).json({ success: false, error: err.message });
 
-      // Return updated message
+      // Update recipients if provided
+      if (Array.isArray(recipients)) {
+        const deleteSql = `DELETE FROM message_recipients WHERE message_id = ?`;
+        db.run(deleteSql, [req.params.id], function (err) {
+          if (err) console.error('❌ Failed to clear old recipients:', err.message);
+
+          const insertSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status) VALUES (?, ?, 'pending')`;
+          for (const guestId of recipients) {
+            db.run(insertSql, [req.params.id, guestId], err => {
+              if (err) console.error('❌ Failed to insert recipient:', guestId, err.message);
+            });
+          }
+        });
+      }
+
+      // Fetch updated message
       const fetchSql = `SELECT * FROM messages WHERE id = ?`;
       db.get(fetchSql, [req.params.id], (err, updatedRow) => {
         if (err) return res.status(500).json({ success: false, error: err.message });
-        res.json({ success: true, message: updatedRow });
+
+        // Return recipients too
+        const recipientSql = `SELECT guest_id FROM message_recipients WHERE message_id = ?`;
+        db.all(recipientSql, [req.params.id], (err, recipients) => {
+          if (err) return res.status(500).json({ success: false, error: err.message });
+
+          const recipientIds = recipients.map(r => r.guest_id);
+          res.json({ success: true, message: { ...updatedRow, recipients: recipientIds } });
+        });
       });
     });
   });

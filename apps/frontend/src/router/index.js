@@ -39,7 +39,8 @@ const routes = [
             component: () => import('@/views/admin/guests/Messages.vue'),
           },
           { path: 'messages/new', name: 'admin-guests-messages-new', component: () => import('@/views/admin/guests/MessageCreate.vue') },
-          { path: 'messages/:id', name: 'admin-guests-messages-detail', component: () => import('@/views/admin/guests/MessageDetail.vue') },
+          { path: 'messages/:id(\\d+)', name: 'admin-guests-messages-detail', component: () => import('@/views/admin/guests/MessageDetail.vue') },
+          { path: 'messages/:id(\\d+)/edit', name: 'admin-guests-messages-edit', component: () => import('@/views/admin/guests/MessageCreate.vue') },
         ]
       }
     ]

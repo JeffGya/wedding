@@ -22,7 +22,7 @@
       <input
         id="subject"
         type="text"
-        v-model="subject"
+        v-model="form.subject"
         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
     </div>
@@ -45,11 +45,11 @@
 
       <div v-show="tab === 'en'">
         <label class="block text-sm font-medium text-gray-700">Message (EN)</label>
-        <RichTextEditor v-model="bodyEn" />
+        <RichTextEditor v-model="form.bodyEn" />
       </div>
       <div v-show="tab === 'lt'">
         <label class="block text-sm font-medium text-gray-700">Message (LT)</label>
-        <RichTextEditor v-model="bodyLt" />
+        <RichTextEditor v-model="form.bodyLt" />
       </div>
     </div>
 
@@ -62,13 +62,17 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 
 const props = defineProps({
   templates: {
     type: Array,
     default: () => [],
+  },
+  message: {
+    type: Object,
+    default: null,
   },
 })
 
@@ -81,9 +85,11 @@ const emit = defineEmits([
 const selectedTemplateId = ref('')
 const tab = ref('en')
 
-const subject = ref('')
-const bodyEn = ref('')
-const bodyLt = ref('')
+const form = reactive({
+  subject: '',
+  bodyEn: '',
+  bodyLt: '',
+})
 
 const activeTabClasses = 'px-4 py-2 rounded bg-blue-600 text-white'
 const inactiveTabClasses = 'px-4 py-2 rounded bg-gray-200 text-gray-800'
@@ -91,26 +97,43 @@ const inactiveTabClasses = 'px-4 py-2 rounded bg-gray-200 text-gray-800'
 function loadTemplate() {
   const selected = props.templates.find(t => t.id === parseInt(selectedTemplateId.value))
   if (selected) {
-    const hasExistingContent = subject.value || bodyEn.value || bodyLt.value
+    const hasExistingContent = form.subject || form.bodyEn || form.bodyLt
     const confirmOverwrite = !hasExistingContent || window.confirm('This will replace your current message content. Continue?')
     if (confirmOverwrite) {
-      subject.value = selected.subject || ''
-      bodyEn.value = selected.body_en || ''
-      bodyLt.value = selected.body_lt || ''
+      form.subject = selected.subject || ''
+      form.bodyEn = selected.body_en || ''
+      form.bodyLt = selected.body_lt || ''
     }
   }
 }
 
+watch(() => props.message, (newMsg) => {
+  if (newMsg) {
+    form.subject = newMsg.subject || ''
+    form.bodyEn = newMsg.body_en || ''
+    form.bodyLt = newMsg.body_lt || ''
+  }
+}, { immediate: true })
+
 const getData = () => ({
-  subject: subject.value,
-  body_en: bodyEn.value,
-  body_lt: bodyLt.value,
+  subject: form.subject,
+  body_en: form.bodyEn,
+  body_lt: form.bodyLt,
 })
 
-console.log('🔍 getData() called')
-console.log('✏️ Subject:', subject.value)
-console.log('📝 Body EN:', bodyEn.value)
-console.log('📝 Body LT:', bodyLt.value)
+const setData = ({ subject, body_en, body_lt }) => {
+  form.subject = subject || ''
+  form.bodyEn = body_en || ''
+  form.bodyLt = body_lt || ''
+}
 
-defineExpose({ getData })
+console.log('🔍 getData() called')
+console.log('✏️ Subject:', form.subject)
+console.log('📝 Body EN:', form.bodyEn)
+console.log('📝 Body LT:', form.bodyLt)
+
+defineExpose({
+  getData,
+  setData,
+})
 </script>

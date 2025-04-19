@@ -139,9 +139,14 @@ const allSelected = computed(() => {
          filteredGuests.value.every(g => selectedGuests.value.includes(g.id))
 })
 
+const setSelectedGuestIds = (ids) => {
+  selectedGuests.value = Array.isArray(ids) ? ids : []
+}
+
 defineExpose({
   selectedGuests,
-  getSelectedGuestIds: () => selectedGuests.value
+  getSelectedGuestIds: () => selectedGuests.value,
+  setSelectedGuestIds
 })
 </script>
 

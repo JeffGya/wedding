@@ -28,6 +28,14 @@
           >
             {{ msg.status }}
           </span>
+          <RouterLink
+            v-if="msg.status === 'draft' || msg.status === 'scheduled'"
+            :to="`/admin/guests/messages/${msg.id}/edit`"
+            class="text-sm text-blue-600 hover:underline ml-4"
+            @click.stop
+          >
+            Edit
+          </RouterLink>
         </div>
         <p class="text-gray-500 text-sm">Created: {{ formatDate(msg.created_at) }}</p>
         <p class="text-gray-500 text-sm">Updated: {{ formatDate(msg.updated_at) }}</p>
