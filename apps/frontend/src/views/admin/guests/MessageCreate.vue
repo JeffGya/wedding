@@ -8,6 +8,7 @@
         <!-- Will mount MessageComposer.vue here -->
         <MessageComposer
           ref="composerRef"
+          :templates="templates"
           @save="() => handleComposerAction('draft')"
           @schedule="() => handleComposerAction('scheduled')"
           @send-now="() => handleComposerAction('sent')"
@@ -52,6 +53,7 @@ const composerRef = ref(null)
 const recipientsRef = ref(null)
 const scheduledAt = ref(null)
 const actionTypeBeingHandled = ref(null)
+const templates = ref([])
 
 const route = useRoute()
 const isEditMode = ref(false)
@@ -159,6 +161,15 @@ const handleComposerAction = async (actionType) => {
 onMounted(async () => {
   const id = route.params.id
   console.log('🧭 Checking for edit mode. Route ID:', id)
+
+  try {
+    const templateRes = await axios.get('/api/templates')
+    templates.value = templateRes.data.templates || []
+    console.log('📋 Loaded templates:', templates.value)
+  } catch (err) {
+    console.error('❌ Failed to load templates:', err)
+    toast.error('Failed to load templates.')
+  }
 
   if (id) {
     isEditMode.value = true

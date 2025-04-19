@@ -43,6 +43,12 @@ app.use('/api/settings/email', emailSettingsRoutes);
 const messageRoutes = require('./routes/messages');
 app.use('/api/messages', messageRoutes); // Added messages route
 
+const templateRoutes = require('./routes/templates');
+app.use('/api/templates', (req, res, next) => {
+  console.log('📥 Incoming request to /api/templates');
+  return templateRoutes(req, res, next);
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

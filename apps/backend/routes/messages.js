@@ -5,6 +5,10 @@ const requireAuth = require('../middleware/auth');
 
 // Protect all routes
 router.use(requireAuth);
+router.use((req, res, next) => {
+  console.log('🧭 Route hit:', req.method, req.originalUrl);
+  next();
+});
 
 // Create a new draft message
 router.post('/', (req, res) => {
@@ -43,16 +47,6 @@ router.get('/', (req, res) => {
   });
 });
 
-// Get all templates
-router.get('/templates', (req, res) => {
-  const sql = `SELECT * FROM templates ORDER BY created_at DESC`;
-
-  db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).json({ success: false, error: err.message });
-    res.json({ success: true, templates: rows });
-  });
-});
-
 // Create a new template
 router.post('/templates', (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
@@ -73,6 +67,39 @@ router.delete('/templates/:id', (req, res) => {
   const sql = `DELETE FROM templates WHERE id = ?`;
   db.run(sql, [req.params.id], function (err) {
     if (err) return res.status(500).json({ success: false, error: err.message });
+    res.json({ success: true });
+  });
+});
+
+// Get a single template
+router.get('/templates/:id', (req, res) => {
+  console.log('🧪 Hitting GET /templates/:id with', req.params.id);
+  const sql = `SELECT * FROM templates WHERE id = ?`;
+  db.get(sql, [req.params.id], (err, row) => {
+    if (err) return res.status(500).json({ success: false, error: err.message });
+    if (!row) return res.status(404).json({ success: false, error: 'Template not found' });
+    res.json({ success: true, template: row });
+  });
+});
+
+// Update a template
+router.put('/templates/:id', (req, res) => {
+  const { name, subject, body_en, body_lt } = req.body;
+
+  if (!name || !subject || !body_en || !body_lt) {
+    return res.status(400).json({ success: false, error: 'All fields are required' });
+  }
+
+  const sql = `
+    UPDATE templates 
+    SET name = ?, subject = ?, body_en = ?, body_lt = ?, updated_at = CURRENT_TIMESTAMP 
+    WHERE id = ?
+  `;
+  db.run(sql, [name, subject, body_en, body_lt, req.params.id], function (err) {
+    if (err) return res.status(500).json({ success: false, error: err.message });
+    if (this.changes === 0) {
+      return res.status(404).json({ success: false, error: 'Template not found' });
+    }
     res.json({ success: true });
   });
 });
