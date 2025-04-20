@@ -57,13 +57,26 @@
       <button @click="$emit('save')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save Draft</button>
       <button @click="$emit('schedule')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Schedule</button>
       <button @click="$emit('sendNow')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Send Now</button>
+      <button @click="showSaveTemplate = true" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Save as Template</button>
     </div>
+    
+    <SaveTemplateModal
+      v-if="showSaveTemplate"
+      :show="showSaveTemplate"
+      :subject="form.subject"
+      :bodyEn="form.bodyEn"
+      :bodyLt="form.bodyLt"
+      :templates="templates"
+      @close="showSaveTemplate = false"
+      @saved="handleTemplateSaved"
+    />
   </div>
 </template>
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
+import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 
 const props = defineProps({
   templates: {
@@ -84,6 +97,7 @@ const emit = defineEmits([
 
 const selectedTemplateId = ref('')
 const tab = ref('en')
+const showSaveTemplate = ref(false)
 
 const form = reactive({
   subject: '',
@@ -125,6 +139,11 @@ const setData = ({ subject, body_en, body_lt }) => {
   form.subject = subject || ''
   form.bodyEn = body_en || ''
   form.bodyLt = body_lt || ''
+}
+
+function handleTemplateSaved() {
+  // You could emit an event here or trigger a reload of templates
+  console.log('✅ Template saved')
 }
 
 console.log('🔍 getData() called')

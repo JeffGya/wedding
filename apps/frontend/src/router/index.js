@@ -29,6 +29,24 @@ const routes = [
         ]
       },
       {
+        path: 'templates',
+        name: 'admin-templates',
+        component: () => import('@/views/admin/templates/TemplateManager.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'templates/new',
+        name: 'admin-template-create',
+        component: () => import('@/views/admin/templates/TemplateForm.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'templates/:id/edit',
+        name: 'admin-template-edit',
+        component: () => import('@/views/admin/templates/TemplateForm.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
         path: 'guests',
         children: [
           { path: 'overview', name: 'admin-guests-overview', component: () => import('@/views/admin/guests/Overview.vue') },

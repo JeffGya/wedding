@@ -3,8 +3,17 @@
     <h1 class="text-4xl font-bold text-gray-800 text-center mb-6">Guest Messages</h1>
     <p class="text-gray-600 text-center mb-6">View sent and scheduled emails to guests.</p>
 
-    <div class="flex justify-end mb-4">
-      <RouterLink to="/admin/guests/messages/new" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    <div class="flex justify-between items-center mb-4">
+      <RouterLink
+        to="/admin/templates"
+        class="text-blue-600 hover:underline text-sm"
+      >
+        Manage Templates
+      </RouterLink>
+      <RouterLink
+        to="/admin/guests/messages/new"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
         + New Message
       </RouterLink>
     </div>
