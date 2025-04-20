@@ -44,10 +44,7 @@ const messageRoutes = require('./routes/messages');
 app.use('/api/messages', messageRoutes); // Added messages route
 
 const templateRoutes = require('./routes/templates');
-app.use('/api/templates', (req, res, next) => {
-  console.log('📥 Incoming request to /api/templates');
-  return templateRoutes(req, res, next);
-});
+app.use('/api/templates', templateRoutes);
 
 // Start server
 app.listen(PORT, () => {

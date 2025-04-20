@@ -14,18 +14,17 @@ router.use((req, res, next) => {
 router.post('/', (req, res) => {
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
   const scheduledForFinal = status === 'scheduled' ? scheduledAt : null;
-  console.log('🧪 Incoming message payload:', req.body);
-  console.log('📅 Final scheduled_for value:', scheduledForFinal);
+  
   const sql = `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`;
 
   db.run(sql, [subject, body_en, body_lt, status, scheduledForFinal], function (err) {
     if (err) return res.status(500).json({ success: false, error: err.message });
-    console.log('✅ Message created with ID:', this.lastID);
+    
     if (status === 'scheduled') {
-      console.log('⏰ Scheduled for:', scheduledAt);
+      
     }
     if (recipients && recipients.length) {
-      console.log('📩 Will be sent to recipient IDs:', recipients);
+      
       const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status) VALUES (?, ?, 'pending')`;
       for (const guestId of recipients) {
         db.run(insertRecipientSql, [this.lastID, guestId], err => {
@@ -122,7 +121,7 @@ router.get('/:id', (req, res) => {
       if (err) return res.status(500).json({ success: false, error: err.message });
 
       const recipientIds = recipients.map(r => r.guest_id);
-      console.log('📬 Returning recipient IDs with message:', recipientIds);
+      
       res.json({ success: true, message: { ...row, recipients: recipientIds } });
     });
   });

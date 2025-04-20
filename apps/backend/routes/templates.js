@@ -23,7 +23,6 @@ router.get('/', (req, res) => {
 
 // Get a single template
 router.get('/:id', (req, res) => {
-  console.log('🧪 Hitting GET /templates/:id with', req.params.id);
   const sql = `SELECT * FROM templates WHERE id = ?`;
   db.get(sql, [req.params.id], (err, row) => {
     if (err) return res.status(500).json({ success: false, error: err.message });

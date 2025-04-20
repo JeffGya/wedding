@@ -86,7 +86,6 @@ const onDateChange = (newValue) => {
   }
 
   scheduledAt.value = updated
-  console.log('📅 Updated scheduledAt value:', scheduledAt.value)
 }
 
 const onManualDateInput = (event) => {
@@ -96,9 +95,7 @@ const onManualDateInput = (event) => {
   const parsed = new Date(input)
   if (!isNaN(parsed)) {
     scheduledAt.value = parsed
-    console.log('📝 Manual input set scheduledAt to:', parsed)
   } else {
-    console.warn('❌ Invalid manual input for date:', input)
     toast.error('Invalid date format. Use yyyy-MM-dd HH:mm')
   }
 }
@@ -108,12 +105,6 @@ const handleComposerAction = async (actionType) => {
   const composerData = composerRef.value?.getData()
   const selectedRecipients = recipientsRef.value?.getSelectedGuestIds()
 
-  console.log('🧪 Composer Data:', composerData)
-  console.log('🧪 Selected Recipients:', selectedRecipients)
-  console.log('🧪 Is subject valid?', !!composerData?.subject)
-  console.log('🧪 Is body_en valid?', !!composerData?.body_en)
-  console.log('🧪 Are recipients valid?', selectedRecipients?.length > 0)
-
   if (!composerData?.subject || !composerData?.body_en || !selectedRecipients?.length) {
     toast.error('Please fill out the message and select at least one recipient.')
     return
@@ -121,7 +112,6 @@ const handleComposerAction = async (actionType) => {
 
   if (actionType === 'scheduled') {
     if (!scheduledAt.value) {
-      // Don’t return yet — let the UI show the picker first
       return
     }
   }
@@ -143,7 +133,6 @@ const handleComposerAction = async (actionType) => {
   }
 
   try {
-    console.log('📦 Final payload being sent:', JSON.stringify(payload, null, 2))
     if (isEditMode.value) {
       await axios.put(`/api/messages/${messageId.value}`, payload)
       toast.success("Message updated successfully!")
@@ -153,21 +142,17 @@ const handleComposerAction = async (actionType) => {
     }
     router.push('/admin/guests/messages')
   } catch (err) {
-    console.error('❌ Failed to save message:', err)
     toast.error('Failed to save message. Please try again.')
   }
 }
 
 onMounted(async () => {
   const id = route.params.id
-  console.log('🧭 Checking for edit mode. Route ID:', id)
 
   try {
     const templateRes = await axios.get('/api/templates')
     templates.value = templateRes.data.templates || []
-    console.log('📋 Loaded templates:', templates.value)
   } catch (err) {
-    console.error('❌ Failed to load templates:', err)
     toast.error('Failed to load templates.')
   }
 
@@ -178,41 +163,28 @@ onMounted(async () => {
     try {
       const res = await axios.get(`/api/messages/${id}`)
       const msg = res.data.message
-      console.log('📩 Loaded message for editing:', msg)
 
       await nextTick()
 
       if (composerRef.value?.setData) {
-        console.log('✅ Calling setData on composerRef with:', {
-          subject: msg.subject,
-          body_en: msg.body_en,
-          body_lt: msg.body_lt
-        })
         composerRef.value.setData({
           subject: msg.subject,
           body_en: msg.body_en,
           body_lt: msg.body_lt
         })
-      } else {
-        console.warn("❗ composerRef.value.setData is not defined or not a function.", composerRef.value)
       }
 
       if (recipientsRef.value?.setSelectedGuestIds) {
-        console.log('✅ Setting selected guest IDs:', msg.recipients || [])
         recipientsRef.value.setSelectedGuestIds(msg.recipients || [])
-      } else {
-        console.warn("❗ recipientsRef.value.setSelectedGuestIds is not defined or not a function.", recipientsRef.value)
       }
 
       if (msg.status === 'scheduled' && msg.scheduled_for) {
         const parsedDate = new Date(msg.scheduled_for)
         if (!isNaN(parsedDate)) {
           scheduledAt.value = new Date(parsedDate)
-          console.log('⏰ Scheduled time loaded:', scheduledAt.value)
         }
       }
     } catch (err) {
-      console.error('❌ Failed to load message for editing:', err)
       toast.error('Failed to load message for editing.')
     }
   }

@@ -73,31 +73,24 @@ onMounted(async () => {
     const res = await axios.get(`${import.meta.env.VITE_API_BASE}/guests`, {
       withCredentials: true
     })
-    console.log('✅ Full raw guest response:', res.data)
 
     if (Array.isArray(res.data)) {
       guests.value = res.data
     } else if (Array.isArray(res.data.guests)) {
       guests.value = res.data.guests
     } else {
-      console.warn('⚠️ Unexpected guest structure:', res.data)
       guests.value = []
     }
 
     fuse = new Fuse(guests.value, { keys: ['name'], threshold: 0.4 })
 
-    console.log('🧾 guests.value keys:', guests.value.map(g => g.name))
     await nextTick()
-    console.log('🔍 Filtered Guests:', filteredGuests.value)
   } catch (err) {
-    console.error('❌ Failed to load guests:', err)
   }
 })
 
 // Filters
 const filteredGuests = computed(() => {
-  console.log('🎛 Filters:', { search: search.value, rsvpFilter: rsvpFilter.value, languageFilter: languageFilter.value })
-
   let matchedGuests = guests.value
 
   if (search.value.trim() && fuse) {

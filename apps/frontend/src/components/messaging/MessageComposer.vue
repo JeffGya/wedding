@@ -146,11 +146,6 @@ function handleTemplateSaved() {
   console.log('✅ Template saved')
 }
 
-console.log('🔍 getData() called')
-console.log('✏️ Subject:', form.subject)
-console.log('📝 Body EN:', form.bodyEn)
-console.log('📝 Body LT:', form.bodyLt)
-
 defineExpose({
   getData,
   setData,
