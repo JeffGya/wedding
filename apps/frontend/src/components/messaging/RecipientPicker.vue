@@ -51,7 +51,6 @@
     <p class="text-sm text-gray-600">
       {{ selectedGuests.length }} recipient(s) selected.
     </p>
-    <pre class="mt-4 bg-gray-100 p-2 text-sm text-gray-800 border rounded">Debug: {{ filteredGuests }}</pre>
   </div>
 </template>
 

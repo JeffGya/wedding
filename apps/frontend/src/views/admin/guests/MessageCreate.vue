@@ -1,11 +1,8 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ isEditMode ? 'Edit Message' : 'New Message' }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Composer Section -->
-      <div>
-        <h2 class="text-xl font-semibold text-gray-700 mb-2">Message Composer</h2>
-        <!-- Will mount MessageComposer.vue here -->
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 px-6">{{ isEditMode ? 'Edit Message' : 'New Message' }}</h1>
+    <div class="grid gap-6 w-full px-4 box-border grid-cols-1 md:grid-cols-3">
+      <!-- Left (Message Composer) -->
+      <div class="md:col-span-2 bg-gray-100 w-full">
         <MessageComposer
           ref="composerRef"
           :templates="templates"
@@ -18,22 +15,38 @@
           <VueDatePicker
             v-model="scheduledAt"
             @change="onManualDateInput"
-          :format="'yyyy-MM-dd HH:mm'"
+            :format="'yyyy-MM-dd HH:mm'"
             type="datetime"
             placeholder="Select date and time"
-            class="w-full"
+            class="w-full max-w-full"
           />
         </div>
       </div>
-
-      <!-- Recipient Picker Section -->
-      <div>
+      <!-- Right (Recipient Picker) -->
+      <div class="md:col-span-1 bg-gray-100 w-full">
         <h2 class="text-xl font-semibold text-gray-700 mb-2">Recipients</h2>
-        <!-- Will mount RecipientPicker.vue here -->
         <RecipientPicker ref="recipientsRef" />
       </div>
     </div>
-  </div>
+    <div class="fixed bottom-0 left-0 right-0 z-10 bg-white px-6 py-4 flex justify-end gap-4 border-t shadow">
+        <MessageActionBar
+          :templates="templates"
+          @save="() => handleComposerAction('draft')"
+          @schedule="() => handleComposerAction('scheduled')"
+          @send-now="() => handleComposerAction('sent')"
+          @open-template-modal="isTemplateModalOpen = true"
+        />
+    </div>
+    <SaveTemplateModal
+      v-if="isTemplateModalOpen"
+      :show="isTemplateModalOpen"
+      :subject="composerRef?.getData()?.subject || ''"
+      :bodyEn="composerRef?.getData()?.body_en || ''"
+      :bodyLt="composerRef?.getData()?.body_lt || ''"
+      :templates="templates"
+      @close="isTemplateModalOpen = false"
+      @saved="handleTemplateSaved"
+    />
 </template>
 
 <script setup>
@@ -45,6 +58,8 @@ import RecipientPicker from '@/components/messaging/RecipientPicker.vue'
 import { useToast } from 'vue-toastification'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import MessageActionBar from '@/components/messaging/MessageActionBar.vue'
+import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 
 const router = useRouter()
 const toast = useToast()
@@ -54,6 +69,7 @@ const recipientsRef = ref(null)
 const scheduledAt = ref(null)
 const actionTypeBeingHandled = ref(null)
 const templates = ref([])
+const isTemplateModalOpen = ref(false)
 
 const route = useRoute()
 const isEditMode = ref(false)
@@ -144,6 +160,10 @@ const handleComposerAction = async (actionType) => {
   } catch (err) {
     toast.error('Failed to save message. Please try again.')
   }
+}
+
+const handleTemplateSaved = () => {
+  toast.success('Template saved!')
 }
 
 onMounted(async () => {

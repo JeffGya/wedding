@@ -53,12 +53,7 @@
       </div>
     </div>
 
-    <div class="flex space-x-2">
-      <button @click="$emit('save')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save Draft</button>
-      <button @click="$emit('schedule')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Schedule</button>
-      <button @click="$emit('sendNow')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Send Now</button>
-      <button @click="showSaveTemplate = true" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Save as Template</button>
-    </div>
+    <!-- Action buttons moved to dedicated MessageActionsBar component -->
     
     <SaveTemplateModal
       v-if="showSaveTemplate"
