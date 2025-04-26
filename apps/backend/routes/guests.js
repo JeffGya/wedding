@@ -1,5 +1,6 @@
 const express = require('express');
-const db = require('../db/connection');
+const getDbConnection = require('../db/connection');
+const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -36,7 +37,6 @@ router.post('/', (req, res) => {
     name,
     email,
     code,
-    is_rsvp_lead,
     can_bring_plus_one,
     num_kids
   } = req.body;
@@ -44,8 +44,8 @@ router.post('/', (req, res) => {
   const stmt = db.prepare(`
     INSERT INTO guests (
       group_id, group_label, name, email, code,
-      is_rsvp_lead, can_bring_plus_one, num_kids
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      can_bring_plus_one, num_kids
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
 
   stmt.run(
@@ -54,7 +54,6 @@ router.post('/', (req, res) => {
     name,
     email,
     code,
-    is_rsvp_lead || 0,
     can_bring_plus_one || 0,
     num_kids || 0,
     function (err) {

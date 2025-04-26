@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/connection');
+const getDbConnection = require('../db/connection');
+const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
+const getSenderInfo = require('../helpers/getSenderInfo');
 
 // Protect all routes
 router.use(requireAuth);
@@ -13,26 +15,56 @@ router.use((req, res, next) => {
 // Create a new draft message
 router.post('/', (req, res) => {
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
-  const scheduledForFinal = status === 'scheduled' ? scheduledAt : null;
-  
+
+  // Validate required fields
+  if (!subject || !body_en || !body_lt || !status) {
+    return res.status(400).json({ success: false, error: 'Subject, body_en, body_lt, and status are required.' });
+  }
+
+  // Special validation for scheduled messages
+  let scheduledForFinal = null;
+  if (status === 'scheduled') {
+    if (!scheduledAt) {
+      return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages.' });
+    }
+    const date = new Date(scheduledAt);
+    if (isNaN(date.getTime())) {
+      return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime.' });
+    }
+    if (date < new Date()) {
+      return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
+    }
+    scheduledForFinal = date.toISOString();
+  }
+
   const sql = `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`;
 
   db.run(sql, [subject, body_en, body_lt, status, scheduledForFinal], function (err) {
     if (err) return res.status(500).json({ success: false, error: err.message });
-    
+
     if (status === 'scheduled') {
-      
+      // No-op, as scheduledForFinal is already set above
     }
     if (recipients && recipients.length) {
-      
-      const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status) VALUES (?, ?, 'pending')`;
-      for (const guestId of recipients) {
-        db.run(insertRecipientSql, [this.lastID, guestId], err => {
-          if (err) console.error('❌ Failed to insert recipient:', guestId, err.message);
+      const guestSql = `SELECT id, email, preferred_language FROM guests WHERE id IN (${recipients.map(() => '?').join(',')})`;
+      db.all(guestSql, recipients, (err, guests) => {
+        if (err) {
+          console.error('❌ Failed to fetch guest details:', err.message);
+          return;
+        }
+        const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, email, language, delivery_status) VALUES (?, ?, ?, ?, 'pending')`;
+        guests.forEach(guest => {
+          db.run(
+            insertRecipientSql,
+            [this.lastID, guest.id, guest.email, guest.preferred_language || 'en'],
+            err => {
+              if (err) console.error('❌ Failed to insert recipient:', guest.id, err.message);
+            }
+          );
         });
-      }
+      });
     }
-    res.json({ success: true, id: this.lastID });
+    res.json({ success: true, messageId: this.lastID });
   });
 });
 
@@ -116,14 +148,25 @@ router.get('/:id', (req, res) => {
       ? 'message_recipients'
       : 'message_logs';
 
-    const recipientSql = `SELECT guest_id FROM message_recipients WHERE message_id = ?`;
+    // Updated recipient SQL and logic to include sentCount and failedCount
+    const recipientSql = `SELECT guest_id, delivery_status FROM message_recipients WHERE message_id = ?`;
     db.all(recipientSql, [req.params.id], (err, recipients) => {
       if (err) return res.status(500).json({ success: false, error: err.message });
 
       const recipientIds = recipients.map(r => r.guest_id);
-      
-      res.json({ success: true, message: { ...row, recipients: recipientIds } });
-    });
+      const sentCount = recipients.filter(r => r.delivery_status === 'sent').length;
+      const failedCount = recipients.filter(r => r.delivery_status === 'failed').length;
+
+      res.json({
+        success: true,
+        message: {
+          ...row,
+          recipients: recipientIds,
+          sentCount,
+          failedCount
+        }
+      });
+    }); 
   });
 });
 
@@ -217,18 +260,52 @@ router.delete('/:id', (req, res) => {
 });
 
 // Send message to selected guests
-router.post('/:id/send', async (req, res) => {
+router.post('/:id/send', async (req, res, next) => {
+  console.log('✅ Route hit: POST /:id/send — messageId:', req.params.id);
   const messageId = req.params.id;
-  const guestIds = req.body.guestIds; // Optional
+  const guestIds = req.body?.guestIds || null; // Optional
+
+  // Debug: preparing to send message
+  console.log('➡️ Preparing to send messageId:', messageId);
+
+  // Get sender info from settings
+  let senderInfo;
+  try {
+    senderInfo = await getSenderInfo(db);
+    console.log('📫 Sender info:', senderInfo);
+  } catch (err) {
+    console.error('❌ Failed to fetch sender info:', err);
+    return res.status(500).json({ success: false, error: 'Failed to fetch sender settings' });
+  }
 
   // Load the message
   const messageSql = `SELECT * FROM messages WHERE id = ?`;
   db.get(messageSql, [messageId], async (err, message) => {
     if (err) return res.status(500).json({ success: false, error: err.message });
-    if (!message) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (!message) {
+      console.error('❌ No message found for ID:', messageId);
+      return res.status(404).json({ success: false, error: 'Message not found' });
+    }
+    console.log('📦 Loaded message:', message);
+    if ((!message.body_en || message.body_en.trim() === '') && (!message.body_lt || message.body_lt.trim() === '')) {
+      console.error('❌ Cannot send email: message body is empty.');
+      return res.status(400).json({ success: false, error: 'Cannot send email: message body is empty.' });
+    }
     if (message.status !== 'draft') {
       return res.status(400).json({ success: false, error: 'Only draft messages can be sent' });
     }
+
+    // 💡 Clear any previous logs for this message ID
+    const clearSql = `DELETE FROM message_recipients WHERE message_id = ?`;
+    await new Promise((resolve, reject) => {
+      db.run(clearSql, [messageId], function (err) {
+        if (err) {
+          console.error('❌ Failed to clear previous delivery logs:', err.message);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
 
     // Load guest list (filtered or all)
     const guestSql = guestIds?.length
@@ -240,48 +317,98 @@ router.post('/:id/send', async (req, res) => {
 
       const results = [];
 
-      for (const guest of guests) {
-        const name = guest.group_label || guest.name;
-        const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-        const body = (lang === 'lt' ? message.body_lt : message.body_en)
-          .replace(/{{\s*name\s*}}/g, name)
-          .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
-          .replace(/{{\s*code\s*}}/g, guest.code)
-          .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code}`);
+      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-        const emailData = {
-          from: 'Your Wedding Site <onboarding@resend.dev>', // use real sender in production
-          to: guest.email,
-          subject: message.subject,
-          html: body,
-        };
+      // Batch sending logic: send emails in chunks of 1 guest at a time, with delay between batches
+      const BATCH_SIZE = 1;
+      const BATCH_DELAY = 2000; // 2 seconds between batches
 
-        try {
-          const axios = require('axios');
-          const { RESEND_API_KEY } = process.env;
+      for (let i = 0; i < guests.length; i += BATCH_SIZE) {
+        const batch = guests.slice(i, i + BATCH_SIZE);
+        const batchPromises = batch.map(async (guest) => {
+          await delay(300); // Throttle between individual sends in batch
 
-          const response = await axios.post('https://api.resend.com/emails', emailData, {
-            headers: {
-              Authorization: `Bearer ${RESEND_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-          });
+          // Check for missing email before sending
+          if (!guest.email) {
+            console.warn('⚠️ Guest missing email, skipping:', guest.id);
+            results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
+            return;
+          }
 
-          // Log success
-          const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status) VALUES (?, ?, 'sent')`;
-          db.run(logSql, [messageId, guest.id]);
-          results.push({ guest_id: guest.id, status: 'sent' });
-        } catch (err) {
-          // Log failure
-          const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
-          db.run(logSql, [messageId, guest.id, err.message]);
-          results.push({ guest_id: guest.id, status: 'failed', error: err.message });
+          const name = guest.group_label || guest.name;
+          const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
+          const body = (lang === 'lt' ? message.body_lt : message.body_en)
+            .replace(/{{\s*name\s*}}/g, name)
+            .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
+            .replace(/{{\s*code\s*}}/g, guest.code)
+            .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code}`);
+
+          const emailData = {
+            from: senderInfo,
+            to: guest.email,
+            subject: message.subject,
+            html: body,
+          };
+
+          let retries = 0;
+          const maxRetries = 3;
+          const backoff = [0, 2000, 4000];
+
+          while (retries <= maxRetries) {
+            try {
+              const axios = require('axios');
+              const { RESEND_API_KEY } = process.env;
+
+              // Log email data before sending
+              console.log('📤 Email data to send:', emailData);
+              const response = await axios.post('https://api.resend.com/emails', emailData, {
+                headers: {
+                  Authorization: `Bearer ${RESEND_API_KEY}`,
+                  'Content-Type': 'application/json',
+                },
+              });
+              // Log the full response from Resend
+              console.log('✅ Resend response:', {
+                status: response.status,
+                data: response.data,
+              });
+
+              const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status) VALUES (?, ?, 'sent', ?, 'sent')`;
+              const sentAt = new Date().toISOString();
+              db.run(logSql, [messageId, guest.id, sentAt]);
+              results.push({ guest_id: guest.id, status: 'sent' });
+              break;
+            } catch (err) {
+              if (err.response?.status === 429 && retries < maxRetries) {
+                retries++;
+                await delay(backoff[retries]);
+              } else {
+                const errorMsg = err.response?.data
+                  ? JSON.stringify(err.response.data)
+                  : err.message;
+
+                console.error('❌ Resend error:', errorMsg);
+
+                const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
+                db.run(logSql, [messageId, guest.id, errorMsg]);
+                results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
+                break;
+              }
+            }
+          }
+        });
+
+        await Promise.all(batchPromises);
+        if (i + BATCH_SIZE < guests.length) {
+          await delay(BATCH_DELAY);
         }
       }
 
       // Mark message as sent
       db.run(`UPDATE messages SET status = 'sent', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [messageId]);
-      res.json({ success: true, results });
+      const sentCount = results.filter(r => r.status === 'sent').length;
+      const failedCount = results.filter(r => r.status === 'failed').length;
+      res.json({ success: true, results, sentCount, failedCount });
     });
   });
 });
@@ -357,6 +484,115 @@ router.post('/preview', (req, res) => {
     .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code || ''}`);
 
   res.json({ success: true, subject, body });
+});
+
+// Resend failed messages
+router.post('/:id/resend', async (req, res, next) => {
+  const messageId = req.params.id;
+
+  // Get sender info from settings
+  const senderInfo = await getSenderInfo(db);
+
+  // Load the message
+  const messageSql = `SELECT * FROM messages WHERE id = ?`;
+  db.get(messageSql, [messageId], async (err, message) => {
+    if (err) return res.status(500).json({ success: false, error: err.message });
+    if (!message) return res.status(404).json({ success: false, error: 'Message not found' });
+
+    // Load failed recipients only
+    const recipientSql = `SELECT g.* FROM message_recipients mr JOIN guests g ON g.id = mr.guest_id WHERE mr.message_id = ? AND mr.delivery_status = 'failed'`;
+    db.all(recipientSql, [messageId], async (err, guests) => {
+      if (err) return res.status(500).json({ success: false, error: err.message });
+
+      const results = [];
+      const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+      const BATCH_SIZE = 1;
+      const BATCH_DELAY = 2000;
+
+      for (let i = 0; i < guests.length; i += BATCH_SIZE) {
+        const batch = guests.slice(i, i + BATCH_SIZE);
+        const batchPromises = batch.map(async (guest) => {
+          await delay(300);
+
+          // Check for missing email before sending
+          if (!guest.email) {
+            console.warn('⚠️ Guest missing email, skipping:', guest.id);
+            results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
+            return;
+          }
+
+          const name = guest.group_label || guest.name;
+          const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
+          const body = (lang === 'lt' ? message.body_lt : message.body_en)
+            .replace(/{{\s*name\s*}}/g, name)
+            .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
+            .replace(/{{\s*code\s*}}/g, guest.code)
+            .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code}`);
+
+          const emailData = {
+            from: senderInfo,
+            to: guest.email,
+            subject: message.subject,
+            html: body,
+          };
+
+          let retries = 0;
+          const maxRetries = 3;
+          const backoff = [0, 2000, 4000];
+
+          while (retries <= maxRetries) {
+            try {
+              const axios = require('axios');
+              const { RESEND_API_KEY } = process.env;
+
+              const response = await axios.post('https://api.resend.com/emails', emailData, {
+                headers: {
+                  Authorization: `Bearer ${RESEND_API_KEY}`,
+                  'Content-Type': 'application/json',
+                },
+              });
+              // Log the full response from Resend
+              console.log('✅ Resend response:', {
+                status: response.status,
+                data: response.data,
+              });
+
+              const sentAt = new Date().toISOString();
+              const logSql = `UPDATE message_recipients SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL WHERE message_id = ? AND guest_id = ?`;
+              db.run(logSql, [sentAt, messageId, guest.id]);
+              results.push({ guest_id: guest.id, status: 'sent' });
+              break;
+            } catch (err) {
+              if (err.response?.status === 429 && retries < maxRetries) {
+                retries++;
+                await delay(backoff[retries]);
+              } else {
+                const errorMsg = err.response?.data
+                  ? JSON.stringify(err.response.data)
+                  : err.message;
+
+                console.error('❌ Resend error:', errorMsg);
+
+                const logSql = `UPDATE message_recipients SET delivery_status = 'failed', error_message = ? WHERE message_id = ? AND guest_id = ?`;
+                db.run(logSql, [errorMsg, messageId, guest.id]);
+                results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
+                break;
+              }
+            }
+          }
+        });
+
+        await Promise.all(batchPromises);
+        if (i + BATCH_SIZE < guests.length) {
+          await delay(BATCH_DELAY);
+        }
+      }
+
+      const sentCount = results.filter(r => r.status === 'sent').length;
+      const failedCount = results.filter(r => r.status === 'failed').length;
+      res.json({ success: true, results, sentCount, failedCount });
+    });
+  });
 });
 
 module.exports = router;

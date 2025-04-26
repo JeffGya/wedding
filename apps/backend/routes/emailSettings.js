@@ -1,5 +1,6 @@
 const express = require('express');
-const db = require('../db/connection');
+const getDbConnection = require('../db/connection');
+const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();

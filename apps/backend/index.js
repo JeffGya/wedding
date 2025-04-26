@@ -6,6 +6,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const startScheduler = require('./jobs/scheduler');
 
 // Initialize Express app
 const app = express();
@@ -41,10 +42,15 @@ const emailSettingsRoutes = require('./routes/emailSettings');
 app.use('/api/settings/email', emailSettingsRoutes);
 
 const messageRoutes = require('./routes/messages');
-app.use('/api/messages', messageRoutes); // Added messages route
+app.use('/api/messages', messageRoutes); // All message-related routes including send, resend, logs, etc.
 
 const templateRoutes = require('./routes/templates');
+const messageStatsRoutes = require('./routes/messageStats');
 app.use('/api/templates', templateRoutes);
+app.use('/api/message-stats', messageStatsRoutes); // Adds message delivery stats route
+
+// Start the background scheduler
+startScheduler();
 
 // Start server
 app.listen(PORT, () => {

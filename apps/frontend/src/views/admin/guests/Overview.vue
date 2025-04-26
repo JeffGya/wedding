@@ -6,6 +6,43 @@
       <button @click="openCreateModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">Add Guest</button>
       <button v-if="selectedGuest" @click="openEditModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Edit Guest</button>
     </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8">
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-gray-600 text-sm font-semibold mb-1">Total Guests</h3>
+        <p class="text-2xl font-bold text-gray-800">{{ guests.length }}</p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-gray-600 text-sm font-semibold mb-1">% Attending</h3>
+        <p class="text-2xl font-bold text-gray-800">
+          {{
+            guests.length > 0
+              ? Math.round(
+                  (guests.filter(g => g.rsvp_status === 'yes').length / guests.length) * 100
+                )
+              : 0
+          }}%
+        </p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-gray-600 text-sm font-semibold mb-1">Dietary Stats</h3>
+        <p class="text-sm text-gray-700">
+          {{
+            guests.reduce((acc, g) => {
+              if (g.diet) {
+                acc[g.diet] = (acc[g.diet] || 0) + 1
+              }
+              return acc
+            }, {})
+          }}
+        </p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-gray-600 text-sm font-semibold mb-1">Message Delivery Stats</h3>
+        <p class="text-sm text-gray-700">
+          Sent: {{ deliveryStats.sent }} | Failed: {{ deliveryStats.failed }}
+        </p>
+      </div>
+    </div>
     <div v-if="loading" class="text-gray-500">Loading guests...</div>
     <div v-else>
       <table class="min-w-full text-left border-collapse border border-gray-300 mx-auto">
@@ -14,6 +51,9 @@
             <th class="p-2 border border-gray-300">Group</th>
             <th class="p-2 border border-gray-300">Name</th>
             <th class="p-2 border border-gray-300">Email</th>
+            <th class="p-2 border border-gray-300">RSVP</th>
+            <th class="p-2 border border-gray-300">Code</th>
+            <th class="p-2 border border-gray-300">+1</th>
             <th class="p-2 border border-gray-300">Kids</th>
             <th class="p-2 border border-gray-300">Actions</th>
           </tr>
@@ -23,6 +63,9 @@
             <td class="p-2 border border-gray-300">{{ guest.group_label }}</td>
             <td class="p-2 border border-gray-300">{{ guest.name }}</td>
             <td class="p-2 border border-gray-300">{{ guest.email }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.rsvp_status || '—' }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.code || '—' }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.plus_one ? 'Yes' : 'No' }}</td>
             <td class="p-2 border border-gray-300">{{ guest.num_kids }}</td>
             <td class="p-2 border border-gray-300">
               <button @click="() => { selectedGuest = guest; openEditModal() }" class="text-blue-600 hover:underline mr-2">Edit</button>
@@ -52,11 +95,22 @@ const loading = ref(true)
 const showModal = ref(false)
 const isEdit = ref(false)
 const selectedGuest = ref(null)
+const deliveryStats = ref({ sent: 0, failed: 0 })
 
 const fetchGuests = async () => {
   try {
     const res = await api.get('/guests')
     guests.value = res.data
+    // Fetch delivery stats for overview (placeholder: update with actual API later)
+    try {
+      const statRes = await api.get('/message-stats/latest-delivery')
+      deliveryStats.value = {
+        sent: statRes.data.sentCount,
+        failed: statRes.data.failedCount
+      }
+    } catch (e) {
+      console.error('Failed to load delivery stats', e)
+    }
   } catch (err) {
     console.error('Failed to load guests:', err)
   } finally {

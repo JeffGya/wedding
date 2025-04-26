@@ -47,6 +47,24 @@
       @close="isTemplateModalOpen = false"
       @saved="handleTemplateSaved"
     />
+  <!-- Full screen loading overlay -->
+  <div v-if="sendingState === 'sending'" class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80">
+    <div class="text-center">
+      <div class="text-2xl font-semibold mb-4">{{ sendingStatusMessage }}</div>
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+    </div>
+  </div>
+
+  <!-- Summary after sending -->
+  <div v-if="sendingState === 'summary'" class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80">
+    <div class="bg-white p-8 rounded shadow text-center">
+      <h2 class="text-2xl font-bold mb-4">Sending Complete</h2>
+      <p v-if="sendingSummary.error" class="text-red-500 mb-4">{{ sendingSummary.error }}</p>
+      <p class="mb-2">✅ Sent: {{ sendingSummary.sentCount }}</p>
+      <p class="mb-6">❌ Failed: {{ sendingSummary.failedCount }}</p>
+      <button @click="handleSummaryDismiss" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Continue</button>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -70,6 +88,10 @@ const scheduledAt = ref(null)
 const actionTypeBeingHandled = ref(null)
 const templates = ref([])
 const isTemplateModalOpen = ref(false)
+
+const sendingState = ref('idle') // idle | sending | summary
+const sendingSummary = ref({ sentCount: 0, failedCount: 0 })
+const sendingStatusMessage = ref('Saving your message...')
 
 const route = useRoute()
 const isEditMode = ref(false)
@@ -126,12 +148,6 @@ const handleComposerAction = async (actionType) => {
     return
   }
 
-  if (actionType === 'scheduled') {
-    if (!scheduledAt.value) {
-      return
-    }
-  }
-
   if (actionType === 'scheduled' && !scheduledAt.value) {
     toast.error('Please select a date and time before scheduling.')
     return
@@ -141,29 +157,101 @@ const handleComposerAction = async (actionType) => {
     subject: composerData.subject,
     body_en: composerData.body_en,
     body_lt: composerData.body_lt,
-    status: actionType, // 'draft', 'scheduled', or 'sent'
+    status: 'draft', // always create as draft first
     recipients: selectedRecipients,
     scheduledAt: actionType === 'scheduled' && scheduledAt.value
       ? scheduledAt.value.toISOString()
       : null
   }
 
+  console.log('🔵 Preparing to create new message with payload:', payload)
+
   try {
     if (isEditMode.value) {
       await axios.put(`/api/messages/${messageId.value}`, payload)
       toast.success("Message updated successfully!")
+      router.push('/admin/guests/messages')
     } else {
-      await axios.post('/api/messages', payload)
-      toast.success(`Message ${actionType === 'sent' ? 'sent' : actionType} successfully!`)
+      const res = await axios.post('/api/messages', payload)
+      const newMessageId = res?.data?.messageId
+      console.log('🟢 Message created. New message ID:', newMessageId)
+
+      if (actionType === 'sent' && newMessageId) {
+        sendingState.value = 'sending'
+        sendingStatusMessage.value = 'Saving your message...'
+        messageId.value = newMessageId
+
+        sendingStatusMessage.value = 'Preparing message for sending...'
+
+        console.log('🟠 Starting to poll for readiness of message ID:', newMessageId)
+
+        const startTime = Date.now()
+        const pollInterval = 1000
+        let ready = false
+
+        while (Date.now() - startTime < 10000) { // 10 second timeout
+          try {
+            const statusRes = await axios.get(`/api/messages/${newMessageId}`)
+            const msg = statusRes.data.message
+
+            if (
+              msg.subject &&
+              msg.body_en &&
+              Array.isArray(msg.recipients) &&
+              msg.recipients.length > 0 &&
+              (msg.status === 'draft' || msg.status === 'scheduled')
+            ) {
+              ready = true
+              break
+            }
+          } catch (e) {
+            console.warn('Polling error, retrying...', e)
+          }
+
+          await new Promise(r => setTimeout(r, pollInterval))
+        }
+
+        if (!ready) {
+          sendingState.value = 'summary'
+          sendingSummary.value.sentCount = 0
+          sendingSummary.value.failedCount = 0
+          sendingSummary.value.error = 'Sending cancelled — message not ready within 10 seconds.'
+          return
+        }
+
+        sendingStatusMessage.value = 'Sending emails...'
+
+        try {
+          const sendRes = await axios.post(`/api/messages/${newMessageId}/send`)
+          console.log('Send result:', sendRes.data)
+
+          sendingSummary.value.sentCount = sendRes.data.sentCount || 0
+          sendingSummary.value.failedCount = sendRes.data.failedCount || 0
+          sendingState.value = 'summary'
+        } catch (sendErr) {
+          console.error('🔴 Sending failed with error:', sendErr)
+          sendingSummary.value.sentCount = 0
+          sendingSummary.value.failedCount = 0
+          sendingSummary.value.error = 'Sending failed unexpectedly.'
+          sendingState.value = 'summary'
+        }
+      } else {
+        toast.success(`Message ${actionType} successfully!`)
+        router.push('/admin/guests/messages')
+      }
     }
-    router.push('/admin/guests/messages')
   } catch (err) {
+    console.error('🔴 Failed to save message:', err)
     toast.error('Failed to save message. Please try again.')
   }
 }
 
 const handleTemplateSaved = () => {
   toast.success('Template saved!')
+}
+
+const handleSummaryDismiss = () => {
+  router.push(`/admin/guests/messages/${messageId.value}`)
 }
 
 onMounted(async () => {

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/connection');
+const getDbConnection = require('../db/connection');
+const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
 
 // GET email settings
