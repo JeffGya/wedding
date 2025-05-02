@@ -66,27 +66,31 @@ const rsvpFilter = ref('all')
 const languageFilter = ref('all')
 let fuse = null
 
-// Fetch all guests once
-onMounted(async () => {
+const fetchGuests = async () => {
   try {
     const res = await axios.get(`${import.meta.env.VITE_API_BASE}/guests`, {
       withCredentials: true
-    })
+    });
 
     if (Array.isArray(res.data)) {
-      guests.value = res.data
+      guests.value = res.data;
     } else if (Array.isArray(res.data.guests)) {
-      guests.value = res.data.guests
+      guests.value = res.data.guests;
     } else {
-      guests.value = []
+      guests.value = [];
     }
 
-    fuse = new Fuse(guests.value, { keys: ['name'], threshold: 0.4 })
+    fuse = new Fuse(guests.value, { keys: ['name'], threshold: 0.4 });
 
-    await nextTick()
+    await nextTick();
   } catch (err) {
+    console.error("Failed to fetch guests:", err);
   }
-})
+};
+
+onMounted(() => {
+  fetchGuests();
+});
 
 // Filters
 const filteredGuests = computed(() => {
@@ -112,11 +116,12 @@ const filteredGuests = computed(() => {
 
 const toggleGuest = (id) => {
   if (selectedGuests.value.includes(id)) {
-    selectedGuests.value = selectedGuests.value.filter(g => g !== id)
+    selectedGuests.value = selectedGuests.value.filter(g => g !== id);
   } else {
-    selectedGuests.value.push(id)
+    selectedGuests.value.push(id);
   }
-}
+  console.log('Selected guests:', selectedGuests.value); // Logs the array correctly
+};
 
 const toggleAll = () => {
   if (allSelected.value) {
@@ -135,10 +140,23 @@ const setSelectedGuestIds = (ids) => {
   selectedGuests.value = Array.isArray(ids) ? ids : []
 }
 
+// Example of sending selected recipients to backend
+const sendMessage = async () => {
+  try {
+    // Send the actual selected guest IDs (spread into array)
+    await axios.post(`${import.meta.env.VITE_API_BASE}/messages`, {
+      recipients: [...selectedGuests.value]
+    })
+  } catch (error) {
+    console.error('Error sending message:', error)
+  }
+}
+
 defineExpose({
   selectedGuests,
   getSelectedGuestIds: () => selectedGuests.value,
-  setSelectedGuestIds
+  setSelectedGuestIds,
+  sendMessage
 })
 </script>
 

@@ -11,6 +11,7 @@
     "dev:backend": "npm run dev --workspace apps/backend"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.9"
   }

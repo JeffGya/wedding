@@ -47,7 +47,9 @@
           </RouterLink>
         </div>
         <p class="text-gray-500 text-sm">Created: {{ formatDate(msg.created_at) }}</p>
-        <p class="text-gray-500 text-sm">Updated: {{ formatDate(msg.updated_at) }}</p>
+        <p v-if="msg.status === 'scheduled'" class="text-gray-500 text-sm">Scheduled for: {{ formatDate(msg.scheduled_for) }}</p>
+        <p v-if="msg.status === 'sent'" class="text-gray-500 text-sm">Sent</p>
+        <p v-else class="text-gray-500 text-sm">Updated: {{ formatDate(msg.updated_at) }}</p>
       </div>
     </div>
 

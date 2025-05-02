@@ -1,12 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import PublicHome from '@/views/PublicHome.vue';
 import LoginView from '@/views/LoginView.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import GenericLayout from '@/layouts/GenericLayout.vue';
 import { useAuthStore } from '@/store/auth';
 import EmailSettings from '@/views/admin/settings/EmailSettings.vue';
+import { useLangStore } from '@/store/lang';
+import PublicPageWrapper from '@/components/PublicPageWrapper.vue';
 
 const routes = [
-  { path: '/', name: 'home', component: PublicHome },
+  // Default route redirects to the English homepage
+  {
+    path: '/',
+    redirect: '/en/home' // Redirecting to /en/home by default
+  },
+
+// Language-specific route with GenericLayout wrapper
+{
+  path: '/:lang(en|lt)',  // Handle /en, /lt as language prefix (mandatory now)
+  component: GenericLayout, // Use GenericLayout for all public routes
+  children: [
+    {
+      path: 'home',
+      name: 'home',
+      component: PublicPageWrapper,
+      beforeEnter: (to, from, next) => {
+        const lang = to.params.lang || 'en';
+        const langStore = useLangStore();
+        langStore.setLanguage(lang);
+        next();
+      },
+    },
+
+      /* Example of other routes
+      {
+        path: 'event-details',
+        name: 'event-details',
+        component: () => import('@/views/public/en/EventDetails.vue'),
+      },
+      {
+        path: 'rsvp',
+        name: 'rsvp',
+        component: () => import('@/views/public/en/Rsvp.vue'),
+      }*/
+    ]
+  },
+
   { path: '/login', name: 'login', component: LoginView },
   {
     path: '/admin',

@@ -259,14 +259,16 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-// Send message to selected guests
+// Send message to selected guests (filtered by guestIds if provided)
 router.post('/:id/send', async (req, res, next) => {
   console.log('✅ Route hit: POST /:id/send — messageId:', req.params.id);
   const messageId = req.params.id;
-  const guestIds = req.body?.guestIds || null; // Optional
+  const guestIds = req.body?.guestIds && Array.isArray(req.body.guestIds) && req.body.guestIds.length > 0
+    ? req.body.guestIds
+    : null;
 
   // Debug: preparing to send message
-  console.log('➡️ Preparing to send messageId:', messageId);
+  console.log('➡️ Preparing to send messageId:', messageId, 'with guestIds:', guestIds);
 
   // Get sender info from settings
   let senderInfo;
@@ -307,26 +309,28 @@ router.post('/:id/send', async (req, res, next) => {
       });
     });
 
-    // Load guest list (filtered or all)
-    const guestSql = guestIds?.length
-      ? `SELECT * FROM guests WHERE id IN (${guestIds.map(() => '?').join(',')})`
-      : `SELECT * FROM guests`;
+    // Load guest list (filtered by guestIds if provided, otherwise all guests)
+    let guestSql, guestParams;
+    if (guestIds && guestIds.length > 0) {
+      guestSql = `SELECT * FROM guests WHERE id IN (${guestIds.map(() => '?').join(',')})`;
+      guestParams = guestIds;
+    } else {
+      guestSql = `SELECT * FROM guests`;
+      guestParams = [];
+    }
 
-    db.all(guestSql, guestIds || [], async (err, guests) => {
+    db.all(guestSql, guestParams, async (err, guests) => {
       if (err) return res.status(500).json({ success: false, error: err.message });
 
       const results = [];
-
       const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-      // Batch sending logic: send emails in chunks of 1 guest at a time, with delay between batches
       const BATCH_SIZE = 1;
-      const BATCH_DELAY = 2000; // 2 seconds between batches
+      const BATCH_DELAY = 2000;
 
       for (let i = 0; i < guests.length; i += BATCH_SIZE) {
         const batch = guests.slice(i, i + BATCH_SIZE);
         const batchPromises = batch.map(async (guest) => {
-          await delay(300); // Throttle between individual sends in batch
+          await delay(300);
 
           // Check for missing email before sending
           if (!guest.email) {

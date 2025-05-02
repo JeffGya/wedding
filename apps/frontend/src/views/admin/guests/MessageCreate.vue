@@ -141,16 +141,24 @@ const onManualDateInput = (event) => {
 const handleComposerAction = async (actionType) => {
   actionTypeBeingHandled.value = actionType
   const composerData = composerRef.value?.getData()
+  // Convert Proxy array to regular array if necessary
   const selectedRecipients = recipientsRef.value?.getSelectedGuestIds()
+    ? Array.from(recipientsRef.value.getSelectedGuestIds())
+    : []
+
+  console.log('🎯 Composer Data:', composerData)
+  console.log('🎯 Selected Recipients:', selectedRecipients)
 
   if (!composerData?.subject || !composerData?.body_en || !selectedRecipients?.length) {
     toast.error('Please fill out the message and select at least one recipient.')
     return
   }
 
-  if (actionType === 'scheduled' && !scheduledAt.value) {
-    toast.error('Please select a date and time before scheduling.')
-    return
+  if (actionType === 'scheduled') {
+    if (!scheduledAt.value || isNaN(new Date(scheduledAt.value).getTime())) {
+      toast.error('Please select a valid date and time before scheduling.')
+      return
+    }
   }
 
   const payload = {
@@ -158,11 +166,19 @@ const handleComposerAction = async (actionType) => {
     body_en: composerData.body_en,
     body_lt: composerData.body_lt,
     status: 'draft', // always create as draft first
-    recipients: selectedRecipients,
-    scheduledAt: actionType === 'scheduled' && scheduledAt.value
+    recipients: Array.isArray(selectedRecipients) ? selectedRecipients : Array.from(selectedRecipients),
+  }
+
+  if (actionType === 'scheduled') {
+    payload.status = 'scheduled'
+    payload.scheduledAt = scheduledAt.value instanceof Date && !isNaN(scheduledAt.value.getTime())
       ? scheduledAt.value.toISOString()
       : null
+  } else {
+    payload.scheduledAt = null
   }
+
+  console.log('🎯 Payload for sending:', payload);
 
   console.log('🔵 Preparing to create new message with payload:', payload)
 

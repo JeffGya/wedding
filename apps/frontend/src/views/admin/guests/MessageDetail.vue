@@ -27,6 +27,14 @@
               <p class="text-gray-600 capitalize">{{ message.status }}</p>
             </div>
 
+            <!-- Display scheduled time if the message is scheduled -->
+            <div v-if="message.status === 'scheduled'" class="space-y-1">
+              <h2 class="text-xl font-semibold">Scheduled Time:</h2>
+              <p class="text-gray-800">
+                {{ formatScheduledTime(message.scheduled_for) }}
+              </p>
+            </div>
+
             <div>
               <h2 class="text-xl font-semibold">Delivery Summary:</h2>
               <div class="space-y-1">
@@ -151,9 +159,11 @@ const showSummaryModal = ref(false)
 const summarySentCount = ref(0)
 const summaryFailedCount = ref(0)
 
-function updateDeliverySummary() {
-  sentCount.value = deliveryLogs.value.filter(log => log.delivery_status === 'sent').length
-  failedCount.value = deliveryLogs.value.filter(log => log.delivery_status === 'failed').length
+// New method to format the scheduled time
+const formatScheduledTime = (scheduledAt) => {
+  if (!scheduledAt) return 'N/A'
+  const date = new Date(scheduledAt)
+  return date.toLocaleString()  // or use a date library to customize format
 }
 
 onMounted(async () => {
@@ -162,7 +172,8 @@ onMounted(async () => {
 
   const logRes = await api.get(`/messages/${messageId}/logs`)
   deliveryLogs.value = logRes.data.logs
-  updateDeliverySummary()
+  sentCount.value = logRes.data.sentCount || 0
+  failedCount.value = logRes.data.failedCount || 0
 })
 
 const pendingCount = computed(() => {
@@ -219,7 +230,8 @@ const resendFailed = async () => {
     // Refresh logs after resend attempts
     const logRes = await api.get(`/messages/${messageId}/logs`)
     deliveryLogs.value = logRes.data.logs
-    updateDeliverySummary()
+    sentCount.value = deliveryLogs.value.filter(log => log.delivery_status === 'sent').length
+    failedCount.value = deliveryLogs.value.filter(log => log.delivery_status === 'failed').length
 
     summarySentCount.value = sent
     summaryFailedCount.value = failed
