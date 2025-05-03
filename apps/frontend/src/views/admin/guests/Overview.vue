@@ -17,7 +17,7 @@
           {{
             guests.length > 0
               ? Math.round(
-                  (guests.filter(g => g.rsvp_status === 'yes').length / guests.length) * 100
+                  (guests.filter(g => g.attending === true).length / guests.length) * 100
                 )
               : 0
           }}%
@@ -28,8 +28,8 @@
         <p class="text-sm text-gray-700">
           {{
             guests.reduce((acc, g) => {
-              if (g.diet) {
-                acc[g.diet] = (acc[g.diet] || 0) + 1
+              if (g.dietary) {
+                acc[g.dietary] = (acc[g.dietary] || 0) + 1
               }
               return acc
             }, {})
@@ -100,7 +100,7 @@ const deliveryStats = ref({ sent: 0, failed: 0 })
 const fetchGuests = async () => {
   try {
     const res = await api.get('/guests')
-    guests.value = res.data
+    guests.value = res.data.guests || []
     // Fetch delivery stats for overview (placeholder: update with actual API later)
     try {
       const statRes = await api.get('/message-stats/latest-delivery')
@@ -148,13 +148,10 @@ const saveGuest = async (guestData) => {
   try {
     if (isEdit.value && selectedGuest.value) {
       await api.put(`/guests/${selectedGuest.value.id}`, guestData)
-      const updated = await api.get('/guests')
-      guests.value = updated.data
     } else {
       await api.post('/guests', guestData)
-      const updated = await api.get('/guests')
-      guests.value = updated.data
     }
+    await fetchGuests()
     closeModal()
   } catch (err) {
     console.error('Failed to save guest:', err)
