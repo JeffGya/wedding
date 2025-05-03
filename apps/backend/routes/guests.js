@@ -8,9 +8,9 @@ const router = express.Router();
 // Middleware: Protect all guest routes
 router.use(requireAuth);
 
-// GET /api/guests - List all guests with filtering and sorting
+// GET /api/guests - List all guests with filtering, sorting, and pagination
 router.get('/', (req, res) => {
-  const { attending, group_id, rsvp_response, sort_by } = req.query;
+  const { attending, group_id, rsvp_response, sort_by, page = 1, per_page = 40 } = req.query;
 
   let query = `
     SELECT id, name, attending, plus_one_name, dietary, notes, rsvp_deadline, updated_at, group_id, group_label, email, code, can_bring_plus_one, num_kids, meal_preference
@@ -48,15 +48,22 @@ router.get('/', (req, res) => {
   } else if (sort_by === 'updated_at') {
     query += ` ORDER BY updated_at DESC`;
   } else {
-    query += ` ORDER BY group_id ASC, id ASC`;
+    query += ` ORDER BY group_id ASC, id ASC`;  // Default sorting
   }
+
+  // Pagination
+  const limit = parseInt(per_page);
+  const offset = (parseInt(page) - 1) * limit;
+
+  query += ` LIMIT ? OFFSET ?`;
+  queryParams.push(limit, offset);
 
   db.all(query, queryParams, (err, rows) => {
     if (err) {
       console.error('Error fetching guests:', err);
       return res.status(500).json({ error: 'Database error' });
     }
-    res.json(rows);
+    res.json({ guests: rows, total: rows.length }); // Adjust if needed
   });
 });
 
