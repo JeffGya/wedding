@@ -33,8 +33,10 @@ const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
 
 const guestRoutes = require('./routes/guests');
+const rsvpRouter = require('./routes/rsvp');
 // Guest management routes
 app.use('/api/guests', guestRoutes); // Added guests route
+app.use('/api/rsvp', rsvpRouter);
 
 // Import email settings routes
 const emailSettingsRoutes = require('./routes/emailSettings');

@@ -192,8 +192,8 @@ function seedDatabase() {
             const guestInsert = db.prepare(`INSERT INTO guests (
               group_id, group_label, name, email, code,
               can_bring_plus_one, num_kids, preferred_language,
-              attending, meal_preference, rsvp_deadline, notes
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+              attending, meal_preference, rsvp_deadline, notes, rsvp_status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
 
             const languages = ['en', 'lt'];
             const insertNext = (i = 0) => {
@@ -222,6 +222,7 @@ function seedDatabase() {
                   null,         // meal_preference null
                   null,         // rsvp_deadline null
                   null,         // notes null
+                  'not_attending',
                   () => insertNext(i + 1)
                 );
               } else {
@@ -239,6 +240,7 @@ function seedDatabase() {
                   null,
                   null,
                   null,
+                  'pending',
                   () => insertNext(i + 1)
                 );
               }

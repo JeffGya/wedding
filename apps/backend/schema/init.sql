@@ -19,10 +19,12 @@ CREATE TABLE IF NOT EXISTS guests (
   can_bring_plus_one BOOLEAN DEFAULT 0,
   num_kids INTEGER DEFAULT 0,
   attending BOOLEAN,
+  plus_one_name TEXT,
   meal_preference TEXT,
   rsvp_deadline DATETIME,
   dietary TEXT,
   notes TEXT,
+  rsvp_status TEXT CHECK(rsvp_status IN ('pending','attending','not_attending')) NOT NULL DEFAULT 'pending',
   responded_at DATETIME,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP

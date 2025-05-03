@@ -63,7 +63,15 @@
             <td class="p-2 border border-gray-300">{{ guest.group_label }}</td>
             <td class="p-2 border border-gray-300">{{ guest.name }}</td>
             <td class="p-2 border border-gray-300">{{ guest.email }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.rsvp_status || '—' }}</td>
+            <td class="p-2 border border-gray-300">
+              {{
+                guest.attending === true
+                  ? 'Yes'
+                  : guest.attending === false
+                  ? 'No'
+                  : '—'
+              }}
+            </td>
             <td class="p-2 border border-gray-300">{{ guest.code || '—' }}</td>
             <td class="p-2 border border-gray-300">{{ guest.plus_one ? 'Yes' : 'No' }}</td>
             <td class="p-2 border border-gray-300">{{ guest.num_kids }}</td>
