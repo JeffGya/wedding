@@ -191,8 +191,9 @@ function seedDatabase() {
 
             const guestInsert = db.prepare(`INSERT INTO guests (
               group_id, group_label, name, email, code,
-              can_bring_plus_one, num_kids, preferred_language
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
+              can_bring_plus_one, num_kids, preferred_language,
+              attending, meal_preference, rsvp_deadline, notes
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
 
             const languages = ['en', 'lt'];
             const insertNext = (i = 0) => {
@@ -205,17 +206,42 @@ function seedDatabase() {
 
               const guest = groupData.guests[i];
               const preferredLanguage = guest.preferred_language || languages[Math.floor(Math.random() * languages.length)];
-              guestInsert.run(
-                groupData.groupId,
-                groupData.groupLabel,
-                guest.name,
-                guest.email || null,
-                code,
-                guest.can_bring_plus_one || 0,
-                guest.num_kids || 0,
-                preferredLanguage,
-                () => insertNext(i + 1)
-              );
+
+              // Only the first guest (lead) gets RSVP-related fields
+              if (i === 0) {
+                guestInsert.run(
+                  groupData.groupId,
+                  groupData.groupLabel,
+                  guest.name,
+                  guest.email || null,
+                  code,
+                  guest.can_bring_plus_one || 0,
+                  guest.num_kids || 0,
+                  preferredLanguage,
+                  0,            // attending default to 0 (not attending)
+                  null,         // meal_preference null
+                  null,         // rsvp_deadline null
+                  null,         // notes null
+                  () => insertNext(i + 1)
+                );
+              } else {
+                // For non-lead guests, RSVP fields are null
+                guestInsert.run(
+                  groupData.groupId,
+                  groupData.groupLabel,
+                  guest.name,
+                  guest.email || null,
+                  code,
+                  guest.can_bring_plus_one || 0,
+                  guest.num_kids || 0,
+                  preferredLanguage,
+                  null,
+                  null,
+                  null,
+                  null,
+                  () => insertNext(i + 1)
+                );
+              }
             };
 
             insertNext();

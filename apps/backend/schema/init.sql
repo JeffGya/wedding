@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS guests (
   can_bring_plus_one BOOLEAN DEFAULT 0,
   num_kids INTEGER DEFAULT 0,
   attending BOOLEAN,
+  meal_preference TEXT,
+  rsvp_deadline DATETIME,
   dietary TEXT,
   notes TEXT,
   responded_at DATETIME,
