@@ -19,11 +19,12 @@
     </div>
 
     <div class="mb-4">
-      <label>Filter by RSVP Response:</label>
-      <select v-model="filters.rsvpResponse" class="px-4 py-2 border rounded">
+      <label>Filter by Status:</label>
+      <select v-model="filters.rsvp_status" class="px-4 py-2 border rounded">
         <option value="">All</option>
-        <option value="true">Responded</option>
-        <option value="false">Not Responded</option>
+        <option value="pending">Pending</option>
+        <option value="going">Going</option>
+        <option value="not_going">Not going</option>
       </select>
     </div>
 
@@ -42,6 +43,7 @@
           <th class="px-4 py-2 border">Dietary</th>
           <th class="px-4 py-2 border">Notes</th>
           <th class="px-4 py-2 border">Submission Date</th>
+          <th class="px-4 py-2 border">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -52,9 +54,22 @@
           <td class="px-4 py-2 border">{{ guest.dietary || 'N/A' }}</td>
           <td class="px-4 py-2 border">{{ guest.notes || 'N/A' }}</td>
           <td class="px-4 py-2 border">{{ guest.updated_at }}</td>
+          <td class="px-4 py-2 border">
+            <button @click="openEditModal(guest)" class="px-2 py-1 bg-blue-500 text-white rounded">
+              Edit
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Edit RSVP Modal -->
+    <div v-if="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full relative">
+        <button @click="closeEditModal" class="absolute top-2 right-2 text-gray-600 text-xl">&times;</button>
+        <RSVPForm :guest="currentGuest" mode="admin" @submit="onRSVPFormSubmit" />
+      </div>
+    </div>
 
     <!-- Pagination -->
     <div class="mt-4">
@@ -67,6 +82,7 @@
 </template>
 
 <script setup>
+import RSVPForm from '@/components/forms/RSVPForm.vue';
 import { ref, reactive, computed, watch, onMounted } from 'vue';
 import axios from 'axios'; // Axios for API calls
 
@@ -74,7 +90,7 @@ const guests = ref([]);
 const totalGuests = ref(0);
 const filters = reactive({
   attending: '',
-  rsvpResponse: '',
+  rsvp_status: '',
 });
 
 const currentPage = ref(1);
@@ -98,10 +114,9 @@ const fetchGuests = async () => {
     console.log("Added attending filter:", attendingVal);
   }
 
-  const rsvpVal = parseFilterValue(filters.rsvpResponse);
-  if (rsvpVal !== null) {
-    params.rsvp_response = rsvpVal;
-    console.log("Added RSVP response filter:", rsvpVal);
+  if (filters.rsvp_status) {
+    params.rsvp_status = filters.rsvp_status;
+    console.log("Added RSVP status filter:", filters.rsvp_status);
   }
 
   try {
@@ -139,7 +154,7 @@ const prevPage = () => {
 
 // Reset to page 1 whenever filters change and refetch guests
 watch(
-  () => [filters.attending, filters.rsvpResponse],
+  () => [filters.attending, filters.rsvp_status],
   () => {
     console.log("Filters updated:", filters);
     currentPage.value = 1;
@@ -154,7 +169,7 @@ onMounted(() => {
 
 const clearFilters = () => {
   filters.attending = '';
-  filters.rsvpResponse = '';
+  filters.rsvp_status = '';
 };
 
 // Helper to check if a string is an ISO date
@@ -213,6 +228,24 @@ const exportToCSV = async () => {
   } catch (error) {
     console.error('Error exporting CSV:', error);
   }
+};
+
+const showEditModal = ref(false);
+const currentGuest = ref(null);
+
+const openEditModal = (guest) => {
+  currentGuest.value = { ...guest };
+  showEditModal.value = true;
+};
+
+const closeEditModal = () => {
+  showEditModal.value = false;
+  currentGuest.value = null;
+};
+
+const onRSVPFormSubmit = async () => {
+  await fetchGuests();
+  closeEditModal();
 };
 </script>
 

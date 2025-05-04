@@ -6,42 +6,62 @@
       <button @click="openCreateModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">Add Guest</button>
       <button v-if="selectedGuest" @click="openEditModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Edit Guest</button>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8">
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-gray-600 text-sm font-semibold mb-1">Total Guests</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ guests.length }}</p>
-      </div>
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-gray-600 text-sm font-semibold mb-1">% Attending</h3>
-        <p class="text-2xl font-bold text-gray-800">
-          {{
-            guests.length > 0
-              ? Math.round(
-                  (guests.filter(g => g.attending === true).length / guests.length) * 100
-                )
-              : 0
-          }}%
-        </p>
-      </div>
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-gray-600 text-sm font-semibold mb-1">Dietary Stats</h3>
-        <p class="text-sm text-gray-700">
-          {{
-            guests.reduce((acc, g) => {
-              if (g.dietary) {
-                acc[g.dietary] = (acc[g.dietary] || 0) + 1
-              }
-              return acc
-            }, {})
-          }}
-        </p>
-      </div>
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-gray-600 text-sm font-semibold mb-1">Message Delivery Stats</h3>
-        <p class="text-sm text-gray-700">
-          Sent: {{ deliveryStats.sent }} | Failed: {{ deliveryStats.failed }}
-        </p>
-      </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-7xl mx-auto mb-8">
+      <!-- RSVP Status -->
+      <StatCard
+        title="RSVP Status"
+        chartType="doughnut"
+        :items="[
+          { label: 'Going', value: stats.attending },
+          { label: 'Not Going', value: stats.not_attending },
+          { label: 'Pending', value: stats.pending }
+        ]"
+      />
+      <!-- Email delivery -->
+      <StatCard
+        title="Email Delivery"
+        :items="[
+          { label: 'Emails Sent', value: deliveryStats.sent },
+          { label: 'Emails Failed', value: deliveryStats.failed }
+        ]"
+      />
+      <!-- Overall Response Rate -->
+      <StatCard
+        title="Overall Response Rate"
+        chartType="doughnut"
+        :items="[
+          { label: 'Replied', value: stats.attending + stats.not_attending },
+          { label: 'Pending', value: stats.pending }
+        ]"
+      />
+      <!-- No-Shows vs Late Responses -->
+      <StatCard
+        title="No-Shows vs Late Responses"
+        chartType="doughnut"
+        :items="[
+          { label: 'No-Shows', value: stats.no_shows },
+          { label: 'Late Responses', value: stats.late_responses }
+        ]"
+      />
+      <!-- Average Time to RSVP -->
+      <StatCard
+        title="Avg. RSVP Time (days)"
+        :value="stats.avg_response_time.toFixed(1)"
+      />
+      <!-- Dietary Requirements Breakdown -->
+      <template v-if="dietaryItems.length > 1">
+        <StatCard
+          title="Dietary Requirements Breakdown"
+          chartType="bar"
+          :items="dietaryItems"
+        />
+      </template>
+      <template v-else-if="dietaryItems.length === 1">
+        <StatCard :title="dietaryItems[0].label" :value="dietaryItems[0].value" />
+      </template>
+      <template v-else>
+        <StatCard title="Dietary Requirements" :value="0" />
+      </template>
     </div>
     <div v-if="loading" class="text-gray-500">Loading guests...</div>
     <div v-else>
@@ -69,14 +89,14 @@
                   ? 'Yes'
                   : guest.attending === false
                   ? 'No'
-                  : '—'
+                  : 'Pending'
               }}
             </td>
             <td class="p-2 border border-gray-300">{{ guest.code || '—' }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.plus_one ? 'Yes' : 'No' }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.plus_one_name ? 'Yes' : 'No' }}</td>
             <td class="p-2 border border-gray-300">{{ guest.num_kids }}</td>
             <td class="p-2 border border-gray-300">
-              <button @click="() => { selectedGuest = guest; openEditModal() }" class="text-blue-600 hover:underline mr-2">Edit</button>
+              <button @click="openEditForGuest(guest)" class="text-blue-600 hover:underline mr-2">Edit</button>
               <button @click="deleteGuest(guest.id)" class="text-red-600 hover:underline">Delete</button>
             </td>
           </tr>
@@ -94,9 +114,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import api from '@/api'
 import GuestModal from '@/components/GuestModal.vue'
+import { fetchGuestAnalytics } from '@/api/analytics';
+import StatCard from '@/components/ui/StatCard.vue';
 
 const guests = ref([])
 const loading = ref(true)
@@ -104,6 +126,40 @@ const showModal = ref(false)
 const isEdit = ref(false)
 const selectedGuest = ref(null)
 const deliveryStats = ref({ sent: 0, failed: 0 })
+
+const stats = ref({
+  total: 0,
+  attending: 0,
+  not_attending: 0,
+  pending: 0,
+  no_shows: 0,
+  late_responses: 0,
+  avg_response_time: 0,
+  dietary_counts: []
+});
+
+// Compute a simple items array for dietary chart
+const dietaryItems = computed(() =>
+  (stats.value.dietary_counts || []).map(dc => ({ label: dc.label, value: dc.count }))
+)
+
+const fetchStats = async () => {
+  try {
+    const res = await fetchGuestAnalytics();
+    stats.value = {
+      total: res.stats.total,
+      attending: res.stats.attending,
+      not_attending: res.stats.not_attending,
+      pending: res.stats.pending,
+      no_shows: res.no_shows,
+      late_responses: res.late_responses,
+      avg_response_time: res.avg_response_time_days,
+      dietary_counts: Object.entries(res.dietary).map(([label, count]) => ({ label, count }))
+    };
+  } catch (e) {
+    console.error('Failed to load guest analytics', e);
+  }
+};
 
 const fetchGuests = async () => {
   try {
@@ -147,6 +203,12 @@ const openEditModal = () => {
   showModal.value = true
 }
 
+function openEditForGuest(guest) {
+  selectedGuest.value = guest;
+  isEdit.value = true;
+  showModal.value = true;
+}
+
 const closeModal = () => {
   showModal.value = false
   selectedGuest.value = null
@@ -160,11 +222,15 @@ const saveGuest = async (guestData) => {
       await api.post('/guests', guestData)
     }
     await fetchGuests()
+    await fetchStats()
     closeModal()
   } catch (err) {
     console.error('Failed to save guest:', err)
   }
 }
 
-onMounted(fetchGuests)
+onMounted(async () => {
+  await fetchGuests();
+  await fetchStats();
+})
 </script>

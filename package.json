@@ -14,5 +14,12 @@
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "@vee-validate/i18n": "^4.15.0",
+    "chart.js": "^4.4.9",
+    "vee-validate": "^4.15.0",
+    "vue-chartjs": "^3.1.1",
+    "yup": "^1.6.1"
   }
 }

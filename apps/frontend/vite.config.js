@@ -7,9 +7,10 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue(), UnoCSS()],
   resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+    alias: [
+      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      { find: /^chart\.js$/, replacement: 'chart.js/auto' }
+    ]
   },
   server: {
     proxy: {

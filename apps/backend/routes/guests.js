@@ -112,22 +112,100 @@ router.get('/', (req, res) => {
 
 // GET /api/guests/analytics - RSVP statistics by status
 router.get('/analytics', (req, res) => {
-  const sql = `
-    SELECT rsvp_status, COUNT(*) AS count
-    FROM guests
-    GROUP BY rsvp_status
-  `;
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      logger.error('Error fetching RSVP analytics: %o', err);
-      return res.status(500).json({ error: 'Database error' });
-    }
-    const stats = { total: 0, attending: 0, not_attending: 0, pending: 0 };
-    rows.forEach(row => {
-      stats[row.rsvp_status] = row.count;
-      stats.total += row.count;
-    });
-    res.json({ success: true, stats });
+  db.serialize(() => {
+    // RSVP counts by status
+    db.all(
+      `SELECT rsvp_status AS status, COUNT(*) AS count
+       FROM guests
+       GROUP BY rsvp_status;`,
+      [],
+      (err, rows) => {
+        if (err) {
+          logger.error('Error fetching RSVP analytics:', err);
+          return res.status(500).json({ error: 'Database error' });
+        }
+        const stats = { total: 0, attending: 0, not_attending: 0, pending: 0 };
+        rows.forEach((row) => {
+          stats[row.status] = row.count;
+          stats.total += row.count;
+        });
+
+        // Dietary breakdown
+        db.all(
+          `SELECT dietary, COUNT(*) AS count
+           FROM guests
+           WHERE dietary IS NOT NULL AND dietary != ''
+           GROUP BY dietary;`,
+          [],
+          (dietErr, dietRows) => {
+            if (dietErr) {
+              logger.error('Error fetching dietary analytics:', dietErr);
+              return res.status(500).json({ error: 'Database error' });
+            }
+            const dietary = {};
+            dietRows.forEach((row) => {
+              dietary[row.dietary] = row.count;
+            });
+
+            // No-shows (pending past deadline)
+            db.get(
+              `SELECT COUNT(*) AS no_shows
+               FROM guests
+               WHERE rsvp_status = 'pending'
+                 AND rsvp_deadline IS NOT NULL
+                 AND rsvp_deadline < datetime('now');`,
+              [],
+              (noErr, noRow) => {
+                if (noErr) {
+                  logger.error('Error fetching no-shows analytics:', noErr);
+                  return res.status(500).json({ error: 'Database error' });
+                }
+
+                // Late responses (responded after deadline)
+                db.get(
+                  `SELECT COUNT(*) AS late_responses
+                   FROM guests
+                   WHERE rsvp_status IN ('attending','not_attending')
+                     AND rsvp_deadline IS NOT NULL
+                     AND updated_at > rsvp_deadline;`,
+                  [],
+                  (lateErr, lateRow) => {
+                    if (lateErr) {
+                      logger.error('Error fetching late responses analytics:', lateErr);
+                      return res.status(500).json({ error: 'Database error' });
+                    }
+
+                    // Average time to RSVP (in days)
+                    db.get(
+                      `SELECT AVG(JULIANDAY(updated_at) - JULIANDAY(created_at)) AS avg_response_days
+                       FROM guests
+                       WHERE created_at IS NOT NULL
+                         AND updated_at IS NOT NULL;`,
+                      [],
+                      (avgErr, avgRow) => {
+                        if (avgErr) {
+                          logger.error('Error fetching avg response time analytics:', avgErr);
+                          return res.status(500).json({ error: 'Database error' });
+                        }
+
+                        res.json({
+                          success: true,
+                          stats,
+                          dietary,
+                          no_shows: noRow.no_shows || 0,
+                          late_responses: lateRow.late_responses || 0,
+                          avg_response_time_days: avgRow.avg_response_days || 0.0
+                        });
+                      }
+                    );
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
   });
 });
 
