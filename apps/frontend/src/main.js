@@ -8,11 +8,12 @@ import Toast, { useToast } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import { configure } from 'vee-validate';
 import { localize } from '@vee-validate/i18n';
-import en from '@vee-validate/i18n/dist/locale/en.json';
+import validationEn from '@vee-validate/i18n/dist/locale/en.json';
+import i18n from '@/i18n';
 
 // Configure VeeValidate
 configure({
-  generateMessage: localize({ en }),  // use English locale
+  generateMessage: localize({ en: validationEn }),  // use VeeValidate English locale
   validateOnInput: true,              // validate on each input event
 });
 
@@ -21,4 +22,5 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(Toast)
+app.use(i18n)
 app.mount('#app')

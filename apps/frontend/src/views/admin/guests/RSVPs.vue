@@ -85,6 +85,7 @@
 import RSVPForm from '@/components/forms/RSVPForm.vue';
 import { ref, reactive, computed, watch, onMounted } from 'vue';
 import axios from 'axios'; // Axios for API calls
+import { submitGuestRSVP } from '@/api/rsvp';
 
 const guests = ref([]);
 const totalGuests = ref(0);
@@ -243,9 +244,14 @@ const closeEditModal = () => {
   currentGuest.value = null;
 };
 
-const onRSVPFormSubmit = async () => {
-  await fetchGuests();
-  closeEditModal();
+const onRSVPFormSubmit = async (payload) => {
+  try {
+    await submitGuestRSVP(payload);
+    await fetchGuests();
+    closeEditModal();
+  } catch (error) {
+    console.error('Error updating RSVP:', error);
+  }
 };
 </script>
 

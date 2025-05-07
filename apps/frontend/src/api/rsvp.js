@@ -17,5 +17,5 @@ export async function fetchGuestByCode(code) {
  */
 export async function submitGuestRSVP(payload) {
   const { data } = await api.post('/rsvp', payload);
-  return data;
+  return data.success;
 }

@@ -1,0 +1,70 @@
+{
+    "home": {
+      "hero": {
+        "title": "Welcome to our wedding website!",
+        "subtitle": "The one stop for everything about our special day.",
+        "cta": "RSVP"
+      },
+      "story": {
+        "title": "Our Story",
+        "text1": "It all started on a warm summer day...",
+        "text2": "We met in 2015 and have since shared countless adventures – from spontaneous road trips to quiet evenings at home. Our journey together has been wonderful, and we can't wait to celebrate it with you."
+      },
+      "details": {
+        "title": "Event Details",
+        "dateLabel": "Date",
+        "dateValue": "June 25, 2025",
+        "venueLabel": "Venue",
+        "venueValue": "Grand Hall, Main Street",
+        "timeLabel": "Time",
+        "timeValue": "5:00 PM"
+      },
+      "rsvp": {
+        "lookupTitle": "Enter your RSVP code",
+        "lookupLabel": "RSVP Code",
+        "lookupButton": "Find My RSVP",
+        "lookup": {
+          "title": "Enter your RSVP code",
+          "prompt": "RSVP Code",
+          "button": "Find My RSVP",
+          "errorFetch": "Failed to load your RSVP information. Please check your code and try again."
+        },
+        "prompt": "Please provide your response",
+        "attend": "Will you attend?",
+        "plusOne": "Will you bring a plus one?",
+        "kids": "Number of kids",
+        "dietary": "Dietary restrictions",
+        "notes": "Additional notes",
+        "submit": "Submit RSVP",
+        "success": "Your RSVP has been submitted successfully!",
+        "errorSubmit": "There was an error submitting your RSVP. Please try again later."
+      }
+    },
+  "rsvp": {
+    "lookupTitle": "Enter your RSVP code",
+    "lookupLabel": "RSVP Code",
+    "lookupButton": "Find My RSVP",
+    "title": "RSVP",
+    "loading": "Loading...",
+    "errorFetch": "Failed to load your RSVP information. Please check your code and try again.",
+    "errorSubmit": "There was an error submitting your RSVP. Please try again later.",
+    "success": "Your RSVP has been submitted successfully!",
+    "attendingLabel": "Will you attend?",
+    "attendingYes": "Yes",
+    "attendingNo": "No",
+    "attend": "Will you attend?",
+    "attendYes": "Yes",
+    "attendNo": "No",
+    "attendingNo": "No",
+    "plusOneLabel": "Will you bring a plus one?",
+    "kidsLabel": "Number of kids",
+    "dietaryLabel": "Dietary restrictions",
+    "notesLabel": "Additional notes",
+    "mealPreferenceLabel": "Meal Preference",
+    "submitButton": "Submit RSVP",
+    "lookupSuccess": "Succes",
+    "successTitle": "Thank you!",
+    "successMessage": "Your RSVP was received.",
+    "backHome": "Return to Home"
+  }
+}

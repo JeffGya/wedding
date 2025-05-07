@@ -1,40 +1,38 @@
 <template>
   <div class="home">
     <section class="hero">
-      <h1>Welcome to Our Wedding Website!</h1>
-      <p>Your one-stop place for all things about our special day.</p>
-      <button class="cta-button">RSVP Now</button>
+      <h1>{{ t('home.hero.title') }}</h1>
+      <p>{{ t('home.hero.subtitle') }}</p>
+      <button class="cta-button">{{ t('home.hero.cta') }}</button>
     </section>
 
     <section class="story">
-      <h2>Our Story</h2>
-      <p>It all started on a warm summer day...</p>
-      <p>
-        We met in 2015 and since then, we've had countless adventures together, from spontaneous road trips to quiet nights at home. Our journey together has been incredible, and we can't wait to celebrate it with you.
-      </p>
+      <h2>{{ t('home.story.title') }}</h2>
+      <p>{{ t('home.story.text1') }}</p>
+      <p>{{ t('home.story.text2') }}</p>
     </section>
 
     <section class="details">
-      <h2>Event Details</h2>
+      <h2>{{ t('home.details.title') }}</h2>
       <ul>
-        <li><strong>Date:</strong> June 25, 2025</li>
-        <li><strong>Venue:</strong> The Grand Hall, Main Street</li>
-        <li><strong>Time:</strong> 5:00 PM</li>
+        <li><strong>{{ t('home.details.dateLabel') }}:</strong> {{ t('home.details.dateValue') }}</li>
+        <li><strong>{{ t('home.details.venueLabel') }}:</strong> {{ t('home.details.venueValue') }}</li>
+        <li><strong>{{ t('home.details.timeLabel') }}:</strong> {{ t('home.details.timeValue') }}</li>
       </ul>
     </section>
 
     <section class="rsvp">
-      <h2>RSVP</h2>
-      <p>We would love to have you with us! Please let us know if you can attend.</p>
-      <button class="cta-button">RSVP Now</button>
+      <h2>{{ t('home.rsvp.title') }}</h2>
+      <p>{{ t('home.rsvp.desc') }}</p>
+      <button class="cta-button">{{ t('home.rsvp.cta') }}</button>
     </section>
   </div>
 </template>
 
-<script>
-export default {
-  name: "Home",
-};
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 </script>
 
 <style scoped>

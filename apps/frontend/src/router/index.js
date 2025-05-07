@@ -5,7 +5,7 @@ import GenericLayout from '@/layouts/GenericLayout.vue';
 import { useAuthStore } from '@/store/auth';
 import EmailSettings from '@/views/admin/settings/EmailSettings.vue';
 import { useLangStore } from '@/store/lang';
-import PublicPageWrapper from '@/components/PublicPageWrapper.vue';
+import i18n from '@/i18n';
 
 const routes = [
   // Default route redirects to the English homepage
@@ -22,13 +22,41 @@ const routes = [
     {
       path: 'home',
       name: 'home',
-      component: PublicPageWrapper,
+      component: () => import('@/views/public/Home.vue'),
       beforeEnter: (to, from, next) => {
         const lang = to.params.lang || 'en';
         const langStore = useLangStore();
         langStore.setLanguage(lang);
         next();
       },
+    },
+    {
+      path: 'rsvp',
+      name: 'public-rsvp-lookup',
+      component: () => import('@/views/public/RSVPLookup.vue'),
+      // beforeEnter: (to, from, next) => {
+      //   i18n.global.locale.value = to.params.lang
+      //   next()
+      // }
+    },
+    {
+      path: 'rsvp/:code',
+      name: 'public-rsvp',
+      component: () => import('@/views/public/RSVP.vue'),
+      // beforeEnter: (to, from, next) => {
+      //   i18n.global.locale.value = to.params.lang
+      //   next()
+      // }
+    },
+    {
+      path: 'rsvp/:code/success',
+      name: 'public-rsvp-success',
+      component: () => import('@/views/public/RSVPSuccess.vue'),
+      beforeEnter: (to, from, next) => {
+        // ensure locale is set without breaking the ref
+        i18n.global.locale.value = to.params.lang;
+        next();
+      }
     },
 
       /* Example of other routes
@@ -109,6 +137,18 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  // synchronize i18n locale from route parameter
+  const lang = to.params.lang || 'en';
+  // Determine locales, whether availableLocales is a function or an array
+  const localeList =
+    typeof i18n.global.availableLocales === 'function'
+      ? i18n.global.availableLocales()
+      : i18n.global.availableLocales;
+  // if (Array.isArray(localeList) && localeList.includes(lang)) {
+  //   i18n.global.locale.value = lang;
+  // }
+  i18n.global.locale.value = lang;
+
   const auth = useAuthStore();
 
   if (auth.user === null) {

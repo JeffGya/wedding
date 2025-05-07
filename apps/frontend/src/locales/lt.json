@@ -1,0 +1,63 @@
+{
+  "home": {
+    "hero": {
+      "title": "Sveiki atvykę į mūsų vestuvių svetainę!",
+      "subtitle": "Vienintelė vieta viskam, kas susiję su mūsų ypatinga diena.",
+      "cta": "Patvirtinkite dalyvavimą"
+    },
+    "story": {
+      "title": "Mūsų istorija",
+      "text1": "Viskas prasidėjo šiltą vasaros dieną...",
+      "text2": "Susipažinome 2015 metais ir nuo tada kartu patyrėme begales nuotykių – nuo spontaniškų kelionių automobiliu iki ramių vakarų namuose. Mūsų kelionė buvo nuostabi, ir mes nekantraujame ją švęsti su jumis."
+    },
+    "details": {
+      "title": "Renginio detalės",
+      "dateLabel": "Data",
+      "dateValue": "2025 m. birželio 25 d.",
+      "venueLabel": "Vieta",
+      "venueValue": "Didžioji salė, Pagrindinė gatvė",
+      "timeLabel": "Laikas",
+      "timeValue": "17:00"
+    },
+    "rsvp": {
+      "lookupTitle": "Įveskite savo RSVP kodą",
+      "lookupLabel": "RSVP kodas",
+      "lookupButton": "Rasti mano RSVP",
+      "lookup": {
+        "title": "Įveskite savo RSVP kodą",
+        "prompt": "RSVP kodas",
+        "button": "Rasti mano RSVP",
+        "errorFetch": "Nepavyko gauti jūsų RSVP informacijos. Patikrinkite kodą ir bandykite dar kartą."
+      },
+      "prompt": "Prašome pateikti savo atsakymą",
+      "attend": "Ar dalyvausite?",
+      "plusOne": "Ar atsivesite papildomą svečią?",
+      "kids": "Vaikų skaičius",
+      "dietary": "Mitybos apribojimai",
+      "notes": "Papildomos pastabos",
+      "submit": "Pateikti RSVP",
+      "success": "Jūsų RSVP sėkmingai pateiktas!",
+      "errorSubmit": "Įvyko klaida pateikiant jūsų RSVP. Prašome pabandyti vėliau."
+    }
+  },
+  "rsvp": {
+    "lookupTitle": "Įveskite savo RSVP kodą",
+    "lookupLabel": "RSVP kodas",
+    "lookupButton": "Rasti mano RSVP",
+    "title": "Patvirtinimas",
+    "loading": "Kraunama...",
+    "attendingLabel": "Ar dalyvausite?",
+    "attendingYes": "Taip",
+    "attendingNo": "Ne",
+    "plusOneLabel": "Ar atsivesite papildomą svečią?",
+    "kidsLabel": "Vaikų skaičius",
+    "dietaryLabel": "Mitybos apribojimai",
+    "notesLabel": "Papildomos pastabos",
+    "mealPreferenceLabel": "Maitinimo pageidavimai",
+    "submitButton": "Pateikti RSVP",    
+    "lookupSuccess": "Succes",
+    "successTitle": "Ačiū!",
+    "successMessage": "Jūsų atsakymas sėkmingai užregistruotas.",
+    "backHome": "Grįžti į pradžią"
+  }
+}

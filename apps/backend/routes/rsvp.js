@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+// parse JSON bodies on this router
+router.use(express.json());
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
 const axios = require('axios');
@@ -66,6 +68,7 @@ router.get('/:code', (req, res) => {
 // Public: submit RSVP by code
 // POST /api/rsvp
 router.post('/', (req, res) => {
+  console.log('req.body →', req.body);
   const { code, attending, plus_one_name, dietary, notes, num_kids, meal_preference } = req.body;
   if (!code) return res.status(400).json({ error: 'Code is required' });
   // Input type validation

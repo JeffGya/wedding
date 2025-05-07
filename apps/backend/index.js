@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5001; // Changed fallback port from 5000 to 500
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
 
 // Middleware to parse signed cookies using session secret
 app.use(cookieParser(process.env.SESSION_SECRET));
