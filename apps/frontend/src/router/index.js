@@ -4,6 +4,7 @@ import AdminLayout from '@/layouts/AdminLayout.vue';
 import GenericLayout from '@/layouts/GenericLayout.vue';
 import { useAuthStore } from '@/store/auth';
 import EmailSettings from '@/views/admin/settings/EmailSettings.vue';
+import GuestSettings from '@/views/admin/settings/GuestSettings.vue';
 import { useLangStore } from '@/store/lang';
 import i18n from '@/i18n';
 
@@ -90,6 +91,12 @@ const routes = [
             path: 'email',
             name: 'admin-settings-email',
             component: EmailSettings,
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'guests',
+            name: 'admin-settings-guests',
+            component: GuestSettings,
             meta: { requiresAuth: true }
           }
         ]

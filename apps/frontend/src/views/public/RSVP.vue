@@ -1,14 +1,20 @@
 <template>
   <div class="rsvp-page">
-    <h1>{{ $t('rsvp.title') }}</h1>
-    <ErrorBanner v-if="error" :message="error" />
-    <div v-else-if="loading">{{ $t('rsvp.loading') }}</div>
-    <RSVPForm
-      v-else
-      mode="public"
-      :guest="guest"
-      @submit="onSubmit"
+    <ErrorBanner
+      v-if="!settingsLoading && isClosed()"
+      :message="t('rsvp.closed')"
     />
+    <div v-else>
+      <h1>{{ $t('rsvp.title') }}</h1>
+      <ErrorBanner v-if="error" :message="error" />
+      <div v-else-if="loading">{{ $t('rsvp.loading') }}</div>
+      <RSVPForm
+        v-else
+        mode="public"
+        :guest="guest"
+        @submit="onSubmit"
+      />
+    </div>
   </div>
 </template>
 
@@ -19,10 +25,12 @@ import { useI18n } from 'vue-i18n'
 import { fetchGuestByCode, submitGuestRSVP } from '@/api/rsvp'
 import ErrorBanner from '@/components/ui/ErrorBanner.vue'
 import RSVPForm from '@/components/forms/RSVPForm.vue'
+import { useGuestSettings } from '@/hooks/useGuestSettings'
 
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
+const { loading: settingsLoading, isClosed } = useGuestSettings()
 
 const guest = ref(null)
 const loading = ref(true)

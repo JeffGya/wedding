@@ -41,8 +41,9 @@ app.use('/api/rsvp', rsvpRouter);
 
 // Import email settings routes
 const emailSettingsRoutes = require('./routes/emailSettings');
-// Email settings route for sending and saving provider settings
 app.use('/api/settings/email', emailSettingsRoutes);
+const guestSettingsRoutes = require('./routes/guestSettings');
+app.use('/api/settings/guests', guestSettingsRoutes);
 
 const messageRoutes = require('./routes/messages');
 app.use('/api/messages', messageRoutes); // All message-related routes including send, resend, logs, etc.

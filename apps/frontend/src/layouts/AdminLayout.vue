@@ -24,6 +24,12 @@
               Email Settings
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/admin/settings/guests"
+              :class="['hover:underline', $route.path === '/admin/settings/guests' ? 'text-black font-bold' : 'text-blue-600']">
+              Guest Settings
+            </RouterLink>
+          </li>
         </ul>
       </nav>
     </aside>

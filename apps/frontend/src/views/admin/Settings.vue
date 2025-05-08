@@ -19,6 +19,13 @@
       >
         Email
       </button>
+      <button
+        class="px-4 py-2 rounded border border-gray-300"
+        :class="activeTab === 'guests' ? 'bg-gray-200 font-semibold' : 'bg-white'"
+        @click="activateTab('guests')"
+      >
+        Guests
+      </button>
       <!-- Future tabs can be added here -->
     </div>
 
@@ -28,6 +35,7 @@
         <!-- Placeholder for main settings form or content -->
       </div>
       <EmailSettings v-if="activeTab === 'email'" />
+      <GuestSettings v-if="activeTab === 'guests'" />
     </div>
   </div>
 </template>
@@ -36,6 +44,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import EmailSettings from './settings/EmailSettings.vue'
+import GuestSettings from './settings/GuestSettings.vue'
 
 const route = useRoute()
 const router = useRouter()

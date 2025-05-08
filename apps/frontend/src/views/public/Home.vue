@@ -3,7 +3,16 @@
     <section class="hero">
       <h1>{{ t('home.hero.title') }}</h1>
       <p>{{ t('home.hero.subtitle') }}</p>
-      <button class="cta-button">{{ t('home.hero.cta') }}</button>
+      <div v-if="!loading">
+        <router-link
+          v-if="!isClosed()"
+          :to="{ name: 'public-rsvp-lookup', params: { lang } }"
+          class="cta-button"
+        >
+          {{ t('home.hero.cta') }}
+        </router-link>
+        <span v-else class="text-gray-500">{{ t('home.rsvpClosed')}}</span>
+      </div>
     </section>
 
     <section class="story">
@@ -24,7 +33,20 @@
     <section class="rsvp">
       <h2>{{ t('home.rsvp.title') }}</h2>
       <p>{{ t('home.rsvp.desc') }}</p>
-      <button class="cta-button">{{ t('home.rsvp.cta') }}</button>
+      <div v-if="!loading">
+        <router-link
+          v-if="!isClosed()"
+          :to="{ name: 'public-rsvp-lookup', params: { lang } }"
+          class="cta-button"
+        >
+          {{ t('home.rsvp.cta') }}
+        </router-link>
+        <span v-else class="text-gray-500">{{ t('home.rsvpClosed')}}</span>
+        <CountdownTimer
+          v-if="settings.rsvp_deadline && !isClosed()"
+          :deadline="settings.rsvp_deadline"
+        />
+      </div>
     </section>
   </div>
 </template>
@@ -32,7 +54,14 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { useGuestSettings } from '@/hooks/useGuestSettings'
+import CountdownTimer from '@/components/ui/CountdownTimer.vue'
+import { useRoute } from 'vue-router'
+
 const { t } = useI18n()
+const { settings, loading, isClosed } = useGuestSettings()
+const route = useRoute()
+const lang = route.params.lang || 'en'
 </script>
 
 <style scoped>

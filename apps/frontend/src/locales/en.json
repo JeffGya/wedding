@@ -5,6 +5,7 @@
         "subtitle": "The one stop for everything about our special day.",
         "cta": "RSVP"
       },
+      "rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
       "story": {
         "title": "Our Story",
         "text1": "It all started on a warm summer day...",
@@ -65,6 +66,7 @@
     "lookupSuccess": "Succes",
     "successTitle": "Thank you!",
     "successMessage": "Your RSVP was received.",
-    "backHome": "Return to Home"
+    "backHome": "Return to Home",
+    "closed": "RSVP's are not open yet. We will inform you when it is possible"
   }
 }

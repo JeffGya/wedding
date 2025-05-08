@@ -5,10 +5,11 @@
       "subtitle": "Vienintelė vieta viskam, kas susiję su mūsų ypatinga diena.",
       "cta": "Patvirtinkite dalyvavimą"
     },
+    "rsvpClosed": "RSVP dar nėra atidaryti. Laukite naujienų.",
     "story": {
       "title": "Mūsų istorija",
       "text1": "Viskas prasidėjo šiltą vasaros dieną...",
-      "text2": "Susipažinome 2015 metais ir nuo tada kartu patyrėme begales nuotykių – nuo spontaniškų kelionių automobiliu iki ramių vakarų namuose. Mūsų kelionė buvo nuostabi, ir mes nekantraujame ją švęsti su jumis."
+      "text2": "Susipažinome 2015 metais ir nuo tada kartu patyrėme begales nuotykių – nuo spontaniškų ũelionių automobiliu iki ramių vakarų namuose. Mūsų kelionė buvo nuostabi, ir mes nekantraujame ją švęsti su jumis."
     },
     "details": {
       "title": "Renginio detalės",
@@ -58,6 +59,7 @@
     "lookupSuccess": "Succes",
     "successTitle": "Ačiū!",
     "successMessage": "Jūsų atsakymas sėkmingai užregistruotas.",
-    "backHome": "Grįžti į pradžią"
+    "backHome": "Grįžti į pradžią",
+    "closed": "RSVP dar nėra atidaryti. Laukite naujienų."
   }
 }

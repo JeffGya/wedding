@@ -19,3 +19,12 @@ export async function updateEmailSettings(data) {
   const response = await api.post('/email-settings', data)
   return response.data
 }
+
+/**
+ * Fetch global RSVP settings for guests
+ * @returns {{ rsvp_open: boolean, rsvp_deadline: string|null }}
+ */
+export async function fetchGuestSettings() {
+  const response = await api.get('/settings/guests');
+  return response.data;
+}
