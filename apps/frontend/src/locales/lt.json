@@ -42,6 +42,8 @@
     }
   },
   "rsvp": {
+    "attendingRequired": "Prašome pranešti, ar galėsite dalyvauti.",
+    "notesMax": "Pastabos turi būti ne ilgesnės nei 500 simbolių.",
     "lookupTitle": "Įveskite savo RSVP kodą",
     "lookupLabel": "RSVP kodas",
     "lookupButton": "Rasti mano RSVP",

@@ -11,6 +11,7 @@
   "dependencies": {
     "@tiptap/starter-kit": "^2.11.7",
     "@tiptap/vue-3": "^2.11.7",
+    "@vee-validate/rules": "^4.15.0",
     "@vuepic/vue-datepicker": "^11.0.2",
     "axios": "^1.8.4",
     "fuse.js": "^7.1.0",

@@ -42,6 +42,8 @@
       }
     },
   "rsvp": {
+    "attendingRequired": "Let us know if you can attend.",
+    "notesMax": "Notes must be at most 500 characters.",
     "lookupTitle": "Enter your RSVP code",
     "lookupLabel": "RSVP Code",
     "lookupButton": "Find My RSVP",
@@ -56,7 +58,6 @@
     "attend": "Will you attend?",
     "attendYes": "Yes",
     "attendNo": "No",
-    "attendingNo": "No",
     "plusOneLabel": "Will you bring a plus one?",
     "kidsLabel": "Number of kids",
     "dietaryLabel": "Dietary restrictions",

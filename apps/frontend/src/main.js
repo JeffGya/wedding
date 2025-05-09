@@ -6,10 +6,18 @@ import App from './App.vue'
 import router from '@/router'
 import Toast, { useToast } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import { configure } from 'vee-validate';
+import { configure, defineRule } from 'vee-validate';
 import { localize } from '@vee-validate/i18n';
 import validationEn from '@vee-validate/i18n/dist/locale/en.json';
 import i18n from '@/i18n';
+import * as rules from '@vee-validate/rules';
+
+// Register all built-in rules, skipping any non-function exports (e.g., the 'all' JSON object)
+Object.keys(rules).forEach(name => {
+  if (typeof rules[name] === 'function') {
+    defineRule(name, rules[name]);
+  }
+});
 
 // Configure VeeValidate
 configure({
