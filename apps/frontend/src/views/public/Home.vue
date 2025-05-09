@@ -14,6 +14,9 @@
         <span v-else class="text-gray-500">{{ t('home.rsvpClosed')}}</span>
       </div>
     </section>
+    <section class="wedding-countdown-section my-8">
+      <WeddingCountdown />
+    </section>
 
     <section class="story">
       <h2>{{ t('home.story.title') }}</h2>
@@ -57,7 +60,7 @@ import { useI18n } from 'vue-i18n'
 import { useGuestSettings } from '@/hooks/useGuestSettings'
 import CountdownTimer from '@/components/ui/CountdownTimer.vue'
 import { useRoute } from 'vue-router'
-
+import WeddingCountdown from '@/components/WeddingCountdown.vue';
 const { t } = useI18n()
 const { settings, loading, isClosed } = useGuestSettings()
 const route = useRoute()

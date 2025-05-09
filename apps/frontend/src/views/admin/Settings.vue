@@ -8,7 +8,7 @@
       <button
         class="px-4 py-2 rounded border border-gray-300"
         :class="activeTab === 'main' ? 'bg-gray-200 font-semibold' : 'bg-white'"
-        @click="activateTab('')"
+        @click="activateTab('main')"
       >
         Main
       </button>
@@ -32,7 +32,7 @@
     <!-- Tab Content -->
     <div>
       <div v-if="activeTab === 'main'">
-        <!-- Placeholder for main settings form or content -->
+        <MainSettings />
       </div>
       <EmailSettings v-if="activeTab === 'email'" />
       <GuestSettings v-if="activeTab === 'guests'" />
@@ -41,23 +41,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
 import EmailSettings from './settings/EmailSettings.vue'
 import GuestSettings from './settings/GuestSettings.vue'
+import MainSettings from './settings/MainSettings.vue'
 
-const route = useRoute()
-const router = useRouter()
 const activeTab = ref('main')
 
 // Navigate to current tab route when switching tabs
 function activateTab(tab) {
   activeTab.value = tab
-  router.push(`/admin/settings/${tab}`)
 }
-
-onMounted(() => {
-  const tabFromRoute = route.path.split('/').pop()
-  if (tabFromRoute) activeTab.value = tabFromRoute
-})
 </script>

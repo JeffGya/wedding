@@ -45,6 +45,9 @@ app.use('/api/settings/email', emailSettingsRoutes);
 const guestSettingsRoutes = require('./routes/guestSettings');
 app.use('/api/settings/guests', guestSettingsRoutes);
 
+const settingRoutes = require('./routes/setting');
+app.use('/api/settings/main', settingRoutes);
+
 const messageRoutes = require('./routes/messages');
 app.use('/api/messages', messageRoutes); // All message-related routes including send, resend, logs, etc.
 

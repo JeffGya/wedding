@@ -95,3 +95,12 @@ CREATE TABLE IF NOT EXISTS guest_settings (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create the main settings table for global flags
+CREATE TABLE IF NOT EXISTS settings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  enable_global_countdown BOOLEAN NOT NULL DEFAULT FALSE,
+  wedding_date DATETIME,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

@@ -20,6 +20,11 @@
         "timeLabel": "Time",
         "timeValue": "5:00 PM"
       },
+      "countdown": {
+        "label": "Time until our wedding",
+        "months": " Month | Months",
+        "days": " Day | Days"
+      },
       "rsvp": {
         "lookupTitle": "Enter your RSVP code",
         "lookupLabel": "RSVP Code",

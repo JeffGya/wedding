@@ -20,6 +20,11 @@
       "timeLabel": "Laikas",
       "timeValue": "17:00"
     },
+    "countdown": {
+      "label": "Laikas iki mūsų vestuvių",
+      "months": " Mėnuo | Mėnesiai",
+      "days": " Diena | Dienos"
+    },
     "rsvp": {
       "lookupTitle": "Įveskite savo RSVP kodą",
       "lookupLabel": "RSVP kodas",
