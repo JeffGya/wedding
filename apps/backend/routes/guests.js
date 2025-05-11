@@ -55,7 +55,10 @@ router.get('/', (req, res) => {
   const { attending, group_id, rsvp_status, sort_by, page = 1, per_page = 40 } = req.query;
 
   let query = `
-    SELECT id, name, attending, rsvp_status, plus_one_name, dietary, notes, rsvp_deadline, updated_at, group_id, group_label, email, code, can_bring_plus_one, num_kids, meal_preference
+    SELECT
+      id, group_id, group_label, name, preferred_language, email, code,
+      can_bring_plus_one, is_primary, attending,
+      rsvp_status, dietary, notes, rsvp_deadline, updated_at
     FROM guests
   `;
 
@@ -228,7 +231,7 @@ router.post('/', (req, res) => {
     email,
     code,
     can_bring_plus_one,
-    num_kids
+    is_primary
   } = req.body;
 
   // Basic validation
@@ -244,15 +247,11 @@ router.post('/', (req, res) => {
       can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
     return res.status(400).json({ error: 'can_bring_plus_one must be a boolean or 0/1' });
   }
-  // num_kids validation
-  if (typeof num_kids !== 'undefined' && (!Number.isInteger(num_kids) || num_kids < 0)) {
-    return res.status(400).json({ error: 'num_kids must be a non-negative integer' });
-  }
 
   const stmt = db.prepare(`
     INSERT INTO guests (
       group_id, group_label, name, email, code,
-      can_bring_plus_one, num_kids
+      can_bring_plus_one, is_primary
     ) VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
 
@@ -263,7 +262,7 @@ router.post('/', (req, res) => {
     email,
     code,
     can_bring_plus_one || 0,
-    num_kids || 0,
+    typeof is_primary !== 'undefined' ? is_primary : 1,
     function (err) {
       if (err) return res.status(500).json({ error: 'Failed to create guest' });
       res.status(201).json({ id: this.lastID });
@@ -279,7 +278,7 @@ router.put('/:id', (req, res) => {
     email,
     group_label,
     can_bring_plus_one,
-    num_kids,
+    is_primary,
     attending,
     dietary,
     notes,
@@ -298,47 +297,50 @@ router.put('/:id', (req, res) => {
       can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
     return res.status(400).json({ error: 'can_bring_plus_one must be a boolean or 0/1' });
   }
-  // num_kids validation
-  if (typeof num_kids !== 'undefined' && (!Number.isInteger(num_kids) || num_kids < 0)) {
-    return res.status(400).json({ error: 'num_kids must be a non-negative integer' });
-  }
   // RSVP deadline validation
   if (rsvp_deadline && isNaN(Date.parse(rsvp_deadline))) {
     return res.status(400).json({ error: 'rsvp_deadline must be a valid datetime string' });
   }
 
-  const attendingValue = typeof attending !== 'undefined' ? attending : null;
-  const rsvpStatusVal = attendingValue === 1 || attendingValue === 'true' || attendingValue === true
-    ? 'attending'
-    : attendingValue === 0 || attendingValue === 'false' || attendingValue === false
-    ? 'not_attending'
-    : 'pending';
+  db.get('SELECT * FROM guests WHERE id = ?', [id], (err, row) => {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    if (!row) return res.status(404).json({ error: 'Guest not found' });
 
-  const stmt = db.prepare(`
-    UPDATE guests SET
-      name = ?, email = ?, group_label = ?,
-      can_bring_plus_one = ?, num_kids = ?, attending = ?, rsvp_status = ?,
-      dietary = ?, notes = ?, rsvp_deadline = ?, updated_at = CURRENT_TIMESTAMP
-    WHERE id = ?
-  `);
+    const isPrimaryValue = typeof is_primary !== 'undefined' ? is_primary : row.is_primary;
 
-  stmt.run(
-    name,
-    email,
-    group_label,
-    can_bring_plus_one || 0,
-    num_kids || 0,
-    attendingValue,
-    rsvpStatusVal,
-    dietary,
-    notes,
-    rsvp_deadline || null,
-    id,
-    function (err) {
-      if (err) return res.status(500).json({ error: 'Failed to update guest' });
-      res.json({ success: true });
-    }
-  );
+    const attendingValue = typeof attending !== 'undefined' ? attending : null;
+    const rsvpStatusVal = attendingValue === 1 || attendingValue === 'true' || attendingValue === true
+      ? 'attending'
+      : attendingValue === 0 || attendingValue === 'false' || attendingValue === false
+      ? 'not_attending'
+      : 'pending';
+
+    const stmt = db.prepare(`
+      UPDATE guests SET
+        name = ?, email = ?, group_label = ?,
+        can_bring_plus_one = ?, is_primary = ?, attending = ?, rsvp_status = ?,
+        dietary = ?, notes = ?, rsvp_deadline = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `);
+
+    stmt.run(
+      name,
+      email,
+      group_label,
+      can_bring_plus_one || 0,
+      isPrimaryValue,
+      attendingValue,
+      rsvpStatusVal,
+      dietary,
+      notes,
+      rsvp_deadline || null,
+      id,
+      function (err) {
+        if (err) return res.status(500).json({ error: 'Failed to update guest' });
+        res.json({ success: true });
+      }
+    );
+  });
 });
 
 // DELETE /api/guests/:id - Delete guest
@@ -350,16 +352,13 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-
-
 // RSVP: Create or update RSVP for a guest
 // POST /api/guests/rsvp
 router.post('/rsvp', (req, res) => {
-  const { id, attending, dietary, notes, num_kids, plus_one_name, meal_preference, rsvp_deadline } = req.body;
+  const { id, attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary } = req.body;
   if (!id) {
     return res.status(400).json({ error: 'Missing required field: id' });
   }
-  
   // Check if guest exists
   db.get('SELECT * FROM guests WHERE id = ?', [id], (err, row) => {
     if (err) return res.status(500).json({ error: 'Database error' });
@@ -368,11 +367,9 @@ router.post('/rsvp', (req, res) => {
     if (plus_one_name && !row.can_bring_plus_one) {
       return res.status(400).json({ error: 'This guest is not allowed a plus one' });
     }
-    // Validate num_kids
-    if (typeof num_kids !== 'undefined' && (!Number.isInteger(num_kids) || num_kids < 0)) {
-      return res.status(400).json({ error: 'num_kids must be a non-negative integer' });
+    if (plus_one_dietary !== undefined && typeof plus_one_dietary !== 'string') {
+      return res.status(400).json({ error: 'plus_one_dietary must be a string' });
     }
-
     // Determine attending and rsvp_status, preserving existing if not provided
     const attendingProvided = typeof attending !== 'undefined';
     const attendingValue = attendingProvided ? attending : row.attending;
@@ -383,12 +380,10 @@ router.post('/rsvp', (req, res) => {
             ? 'not_attending'
             : 'pending')
       : row.rsvp_status;
-
     // Enforce RSVP deadline
     if (row.rsvp_deadline && new Date(row.rsvp_deadline) < new Date()) {
       return res.status(403).json({ error: 'RSVP deadline has passed' });
     }
-
     // Update RSVP info
     const stmt = db.prepare(`
       UPDATE guests SET
@@ -396,35 +391,69 @@ router.post('/rsvp', (req, res) => {
         rsvp_status = ?,
         dietary = ?,
         notes = ?,
-        num_kids = ?,
-        plus_one_name = ?,
-        meal_preference = ?,
         rsvp_deadline = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
-
     stmt.run(
       attendingValue,
       rsvpStatusVal,
       dietary || null,
       notes || null,
-      typeof num_kids !== 'undefined' ? num_kids : row.num_kids,
-      plus_one_name !== undefined ? plus_one_name : row.plus_one_name,
-      meal_preference !== undefined ? meal_preference : row.meal_preference,
-      rsvp_deadline !== undefined ? rsvp_deadline : row.rsvp_deadline,
+      rsvp_deadline || row.rsvp_deadline,
       id,
       function (updateErr) {
         if (updateErr) return res.status(500).json({ error: 'Failed to update RSVP' });
+        // Insert secondary guest if plus_one_name is provided
+        if (plus_one_name) {
+          db.run(
+            `INSERT INTO guests (
+               group_id, group_label, name, email, code,
+               can_bring_plus_one, is_primary, preferred_language,
+               attending, rsvp_deadline, dietary, notes, rsvp_status
+             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              row.group_id,
+              row.group_label,
+              plus_one_name,
+              null,
+              null,
+              0,
+              0,
+              row.preferred_language,
+              null,
+              null,
+              plus_one_dietary || null,
+              null,
+              'pending'
+            ],
+            (secErr) => {
+              if (secErr) logger.error('Error inserting secondary guest:', secErr);
+            }
+          );
+        }
+        // If primary RSVP is attending, mark all secondaries as attending too
+        if (rsvpStatusVal === 'attending') {
+          db.run(
+            `UPDATE guests
+             SET attending = 1,
+                 rsvp_status = 'attending',
+                 updated_at = CURRENT_TIMESTAMP
+             WHERE group_label = ? AND is_primary = 0`,
+            [row.group_label],
+            (secAttendErr) => {
+              if (secAttendErr) logger.error('Error updating secondary attendance:', secAttendErr);
+            }
+          );
+        }
         res.json({ success: true });
-        // Send confirmation email asynchronously
-        sendConfirmationEmail(db, { 
-          ...row, 
-          preferred_language: row.preferred_language, 
-          name: row.name, 
-          group_label: row.group_label, 
-          email: row.email, 
-          code: row.code 
+        sendConfirmationEmail(db, {
+          ...row,
+          preferred_language: row.preferred_language,
+          name: row.name,
+          group_label: row.group_label,
+          email: row.email,
+          code: row.code
         });
       }
     );
@@ -435,7 +464,7 @@ router.post('/rsvp', (req, res) => {
 // PUT /api/guests/:id/rsvp
 router.put('/:id/rsvp', (req, res) => {
   const { id } = req.params;
-  const { attending, dietary, notes, num_kids, plus_one_name, rsvp_deadline } = req.body;
+  const { attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary } = req.body;
 
   // Check if guest exists
   db.get('SELECT * FROM guests WHERE id = ?', [id], (err, row) => {
@@ -445,9 +474,8 @@ router.put('/:id/rsvp', (req, res) => {
     if (plus_one_name && !row.can_bring_plus_one) {
       return res.status(400).json({ error: 'This guest is not allowed a plus one' });
     }
-    // Validate num_kids
-    if (typeof num_kids !== 'undefined' && (!Number.isInteger(num_kids) || num_kids < 0)) {
-      return res.status(400).json({ error: 'num_kids must be a non-negative integer' });
+    if (plus_one_dietary !== undefined && typeof plus_one_dietary !== 'string') {
+      return res.status(400).json({ error: 'plus_one_dietary must be a string' });
     }
 
     // Determine attending and rsvp_status, preserving existing if not provided
@@ -473,32 +501,71 @@ router.put('/:id/rsvp', (req, res) => {
         rsvp_status = ?,
         dietary = ?,
         notes = ?,
-        num_kids = ?,
-        plus_one_name = ?,
         rsvp_deadline = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
+
     stmt.run(
       attendingValue,
       rsvpStatusVal,
       dietary || null,
       notes || null,
-      typeof num_kids !== 'undefined' ? num_kids : row.num_kids,
-      plus_one_name !== undefined ? plus_one_name : row.plus_one_name,
-      rsvp_deadline !== undefined ? rsvp_deadline : row.rsvp_deadline,
+      rsvp_deadline || row.rsvp_deadline,
       id,
       function (updateErr) {
         if (updateErr) return res.status(500).json({ error: 'Failed to update RSVP' });
+        // Insert secondary guest if plus_one_name is provided
+        if (plus_one_name) {
+          db.run(
+            `INSERT INTO guests (
+               group_id, group_label, name, email, code,
+               can_bring_plus_one, is_primary, preferred_language,
+               attending, rsvp_deadline, dietary, notes, rsvp_status
+             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              row.group_id,
+              row.group_label,
+              plus_one_name,
+              null,
+              null,
+              0,
+              0,
+              row.preferred_language,
+              null,
+              null,
+              plus_one_dietary || null,
+              null,
+              'pending'
+            ],
+            (secErr) => {
+              if (secErr) logger.error('Error inserting secondary guest:', secErr);
+            }
+          );
+        }
+        // If primary RSVP is attending, mark all secondaries as attending too
+        if (rsvpStatusVal === 'attending') {
+          db.run(
+            `UPDATE guests
+             SET attending = 1,
+                 rsvp_status = 'attending',
+                 updated_at = CURRENT_TIMESTAMP
+             WHERE group_label = ? AND is_primary = 0`,
+            [row.group_label],
+            (secAttendErr) => {
+              if (secAttendErr) logger.error('Error updating secondary attendance:', secAttendErr);
+            }
+          );
+        }
         res.json({ success: true });
         // Send confirmation email asynchronously
-        sendConfirmationEmail(db, { 
-          ...row, 
-          preferred_language: row.preferred_language, 
-          name: row.name, 
-          group_label: row.group_label, 
-          email: row.email, 
-          code: row.code 
+        sendConfirmationEmail(db, {
+          ...row,
+          preferred_language: row.preferred_language,
+          name: row.name,
+          group_label: row.group_label,
+          email: row.email,
+          code: row.code
         });
       }
     );

@@ -25,11 +25,14 @@
             <label class="block text-left font-medium mb-1">Email</label>
             <input v-model="form.email" type="email" class="w-full border px-3 py-2 rounded" required />
           </div>
-  
           <div>
-            <label class="block text-left font-medium mb-1">Number of Kids</label>
-            <input v-model.number="form.num_kids" type="number" min="0" class="w-full border px-3 py-2 rounded" />
+            <label class="block text-left font-medium mb-1">Preferred Language</label>
+            <select v-model="form.preferred_language" class="w-full border px-3 py-2 rounded">
+              <option value="en">English</option>
+              <option value="lt">Lithuanian</option>
+            </select>
           </div>
+  
           <div>
     <label class="block text-left font-medium mb-1">Code</label>
     <input
@@ -47,6 +50,15 @@
       class="mr-2"
     />
     <label for="plusOneCheckbox" class="font-medium">Allow Plus One</label>
+  </div>
+  <div class="flex items-center">
+    <input
+      v-model="form.is_primary"
+      type="checkbox"
+      id="primaryCheckbox"
+      class="mr-2"
+    />
+    <label for="primaryCheckbox" class="font-medium">Primary Guest</label>
   </div>
   
           <div class="flex justify-end gap-2 mt-4">
@@ -72,9 +84,10 @@
     group_label: '',
     name: '',
     email: '',
-    num_kids: 0,
     code: '',
-    can_bring_plus_one: false
+    can_bring_plus_one: false,
+    is_primary: true,
+    preferred_language: 'en',
   })
   
   watch(() => props.guest, (newGuest) => {
@@ -82,16 +95,18 @@
       form.group_label = newGuest.group_label
       form.name = newGuest.name
       form.email = newGuest.email
-      form.num_kids = newGuest.num_kids ?? 0
       form.code = newGuest.code ?? ''
       form.can_bring_plus_one = newGuest.can_bring_plus_one ?? false
+      form.is_primary = newGuest.is_primary ?? true
+      form.preferred_language = newGuest.preferred_language ?? 'en'
     } else {
       form.group_label = ''
       form.name = ''
       form.email = ''
-      form.num_kids = 0
       form.code = ''
       form.can_bring_plus_one = false
+      form.is_primary = true
+      form.preferred_language = 'en'
     }
   }, { immediate: true })
   
@@ -104,9 +119,10 @@ const handleSubmit = () => {
     group_label: form.group_label,
     name: form.name,
     email: form.email,
-    num_kids: form.num_kids,
     code: codeValue,
-    can_bring_plus_one: form.can_bring_plus_one
+    can_bring_plus_one: form.can_bring_plus_one,
+    is_primary: form.is_primary,
+    preferred_language: form.preferred_language,
   })
 }
   </script>

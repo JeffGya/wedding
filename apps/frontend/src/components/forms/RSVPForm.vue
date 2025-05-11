@@ -2,7 +2,15 @@
   <Form
     :validation-schema="validationSchema"
     @submit="onSubmit"
-    v-slot="{ errors }"
+    :initial-values="{
+      attending: props.guest.attending,
+      dietary: props.guest.dietary,
+      notes: props.guest.notes,
+      add_plus_one: false,
+      plus_one_name: '',
+      plus_one_dietary: ''
+    }"
+    v-slot="{ errors, values }"
   >
     <ErrorBanner v-if="formError" :message="formError" type="error" />
 
@@ -21,10 +29,22 @@
       <ErrorMessage name="attending" class="text-red-600 text-sm" />
     </div>
 
-    <div v-if="props.guest.plus_one_allowed" class="mb-4">
-      <label class="font-medium">{{ t('rsvp.plusOneLabel') }}</label>
+    <div v-if="props.guest.can_bring_plus_one" class="mb-4">
+      <label class="inline-flex items-center">
+        <Field type="checkbox" name="add_plus_one" class="mr-2" />
+        {{ t('rsvp.plusOneLabel') }}
+      </label>
+    </div>
+
+    <div v-if="props.guest.can_bring_plus_one && !values.add_plus_one" class="mb-4">
+      <label class="font-medium">{{ t('rsvp.plusOnenNameLabel') }}</label>
       <Field name="plus_one_name" class="w-full border rounded px-2 py-1" />
       <ErrorMessage name="plus_one_name" class="text-red-600 text-sm" />
+      <div class="mb-4">
+        <label class="font-medium">{{ t('rsvp.plusOneDietaryLabel') }}</label>
+        <Field name="plus_one_dietary" class="w-full border rounded px-2 py-1" />
+        <ErrorMessage name="plus_one_dietary" class="text-red-600 text-sm" />
+      </div>
     </div>
 
     <div class="mb-4">
@@ -37,12 +57,6 @@
       <label class="font-medium">{{ t('rsvp.notesLabel') }}</label>
       <Field as="textarea" name="notes" class="w-full border rounded px-2 py-1" />
       <ErrorMessage name="notes" class="text-red-600 text-sm" />
-    </div>
-
-    <div class="mb-4">
-      <label class="font-medium">{{ t('rsvp.mealPreferenceLabel') }}</label>
-      <Field name="meal_preference" class="w-full border rounded px-2 py-1" />
-      <ErrorMessage name="meal_preference" class="text-red-600 text-sm" />
     </div>
 
     <div class="flex items-center justify-end">
@@ -85,7 +99,7 @@ const formError = ref('');
 
 // Build dynamic validation schema using shared Yup schema
 const validationSchema = computed(() =>
-  createRsvpSchema({ plusOneAllowed: props.guest.plus_one_allowed })
+  createRsvpSchema({ plusOneAllowed: props.guest.can_bring_plus_one })
 );
 
 // Determine if form should be disabled (deadline passed)

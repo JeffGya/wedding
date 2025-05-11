@@ -13,8 +13,8 @@
  
       <select v-model="rsvpFilter" class="px-3 py-2 border rounded">
         <option value="all">All RSVP</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="attending">Attending</option>
+        <option value="not_attending">Not Attending</option>
         <option value="pending">Pending</option>
       </select>
  
@@ -42,7 +42,9 @@
             :checked="selectedGuests.includes(guest.id)"
             @change="toggleGuest(guest.id)"
           />
-          <span>{{ guest.name }} ({{ guest.preferred_language }}, RSVP: {{ guest.rsvp_status }})</span>
+          <span>
+            {{ guest.name }} ({{ guest.preferred_language || '' }}, RSVP: {{ guest.rsvp_status || '' }})
+          </span>
         </li>
       </ul>
     </div>
@@ -72,13 +74,7 @@ const fetchGuests = async () => {
       withCredentials: true
     });
 
-    if (Array.isArray(res.data)) {
-      guests.value = res.data;
-    } else if (Array.isArray(res.data.guests)) {
-      guests.value = res.data.guests;
-    } else {
-      guests.value = [];
-    }
+    guests.value = Array.isArray(res.data.guests) ? res.data.guests : [];
 
     fuse = new Fuse(guests.value, { keys: ['name'], threshold: 0.4 });
 
@@ -103,9 +99,7 @@ const filteredGuests = computed(() => {
   return matchedGuests.filter((guest) => {
     const matchesRSVP =
       rsvpFilter.value === 'all' ||
-      (rsvpFilter.value === 'yes' && guest.rsvp_status === 'yes') ||
-      (rsvpFilter.value === 'no' && guest.rsvp_status === 'no') ||
-      (rsvpFilter.value === 'pending' && !guest.rsvp_status)
+      guest.rsvp_status === rsvpFilter.value;
 
     const matchesLanguage =
       languageFilter.value === 'all' || guest.preferred_language === languageFilter.value

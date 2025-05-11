@@ -7,20 +7,19 @@ CREATE TABLE IF NOT EXISTS users (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS guests;
 -- Create the guests table
 CREATE TABLE IF NOT EXISTS guests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   group_id INTEGER,
-  group_label TEXT UNIQUE,
+  group_label TEXT,
   name TEXT NOT NULL,
   preferred_language TEXT DEFAULT 'en',
   email TEXT,
-  code TEXT UNIQUE NOT NULL,
+  code TEXT UNIQUE,
   can_bring_plus_one BOOLEAN DEFAULT 0,
-  num_kids INTEGER DEFAULT 0,
+  is_primary BOOLEAN NOT NULL DEFAULT 1,
   attending BOOLEAN,
-  plus_one_name TEXT,
-  meal_preference TEXT,
   rsvp_deadline DATETIME,
   dietary TEXT,
   notes TEXT,

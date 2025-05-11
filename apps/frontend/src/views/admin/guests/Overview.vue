@@ -68,21 +68,53 @@
       <table class="min-w-full text-left border-collapse border border-gray-300 mx-auto">
         <thead>
           <tr class="bg-gray-100">
-            <th class="p-2 border border-gray-300">Group</th>
-            <th class="p-2 border border-gray-300">Name</th>
-            <th class="p-2 border border-gray-300">Email</th>
-            <th class="p-2 border border-gray-300">RSVP</th>
-            <th class="p-2 border border-gray-300">Code</th>
-            <th class="p-2 border border-gray-300">+1</th>
-            <th class="p-2 border border-gray-300">Kids</th>
+            <th @click="setSort('id')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              #
+              <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('is_primary')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Primary
+              <span v-if="sortKey === 'is_primary'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('group_label')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Group
+              <span v-if="sortKey === 'group_label'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('name')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Name
+              <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('email')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Email
+              <span v-if="sortKey === 'email'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('preferred_language')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Language
+              <span v-if="sortKey === 'preferred_language'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('rsvp_status')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              RSVP
+              <span v-if="sortKey === 'rsvp_status'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('code')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Code
+              <span v-if="sortKey === 'code'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
+            <th @click="setSort('can_bring_plus_one')" class="p-2 border border-gray-300 cursor-pointer select-none">
+              Can Bring +1
+              <span v-if="sortKey === 'can_bring_plus_one'">{{ sortAsc ? '▲' : '▼' }}</span>
+            </th>
             <th class="p-2 border border-gray-300">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="guest in guests" :key="guest.id" class="border-t">
+          <tr v-for="(guest, index) in sortedGuests" :key="guest.id" class="border-t">
+            <td class="p-2 border border-gray-300">{{ index + 1 }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.is_primary ? 'Yes' : 'No' }}</td>
             <td class="p-2 border border-gray-300">{{ guest.group_label }}</td>
             <td class="p-2 border border-gray-300">{{ guest.name }}</td>
             <td class="p-2 border border-gray-300">{{ guest.email }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.preferred_language || '' }}</td>
             <td class="p-2 border border-gray-300">
               {{
                 guest.attending === true
@@ -93,8 +125,7 @@
               }}
             </td>
             <td class="p-2 border border-gray-300">{{ guest.code || '—' }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.plus_one_name ? 'Yes' : 'No' }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.num_kids }}</td>
+            <td class="p-2 border border-gray-300">{{ guest.can_bring_plus_one ? 'Yes' : 'No' }}</td>
             <td class="p-2 border border-gray-300">
               <button @click="openEditForGuest(guest)" class="text-blue-600 hover:underline mr-2">Edit</button>
               <button @click="deleteGuest(guest.id)" class="text-red-600 hover:underline">Delete</button>
@@ -119,6 +150,7 @@ import api from '@/api'
 import GuestModal from '@/components/GuestModal.vue'
 import { fetchGuestAnalytics } from '@/api/analytics';
 import StatCard from '@/components/ui/StatCard.vue';
+import { ref as vueRef } from 'vue';
 
 const guests = ref([])
 const loading = ref(true)
@@ -126,6 +158,50 @@ const showModal = ref(false)
 const isEdit = ref(false)
 const selectedGuest = ref(null)
 const deliveryStats = ref({ sent: 0, failed: 0 })
+
+const sortKey = ref('');
+const sortAsc = ref(true);
+
+const setSort = (key) => {
+  if (sortKey.value === key) {
+    sortAsc.value = !sortAsc.value;
+  } else {
+    sortKey.value = key;
+    sortAsc.value = true;
+  }
+};
+
+const sortedGuests = computed(() => {
+  const list = [...guests.value];
+  if (sortKey.value) {
+    list.sort((a, b) => {
+      let va = a[sortKey.value];
+      let vb = b[sortKey.value];
+      // Normalize booleans to numbers
+      if (typeof va === 'boolean') va = va ? 1 : 0;
+      if (typeof vb === 'boolean') vb = vb ? 1 : 0;
+      // Normalize null/undefined
+      va = va ?? '';
+      vb = vb ?? '';
+      let cmp = 0;
+      if (typeof va === 'number' && typeof vb === 'number') {
+        cmp = va - vb;
+      } else {
+        cmp = va.toString().localeCompare(vb.toString());
+      }
+      return sortAsc.value ? cmp : -cmp;
+    });
+  } else {
+    // default grouping: by group_label, then primary, then name
+    list.sort((a, b) => {
+      if (a.group_label < b.group_label) return -1;
+      if (a.group_label > b.group_label) return 1;
+      if (a.is_primary !== b.is_primary) return (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0);
+      return a.name.localeCompare(b.name);
+    });
+  }
+  return list;
+});
 
 const stats = ref({
   total: 0,

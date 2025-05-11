@@ -23,8 +23,8 @@
       <select v-model="filters.rsvp_status" class="px-4 py-2 border rounded">
         <option value="">All</option>
         <option value="pending">Pending</option>
-        <option value="going">Going</option>
-        <option value="not_going">Not going</option>
+        <option value="attending">Attending</option>
+        <option value="not_attending">Not Attending</option>
       </select>
     </div>
 
@@ -38,8 +38,9 @@
       <thead>
         <tr>
           <th class="px-4 py-2 border">Guest Name</th>
+          <th class="px-4 py-2 border">Group</th>
+          <th class="px-4 py-2 border">Code</th>
           <th class="px-4 py-2 border">Attending</th>
-          <th class="px-4 py-2 border">Plus One</th>
           <th class="px-4 py-2 border">Dietary</th>
           <th class="px-4 py-2 border">Notes</th>
           <th class="px-4 py-2 border">Submission Date</th>
@@ -49,10 +50,11 @@
       <tbody>
         <tr v-for="guest in filteredGuests" :key="guest.id">
           <td class="px-4 py-2 border">{{ guest.name }}</td>
+          <td class="px-4 py-2 border">{{ guest.group_label || '' }}</td>
+          <td class="px-4 py-2 border">{{ guest.code || '' }}</td>
           <td class="px-4 py-2 border">{{ guest.attending ? 'Yes' : 'No' }}</td>
-          <td class="px-4 py-2 border">{{ guest.plus_one_name || 'N/A' }}</td>
-          <td class="px-4 py-2 border">{{ guest.dietary || 'N/A' }}</td>
-          <td class="px-4 py-2 border">{{ guest.notes || 'N/A' }}</td>
+          <td class="px-4 py-2 border">{{ guest.dietary || '' }}</td>
+          <td class="px-4 py-2 border">{{ guest.notes || '' }}</td>
           <td class="px-4 py-2 border">{{ guest.updated_at }}</td>
           <td class="px-4 py-2 border">
             <button @click="openEditModal(guest)" class="px-2 py-1 bg-blue-500 text-white rounded">

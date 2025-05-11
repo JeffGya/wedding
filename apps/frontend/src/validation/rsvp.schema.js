@@ -19,16 +19,26 @@ export function createRsvpSchema({ plusOneAllowed }) {
         .string()
         .nullable()
         .max(500, i18n.global.t('rsvp.notesMax')),
-        meal_preference: yup
-        .string()
-        .nullable()
     };
 
   // Include plus-one field if allowed
   if (plusOneAllowed) {
+    shape.add_plus_one = yup
+      .boolean();
     shape.plus_one_name = yup
       .string()
-      .nullable();
+      .nullable()
+      .when('add_plus_one', {
+        is: true,
+        then: (schema) => schema.required(i18n.global.t('rsvp.plusOneNameRequired')),
+      });
+    shape.plus_one_dietary = yup
+      .string()
+      .nullable()
+      .when('add_plus_one', {
+        is: true,
+        then: (schema) => schema.required(i18n.global.t('rsvp.plusOneDietaryRequired')),
+      });
   }
 
   return yup.object().shape(shape);
