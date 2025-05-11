@@ -12,6 +12,58 @@ router.use((req, res, next) => {
   next();
 });
 
+/**
+ * @openapi
+ * /messages:
+ *   post:
+ *     summary: Create a new draft message
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - subject
+ *               - body_en
+ *               - body_lt
+ *               - status
+ *             properties:
+ *               subject:
+ *                 type: string
+ *               body_en:
+ *                 type: string
+ *               body_lt:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [draft, scheduled, sent]
+ *               scheduledAt:
+ *                 type: string
+ *                 format: date-time
+ *               recipients:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       '200':
+ *         description: Draft created with message ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 messageId:
+ *                   type: integer
+ *       '400':
+ *         description: Validation error
+ *       '500':
+ *         description: Server error
+ */
 // Create a new draft message
 router.post('/', (req, res) => {
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
@@ -68,6 +120,30 @@ router.post('/', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages:
+ *   get:
+ *     summary: Retrieve all messages
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: List of messages
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 messages:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Message'
+ *       '500':
+ *         description: Server error
+ */
 // Get all messages
 router.get('/', (req, res) => {
   const sql = `SELECT * FROM messages ORDER BY created_at DESC`;
@@ -78,6 +154,36 @@ router.get('/', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/templates:
+ *   post:
+ *     summary: Create a new message template
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TemplateCreate'
+ *     responses:
+ *       '200':
+ *         description: Template created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 id:
+ *                   type: integer
+ *       '400':
+ *         description: Validation error
+ *       '500':
+ *         description: Server error
+ */
 // Create a new template
 router.post('/templates', (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
@@ -93,6 +199,32 @@ router.post('/templates', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/templates/{id}:
+ *   delete:
+ *     summary: Delete a message template
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Template deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '500':
+ *         description: Server error
+ */
 // Delete a template
 router.delete('/templates/:id', (req, res) => {
   const sql = `DELETE FROM templates WHERE id = ?`;
@@ -102,6 +234,34 @@ router.delete('/templates/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/templates/{id}:
+ *   get:
+ *     summary: Retrieve a single message template
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Template object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 template:
+ *                   $ref: '#/components/schemas/Template'
+ *       '404':
+ *         description: Template not found
+ */
 // Get a single template
 router.get('/templates/:id', (req, res) => {
   console.log('🧪 Hitting GET /templates/:id with', req.params.id);
@@ -113,6 +273,40 @@ router.get('/templates/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/templates/{id}:
+ *   put:
+ *     summary: Update an existing message template
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TemplateCreate'
+ *     responses:
+ *       '200':
+ *         description: Template updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '404':
+ *         description: Template not found
+ *       '500':
+ *         description: Server error
+ */
 // Update a template
 router.put('/templates/:id', (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
@@ -135,6 +329,43 @@ router.put('/templates/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/{id}:
+ *   get:
+ *     summary: Retrieve a single message and recipient stats
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Message object with recipients and stats
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     recipients:
+ *                       type: array
+ *                       items:
+ *                         type: integer
+ *                     sentCount:
+ *                       type: integer
+ *                     failedCount:
+ *                       type: integer
+ */
 // Get a single message
 router.get('/:id', (req, res) => {
   const sql = `SELECT * FROM messages WHERE id = ?`;
@@ -170,6 +401,38 @@ router.get('/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/{id}:
+ *   put:
+ *     summary: Update a draft message
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Message'
+ *     responses:
+ *       '200':
+ *         description: Message updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: object
+ */
 // Update a draft message
 router.put('/:id', (req, res) => {
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
@@ -249,6 +512,30 @@ router.put('/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/{id}:
+ *   delete:
+ *     summary: Delete a draft message
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Message deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ */
 // Delete a message
 router.delete('/:id', (req, res) => {
   const sql = `DELETE FROM messages WHERE id = ? AND status = 'draft'`;
@@ -259,6 +546,48 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/{id}/send:
+ *   post:
+ *     summary: Send a message to selected guests
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               guestIds:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       '200':
+ *         description: Send results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 sentCount:
+ *                   type: integer
+ *                 failedCount:
+ *                   type: integer
+ */
 // Send message to selected guests (filtered by guestIds if provided)
 router.post('/:id/send', async (req, res, next) => {
   console.log('✅ Route hit: POST /:id/send — messageId:', req.params.id);
@@ -417,6 +746,45 @@ router.post('/:id/send', async (req, res, next) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/{id}/schedule:
+ *   post:
+ *     summary: Schedule a message for future sending
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - scheduled_for
+ *             properties:
+ *               scheduled_for:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       '200':
+ *         description: Message scheduled
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 scheduled_for:
+ *                   type: string
+ *                   format: date-time
+ */
 // Schedule a message
 router.post('/:id/schedule', (req, res) => {
   const messageId = req.params.id;
@@ -440,6 +808,34 @@ router.post('/:id/schedule', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/{id}/logs:
+ *   get:
+ *     summary: Get delivery logs for a message
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Delivery logs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 logs:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/MessageLog'
+ */
 // Get delivery logs for a message
 router.get('/:id/logs', (req, res) => {
   const messageId = req.params.id;
@@ -465,6 +861,42 @@ router.get('/:id/logs', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /messages/preview:
+ *   post:
+ *     summary: Preview a message with guest substitutions
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - template
+ *               - guest
+ *             properties:
+ *               template:
+ *                 $ref: '#/components/schemas/Template'
+ *               guest:
+ *                 $ref: '#/components/schemas/Guest'
+ *     responses:
+ *       '200':
+ *         description: Rendered subject and body
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 subject:
+ *                   type: string
+ *                 body:
+ *                   type: string
+ */
 // Preview a message with guest substitutions
 router.post('/preview', (req, res) => {
   const { template, guest } = req.body;
@@ -490,6 +922,38 @@ router.post('/preview', (req, res) => {
   res.json({ success: true, subject, body });
 });
 
+/**
+ * @openapi
+ * /messages/{id}/resend:
+ *   post:
+ *     summary: Resend failed message deliveries
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Resend results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 sentCount:
+ *                   type: integer
+ *                 failedCount:
+ *                   type: integer
+ */
 // Resend failed messages
 router.post('/:id/resend', async (req, res, next) => {
   const messageId = req.params.id;

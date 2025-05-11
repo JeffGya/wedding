@@ -43,6 +43,36 @@ async function sendConfirmationEmail(db, guest) {
   }
 }
 
+/**
+ * @openapi
+ * /rsvp/{code}:
+ *   get:
+ *     summary: Retrieve RSVP info by invitation code
+ *     parameters:
+ *       - in: path
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: RSVP information for the guest
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 guest:
+ *                   $ref: '#/components/schemas/Guest'
+ *       '400':
+ *         description: Code is required
+ *       '404':
+ *         description: Guest not found
+ *       '500':
+ *         description: Database error
+ */
 // Public: fetch guest by code
 // GET /api/rsvp/:code
 router.get('/:code', (req, res) => {
@@ -61,6 +91,36 @@ router.get('/:code', (req, res) => {
   );
 });
 
+/**
+ * @openapi
+ * /rsvp:
+ *   post:
+ *     summary: Public RSVP submission by invitation code
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PublicRsvp'
+ *     responses:
+ *       '200':
+ *         description: RSVP processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         description: Bad request (missing or invalid fields)
+ *       '403':
+ *         description: RSVP deadline has passed
+ *       '404':
+ *         description: Guest not found
+ *       '500':
+ *         description: Database error
+ */
 // Public: submit RSVP by code
 // POST /api/rsvp
 router.post('/', (req, res) => {

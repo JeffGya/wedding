@@ -50,7 +50,55 @@ async function sendConfirmationEmail(db, guestData) {
   }
 }
 
-// GET /api/guests - List all guests with filtering, sorting, and pagination
+/**
+ * @openapi
+ * /guests:
+ *   get:
+ *     summary: List all guests
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: attending
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: group_id
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: rsvp_status
+ *         schema:
+ *           type: string
+ *           enum: [pending, attending, not_attending]
+ *       - in: query
+ *         name: sort_by
+ *         schema:
+ *           type: string
+ *           enum: [name, updated_at]
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: per_page
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A list of guests with pagination
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 guests:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Guest'
+ *                 total:
+ *                   type: integer
+ */
 router.get('/', (req, res) => {
   const { attending, group_id, rsvp_status, sort_by, page = 1, per_page = 40 } = req.query;
 
@@ -113,7 +161,36 @@ router.get('/', (req, res) => {
   });
 });
 
-// GET /api/guests/analytics - RSVP statistics by status
+/**
+ * @openapi
+ * /guests/analytics:
+ *   get:
+ *     summary: Retrieve RSVP statistics by status
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: RSVP statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 stats:
+ *                   type: object
+ *                 dietary:
+ *                   type: object
+ *                     additionalProperties:
+ *                       type: integer
+ *                 no_shows:
+ *                   type: integer
+ *                 late_responses:
+ *                   type: integer
+ *                 avg_response_time_days:
+ *                   type: number
+ */
 router.get('/analytics', (req, res) => {
   db.serialize(() => {
     // RSVP counts by status
@@ -212,7 +289,29 @@ router.get('/analytics', (req, res) => {
   });
 });
 
-// GET /api/guests/:id - Get one guest
+/**
+ * @openapi
+ * /guests/{id}:
+ *   get:
+ *     summary: Retrieve a single guest by ID
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A guest object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Guest'
+ *       '404':
+ *         description: Guest not found
+ */
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   db.get('SELECT * FROM guests WHERE id = ?', [id], (err, row) => {
@@ -222,7 +321,34 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// POST /api/guests - Create guest
+/**
+ * @openapi
+ * /guests:
+ *   post:
+ *     summary: Create a new guest
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GuestCreate'
+ *     responses:
+ *       '201':
+ *         description: Guest created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *       '400':
+ *         description: Invalid request
+ *       '500':
+ *         description: Database error
+ */
 router.post('/', (req, res) => {
   const {
     group_id,
@@ -270,7 +396,40 @@ router.post('/', (req, res) => {
   );
 });
 
-// PUT /api/guests/:id - Update guest
+/**
+ * @openapi
+ * /guests/{id}:
+ *   put:
+ *     summary: Update an existing guest
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GuestUpdate'
+ *     responses:
+ *       '200':
+ *         description: Guest updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         description: Invalid request
+ *       '404':
+ *         description: Guest not found
+ */
 router.put('/:id', (req, res) => {
   const { id } = req.params;
   const {
@@ -343,7 +502,32 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// DELETE /api/guests/:id - Delete guest
+/**
+ * @openapi
+ * /guests/{id}:
+ *   delete:
+ *     summary: Delete a guest
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Guest deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '500':
+ *         description: Database error
+ */
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   db.run('DELETE FROM guests WHERE id = ?', [id], function (err) {
@@ -352,8 +536,34 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-// RSVP: Create or update RSVP for a guest
-// POST /api/guests/rsvp
+/**
+ * @openapi
+ * /guests/rsvp:
+ *   post:
+ *     summary: Create or update RSVP for a guest
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AdminRsvp'
+ *     responses:
+ *       '200':
+ *         description: RSVP updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         description: Invalid request
+ *       '404':
+ *         description: Guest not found
+ */
 router.post('/rsvp', (req, res) => {
   const { id, attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary } = req.body;
   if (!id) {
@@ -460,8 +670,40 @@ router.post('/rsvp', (req, res) => {
   });
 });
 
-// RSVP: Update RSVP for a specific guest by id
-// PUT /api/guests/:id/rsvp
+/**
+ * @openapi
+ * /guests/{id}/rsvp:
+ *   put:
+ *     summary: Update RSVP for a specific guest by ID
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AdminRsvp'
+ *     responses:
+ *       '200':
+ *         description: RSVP updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         description: Invalid request
+ *       '404':
+ *         description: Guest not found
+ */
 router.put('/:id/rsvp', (req, res) => {
   const { id } = req.params;
   const { attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary } = req.body;

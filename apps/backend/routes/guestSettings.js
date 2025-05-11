@@ -3,6 +3,30 @@ const router = express.Router();
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
 
+/**
+ * @openapi
+ * /settings/guests:
+ *   get:
+ *     summary: Retrieve guest RSVP settings
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: Current RSVP settings
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 rsvp_open:
+ *                   type: boolean
+ *                 rsvp_deadline:
+ *                   type: string
+ *                   format: date-time
+ *                   nullable: true
+ *       '500':
+ *         description: Internal server error
+ */
 // GET /api/settings/guests
 router.get('/', (req, res) => {
   db.get(
@@ -25,6 +49,43 @@ router.get('/', (req, res) => {
   );
 });
 
+/**
+ * @openapi
+ * /settings/guests:
+ *   post:
+ *     summary: Create or update guest RSVP settings
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               rsvp_open:
+ *                 type: boolean
+ *               rsvp_deadline:
+ *                 type: string
+ *                 format: date-time
+ *                 nullable: true
+ *     responses:
+ *       '200':
+ *         description: RSVP settings updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 rsvp_open:
+ *                   type: boolean
+ *                 rsvp_deadline:
+ *                   type: string
+ *                   format: date-time
+ *                   nullable: true
+ *       '500':
+ *         description: Internal server error
+ */
 // POST /api/settings/guests
 router.post('/', (req, res) => {
   const { rsvp_open, rsvp_deadline } = req.body;

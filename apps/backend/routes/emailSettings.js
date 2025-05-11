@@ -5,6 +5,23 @@ const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * /emailSettings:
+ *   get:
+ *     summary: Retrieve the current email settings
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: The email settings object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EmailSettings'
+ *       '500':
+ *         description: Server error retrieving settings
+ */
 // Get email settings
 router.get('/', requireAuth, (req, res) => {
   const query = 'SELECT * FROM email_settings WHERE id = 1';
@@ -19,6 +36,34 @@ router.get('/', requireAuth, (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /emailSettings:
+ *   post:
+ *     summary: Update email settings
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EmailSettingsUpdate'
+ *     responses:
+ *       '200':
+ *         description: Result of the update
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 updated:
+ *                   type: integer
+ *       '500':
+ *         description: Server error updating settings
+ */
 // Update email settings
 router.post('/', requireAuth, (req, res) => {
   const {

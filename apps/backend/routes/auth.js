@@ -7,6 +7,44 @@ const router = express.Router();
 const dbPath = path.resolve(__dirname, '../database.sqlite');
 const db = new sqlite3.Database(dbPath);
 
+/**
+ * @openapi
+ * /auth/login:
+ *   post:
+ *     summary: Authenticate a user and create a session cookie
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 name:
+ *                   type: string
+ *       '400':
+ *         description: Email and password are required
+ *       '401':
+ *         description: Invalid credentials
+ *       '500':
+ *         description: Database error
+ */
 router.post('/login', (req, res) => {
   console.log('Login request received:', req.body);
   
@@ -36,6 +74,30 @@ router.post('/login', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /auth/me:
+ *   get:
+ *     summary: Retrieve the current authenticated user's information
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: Authenticated user info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       '401':
+ *         description: Unauthorized or invalid session
+ */
 router.get('/me', (req, res) => {
   const sessionId = req.signedCookies?.session_id;
   if (!sessionId) {
@@ -51,6 +113,24 @@ router.get('/me', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /auth/logout:
+ *   post:
+ *     summary: Logout the current user by clearing the session cookie
+ *     responses:
+ *       '200':
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.post('/logout', (req, res) => {
   res.clearCookie('session_id', {
     httpOnly: true,

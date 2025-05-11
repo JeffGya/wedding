@@ -6,6 +6,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const startScheduler = require('./jobs/scheduler');
 
 // Initialize Express app
@@ -20,10 +22,34 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 
 // CORS config to allow frontend (localhost:5173) to communicate with backend
+
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
 }));
+
+// Swagger setup
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Wedding Site API',
+      version: '1.0.0',
+    },
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: process.env.SESSION_COOKIE_NAME || 'connect.sid',
+        },
+      },
+    },
+  },
+  apis: [path.join(__dirname, 'routes/*.js')],
+};
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Public authentication routes
 const authRoutes = require('./routes/auth');

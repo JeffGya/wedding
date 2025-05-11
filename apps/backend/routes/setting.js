@@ -12,6 +12,23 @@ const dbRun = util.promisify(db.run.bind(db));
 // Require authentication on all setting routes
 router.use(requireAuth);
 
+/**
+ * @openapi
+ * /setting/email:
+ *   get:
+ *     summary: Retrieve the current email settings
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: The email settings object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EmailSettings'
+ *       '500':
+ *         description: Failed to fetch email settings
+ */
 // GET email settings
 router.get('/email', (req, res) => {
   db.get('SELECT * FROM email_settings WHERE id = 1', (err, row) => {
@@ -23,6 +40,32 @@ router.get('/email', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /setting/email:
+ *   put:
+ *     summary: Update email settings
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EmailSettingsUpdate'
+ *     responses:
+ *       '200':
+ *         description: Email settings updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '500':
+ *         description: Failed to update email settings
+ */
 // UPDATE email settings
 router.put('/email', (req, res) => {
   const { provider, api_key, from_name, from_email, sender_name, sender_email, enabled } = req.body;
@@ -41,6 +84,30 @@ router.put('/email', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /setting:
+ *   get:
+ *     summary: Retrieve the main site settings
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: Main settings object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 enableGlobalCountdown:
+ *                   type: boolean
+ *                 weddingDate:
+ *                   type: string
+ *                   format: date-time
+ *                   nullable: true
+ *       '500':
+ *         description: Failed to fetch main settings
+ */
 // GET main settings
 router.get('/', async (req, res) => {
   try {
@@ -57,6 +124,41 @@ router.get('/', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /setting:
+ *   put:
+ *     summary: Create or update the main site settings
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               enable_global_countdown:
+ *                 type: boolean
+ *               wedding_date:
+ *                 type: string
+ *                 format: date-time
+ *                 nullable: true
+ *     responses:
+ *       '200':
+ *         description: Main settings updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         description: Validation errors for input
+ *       '500':
+ *         description: Failed to update main settings
+ */
 // UPDATE main settings
 router.put(
   '/',

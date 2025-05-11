@@ -13,6 +13,30 @@ router.use((req, res, next) => {
   next();
 });
 
+/**
+ * @openapi
+ * /templates:
+ *   get:
+ *     summary: Retrieve all message templates
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: A list of templates
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 templates:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Template'
+ *       '500':
+ *         description: Database error
+ */
 // Get all templates
 router.get('/', (req, res) => {
   const sql = `SELECT * FROM templates ORDER BY created_at DESC`;
@@ -22,6 +46,36 @@ router.get('/', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /templates/{id}:
+ *   get:
+ *     summary: Retrieve a single template by ID
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A template object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 template:
+ *                   $ref: '#/components/schemas/Template'
+ *       '404':
+ *         description: Template not found
+ *       '500':
+ *         description: Database error
+ */
 // Get a single template
 router.get('/:id', (req, res) => {
   const sql = `SELECT * FROM templates WHERE id = ?`;
@@ -32,6 +86,36 @@ router.get('/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /templates:
+ *   post:
+ *     summary: Create a new message template
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TemplateCreate'
+ *     responses:
+ *       '200':
+ *         description: Template created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 id:
+ *                   type: integer
+ *       '400':
+ *         description: Validation error (missing fields)
+ *       '500':
+ *         description: Database error
+ */
 // Create a new template
 router.post('/', (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
@@ -50,6 +134,42 @@ router.post('/', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /templates/{id}:
+ *   put:
+ *     summary: Update an existing message template
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TemplateCreate'
+ *     responses:
+ *       '200':
+ *         description: Template updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         description: Validation error (missing fields)
+ *       '404':
+ *         description: Template not found
+ *       '500':
+ *         description: Database error
+ */
 // Update a template
 router.put('/:id', (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
@@ -72,6 +192,32 @@ router.put('/:id', (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /templates/{id}:
+ *   delete:
+ *     summary: Delete a message template
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Template deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '500':
+ *         description: Database error
+ */
 // Delete a template
 router.delete('/:id', (req, res) => {
   const sql = `DELETE FROM templates WHERE id = ?`;

@@ -7,7 +7,38 @@ const requireAuth = require('../middleware/auth');
 // Require authentication for this route
 router.use(requireAuth);
 
-// GET /api/messages/:id/stats
+/**
+ * @openapi
+ * /messages/{id}/stats:
+ *   get:
+ *     summary: Get delivery statistics for a message by ID
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Delivery statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 sentCount:
+ *                   type: integer
+ *                 failedCount:
+ *                   type: integer
+ *                 total:
+ *                   type: integer
+ *       '500':
+ *         description: Failed to fetch delivery statistics
+ */
 router.get('/:id/stats', (req, res) => {
   const messageId = req.params.id;
 
@@ -29,7 +60,34 @@ router.get('/:id/stats', (req, res) => {
   });
 });
 
-// GET /api/messages/latest-delivery
+/**
+ * @openapi
+ * /messages/latest-delivery:
+ *   get:
+ *     summary: Retrieve delivery stats for the most recently created message
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: Statistics for the latest message
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message_id:
+ *                   type: integer
+ *                 sentCount:
+ *                   type: integer
+ *                 failedCount:
+ *                   type: integer
+ *                 total:
+ *                   type: integer
+ *       '500':
+ *         description: Failed to fetch latest delivery statistics
+ */
 router.get('/latest-delivery', (req, res) => {
   const sql = `
     SELECT id AS message_id
