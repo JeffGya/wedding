@@ -10,7 +10,7 @@ const dbGet = util.promisify(db.get.bind(db));
 const dbRun = util.promisify(db.run.bind(db));
 
 // Require authentication on all setting routes
-router.use(requireAuth);
+// router.use(requireAuth);
 
 /**
  * @openapi
@@ -30,7 +30,7 @@ router.use(requireAuth);
  *         description: Failed to fetch email settings
  */
 // GET email settings
-router.get('/email', (req, res) => {
+router.get('/email', requireAuth, (req, res) => {
   db.get('SELECT * FROM email_settings WHERE id = 1', (err, row) => {
     if (err) {
       console.error(err);
@@ -67,7 +67,7 @@ router.get('/email', (req, res) => {
  *         description: Failed to update email settings
  */
 // UPDATE email settings
-router.put('/email', (req, res) => {
+router.put('/email', requireAuth, (req, res) => {
   const { provider, api_key, from_name, from_email, sender_name, sender_email, enabled } = req.body;
   const sql = `
     UPDATE email_settings
@@ -123,6 +123,7 @@ router.get('/', async (req, res) => {
     return res.status(500).json({ error: 'Failed to fetch main settings' });
   }
 });
+router.use(requireAuth);
 
 /**
  * @openapi
@@ -162,6 +163,7 @@ router.get('/', async (req, res) => {
 // UPDATE main settings
 router.put(
   '/',
+  requireAuth,
   [
     body('enable_global_countdown')
       .isBoolean()
