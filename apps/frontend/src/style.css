@@ -1,21 +1,32 @@
+@import 'normalize.css';
+
 @unocss;
 
-body {
-    margin: 0;
-}
-
-p {
+p, li{
     font-family: 'Open-sans', sans-serif;
     font-size: 1rem;
 }
 
-h1 {
+/* Special font for hero section heading */
+.hero h1 {
     font-family: 'Great Vibes', sans-serif;
     font-size: 4rem;
+}
+
+h1 {
+    font-family: 'Lora', serif;
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
 h2 {
     font-family: 'Lora', serif;
     font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-family: 'Lora', serif;
+    font-size: 1.5rem;
     margin-bottom: 1rem;
 }

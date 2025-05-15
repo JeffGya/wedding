@@ -1,5 +1,5 @@
 <template>
-  <div class="rsvp-page">
+  <main class="rsvp-page">
     <ErrorBanner
       v-if="!settingsLoading && isClosed()"
       :message="t('rsvp.closed')"
@@ -15,7 +15,7 @@
         @submit="onSubmit"
       />
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup>

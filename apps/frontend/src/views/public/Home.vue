@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <main class="home">
     <section class="hero">
       <h1>{{ t('home.hero.title') }}</h1>
       <p>{{ t('home.hero.subtitle') }}</p>
@@ -32,7 +32,7 @@
         <li><strong>{{ t('home.details.timeLabel') }}:</strong> {{ t('home.details.timeValue') }}</li>
       </ul>
     </section>
-  </div>
+  </main>
 </template>
 
 
