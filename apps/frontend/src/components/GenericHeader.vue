@@ -3,6 +3,7 @@
     <div class="logo">
       <router-link to="/en">Wedding Logo</router-link> <!-- Add logo or name here -->
     </div>
+    <GenericNav /> <!-- Add this line to include the navigation -->
     <div class="language-toggle">
       <LanguageSwitcher />  <!-- Language switcher component -->
     </div>
@@ -11,10 +12,12 @@
 
 <script>
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import GenericNav from '@/components/GenericNav.vue';  // Import the navigation component
 
 export default {
   components: {
-    LanguageSwitcher
+    GenericNav,
+    LanguageSwitcher,
   }
 };
 </script>

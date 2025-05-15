@@ -3,3 +3,19 @@
 body {
     margin: 0;
 }
+
+p {
+    font-family: 'Open-sans', sans-serif;
+    font-size: 1rem;
+}
+
+h1 {
+    font-family: 'Great Vibes', sans-serif;
+    font-size: 4rem;
+}
+
+h2 {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}

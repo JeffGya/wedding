@@ -2,7 +2,6 @@
   <div>
     <header>
       <GenericHeader />
-      <GenericNav /> <!-- Add this line to include the navigation -->
     </header>
     <main>
       <router-view :key="$route.fullPath" />
@@ -15,12 +14,10 @@
 
 <script>
 import GenericHeader from '@/components/GenericHeader.vue';
-import GenericNav from '@/components/GenericNav.vue';  // Import the navigation component
 
 export default {
   components: {
     GenericHeader,
-    GenericNav, // Register the navigation component
   },
 };
 </script>

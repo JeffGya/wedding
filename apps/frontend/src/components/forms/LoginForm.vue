@@ -8,6 +8,7 @@
         v-model="email"
         type="email"
         required
+        autocomplete="email"
         class="w-full mt-1 p-2 border rounded"
       />
     </label>
@@ -18,6 +19,7 @@
         v-model="password"
         type="password"
         required
+        autocomplete="current-password"
         class="w-full mt-1 p-2 border rounded"
       />
     </label>

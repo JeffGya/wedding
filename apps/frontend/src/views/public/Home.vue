@@ -32,25 +32,6 @@
         <li><strong>{{ t('home.details.timeLabel') }}:</strong> {{ t('home.details.timeValue') }}</li>
       </ul>
     </section>
-
-    <section class="rsvp">
-      <h2>{{ t('home.rsvp.title') }}</h2>
-      <p>{{ t('home.rsvp.desc') }}</p>
-      <div v-if="!loading">
-        <router-link
-          v-if="!isClosed()"
-          :to="{ name: 'public-rsvp-lookup', params: { lang } }"
-          class="cta-button"
-        >
-          {{ t('home.rsvp.cta') }}
-        </router-link>
-        <span v-else class="text-gray-500">{{ t('home.rsvpClosed')}}</span>
-        <CountdownTimer
-          v-if="settings.rsvp_deadline && !isClosed()"
-          :deadline="settings.rsvp_deadline"
-        />
-      </div>
-    </section>
   </div>
 </template>
 
@@ -69,7 +50,6 @@ const lang = route.params.lang || 'en'
 
 <style scoped>
 .home {
-  font-family: Arial, sans-serif;
   margin: 0 auto;
   max-width: 900px;
   padding: 20px;
@@ -82,7 +62,6 @@ const lang = route.params.lang || 'en'
 }
 
 .hero h1 {
-  font-size: 2.5em;
   margin-bottom: 10px;
 }
 
@@ -107,11 +86,6 @@ const lang = route.params.lang || 'en'
 
 section {
   margin-bottom: 40px;
-}
-
-h2 {
-  font-size: 2em;
-  margin-bottom: 15px;
 }
 
 ul {

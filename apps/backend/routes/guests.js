@@ -180,10 +180,19 @@ router.get('/', (req, res) => {
  *                   type: boolean
  *                 stats:
  *                   type: object
+ *                     properties:
+ *                       total:
+ *                         type: integer
+ *                       attending:
+ *                         type: integer
+ *                       not_attending:
+ *                         type: integer
+ *                       pending:
+ *                         type: integer
  *                 dietary:
  *                   type: object
- *                     additionalProperties:
- *                       type: integer
+ *                   additionalProperties:
+ *                     type: integer
  *                 no_shows:
  *                   type: integer
  *                 late_responses:
@@ -688,7 +697,21 @@ router.post('/rsvp', (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/AdminRsvp'
+ *             type: object
+ *             properties:
+ *               attending:
+ *                 type: boolean
+ *               dietary:
+ *                 type: string
+ *               notes:
+ *                 type: string
+ *               rsvp_deadline:
+ *                 type: string
+ *                 format: date-time
+ *               plus_one_name:
+ *                 type: string
+ *               plus_one_dietary:
+ *                 type: string
  *     responses:
  *       '200':
  *         description: RSVP updated successfully
