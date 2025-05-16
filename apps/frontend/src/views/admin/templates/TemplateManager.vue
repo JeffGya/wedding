@@ -51,7 +51,7 @@
  
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/api';
 import { useToast } from 'vue-toastification'
 
 const toast = useToast()
@@ -60,7 +60,7 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await axios.get('/api/templates')
+    const res = await api.get('/templates')
     templates.value = res.data.templates
   } catch (err) {
     toast.error('Failed to load templates.')
@@ -71,7 +71,7 @@ onMounted(async () => {
 
 async function deleteTemplate(id) {
   try {
-    await axios.delete(`/api/templates/${id}`)
+    await api.delete(`/templates/${id}`)
     templates.value = templates.value.filter(t => t.id !== id)
     toast.success('Template deleted')
   } catch (err) {

@@ -30,7 +30,7 @@ async function sendConfirmationEmail(db, guestData) {
         .replace(/{{\s*name\s*}}/g, guestData.name)
         .replace(/{{\s*groupLabel\s*}}/g, guestData.group_label)
         .replace(/{{\s*code\s*}}/g, guestData.code)
-        .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guestData.code}`);
+        .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.CORS_ORIGINS}/rsvp/${guestData.code}`);
       // Send via Resend
       axios.post("https://api.resend.com/emails", {
         from: senderInfo,
@@ -180,15 +180,15 @@ router.get('/', (req, res) => {
  *                   type: boolean
  *                 stats:
  *                   type: object
- *                     properties:
- *                       total:
- *                         type: integer
- *                       attending:
- *                         type: integer
- *                       not_attending:
- *                         type: integer
- *                       pending:
- *                         type: integer
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     attending:
+ *                       type: integer
+ *                     not_attending:
+ *                       type: integer
+ *                     pending:
+ *                       type: integer
  *                 dietary:
  *                   type: object
  *                   additionalProperties:

@@ -86,7 +86,7 @@
 <script setup>
 import RSVPForm from '@/components/forms/RSVPForm.vue';
 import { ref, reactive, computed, watch, onMounted } from 'vue';
-import axios from 'axios'; // Axios for API calls
+import api from '@/api';
 import { submitGuestRSVP } from '@/api/rsvp';
 
 const guests = ref([]);
@@ -124,7 +124,8 @@ const fetchGuests = async () => {
 
   try {
     console.log("Fetching guests with params:", params); // Log the params being sent to the API
-    const response = await axios.get('/api/guests', { params });
+    const response = await api.get('/guests', { params });
+    console.log('Full URL:', api.defaults.baseURL + '/guests');
     console.log("API Response:", response.data); // Log the API response
     guests.value = response.data.guests || [];
     totalGuests.value = response.data.total || 0;
@@ -181,7 +182,7 @@ const isISODateString = (str) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(str
 const exportToCSV = async () => {
   try {
     // Fetch all guests across all pages
-    const response = await axios.get('/api/guests', {
+    const response = await api.get('/guests', {
       params: { page: 1, per_page: totalGuests.value },
     });
     const allGuests = response.data.guests || [];

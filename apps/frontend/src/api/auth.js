@@ -1,7 +1,7 @@
-const API_BASE = 'http://localhost:5001/api';
+const API = import.meta.env.VITE_API_URL;
 
 export async function login({ email, password }) {
-  const res = await fetch(`${API_BASE}/login`, {
+  const res = await fetch(`${API}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -17,7 +17,7 @@ export async function login({ email, password }) {
 }
 
 export async function me() {
-  const res = await fetch(`${API_BASE}/me`, {
+  const res = await fetch(`${API}/me`, {
     method: 'GET',
     credentials: 'include',
   });
@@ -27,7 +27,7 @@ export async function me() {
 }
 
 export async function logout() {
-  await fetch(`${API_BASE}/logout`, {
+  await fetch(`${API}/logout`, {
     method: 'POST',
     credentials: 'include',
   });

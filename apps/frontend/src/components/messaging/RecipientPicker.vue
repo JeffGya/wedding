@@ -58,7 +58,7 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 import Fuse from 'fuse.js'
 
 const guests = ref([])
@@ -70,7 +70,7 @@ let fuse = null
 
 const fetchGuests = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_BASE}/guests`, {
+    const res = await api.get(`/guests`, {
       withCredentials: true
     });
 
@@ -138,7 +138,7 @@ const setSelectedGuestIds = (ids) => {
 const sendMessage = async () => {
   try {
     // Send the actual selected guest IDs (spread into array)
-    await axios.post(`${import.meta.env.VITE_API_BASE}/messages`, {
+    await api.post(`/messages`, {
       recipients: [...selectedGuests.value]
     })
   } catch (error) {

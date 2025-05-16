@@ -18,18 +18,6 @@
             </ul>
           </li>
           <li><RouterLink to="/admin/settings" :class="['hover:underline', $route.path === '/admin/settings' ? 'text-black font-bold' : 'text-blue-600']">Settings</RouterLink></li>
-          <li>
-            <RouterLink to="/admin/settings/email"
-              :class="['hover:underline', $route.path === '/admin/settings/email' ? 'text-black font-bold' : 'text-blue-600']">
-              Email Settings
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/admin/settings/guests"
-              :class="['hover:underline', $route.path === '/admin/settings/guests' ? 'text-black font-bold' : 'text-blue-600']">
-              Guest Settings
-            </RouterLink>
-          </li>
         </ul>
       </nav>
     </aside>

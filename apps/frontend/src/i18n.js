@@ -7,16 +7,6 @@ const messages = {
   lt
 }
 
-/* 
-const messages = {
-  en: {
-    "test": "Welcome to our wedding website!"
-      },
-  lt: {
-    "test":  "Sveiki atvykę į mūsų vestuvių svetainę!",
-      }
-    }
-*/
 console.log('Loaded translations', messages)
 // import { createI18n } from 'vue-i18n'
 

@@ -31,7 +31,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
-import axios from 'axios'
+import api from '@/api';
 import { useToast } from 'vue-toastification'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 
@@ -50,7 +50,7 @@ const form = ref({
 onMounted(async () => {
   if (isEditMode.value) {
     try {
-      const { data } = await axios.get(`/api/templates/${route.params.id}`)
+      const { data } = await api.get(`/templates/${route.params.id}`)
       form.value = {
         name: data.template.name,
         subject: data.template.subject,
@@ -66,10 +66,10 @@ onMounted(async () => {
 async function saveTemplate() {
   try {
     if (isEditMode.value) {
-      await axios.put(`/api/templates/${route.params.id}`, form.value)
+      await api.put(`/templates/${route.params.id}`, form.value)
       toast.success('Template updated.')
     } else {
-      await axios.post('/api/templates', form.value)
+      await api.post('/templates', form.value)
       toast.success('Template created.')
     }
     router.push('/admin/templates')

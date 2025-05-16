@@ -70,7 +70,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import axios from 'axios'
+import api from '@/api'
 import MessageComposer from '@/components/messaging/MessageComposer.vue'
 import RecipientPicker from '@/components/messaging/RecipientPicker.vue'
 import { useToast } from 'vue-toastification'
@@ -184,11 +184,11 @@ const handleComposerAction = async (actionType) => {
 
   try {
     if (isEditMode.value) {
-      await axios.put(`/api/messages/${messageId.value}`, payload)
+      await api.put(`/messages/${messageId.value}`, payload)
       toast.success("Message updated successfully!")
       router.push('/admin/guests/messages')
     } else {
-      const res = await axios.post('/api/messages', payload)
+      const res = await api.post('/messages', payload)
       const newMessageId = res?.data?.messageId
       console.log('🟢 Message created. New message ID:', newMessageId)
 
@@ -207,7 +207,7 @@ const handleComposerAction = async (actionType) => {
 
         while (Date.now() - startTime < 10000) { // 10 second timeout
           try {
-            const statusRes = await axios.get(`/api/messages/${newMessageId}`)
+            const statusRes = await api.get(`/messages/${newMessageId}`)
             const msg = statusRes.data.message
 
             if (
@@ -238,7 +238,7 @@ const handleComposerAction = async (actionType) => {
         sendingStatusMessage.value = 'Sending emails...'
 
         try {
-          const sendRes = await axios.post(`/api/messages/${newMessageId}/send`)
+          const sendRes = await api.post(`/messages/${newMessageId}/send`)
           console.log('Send result:', sendRes.data)
 
           sendingSummary.value.sentCount = sendRes.data.sentCount || 0
@@ -274,7 +274,7 @@ onMounted(async () => {
   const id = route.params.id
 
   try {
-    const templateRes = await axios.get('/api/templates')
+    const templateRes = await api.get('/templates')
     templates.value = templateRes.data.templates || []
   } catch (err) {
     toast.error('Failed to load templates.')
@@ -285,7 +285,7 @@ onMounted(async () => {
     messageId.value = id
 
     try {
-      const res = await axios.get(`/api/messages/${id}`)
+      const res = await api.get(`/messages/${id}`)
       const msg = res.data.message
 
       await nextTick()
