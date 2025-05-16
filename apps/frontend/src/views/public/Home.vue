@@ -1,17 +1,17 @@
 <template>
-  <main class="home">
+ <main class="home">
     <section class="hero">
-      <h1>{{ t('home.hero.title') }}</h1>
-      <p>{{ t('home.hero.subtitle') }}</p>
+      <h1>{{ $t('home.hero.title') }}</h1>
+      <p>{{ $t('home.hero.subtitle') }}</p>
       <div v-if="!loading">
         <router-link
           v-if="!isClosed()"
           :to="{ name: 'public-rsvp-lookup', params: { lang } }"
           class="cta-button"
         >
-          {{ t('home.hero.cta') }}
+          {{ $t('home.hero.cta') }}
         </router-link>
-        <span v-else class="text-gray-500">{{ t('home.rsvpClosed')}}</span>
+        <span v-else class="text-gray-500">{{ $t('home.rsvpClosed')}}</span>
       </div>
     </section>
     <section class="wedding-countdown-section my-8">
@@ -19,17 +19,17 @@
     </section>
 
     <section class="story">
-      <h2>{{ t('home.story.title') }}</h2>
-      <p>{{ t('home.story.text1') }}</p>
-      <p>{{ t('home.story.text2') }}</p>
+      <h2>{{ $t('home.story.title') }}</h2>
+      <p>{{ $t('home.story.text1') }}</p>
+      <p>{{ $t('home.story.text2') }}</p>
     </section>
 
     <section class="details">
-      <h2>{{ t('home.details.title') }}</h2>
+      <h2>{{ $t('home.details.title') }}</h2>
       <ul>
-        <li><strong>{{ t('home.details.dateLabel') }}:</strong> {{ t('home.details.dateValue') }}</li>
-        <li><strong>{{ t('home.details.venueLabel') }}:</strong> {{ t('home.details.venueValue') }}</li>
-        <li><strong>{{ t('home.details.timeLabel') }}:</strong> {{ t('home.details.timeValue') }}</li>
+        <li><strong>{{ $t('home.details.dateLabel') }}:</strong> {{ t('home.details.dateValue') }}</li>
+        <li><strong>{{ $t('home.details.venueLabel') }}:</strong> {{ t('home.details.venueValue') }}</li>
+        <li><strong>{{ $t('home.details.timeLabel') }}:</strong> {{ t('home.details.timeValue') }}</li>
       </ul>
     </section>
   </main>
@@ -49,15 +49,13 @@ const lang = route.params.lang || 'en'
 </script>
 
 <style scoped>
-.home {
+main {
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 1440px;
   padding: 20px;
 }
 
 .hero {
-  background-color: #f8f9fa;
-  padding: 40px;
   text-align: center;
 }
 

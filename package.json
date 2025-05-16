@@ -5,15 +5,24 @@
     "apps/backend",
     "apps/frontend"
   ],
+  "nohoist": [
+      "vite",
+      "vite/**",
+      "@vitejs/plugin-vue",
+      "@vitejs/plugin-vue/**"
+    ],
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace apps/frontend\" \"npm run dev --workspace apps/backend\"",
     "dev:frontend": "npm run dev --workspace apps/frontend",
-    "dev:backend": "npm run dev --workspace apps/backend"
+    "dev:backend": "npm run dev --workspace apps/backend",
+    "start": "npm run build  && concurrently \" npm start --workspace apps/frontend\" \"npm start --workspace apps/backend\"",
+    "build": "npm run build --workspace apps/frontend"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "vite": "^5.4.19"
   },
   "dependencies": {
     "@vee-validate/i18n": "^4.15.0",

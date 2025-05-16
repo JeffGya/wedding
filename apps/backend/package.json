@@ -16,6 +16,9 @@
     "axios": "^1.4.0"
   },
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "start:dev": "cross-env NODE_ENV=development node apps/backend/index.js",
+    "start:prod": "cross-env NODE_ENV=production node apps/backend/index.js"
   }
 }

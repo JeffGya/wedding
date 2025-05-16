@@ -1,6 +1,7 @@
 // Backend entry point for wedding website
-// Load environment variables from .env file
-require('dotenv').config();
+// Load environment vars from .env, .env-staging, or .env-production based on NODE_ENV
+const envFile = process.env.NODE_ENV ? `.env-${process.env.NODE_ENV}` : '.env';
+require('dotenv').config({ path: envFile });
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -14,6 +15,11 @@ const startScheduler = require('./jobs/scheduler');
 const app = express();
 const PORT = process.env.PORT || 5001; // Changed fallback port from 5000 to 5001
 
+// Load allowed CORS origins from env var CORS_ORIGINS (comma-separated)
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map(o => o.trim())
+  : [];
+
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -21,10 +27,15 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to parse signed cookies using session secret
 app.use(cookieParser(process.env.SESSION_SECRET));
 
-// CORS config to allow frontend (localhost:5173) to communicate with backend
-
+// Dynamic CORS based on CORS_ORIGINS env var
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // allow requests with no origin (e.g. mobile apps or curl)
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS policy: origin ${origin} not allowed`));
+  },
   credentials: true
 }));
 

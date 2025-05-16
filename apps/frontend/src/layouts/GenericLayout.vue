@@ -1,15 +1,11 @@
 <template>
-  <div>
     <header>
       <GenericHeader />
     </header>
-    <main>
-      <router-view :key="$route.fullPath" />
-    </main>
+    <router-view :key="$route.fullPath" />
     <footer>
       <!-- footer content -->
     </footer>
-  </div>
 </template>
 
 <script>
