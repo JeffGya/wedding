@@ -33,6 +33,14 @@
       </ul>
     </section>
   </main>
+
+  <router-link
+          v-if="!isClosed()"
+          :to="{ name: 'public-rsvp-lookup', params: { lang } }"
+          class="cta-button"
+        >
+          {{ $t('home.hero.cta') }}
+        </router-link>
 </template>
 
 

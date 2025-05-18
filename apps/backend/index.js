@@ -30,11 +30,19 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 // Dynamic CORS based on CORS_ORIGINS env var
 app.use(cors({
   origin: (origin, callback) => {
-    // allow requests with no origin (e.g. mobile apps or curl)
-    if (!origin || allowedOrigins.includes(origin)) {
+    console.log('🔎 Incoming Origin:', origin);
+    console.log('✅ Allowed Origins:', allowedOrigins);
+
+    if (!origin) return callback(null, true); // Allow Postman, curl, etc.
+
+    const normalized = origin.replace(/\/$/, '');
+    const isAllowed = allowedOrigins.some(o => o === normalized);
+
+    if (isAllowed) {
       return callback(null, true);
     }
-    callback(new Error(`CORS policy: origin ${origin} not allowed`));
+
+    return callback(new Error(`CORS policy: origin ${origin} not allowed`));
   },
   credentials: true
 }));
