@@ -16,6 +16,16 @@
       </div>
 
       <div>
+        <label for="from_name" class="block font-medium">From Name</label>
+        <input v-model="form.from_name" type="text" id="from_name" class="w-full border px-3 py-2 rounded" />
+      </div>
+
+      <div>
+        <label for="from_email" class="block font-medium">From Email</label>
+        <input v-model="form.from_email" type="email" id="from_email" class="w-full border px-3 py-2 rounded" />
+      </div>
+
+      <div>
         <label for="sender_name" class="block font-medium">Sender Name</label>
         <input v-model="form.sender_name" type="text" id="sender_name" class="w-full border px-3 py-2 rounded" />
       </div>
@@ -43,6 +53,8 @@ import api from '@/api'
 const form = ref({
   provider: 'resend',
   api_key: '',
+  from_name: '',
+  from_email: '',
   sender_name: '',
   sender_email: '',
   enabled: false
