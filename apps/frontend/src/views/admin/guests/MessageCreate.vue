@@ -238,7 +238,10 @@ const handleComposerAction = async (actionType) => {
         sendingStatusMessage.value = 'Sending emails...'
 
         try {
-          const sendRes = await api.post(`/messages/${newMessageId}/send`)
+          const sendRes = await api.post(
+            `/messages/${newMessageId}/send`,
+            { guestIds: selectedRecipients }
+          )
           console.log('Send result:', sendRes.data)
 
           sendingSummary.value.sentCount = sendRes.data.sentCount || 0

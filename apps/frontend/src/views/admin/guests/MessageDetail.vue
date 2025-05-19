@@ -69,29 +69,42 @@
 
     <!-- Sticky Button Bar -->
     <div
-      class="sticky bottom-0 left-0 right-0 z-10 bg-white px-6 py-4 flex justify-end gap-4 border-t shadow-inner"
+      class="sticky bottom-0 left-0 right-0 z-10 bg-white px-6 py-4 flex justify-between border-t shadow-inner"
       v-if="message"
     >
-      <button
-        v-if="message.status === 'draft' || message.status === 'scheduled'"
-        @click="$router.push(`/admin/guests/messages/${message.id}/edit`)"
-        class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-      >
-        Edit Message
-      </button>
-      <button
-        @click="resendFailed"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        :disabled="resendLoading"
-      >
-        Resend Failed
-      </button>
-      <button
-        @click="$router.push('/admin/guests/messages')"
-        class="border border-gray-400 px-4 py-2 rounded hover:bg-gray-100"
-      >
-        Back to Messages
-      </button>
+      <!-- Left: Delete button for drafts/scheduled -->
+      <div>
+        <button
+          v-if="message.status === 'draft' || message.status === 'scheduled'"
+          @click="deleteMessage(message.id)"
+          class="border border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-50"
+        >
+          Delete Message
+        </button>
+      </div>
+      <!-- Right: Other actions -->
+      <div class="flex gap-4">
+        <button
+          v-if="message.status === 'draft' || message.status === 'scheduled'"
+          @click="$router.push(`/admin/guests/messages/${message.id}/edit`)"
+          class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+        >
+          Edit Message
+        </button>
+        <button
+          @click="resendFailed"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          :disabled="resendLoading"
+        >
+          Resend Failed
+        </button>
+        <button
+          @click="$router.push('/admin/guests/messages')"
+          class="border border-gray-400 px-4 py-2 rounded hover:bg-gray-100"
+        >
+          Back to Messages
+        </button>
+      </div>
     </div>
 
     <!-- Resend Loading Overlay -->
@@ -140,9 +153,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import api from '@/api'
 
 const route = useRoute()
+const router = useRouter()
 const messageId = route.params.id
 
 const message = ref(null)
@@ -243,6 +258,17 @@ const resendFailed = async () => {
   } finally {
     resendLoading.value = false
     resendProgressMessage.value = ''
+  }
+}
+
+async function deleteMessage(id) {
+  if (!confirm('Are you sure you want to delete this message?')) return;
+  try {
+    await api.delete(`/messages/${id}`);
+    // Redirect back to messages list
+    router.push('/admin/guests/messages');
+  } catch (error) {
+    console.error('Failed to delete message:', error);
   }
 }
 </script>

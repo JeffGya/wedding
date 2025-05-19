@@ -45,6 +45,12 @@
           >
             Edit
           </RouterLink>
+          <button
+            v-if="msg.status === 'draft' || msg.status === 'scheduled'"
+            @click.stop="deleteMessage(msg.id)"
+          >
+            Delete
+          </button>
         </div>
         <p class="text-gray-500 text-sm">Created: {{ formatDate(msg.created_at) }}</p>
         <p v-if="msg.status === 'scheduled'" class="text-gray-500 text-sm">Scheduled for: {{ formatDate(msg.scheduled_for) }}</p>
@@ -79,6 +85,17 @@ const fetchMessages = async () => {
     messages.value = response.data.messages
   } catch (error) {
     console.error('Failed to load messages:', error)
+  }
+}
+
+async function deleteMessage(id) {
+  if (!confirm('Are you sure you want to delete this message?')) return;
+  try {
+    await api.delete(`/messages/${id}`);
+    // Remove the deleted message from the local list
+    messages.value = messages.value.filter(m => m.id !== id);
+  } catch (error) {
+    console.error('Failed to delete message:', error);
   }
 }
 

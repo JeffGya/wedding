@@ -674,7 +674,7 @@ router.post('/:id/send', async (req, res, next) => {
             .replace(/{{\s*name\s*}}/g, name)
             .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
             .replace(/{{\s*code\s*}}/g, guest.code)
-            .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code}`);
+            .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code}`);
 
           const emailData = {
             from: senderInfo,
@@ -912,12 +912,12 @@ router.post('/preview', (req, res) => {
     .replace(/{{\s*name\s*}}/g, name)
     .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
     .replace(/{{\s*code\s*}}/g, guest.code || '')
-    .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code || ''}`);
+    .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code || ''}`);
 
   const subject = template.subject.replace(/{{\s*name\s*}}/g, name)
     .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
     .replace(/{{\s*code\s*}}/g, guest.code || '')
-    .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code || ''}`);
+    .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code || ''}`);
 
   res.json({ success: true, subject, body });
 });
@@ -995,7 +995,7 @@ router.post('/:id/resend', async (req, res, next) => {
             .replace(/{{\s*name\s*}}/g, name)
             .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
             .replace(/{{\s*code\s*}}/g, guest.code)
-            .replace(/{{\s*rsvpLink\s*}}/g, `https://yourdomain.com/rsvp/${guest.code}`);
+            .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code}`);
 
           const emailData = {
             from: senderInfo,
