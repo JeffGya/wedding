@@ -35,19 +35,23 @@ const routes = [
       path: 'rsvp',
       name: 'public-rsvp-lookup',
       component: () => import('@/views/public/RSVPLookup.vue'),
-      // beforeEnter: (to, from, next) => {
-      //   i18n.global.locale.value = to.params.lang
-      //   next()
-      // }
+      beforeEnter: (to, from, next) => {
+        const lang = to.params.lang || 'en';
+        const langStore = useLangStore();
+        langStore.setLanguage(lang);
+        next();
+      }
     },
     {
       path: 'rsvp/:code',
       name: 'public-rsvp',
       component: () => import('@/views/public/RSVP.vue'),
-      // beforeEnter: (to, from, next) => {
-      //   i18n.global.locale.value = to.params.lang
-      //   next()
-      // }
+      beforeEnter: (to, from, next) => {
+        const lang = to.params.lang || 'en';
+        const langStore = useLangStore();
+        langStore.setLanguage(lang);
+        next();
+      }
     },
     {
       path: 'rsvp/:code/success',
@@ -59,20 +63,8 @@ const routes = [
         next();
       }
     },
-
-      /* Example of other routes
-      {
-        path: 'event-details',
-        name: 'event-details',
-        component: () => import('@/views/public/en/EventDetails.vue'),
-      },
-      {
-        path: 'rsvp',
-        name: 'rsvp',
-        component: () => import('@/views/public/en/Rsvp.vue'),
-      }*/
-    ]
-  },
+  ]
+},
 
   { path: '/login', name: 'login', component: LoginView },
   {

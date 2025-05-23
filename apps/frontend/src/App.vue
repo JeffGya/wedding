@@ -1,8 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
     <TopBar v-if="auth.isLoggedIn" />
     <router-view />
-  </div>
 </template>
 
 <script setup>

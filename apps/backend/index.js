@@ -30,8 +30,8 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 // Dynamic CORS based on CORS_ORIGINS env var
 app.use(cors({
   origin: (origin, callback) => {
-    console.log('🔎 Incoming Origin:', origin);
-    console.log('✅ Allowed Origins:', allowedOrigins);
+    //console.log('🔎 Incoming Origin:', origin);
+    //console.log('✅ Allowed Origins:', allowedOrigins);
 
     if (!origin) return callback(null, true); // Allow Postman, curl, etc.
 

@@ -2,31 +2,29 @@
 
 @unocss;
 
-p, li{
-    font-family: 'Open-sans', sans-serif;
-    font-size: 1rem;
+p, li {
+  @apply font-sans text-base text-txt;
 }
 
-/* Special font for hero section heading */
 .hero h1 {
-    font-family: 'Great Vibes', sans-serif;
-    font-size: 4rem;
+  @apply font-cursive text-align-center text-[4rem] text-int-base mb-16;
 }
 
 h1 {
-    font-family: 'Lora', serif;
-    font-size: 3rem;
-    margin-bottom: 1rem;
+  @apply font-serif text-5xl mb-16 text-int-base;
 }
 
 h2 {
-    font-family: 'Lora', serif;
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  @apply font-serif text-2xl mb-16 text-int-base;
 }
 
 h3 {
-    font-family: 'Lora', serif;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+  @apply font-serif text-xl mb-16 text-int-base;
 }
+
+body {
+  @apply font-sans text-txtl;
+  background-image: var(--bg-gradient);
+}
+
+

@@ -4,13 +4,15 @@
       <h1>{{ $t('home.hero.title') }}</h1>
       <p>{{ $t('home.hero.subtitle') }}</p>
       <div v-if="!loading">
-        <router-link
+        <Button
           v-if="!isClosed()"
-          :to="{ name: 'public-rsvp-lookup', params: { lang } }"
-          class="cta-button"
+          label="Large" size="large"
+          class="flex items-center gap-2 font-sans"
+          @click="router.push({ name: 'public-rsvp-lookup', params: { lang } })"
         >
+          <SolarLetterLinear />
           {{ $t('home.hero.cta') }}
-        </router-link>
+        </Button>
         <span v-else class="text-gray-500">{{ $t('home.rsvpClosed')}}</span>
       </div>
     </section>
@@ -33,26 +35,20 @@
       </ul>
     </section>
   </main>
-
-  <router-link
-          v-if="!isClosed()"
-          :to="{ name: 'public-rsvp-lookup', params: { lang } }"
-          class="cta-button"
-        >
-          {{ $t('home.hero.cta') }}
-        </router-link>
 </template>
 
 
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { useGuestSettings } from '@/hooks/useGuestSettings'
-import CountdownTimer from '@/components/ui/CountdownTimer.vue'
 import { useRoute } from 'vue-router'
-import WeddingCountdown from '@/components/WeddingCountdown.vue';
+import WeddingCountdown from '@/components/WeddingCountdown.vue'
+import { useRouter } from 'vue-router'
+import SolarLetterLinear from '~icons/solar/letter-linear'
 const { t } = useI18n()
 const { settings, loading, isClosed } = useGuestSettings()
 const route = useRoute()
+const router = useRouter()
 const lang = route.params.lang || 'en'
 </script>
 
@@ -60,34 +56,12 @@ const lang = route.params.lang || 'en'
 main {
   margin: 0 auto;
   max-width: 1440px;
-  padding: 20px;
-}
-
-.hero {
-  text-align: center;
-}
-
-.hero h1 {
-  margin-bottom: 10px;
+  margin: 20px;
 }
 
 .hero p {
   font-size: 1.2em;
   margin-bottom: 20px;
-}
-
-.cta-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  font-size: 1.1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.cta-button:hover {
-  background-color: #0056b3;
 }
 
 section {
