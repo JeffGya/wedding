@@ -1,4 +1,5 @@
 <template>
+    <Loader />
     <TopBar v-if="auth.isLoggedIn" />
     <router-view />
 </template>
@@ -7,6 +8,7 @@
 import { onMounted } from 'vue';
 import { useAuthStore } from '@/store/auth';
 import TopBar from '@/components/TopBar.vue';
+import Loader from '@/components/Loader.vue';
 
 const auth = useAuthStore();
 

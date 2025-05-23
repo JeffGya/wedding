@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     toggleDarkMode() {
-      const element = document.getElementById('app');
+      const element = document.getElementById('mode');
       element.classList.toggle('dark-mode');
     },
   },

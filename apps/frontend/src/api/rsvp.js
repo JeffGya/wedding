@@ -6,7 +6,10 @@ import api from './index';
  * @returns {Promise<Object>} guest object
  */
 export async function fetchGuestByCode(code) {
-  const { data } = await api.get(`/rsvp/${code}`);
+  const { data } = await api.get(
+    `/rsvp/${code}`,
+    { meta: { showLoader: true } }
+  );
   return data.guest;
 }
 
@@ -16,6 +19,10 @@ export async function fetchGuestByCode(code) {
  * @returns {Promise<Object>} response data
  */
 export async function submitGuestRSVP(payload) {
-  const { data } = await api.post('/rsvp', payload);
+  const { data } = await api.post(
+    '/rsvp',
+    payload,
+    { meta: { showLoader: true } }
+  );
   return data.success;
 }

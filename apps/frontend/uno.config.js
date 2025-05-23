@@ -48,6 +48,12 @@ export default defineConfig({
       'int-pressed': 'var(--int-pressed)',
       'int-hover':   'var(--int-hover)',
 
+      // Accent-Background
+      'ac-base':    'var(--acc-base)',
+      'ac-active':  'var(--acc-active)',
+      'ac-pressed': 'var(--int-pressed)',
+      'ac-hover':   'var(--acc-hover)',
+
       // Background Gradient
       'bg-gradient': 'var(--bg-gradient)',
 

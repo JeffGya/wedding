@@ -19,6 +19,7 @@ import Aura from '@primeuix/themes/aura';
 import Button from "primevue/button";
 import ToggleSwitch from 'primevue/toggleswitch'
 import ProgressBar from 'primevue/progressbar';
+import { useLoaderStore } from '@/store/loader';
 
 // Register all built-in rules, skipping any non-function exports (e.g., the 'all' JSON object)
 Object.keys(rules).forEach(name => {
@@ -97,6 +98,18 @@ app.use(createPinia())
 app.use(Toast)
 app.use(i18n)
 app.use(router)
+
+// Global loader for route navigation
+const loader = useLoaderStore();
+router.beforeEach((to, from) => {
+  loader.start();
+});
+router.afterEach((to, from) => {
+  loader.finish();
+});
+router.onError((error) => {
+  loader.finish();
+});
 
 app.use(PrimeVue, {
   ripple: true,

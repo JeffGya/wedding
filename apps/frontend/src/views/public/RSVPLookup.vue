@@ -1,34 +1,39 @@
 <template>
   <div class="rsvp-lookup max-w-md mx-auto p-6">
-    <ErrorBanner
-      v-if="!settingsLoading && isClosed()"
-      :message="t('rsvp.closed')"
-      class="mb-4"
-    />
-    <div v-else>
-      <ErrorBanner v-if="error" :message="error" class="mb-4" />
-      <h1 class="text-2xl font-semibold mb-4">{{ t('rsvp.lookupTitle') }}</h1>
-      <form @submit.prevent="submitLookup" class="space-y-4">
-        <div>
-          <label for="code" class="block text-sm font-medium mb-1">{{ t('rsvp.lookupLabel') }}</label>
-          <input
-            id="code"
-            v-model="code"
-            type="text"
-            required
-            class="w-full border rounded px-3 py-2"
-          />
-        </div>
-        <button
-          type="submit"
-          :disabled="submitting"
-          :class="{ 'opacity-50 cursor-not-allowed': submitting }"
-          class="w-full bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
-        >
-          {{ t('rsvp.lookupButton') }}
-        </button>
-      </form>
-    </div>
+    <!-- Wait until settingsLoading is false -->
+    <template v-if="!settingsLoading">
+      <!-- Show closed banner if RSVP is closed -->
+      <ErrorBanner
+        v-if="isClosed()"
+        :message="t('rsvp.closed')"
+        class="mb-4"
+      />
+      <!-- Otherwise show lookup form -->
+      <template v-else>
+        <ErrorBanner v-if="error" :message="error" class="mb-4" />
+        <h1 class="text-2xl font-semibold mb-4">{{ t('rsvp.lookupTitle') }}</h1>
+        <form @submit.prevent="submitLookup" class="space-y-4">
+          <div>
+            <label for="code" class="block text-sm font-medium mb-1">{{ t('rsvp.lookupLabel') }}</label>
+            <input
+              id="code"
+              v-model="code"
+              type="text"
+              required
+              class="w-full border rounded px-3 py-2"
+            />
+          </div>
+          <button
+            type="submit"
+            :disabled="submitting"
+            :class="{ 'opacity-50 cursor-not-allowed': submitting }"
+            class="w-full bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
+          >
+            {{ t('rsvp.lookupButton') }}
+          </button>
+        </form>
+      </template>
+    </template>
   </div>
 </template>
 

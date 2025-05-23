@@ -6,6 +6,9 @@ import api from './index';
  */
 // fetch guest analytics and return only the response payload
 export function fetchGuestAnalytics() {
-  return api.get('/guests/analytics')
-    .then(res => res.data)
+  return api.get(
+    '/guests/analytics',
+    { meta: { showLoader: true } }
+  )
+  .then(res => res.data)
 }
