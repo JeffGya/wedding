@@ -2,29 +2,126 @@
 
 @unocss;
 
+/* Increase specificity for ToggleSwitch styles */
+body  {
+  /* PrimeVue ToggleSwitch Overrides */
+  --p-toggleswitch-background:                var(--int-base);
+  --p-toggleswitch-border-color:              var(--form-border);
+  --p-toggleswitch-hover-background:          var(--int-hover);
+  --p-toggleswitch-hover-border-color:        var(--form-border);
+
+  --p-toggleswitch-checked-background:        var(--acc-base) !important;
+  --p-toggleswitch-checked-border-color:      var(--form-border) !important;
+  --p-toggleswitch-checked-hover-background:  var(--acc-hover) !important;
+  --p-toggleswitch-checked-hover-border-color:var(--form-border) !important;
+
+  --p-toggleswitch-handle-background:         var(--form-background);
+  --p-toggleswitch-checked-handle-background: var(--form-background);
+  --p-toggleswitch-handle-color:              var(--text);
+
+  --p-toggleswitch-focus-ring-color:          var(--form-border-focus);
+
+  --p-toggleswitch-handle-hover-background:   var(--form-background-hover);
+  --p-toggleswitch-handle-checked-background: var(--form-background-focus);
+
+
+  --p-toggleswitch-handle-hover-color:        var(--text);
+
+  /* PrimeVue Select Overrides */
+  --p-select-border-color:                    var(--form-border);
+  --p-select-hover-border-color:              var(--form-focus);
+  --p-select-focus-border:                    var(--form-border-focus);
+  --p-select-background:                      var(--form-background);
+  --p-select-text-color:                      var(--text);
+  --p-select-placeholder-color:               var(--form-placeholder-text);
+  --p-select-dropdown-color:                  var(--text);
+  --p-select-option-color:                    var(--text);
+
+  --p-select-hover-border-color:              var(--form-border);
+
+  --p-select-focus-border-color:              var(--form-border-focus);
+  --p-overlay-select-border-color:            var(--form-border-hover);
+  --p-select-overlay-border-color:            var(--form-border-hover);
+
+  --p-select-option-hover-background:         var(--form-background-hover);
+  --p-select-option-selected-background:      var(--form-background-focus);
+  --p-select-option-selected-text-color:      var(--text);
+  
+  --p-select-overlay-background:              var(--form-background);
+  --p-select-overlay-color:                   var(--text);
+
+  --p-select-option-selected-background:      var(--form-background-focus);
+  --p-select-option-selected-color:           var(--text);
+  --p-select-option-focus-background:         var(--form-background-hover);  
+  --p-select-option-focus-color:              var(--text);
+
+  --p-select-option-selected-focus-background: var(--form-background-focus);
+  --p-select-option-selected-focus-color:     var(--text);
+
+  --p-select-placeholder-color:               var(--form-placeholder-text);
+  
+  /* PrimeVue Menubar Overrides */
+  --p-menubar-item-color:                     var(--int-base);
+  --p-menubar-item-focus-color:               var(--int-hover);
+  --p-menubar-item-focus-background:          var(--form-background-hover);
+
+  --p-menubar-submenu-background:             var(--form-background);
+
+  --p-menubar-mobile-button-color:            var(--text);
+  --p-menubar-mobile-button-hover-color:      var(--text);
+
+  --p-menubar-mobile-button-background:       var(--form-background);
+  --p-menubar-mobile-button-hover-background: var(--form-background-hover);
+  --p-menubar-mobile-button-active-background: var(--form-background-focus);
+}
+
 p, li {
-  @apply font-sans text-base text-txt;
+  @apply font-sans text-txt;
 }
 
 .hero h1 {
-  @apply font-cursive text-align-center text-[4rem] text-int-base mb-16;
+  @apply font-cursive text-txt text-align-center text-[4rem] mb-8;
 }
 
 h1 {
-  @apply font-serif text-5xl mb-16 text-int-base;
+  @apply font-serif text-txt text-5xl mb-16;
 }
 
 h2 {
-  @apply font-serif text-2xl mb-16 text-int-base;
+  @apply font-serif text-txt text-2xl mb-8;
 }
 
 h3 {
-  @apply font-serif text-xl mb-16 text-int-base;
+  @apply font-serif text-txt text-xl mb-8;
 }
 
 body {
-  @apply font-sans text-txtl;
+  @apply font-sans text-txtl pr-40 pl-40;
+  background-color: #DAA520;
   background-image: var(--bg-gradient);
 }
 
+/* PrimeVue Button Overrides */
+button.p-button {
+  @apply bg-btn-primary-base text-btn-primary-text border-none;
+}
+button.p-button:not(:disabled):hover {
+  @apply bg-btn-primary-hover text-btn-primary-text border-none;
+}
+button.p-button:not(:disabled):active {
+  @apply bg-btn-primary-active text-btn-primary-text border-none;
+}
 
+button.p-button.p-button-secondary {
+  @apply bg-btn-secondary-base text-btn-secondary-text border-none;
+}
+button.p-button.p-button-secondary:not(:disabled):hover {
+  @apply bg-btn-secondary-hover text-btn-secondary-text border-none;
+}
+button.p-button.p-button-secondary:not(:disabled):active {
+  @apply bg-btn-secondary-active text-btn-secondary-text border-none;
+}
+
+.p-menubar-button:hover {
+  border: 1px solid var(--form-border-hover) !important;
+}

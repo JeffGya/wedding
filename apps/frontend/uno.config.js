@@ -21,47 +21,48 @@ export default defineConfig({
       sans: "Open Sans, sans-serif",
     },
     colors: {
-      // Accent / Gold
-      'accent-gold-base':    '#DAA520',
-      'accent-gold-active':  '#C2901E',
-      'accent-gold-pressed': '#A47A1B',
-      'accent-gold-hover':   '#E3B13F',
-      // Accent / Cream
-      'accent-cream-base':    '#D2C6B2',
-      'accent-cream-active':  '#BFB6A3',
-      'accent-cream-pressed': '#ABA38D',
-      'accent-cream-hover':   '#DED4C4',
-      // Interactive / Light
-      'interactive-light-base':    '#442727',
-      'interactive-light-active':  '#3B1E1E',
-      'interactive-light-pressed': '#2E1A1A',
-      'interactive-light-hover':   '#5A3A3A',
-      // Interactive / Dark
-      'interactive-dark-base':    '#927D14',
-      'interactive-dark-active':  '#846C12',
-      'interactive-dark-pressed': '#69550F',
-      'interactive-dark-hover':   '#A68626',
+      // Button tokens
+      'btn-primary-base':    'var(--btn--primary--base)',
+      'btn-primary-hover':   'var(--btn--primary--hover)',
+      'btn-primary-active':  'var(--btn--primary--active)',
+      'btn-secondary-base':  'var(--btn--secondary--base)',
+      'btn-secondary-hover': 'var(--btn--secondary--hover)',
+      'btn-secondary-active':'var(--btn--secondary--active)',
 
-      // Interactive-Background
-      'int-base':    'var(--int-base)',
-      'int-active':  'var(--int-active)',
-      'int-pressed': 'var(--int-pressed)',
-      'int-hover':   'var(--int-hover)',
+      // Text tokens
+      'txt':      'var(--text)',
+      'int-text': 'var(--int-text)',
 
-      // Accent-Background
-      'ac-base':    'var(--acc-base)',
-      'ac-active':  'var(--acc-active)',
-      'ac-pressed': 'var(--int-pressed)',
-      'ac-hover':   'var(--acc-hover)',
+      // Accent background
+      'ac-base':   'var(--acc-base)',
+      'ac-hover':  'var(--acc-hover)',
+      'ac-active': 'var(--acc-active)',
 
-      // Background Gradient
+      // Interactive background
+      'int-base':   'var(--int-base)',
+      'int-hover':  'var(--int-hover)',
+      'int-active': 'var(--int-active)',
+
+      // Background gradient
       'bg-gradient': 'var(--bg-gradient)',
 
-      // Interactive-Text
-      'int-text':    'var(--int-text)',
+      // Form field tokens
+      'form-placeholder-text': 'var(--form-placeholder-text)',
+
+      'form-bg': 'var(--form-background)',
+      'form-bg-hover': 'var(--form-background-hover)',
+      'form-bg-focus': 'var(--form-background-focus)',
       
-      // Text
-      'txt': 'var(--text)',
+
+      // Form field border tokens
+      'form-border': 'var(--form-border)',
+      'form-border-focus': 'var(--form-border-focus)',
+
+      // Button text tokens
+      'btn-primary-text':   'var(--btn--primary--text)',
+      'btn-secondary-text': 'var(--btn--secondary--text)',
+      // Header and special text
+      'text-header':         'var(--txt-header)',
     },
     // Spacing scale (8px increments, 0.5rem–2.5rem)
     spacing: {
@@ -104,6 +105,8 @@ export default defineConfig({
   preflights: [
     {
       getCSS: () => `
+
+
         /* Light mode variables */
         :root {
           /* Background Glass */
@@ -111,47 +114,116 @@ export default defineConfig({
           --bg-glass-border: #E9E7D910;
 
           /* Background Gradient */
-          --bg-gradient: linear-gradient(to right bottom, #D2C6B2, #E3B13F, #927D14);
+          --bg-gradient: linear-gradient(to right bottom, #D2C6B280, #927D1480);
 
           /* Interactive Background Mahogany */
           --int-base: #442727;
           --int-active: #3B1E1E;
-          --int-pressed: #2E1A1A;
           --int-hover: #5A3A3A;
 
           --acc-base: #DAA520;
           --acc-active: #C2901E;
-          --acc-pressed: #A47A1B;
           --acc-hover: #E3B13F;
+
+          --acc2-base: #D2C6B2;
+          --acc2-active: #BFB6A3;
+          --acc2-hover: #DED4C4;
           
           /* Interactive Text */
           --int-text: #D2C6B2;
           
           /* Text color */
           --text: #0F0F0F;
+
+          /* Button background tokens */
+          --btn--primary--base:    var(--int-base);
+          --btn--primary--hover:   var(--int-hover);
+          --btn--primary--active:  var(--int-active);
+
+          --btn--secondary--base:  var(--acc-base);
+          --btn--secondary--hover: var(--acc-hover);
+          --btn--secondary--active:var(--acc-active);
+
+          /* Button text color tokens */
+          --btn--primary--text:    var(--acc2-base);
+          --btn--secondary--text:  var(--int-base);
+
+          /* Header/special text */
+          --txt-header:            var(--btn--primary--base);
+
+          /* Form field colors (light mode) */
+          --form-placeholder-text: #A0A0A0;
+
+          --form-background: #F1EFE8;
+          --form-background-hover: #DED4C4;
+          --form-background-focus: #BFB6A3;
+
+          /* Form field border (light mode) */
+          --form-border: #DED4C4;
+          --form-border-hover: #ABA38D;
+          --form-border-focus: #DAA520;
         }
+
+
         /* Dark mode overrides */
         .dark-mode {
+          /* Background Glass */
+          --bg-glass: linear-gradient(to right bottom, #C2901E80, #A47A1B60);
+          --bg-glass-border: #E3B13F10;
+
           /* Background Gradient */
           --bg-gradient: linear-gradient(to right bottom, #0f0f0f, #2E1A1A, #442727);
 
           /* Interactive Background Gold */
           --int-base: #DAA520;
           --int-active: #C2901E;
-          --int-pressed: #A47A1B;
           --int-hover: #E3B13F;
 
           --acc-base: #D2C6B2;
           --acc-active: #BFB6A3;
-          --acc-pressed: #ABA38D;
           --acc-hover: #DED4C4;
+
+          --acc2-base: #442727;
+          --acc2-active: #3B1E1E;
+          --acc2-hover: #5A3A3A;
 
           /* Ineractive Text */
           --int-text: #442727;
 
           /* Text color */
-          --text: #E9E7D9;
+          --text: var(--acc-base);
+
+          /* Button background tokens */
+          --btn--primary--base:    var(--int-base);
+          --btn--primary--hover:   var(--int-hover);
+          --btn--primary--active:  var(--int-active);
+
+          --btn--secondary--base:  var(--acc-base);
+          --btn--secondary--hover: var(--acc-hover);
+          --btn--secondary--active:var(--acc-active);
+
+          /* Button text color tokens */
+          --btn--primary--text:    var(--acc2-base);
+          --btn--secondary--text:  var(--int-base);
+
+          /* Header/special text */
+          --txt-header:   var(--btn--primary--base);
+
+          /* Form field colors*/
+          --form-placeholder-text: #ABA38D;
+
+          --form-background: #3B1E1E;
+          --form-background-hover: #2E1A1A;
+          --form-background-focus: #3B2525;
+
+          /* Form field border */
+          --form-border: #5A3A3A;
+          --form-border-hover: #442727;
+          --form-border-focus: #DAA520;
         }
+
+
+
         /* Font Faces */
         @font-face {
           font-family: 'Great Vibes';

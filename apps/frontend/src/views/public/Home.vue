@@ -53,10 +53,8 @@ const lang = route.params.lang || 'en'
 </script>
 
 <style scoped>
-main {
-  margin: 0 auto;
-  max-width: 1440px;
-  margin: 20px;
+.hero {
+  text-align: center;
 }
 
 .hero p {
@@ -65,7 +63,8 @@ main {
 }
 
 section {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+  @apply width: var(--container-6xl);
 }
 
 ul {
@@ -75,5 +74,16 @@ ul {
 
 ul li {
   margin-bottom: 10px;
+}
+
+.story, .details{
+  background: var(--bg-glass);
+  border: 1px solid var(--bg-glass-border);;
+  @apply p-16 rounded-md backdrop-blur-sm;
+}
+
+.story h2, .details h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 </style>
