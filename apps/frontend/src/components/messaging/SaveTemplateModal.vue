@@ -66,7 +66,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 import { useToast } from 'vue-toastification'
 
 const props = defineProps({
@@ -91,7 +91,7 @@ async function handleSave() {
         toast.error('Template name is required')
         return
       }
-      await axios.post('/api/templates', {
+      await api.post('/templates', {
         name: templateName.value,
         subject: props.subject,
         body_en: props.bodyEn,
@@ -102,7 +102,7 @@ async function handleSave() {
         toast.error('Select a template to overwrite')
         return
       }
-      await axios.put(`/api/templates/${selectedId.value}`, {
+      await api.put(`/templates/${selectedId.value}`, {
         name: props.templates.find(t => t.id === selectedId.value)?.name || '',
         subject: props.subject,
         body_en: props.bodyEn,

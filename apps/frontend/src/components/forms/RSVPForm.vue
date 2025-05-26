@@ -1,15 +1,9 @@
 <template>
   <Form
+    :key="props.guest.code"
     :validation-schema="validationSchema"
     @submit="onSubmit"
-    :initial-values="{
-      attending: props.guest.attending,
-      dietary: props.guest.dietary,
-      notes: props.guest.notes,
-      add_plus_one: false,
-      plus_one_name: '',
-      plus_one_dietary: ''
-    }"
+    :initial-values="initialValues"
     v-slot="{ errors, values }"
   >
     <Banner v-if="formError" :message="formError" type="error" />
@@ -69,7 +63,7 @@
       </button>
     </div>
 
-    <CountdownTimer v-if="guest.rsvp_deadline" :deadline="guest.rsvp_deadline" @expired="onExpired" />
+    <CountdownTimer v-if="props.guest.rsvp_deadline" :deadline="props.guest.rsvp_deadline" @expired="onExpired" />
   </Form>
 </template>
 
@@ -101,6 +95,15 @@ const formError = ref('');
 const validationSchema = computed(() =>
   createRsvpSchema({ plusOneAllowed: props.guest.can_bring_plus_one })
 );
+
+const initialValues = computed(() => ({
+  attending: Boolean(props.guest.attending),
+  dietary: props.guest.dietary || '',
+  notes: props.guest.notes || '',
+  add_plus_one: false,
+  plus_one_name: '',
+  plus_one_dietary: ''
+}));
 
 // Determine if form should be disabled (deadline passed)
 const isDisabled = computed(() => {
