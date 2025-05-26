@@ -28,7 +28,6 @@ const iconClass = computed(() => {
 
 <template>
   <Message
-    closeable
     v-if="message"
     :severity="type"
     :icon="iconClass"

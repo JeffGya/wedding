@@ -1,6 +1,6 @@
 {
-  "home.hero.title": "Welcome to our wedding website!",
-  "home.hero.subtitle": "The one stop for everything about our special day.",
+  "home.hero.title": "Brigita & Jeffrey are getting married!",
+  "home.hero.subtitle": "A celebration years in the making.",
   "home.hero.cta": "RSVP",
   "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
   "home.story.title": "Our Story",
@@ -17,8 +17,8 @@
   "home.countdown.months": "{count} Month | {count} Months",
   "home.countdown.days": "{count} Day | {count} Days",
   "rsvp.lookupTitle": "Enter your RSVP code",
-  "rsvp.lookupLabel": "RSVP Code",
-  "rsvp.lookupButton": "Find My RSVP",
+  "rsvp.lookupLabel": "RSVP code",
+  "rsvp.lookupButton": "Find my RSVP",
   "rsvp.title": "So Are you coming?",
   "rsvp.loading": "Loading...",
   "rsvp.errorFetch": "This code does not match with our guest codes. Please check your code and try again.",
@@ -51,5 +51,5 @@
   "rsvp.success.title": "Thank you!",
   "rsvp.success.message": "Your RSVP was received.",
   "rsvp.back.home": "Return to Home",
-  "rsvp.closed": "RSVP's are not open yet. We will inform you when it is possible"
+  "rsvp.closed": "RSVP's are closed. We will inform you when it is to RSVP."
 }

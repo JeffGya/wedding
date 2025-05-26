@@ -3,17 +3,15 @@
     <section class="hero">
       <h1>{{ $t('home.hero.title') }}</h1>
       <p>{{ $t('home.hero.subtitle') }}</p>
-      <div v-if="!loading">
+      <div id="home-rsvp" v-if="!loading">
         <Button
           v-if="!isClosed()"
-          label="Large" size="large"
+          :label="$t('home.hero.cta')" size="large"
           class="flex items-center gap-2 font-sans"
+          icon="i-solar:pen-new-square-bold"
           @click="router.push({ name: 'public-rsvp-lookup', params: { lang } })"
-        >
-          <SolarLetterLinear />
-          {{ $t('home.hero.cta') }}
-        </Button>
-        <span v-else class="text-gray-500">{{ $t('home.rsvpClosed')}}</span>
+        />
+        <Message v-else severity="contrast" variant="outlined" size="small" icon="i-solar:alarm-sleep-bold">{{ $t('home.rsvpClosed')}}</Message>
       </div>
     </section>
     <section class="wedding-countdown-section my-8">
@@ -57,9 +55,12 @@ const lang = route.params.lang || 'en'
   text-align: center;
 }
 
+.hero h1 {
+  @apply font-cursive text-txt text-align-center text-[4rem] mt-32 mb-16;
+}
+
 .hero p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
+  @apply font-serif text-txt text-2xl mt-24 mb-32;
 }
 
 section {
@@ -85,5 +86,11 @@ ul li {
 .story h2, .details h2 {
   margin-top: 0;
   margin-bottom: 16px;
+}
+
+#home-rsvp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

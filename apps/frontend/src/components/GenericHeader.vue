@@ -8,6 +8,7 @@
         </svg>
       </router-link>
       <p class="logoText">Brigita & Jeffrey</p>
+      <p class="logoBottom">01-08-2024</p>
     </div>
 
     <Menubar class="MainNav" :model="menuItems">
@@ -106,6 +107,10 @@ export default {
 }
 
 .logoText {
-  @apply text-2xl font-cursive text-center mt-8 text-int-base tracking-wide;
+  @apply text-2xl font-cursive text-center mt-8 mb-0 text-int-base tracking-wide;
+}
+
+.logoBottom {
+  @apply text-sm font-serif text-center mt-2 mb-8 text-int-base tracking-wide;
 }
 </style>

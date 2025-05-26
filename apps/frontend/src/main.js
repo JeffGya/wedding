@@ -7,6 +7,7 @@ import Button from "primevue/button";
 import ToggleSwitch from 'primevue/toggleswitch'
 import ProgressBar from 'primevue/progressbar';
 import InputText from 'primevue/inputtext';
+import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 import Card from 'primevue/card';
 import ToastService from 'primevue/toastservice';
@@ -92,6 +93,7 @@ app.component('Button', Button);
 app.component('ToggleSwitch', ToggleSwitch);
 app.component('ProgressBar', ProgressBar);
 app.component('InputText', InputText);
+app.component('FloatLabel', FloatLabel);
 app.component('Message', Message);
 app.component('Card', Card);
 app.component('ToastMessage', ToastMessage);

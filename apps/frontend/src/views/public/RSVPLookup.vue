@@ -20,21 +20,23 @@
               type="error" 
               />
             <Form @submit="submitLookup" class="space-y-4">
-              <label for="code" class="block text-sm font-medium mb-1">{{ t('rsvp.lookupLabel') }}</label>
-              <InputText
-                id="code"
-                v-model="code"
-                type="text"
-                required
-                class="w-full border rounded px-3 py-2"
-              />
+              <FloatLabel variant="in">
+                <InputText
+                  id="code"
+                  v-model="code"
+                  type="text"
+                  required
+                  class="w-full border rounded px-3 py-2"
+                />
+                <label for="in_label">{{ t('rsvp.lookupLabel') }}</label>
+              </FloatLabel>
               <Button
                 type="submit"
                 :disabled="submitting"
-                :class="{ 'opacity-50 cursor-not-allowed': submitting }"
-                class="w-full bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
+                :label="t('rsvp.lookupButton')"
+                aria-label="Lookup RSVP" 
+                icon="i-solar:magnifer-linear"
               >
-                {{ t('rsvp.lookupButton') }}
               </Button>
             </Form>
           </template>
@@ -52,11 +54,12 @@ import { fetchGuestByCode } from '@/api/rsvp';
 import Banner from '@/components/ui/Banner.vue';
 import { useToast } from 'vue-toastification';
 import { useGuestSettings } from '@/hooks/useGuestSettings'
+import FloatLabel from 'primevue/floatlabel';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
-const toast = useToast();
+const vuetoast = useToast();
 const { loading: settingsLoading, isClosed } = useGuestSettings()
 
 const code = ref('');
@@ -74,7 +77,7 @@ async function submitLookup(event) {
   submitting.value = true;
   try {
     await fetchGuestByCode(code.value.trim());
-    toast.success(t('rsvp.lookupSuccess'));
+    vuetoast.success(t('rsvp.lookupSuccess'));
     router.push({
       name: 'public-rsvp',
       params: { lang: route.params.lang, code: code.value.trim() }

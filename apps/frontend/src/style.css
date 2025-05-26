@@ -2,6 +2,10 @@
 
 @unocss;
 
+.class {
+  white-space: pre-line
+}
+
 /* Increase specificity for ToggleSwitch styles */
 body  {
   /* PrimeVue Banner Overrides */
@@ -9,6 +13,13 @@ body  {
   --p-message-content-padding:                1rem 1.2rem;
   --p-message-content-gap:                    0.8rem;
   --p-message-border-width:                   4px;
+
+  --p-message-contrast-outlined-color:       var(--text);
+  --p-message-contrast-outlined-border-color: var(--text);
+
+  /* PrimeVue Card Overrides */
+  --p-card-background:                        var(--card-bg) !important;
+  --p-card-color:                             var(--text);
 
   /* PrimeVue ToggleSwitch Overrides */
   --p-toggleswitch-background:                var(--int-base);
@@ -79,14 +90,24 @@ body  {
   --p-menubar-mobile-button-background:       var(--form-background);
   --p-menubar-mobile-button-hover-background: var(--form-background-hover);
   --p-menubar-mobile-button-active-background: var(--form-background-focus);
+
+  /* PrimeVue Float Label Overrides */
+  --p-floatlabel-color:                       var(--form-placeholder-text);
+  --p-floatlabel-focus-color:                 var(--form-placeholder-text);
+  --p-floatlabel-active-color:                var(--form-placeholder-text);
+  
+
+  /* PrimeVue InputText Overrides */
+  --p-inputtext-background:                   var(--form-background);
+  --p-inputtext-border-color:                 var(--form-border);
+  --p-inputtext-color:                        var(--text);
+
+  --p-inputtext-hover-border-color:           var(--form-border-hover);
+  --p-inputtext-focus-border-color:           var(--form-border-focus);
 }
 
 p, li {
   @apply font-sans text-txt;
-}
-
-.hero h1 {
-  @apply font-cursive text-txt text-align-center text-[4rem] mb-8;
 }
 
 h1 {

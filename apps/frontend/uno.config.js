@@ -53,7 +53,6 @@ export default defineConfig({
       'form-bg-hover': 'var(--form-background-hover)',
       'form-bg-focus': 'var(--form-background-focus)',
       
-
       // Form field border tokens
       'form-border': 'var(--form-border)',
       'form-border-focus': 'var(--form-border-focus)',
@@ -61,8 +60,16 @@ export default defineConfig({
       // Button text tokens
       'btn-primary-text':   'var(--btn--primary--text)',
       'btn-secondary-text': 'var(--btn--secondary--text)',
+      
       // Header and special text
       'text-header':         'var(--txt-header)',
+
+      // Card background
+      'card-bg': 'var(--card-bg)',
+      
+      // Background glass
+      'bg-glass': 'var(--bg-glass)',
+      'bg-glass-border': 'var(--bg-glass-border)',
     },
     // Spacing scale (8px increments, 0.5rem–2.5rem)
     spacing: {
@@ -162,6 +169,9 @@ export default defineConfig({
           --form-border: #DED4C4;
           --form-border-hover: #ABA38D;
           --form-border-focus: #DAA520;
+
+          /* Card background */
+          --card-bg: #E9E7D9;
         }
 
 
@@ -220,6 +230,9 @@ export default defineConfig({
           --form-border: #5A3A3A;
           --form-border-hover: #442727;
           --form-border-focus: #DAA520;
+
+          /* Card background */
+          --card-bg: #442727;
         }
 
 
