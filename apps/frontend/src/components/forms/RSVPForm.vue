@@ -12,7 +12,7 @@
     }"
     v-slot="{ errors, values }"
   >
-    <ErrorBanner v-if="formError" :message="formError" type="error" />
+    <Banner v-if="formError" :message="formError" type="error" />
 
     <div class="mb-4">
       <label class="font-medium">{{ t('rsvp.attendingLabel') }}</label>
@@ -37,7 +37,7 @@
     </div>
 
     <div v-if="props.guest.can_bring_plus_one && !values.add_plus_one" class="mb-4">
-      <label class="font-medium">{{ t('rsvp.plusOnenNameLabel') }}</label>
+      <label class="font-medium">{{ t('rsvp.plusOneNameLabel') }}</label>
       <Field name="plus_one_name" class="w-full border rounded px-2 py-1" />
       <ErrorMessage name="plus_one_name" class="text-red-600 text-sm" />
       <div class="mb-4">
@@ -76,7 +76,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import ErrorBanner from '@/components/ui/ErrorBanner.vue';
+import Banner from '@/components/ui/Banner.vue';
 import CountdownTimer from '@/components/ui/CountdownTimer.vue';
 import { useI18n } from 'vue-i18n';
 import { createRsvpSchema } from '@/validation/rsvp.schema';

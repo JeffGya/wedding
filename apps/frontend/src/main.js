@@ -6,6 +6,12 @@ import Aura from '@primeuix/themes/aura';
 import Button from "primevue/button";
 import ToggleSwitch from 'primevue/toggleswitch'
 import ProgressBar from 'primevue/progressbar';
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
+import Card from 'primevue/card';
+import ToastService from 'primevue/toastservice';
+import ToastMessage from 'primevue/toast';
+import { Form, FormField } from '@primevue/forms';
 import { useLoaderStore } from '@/store/loader';
 import './style.css';
 
@@ -57,6 +63,7 @@ const MyPreset = definePreset(Aura, {
 
 app.use(createPinia())
 app.use(Toast)
+app.use(ToastService)
 app.use(i18n)
 app.use(router)
 
@@ -84,5 +91,11 @@ app.use(PrimeVue, {
 app.component('Button', Button);
 app.component('ToggleSwitch', ToggleSwitch);
 app.component('ProgressBar', ProgressBar);
+app.component('InputText', InputText);
+app.component('Message', Message);
+app.component('Card', Card);
+app.component('ToastMessage', ToastMessage);
+app.component('Form', Form);
+app.component('FormField', FormField);
 
 app.mount('#app')

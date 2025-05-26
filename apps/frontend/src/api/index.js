@@ -27,7 +27,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.config?.showLoader) {
+    if (error.config?.meta?.showLoader) {
       useLoaderStore().finish();
     }
     return Promise.reject(error);

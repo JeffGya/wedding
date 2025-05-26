@@ -4,6 +4,12 @@
 
 /* Increase specificity for ToggleSwitch styles */
 body  {
+  /* PrimeVue Banner Overrides */
+  --p-message-icon-size:                      1.5rem;
+  --p-message-content-padding:                1rem 1.2rem;
+  --p-message-content-gap:                    0.8rem;
+  --p-message-border-width:                   4px;
+
   /* PrimeVue ToggleSwitch Overrides */
   --p-toggleswitch-background:                var(--int-base);
   --p-toggleswitch-border-color:              var(--form-border);

@@ -22,14 +22,14 @@ const isLoading = computed(() => loader.isLoading);
   top: 0 !important;
   left: 0 !important;
   width: 100% !important;
-  height: 4px !important;
+  height: 8px !important;
   z-index: 9999 !important;
-  background-color: var(--ac-hover) !important;
+  background-color: var(--int-hover) !important;
   opacity: 0.8 !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 /* Indeterminate bar fill color */
 .p-progressbar .p-progressbar-value {
-  background-color: var(--ac-base) !important;
+  background-color: var(--int-base) !important;
 }
 </style>
