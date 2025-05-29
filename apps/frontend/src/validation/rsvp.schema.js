@@ -12,33 +12,52 @@ export function createRsvpSchema({ plusOneAllowed }) {
       attending: yup
         .boolean()
         .required(i18n.global.t('rsvp.attendingRequired')),
-        dietary: yup
-        .string()
-        .nullable(),
-        notes: yup
+      dietary: yup
         .string()
         .nullable()
-        .max(500, i18n.global.t('rsvp.notesMax')),
+        .notRequired()
+        .transform(value => (value === '' ? null : value))
+        .when([], {
+          is: (val) => !!val,
+          then: (schema) =>
+            schema.matches(/^[^<>[\]{}$%^=*|\\~`]+$/, i18n.global.t('rsvp.noCodeChars')),
+        }),
+      notes: yup
+        .string()
+        .nullable()
+        .max(500, i18n.global.t('rsvp.notesMax'))
+        .notRequired()
+        .transform(value => (value === '' ? null : value))
+        .when([], {
+          is: (val) => !!val,
+          then: (schema) =>
+            schema.matches(/^[^<>[\]{}$%^=*|\\~`]+$/, i18n.global.t('rsvp.noCodeChars')),
+        }),
     };
 
   // Include plus-one field if allowed
   if (plusOneAllowed) {
-    shape.add_plus_one = yup
-      .boolean();
     shape.plus_one_name = yup
       .string()
       .nullable()
-      .when('add_plus_one', {
-        is: true,
-        then: (schema) => schema.required(i18n.global.t('rsvp.plusOneNameRequired')),
-      });
+      .notRequired()
+      .transform(value => (value === '' ? null : value))
+      .test(
+        'plus-one-name-safe',
+        i18n.global.t('rsvp.noCodeChars'),
+        value => value == null || /^[^<>[\]{}$%^=*|\\~`]+$/.test(value)
+      );
+
     shape.plus_one_dietary = yup
       .string()
       .nullable()
-      .when('add_plus_one', {
-        is: true,
-        then: (schema) => schema.required(i18n.global.t('rsvp.plusOneDietaryRequired')),
-      });
+      .notRequired()
+      .transform(value => (value === '' ? null : value))
+      .test(
+        'plus-one-dietary-safe',
+        i18n.global.t('rsvp.noCodeChars'),
+        value => value == null || /^[^<>[\]{}$%^=*|\\~`]+$/.test(value)
+      );
   }
 
   return yup.object().shape(shape);

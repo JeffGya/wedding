@@ -1,5 +1,5 @@
 {
-  "home.hero.title": "Brigita & Jeffrey are getting married!",
+  "home.hero.title": "Brigita & Jeffrey \n are getting married!",
   "home.hero.subtitle": "A celebration years in the making.",
   "home.hero.cta": "RSVP",
   "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
@@ -51,5 +51,19 @@
   "rsvp.success.title": "Thank you!",
   "rsvp.success.message": "Your RSVP was received.",
   "rsvp.back.home": "Return to Home",
-  "rsvp.closed": "RSVP's are closed. We will inform you when it is to RSVP."
+  "rsvp.closed": "RSVP's are closed. We will inform you when it is to RSVP.",
+  "rsvp.noCodeChars": "Please avoid using characters like <, >, {, }, or $ in your response.",
+  "rsvp.yes": "Yes, I am bringing a plus one",
+  "rsvp.no": "No, I am riding solo",
+  "rsvp.successTitleSolo": "Thank you, {name}",
+  "rsvp.successTitlePrefix": "Thank you for your rsvp,",
+  "rsvp.successTitleAnd": "and",
+  "rsvp.successMessageNo": "We’ll miss you at the celebration. Thank you for letting us know!",
+  "rsvp.successMessageYes": "We look forward to celebrating together with you!",
+
+  "rsvp.labelGuest": "Guest",
+  "rsvp.labelDietary": "Dietary Restrictions",
+  "rsvp.labelNotes": "Notes",
+  "rsvp.labelPlusOne": "Plus One",
+  "rsvp.labelPlusOneDietary": "Plus One Dietary Restrictions"
 }

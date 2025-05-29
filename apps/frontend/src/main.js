@@ -7,6 +7,9 @@ import Button from "primevue/button";
 import ToggleSwitch from 'primevue/toggleswitch'
 import ProgressBar from 'primevue/progressbar';
 import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+import RadioButton from 'primevue/radiobutton';
+import RadioButtonGroup from 'primevue/radiobuttongroup';
 import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 import Card from 'primevue/card';
@@ -93,11 +96,14 @@ app.component('Button', Button);
 app.component('ToggleSwitch', ToggleSwitch);
 app.component('ProgressBar', ProgressBar);
 app.component('InputText', InputText);
+app.component('Textarea', Textarea)
 app.component('FloatLabel', FloatLabel);
 app.component('Message', Message);
 app.component('Card', Card);
 app.component('ToastMessage', ToastMessage);
 app.component('Form', Form);
 app.component('FormField', FormField);
+app.component('RadioButton', RadioButton);
+app.component('RadioButtonGroup', RadioButtonGroup);
 
 app.mount('#app')

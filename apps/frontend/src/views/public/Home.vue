@@ -14,7 +14,8 @@
         <Message v-else severity="contrast" variant="outlined" size="small" icon="i-solar:alarm-sleep-bold">{{ $t('home.rsvpClosed')}}</Message>
       </div>
     </section>
-    <section class="wedding-countdown-section my-8">
+    
+    <section class="wedding-countdown-section">
       <WeddingCountdown />
     </section>
 
@@ -34,7 +35,6 @@
     </section>
   </main>
 </template>
-
 
 <script setup>
 import { useI18n } from 'vue-i18n'
@@ -56,11 +56,11 @@ const lang = route.params.lang || 'en'
 }
 
 .hero h1 {
-  @apply font-cursive text-txt text-align-center text-[4rem] mt-32 mb-16;
+  @apply font-cursive text-align-center text-[4.5rem]/5rem mt-24 mb-16;
 }
 
 .hero p {
-  @apply font-serif text-txt text-2xl mt-24 mb-32;
+  @apply font-serif text-2xl mt-16 mb-24;
 }
 
 section {
@@ -74,7 +74,7 @@ ul {
 }
 
 ul li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .story, .details{

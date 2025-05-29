@@ -4,6 +4,23 @@ const getDbConnection = require('../db/connection');
 const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
 const getSenderInfo = require('../helpers/getSenderInfo');
+const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
+
+function formatRsvpDeadline(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+function replaceTemplateVars(template, vars) {
+  if (!template) return '';
+  return template.replace(/{{\s*(\w+)\s*}}/g, (_, key) => {
+    return vars[key] !== undefined ? vars[key] : '';
+  });
+}
 
 // Protect all routes
 router.use(requireAuth);
@@ -905,19 +922,33 @@ router.post('/preview', (req, res) => {
     return res.status(400).json({ success: false, error: 'Template and guest info are required' });
   }
 
-  const name = guest.group_label || guest.name;
   const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
 
-  const body = (lang === 'lt' ? template.body_lt : template.body_en || '')
-    .replace(/{{\s*name\s*}}/g, name)
-    .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
-    .replace(/{{\s*code\s*}}/g, guest.code || '')
-    .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code || ''}`);
+  const replacements = {
+    guestName: guest.name,
+    groupLabel: guest.group_label,
+    rsvpLink: `${SITE_URL}/${lang}/rsvp/${guest.code}`,
+    plusOneName: guest.plus_one_name || '',
+    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+  };
 
-  const subject = template.subject.replace(/{{\s*name\s*}}/g, name)
-    .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
-    .replace(/{{\s*code\s*}}/g, guest.code || '')
-    .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code || ''}`);
+  const body_en = replaceTemplateVars(template.body_en, {
+    guestName: guest.name,
+    groupLabel: guest.group_label,
+    rsvpLink: `${SITE_URL}/en/rsvp/${guest.code}`,
+    plusOneName: guest.plus_one_name || '',
+    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+  });
+  const body_lt = replaceTemplateVars(template.body_lt, {
+    guestName: guest.name,
+    groupLabel: guest.group_label,
+    rsvpLink: `${SITE_URL}/lt/rsvp/${guest.code}`,
+    plusOneName: guest.plus_one_name || '',
+    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+  });
+
+  const body = lang === 'lt' ? body_lt : body_en;
+  const subject = replaceTemplateVars(template.subject, replacements);
 
   res.json({ success: true, subject, body });
 });

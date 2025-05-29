@@ -6,14 +6,18 @@
     />
     <div v-else>
       <h1>{{ $t('rsvp.title') }}</h1>
-      <Banner v-if="error" :message="error" />
-      <div v-else-if="loading">{{ $t('rsvp.loading') }}</div>
-      <RSVPForm
-        v-else
-        mode="public"
-        :guest="guest"
-        @submit="onSubmit"
-      />
+      <Card> 
+        <template #content>
+          <Banner v-if="error" :message="error" />
+          <div v-else-if="loading">{{ $t('rsvp.loading') }}</div>
+          <RSVPForm
+            v-else
+            mode="public"
+            :guest="guest"
+            @submit="onSubmit"
+          />
+        </template>
+      </Card>
     </div>
   </main>
 </template>
@@ -60,8 +64,7 @@ async function onSubmit(payload) {
 
 <style scoped>
 .rsvp-page {
-  max-width: 600px;
+  max-width: 568px;
   margin: 0 auto;
-  padding: 1rem;
 }
 </style>

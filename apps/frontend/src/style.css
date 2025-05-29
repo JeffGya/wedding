@@ -2,8 +2,8 @@
 
 @unocss;
 
-.class {
-  white-space: pre-line
+.hero {
+  white-space: pre-line;
 }
 
 /* Increase specificity for ToggleSwitch styles */
@@ -111,7 +111,7 @@ p, li {
 }
 
 h1 {
-  @apply font-serif text-txt text-5xl mb-16;
+  @apply font-serif text-txt text-3xl mb-24;
 }
 
 h2 {
@@ -120,6 +120,10 @@ h2 {
 
 h3 {
   @apply font-serif text-txt text-xl mb-8;
+}
+
+label {
+  @apply text-text text-base;
 }
 
 body {

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@primeuix/themes": "^1.1.1",
+    "@primevue/forms": "^4.3.4",
     "@tiptap/starter-kit": "^2.11.7",
     "@tiptap/vue-3": "^2.11.7",
     "@vee-validate/i18n": "^4.15.0",
