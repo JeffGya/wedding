@@ -65,5 +65,7 @@
   "rsvp.labelDietary": "Dietary Restrictions",
   "rsvp.labelNotes": "Notes",
   "rsvp.labelPlusOne": "Plus One",
-  "rsvp.labelPlusOneDietary": "Plus One Dietary Restrictions"
+  "rsvp.labelPlusOneDietary": "Plus One Dietary Restrictions",
+
+  "rsvp.confirmDeletePlusOne": "Are you sure you want to remove your earlier added plus one?"
 }
