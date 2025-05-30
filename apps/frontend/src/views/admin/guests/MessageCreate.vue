@@ -12,12 +12,14 @@
         />
         <div v-show="true" class="mt-4">
           <label for="schedule-time" class="block text-sm font-medium text-gray-700 mb-1">Schedule time</label>
-          <VueDatePicker
+          <DatePicker
             v-model="scheduledAt"
-            @change="onManualDateInput"
-            :format="'yyyy-MM-dd HH:mm'"
-            type="datetime"
-            placeholder="Select date and time"
+            showTime
+            dateFormat="yy-mm-dd"
+            timeFormat="HH:mm"
+            hourFormat="24"
+            mask="9999-99-99 99:99"
+            placeholder="YYYY-MM-DD HH:mm"
             class="w-full max-w-full"
           />
         </div>
@@ -73,14 +75,12 @@ import { useRouter, useRoute } from 'vue-router'
 import api from '@/api'
 import MessageComposer from '@/components/messaging/MessageComposer.vue'
 import RecipientPicker from '@/components/messaging/RecipientPicker.vue'
-import { useToast } from 'vue-toastification'
-import VueDatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
+import { useToast as usePrimeToast } from 'primevue/usetoast';
 import MessageActionBar from '@/components/messaging/MessageActionBar.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 
 const router = useRouter()
-const toast = useToast()
+const primeToast = usePrimeToast();
 
 const composerRef = ref(null)
 const recipientsRef = ref(null)
@@ -134,7 +134,7 @@ const onManualDateInput = (event) => {
   if (!isNaN(parsed)) {
     scheduledAt.value = parsed
   } else {
-    toast.error('Invalid date format. Use yyyy-MM-dd HH:mm')
+    primeToast.add({ severity: 'error', summary: 'Error', detail: 'Invalid date format. Use yyyy-MM-dd HH:mm' });
   }
 }
 
@@ -150,13 +150,13 @@ const handleComposerAction = async (actionType) => {
   console.log('🎯 Selected Recipients:', selectedRecipients)
 
   if (!composerData?.subject || !composerData?.body_en || !selectedRecipients?.length) {
-    toast.error('Please fill out the message and select at least one recipient.')
+    primeToast.add({ severity: 'error', summary: 'Error', detail: 'Please fill out the message and select at least one recipient.' });
     return
   }
 
   if (actionType === 'scheduled') {
     if (!scheduledAt.value || isNaN(new Date(scheduledAt.value).getTime())) {
-      toast.error('Please select a valid date and time before scheduling.')
+      primeToast.add({ severity: 'error', summary: 'Error', detail: 'Please select a valid date and time before scheduling.' });
       return
     }
   }
@@ -171,9 +171,13 @@ const handleComposerAction = async (actionType) => {
 
   if (actionType === 'scheduled') {
     payload.status = 'scheduled'
-    payload.scheduledAt = scheduledAt.value instanceof Date && !isNaN(scheduledAt.value.getTime())
-      ? scheduledAt.value.toISOString()
-      : null
+    if (scheduledAt.value instanceof Date && !isNaN(scheduledAt.value.getTime())) {
+      const dt = scheduledAt.value
+      const pad = num => String(num).padStart(2, '0')
+      payload.scheduledAt = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`
+    } else {
+      payload.scheduledAt = null
+    }
   } else {
     payload.scheduledAt = null
   }
@@ -185,7 +189,12 @@ const handleComposerAction = async (actionType) => {
   try {
     if (isEditMode.value) {
       await api.put(`/messages/${messageId.value}`, payload)
-      toast.success("Message updated successfully!")
+      primeToast.add({ 
+        severity: 'success', 
+        summary: 'Success', 
+        detail: 'Message updated successfully!',
+        life: '5000'  
+      });
       router.push('/admin/guests/messages')
     } else {
       const res = await api.post('/messages', payload)
@@ -255,18 +264,33 @@ const handleComposerAction = async (actionType) => {
           sendingState.value = 'summary'
         }
       } else {
-        toast.success(`Message ${actionType} successfully!`)
+        primeToast.add({ 
+          severity: 'success', 
+          summary: 'Success', 
+          detail: `Message ${actionType} successfully!`,
+          life: '5000' 
+        });
         router.push('/admin/guests/messages')
       }
     }
   } catch (err) {
     console.error('🔴 Failed to save message:', err)
-    toast.error('Failed to save message. Please try again.')
+    primeToast.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: 'Failed to save message. Please try again.',
+      life: '5000' 
+    });
   }
 }
 
 const handleTemplateSaved = () => {
-  toast.success('Template saved!')
+  primeToast.add({ 
+    severity: 'success', 
+    summary: 'Success', 
+    detail: 'Template saved!',
+    life: '5000' 
+   });
 }
 
 const handleSummaryDismiss = () => {
@@ -280,7 +304,12 @@ onMounted(async () => {
     const templateRes = await api.get('/templates')
     templates.value = templateRes.data.templates || []
   } catch (err) {
-    toast.error('Failed to load templates.')
+    primeToast.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: 'Failed to load templates.',
+      life: '5000' 
+    });
   }
 
   if (id) {

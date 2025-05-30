@@ -76,7 +76,23 @@ const goToDetail = (id) => {
 }
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleString()
+  if (!dateString) return '';
+  // If no timezone offset or Z in string, assume UTC
+  let iso = dateString;
+  if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(dateString)) {
+    // Normalize "YYYY-MM-DD HH:mm:ss" to "YYYY-MM-DDTHH:mm:ssZ"
+    iso = dateString.replace(' ', 'T') + 'Z';
+  }
+  const date = new Date(iso);
+  return new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Europe/Amsterdam'
+  }).format(date);
 }
 
 const fetchMessages = async () => {

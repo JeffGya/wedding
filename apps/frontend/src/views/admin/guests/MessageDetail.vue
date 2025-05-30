@@ -178,7 +178,15 @@ const summaryFailedCount = ref(0)
 const formatScheduledTime = (scheduledAt) => {
   if (!scheduledAt) return 'N/A'
   const date = new Date(scheduledAt)
-  return date.toLocaleString()  // or use a date library to customize format
+  // Format in Europe/Amsterdam timezone, preserving YYYY-MM-DD HH:mm
+  return new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Europe/Amsterdam'
+  }).format(date)
 }
 
 onMounted(async () => {

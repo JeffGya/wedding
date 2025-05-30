@@ -1,4 +1,5 @@
 <template>
+    <Alert position="top-center"/>
     <Loader />
     <TopBar v-if="auth.isLoggedIn" />
     <router-view />

@@ -5,6 +5,9 @@ const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
+// Use Luxon for robust timezone handling
+const { DateTime } = require('luxon');
+
 
 function formatRsvpDeadline(dateStr) {
   if (!dateStr) return '';
@@ -96,14 +99,15 @@ router.post('/', (req, res) => {
     if (!scheduledAt) {
       return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages.' });
     }
-    const date = new Date(scheduledAt);
-    if (isNaN(date.getTime())) {
+    // Parse local Amsterdam time and convert to UTC
+    let dt = DateTime.fromISO(scheduledAt, { zone: 'Europe/Amsterdam' });
+    if (!dt.isValid) {
       return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime.' });
     }
-    if (date < new Date()) {
+    if (dt < DateTime.utc()) {
       return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
     }
-    scheduledForFinal = date.toISOString();
+    scheduledForFinal = dt.toUTC().toISO();
   }
 
   const sql = `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`;
@@ -167,6 +171,13 @@ router.get('/', (req, res) => {
 
   db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).json({ success: false, error: err.message });
+    rows = rows.map(row => {
+      if (row.scheduled_for) {
+        const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
+        row.scheduled_for = local.toISO({ suppressMilliseconds: true });
+      }
+      return row;
+    });
     res.json({ success: true, messages: rows });
   });
 });
@@ -390,6 +401,10 @@ router.get('/:id', (req, res) => {
   db.get(sql, [req.params.id], (err, row) => {
     if (err) return res.status(500).json({ success: false, error: err.message });
     if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (row.scheduled_for) {
+      const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
+      row.scheduled_for = local.toISO({ suppressMilliseconds: true });
+    }
 
     const status = row.status;
     const recipientTable = (status === 'draft' || status === 'scheduled')
@@ -476,16 +491,15 @@ router.put('/:id', (req, res) => {
       if (!scheduledAt) {
         return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages' });
       }
-
-      const date = new Date(scheduledAt);
-      if (isNaN(date.getTime())) {
-        return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime' });
+      // Parse local Amsterdam time and convert to UTC
+      let dt = DateTime.fromISO(scheduledAt, { zone: 'Europe/Amsterdam' });
+      if (!dt.isValid) {
+        return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime.' });
       }
-      if (date < new Date()) {
-        return res.status(400).json({ success: false, error: 'Scheduled time must be in the future' });
+      if (dt < DateTime.utc()) {
+        return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
       }
-
-      scheduled_for = date.toISOString();
+      scheduled_for = dt.toUTC().toISO();
     }
 
     const updateSql = `
@@ -533,7 +547,7 @@ router.put('/:id', (req, res) => {
  * @openapi
  * /messages/{id}:
  *   delete:
- *     summary: Delete a draft message
+ *     summary: Delete a draft or scheduled message
  *     security:
  *       - cookieAuth: []
  *     parameters:
@@ -552,14 +566,50 @@ router.put('/:id', (req, res) => {
  *               properties:
  *                 success:
  *                   type: boolean
+ *       '400':
+ *         description: Invalid request
+ *       '404':
+ *         description: Message not found
+ *       '500':
+ *         description: Server error
  */
-// Delete a message
 router.delete('/:id', (req, res) => {
-  const sql = `DELETE FROM messages WHERE id = ? AND status = 'draft'`;
-
-  db.run(sql, [req.params.id], function (err) {
+  const messageId = req.params.id;
+  // Fetch current status
+  db.get(`SELECT status FROM messages WHERE id = ?`, [messageId], (err, row) => {
     if (err) return res.status(500).json({ success: false, error: err.message });
-    res.json({ success: true });
+    if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (row.status === 'sent') {
+      return res.status(400).json({ success: false, error: 'Sent messages cannot be deleted' });
+    }
+    // Begin transaction to remove recipients and the message
+    db.serialize(() => {
+      db.run('BEGIN TRANSACTION');
+      db.run(
+        `DELETE FROM message_recipients WHERE message_id = ?`,
+        [messageId],
+        function (deleteErr) {
+          if (deleteErr) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ success: false, error: deleteErr.message });
+          }
+        }
+      );
+      db.run(
+        `DELETE FROM messages WHERE id = ? AND status IN ('draft','scheduled')`,
+        [messageId],
+        function (deleteErr) {
+          if (deleteErr) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ success: false, error: deleteErr.message });
+          }
+        }
+      );
+      db.run('COMMIT', (commitErr) => {
+        if (commitErr) return res.status(500).json({ success: false, error: commitErr.message });
+        res.json({ success: true });
+      });
+    });
   });
 });
 
@@ -810,18 +860,18 @@ router.post('/:id/schedule', (req, res) => {
   if (!scheduled_for) {
     return res.status(400).json({ success: false, error: 'scheduled_for field is required' });
   }
-
-  const date = new Date(scheduled_for);
-  const now = new Date();
-
-  if (isNaN(date.getTime()) || date < now) {
-    return res.status(400).json({ success: false, error: 'scheduled_for must be a valid future datetime' });
+  const dt = DateTime.fromISO(scheduled_for, { zone: 'Europe/Amsterdam' });
+  if (!dt.isValid) {
+    return res.status(400).json({ success: false, error: 'scheduled_for must be a valid datetime' });
   }
-
+  if (dt < DateTime.utc()) {
+    return res.status(400).json({ success: false, error: 'scheduled_for must be in the future' });
+  }
+  const scheduledUtc = dt.toUTC().toISO();
   const sql = `UPDATE messages SET scheduled_for = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
-  db.run(sql, [scheduled_for, messageId], function (err) {
+  db.run(sql, [scheduledUtc, messageId], function (err) {
     if (err) return res.status(500).json({ success: false, error: err.message });
-    res.json({ success: true, scheduled_for });
+    res.json({ success: true, scheduled_for: scheduledUtc });
   });
 });
 

@@ -29,6 +29,7 @@
     "@vee-validate/i18n": "^4.15.0",
     "chart.js": "^4.4.9",
     "normalize.css": "^8.0.1",
+    "quill": "^2.0.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "vee-validate": "^4.15.0",

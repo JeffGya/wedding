@@ -1,46 +1,54 @@
 <template>
-  <div class="p-6 bg-white shadow rounded">
-    <h2 class="text-2xl font-semibold mb-4">Main Settings</h2>
-    <form @submit.prevent="saveSettings" class="space-y-4">
-      <div>
-        <label class="inline-flex items-center">
-          <input
-            type="checkbox"
-            v-model="settings.enable_global_countdown"
-            class="form-checkbox"
-          />
-          <span class="ml-2">Enable wedding countdown on home page</span>
-        </label>
-      </div>
-      <div>
-        <label class="block mb-1">Wedding Date</label>
-        <VueDatePicker
-          v-model="settings.wedding_date"
-          type="date"
-          placeholder="YYYY-MM-DD"
-          class="w-full border px-3 py-2 rounded"
+  <Card>
+    <template #content>
+      <Banner
+          v-if="message"
+          :message="message"
+          :type="success ? 'success' : 'error'"
+          class="mt-4"
         />
-      </div>
-      <button
-        type="submit"
-        class="px-4 py-2 bg-blue-600 text-white rounded"
-      >
-        Save
-      </button>
-    </form>
-  </div>
+      <h2 class="text-2xl font-semibold mb-4">Main Settings</h2>
+      <form @submit.prevent="saveSettings" class="space-y-4">
+        <div>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              v-model="settings.enable_global_countdown"
+              class="form-checkbox"
+            />
+            <span class="ml-2">Enable wedding countdown on home page</span>
+          </label>
+        </div>
+        <div>
+          <label class="block mb-1">Wedding Date</label>
+          <DatePicker
+            v-model="settings.wedding_date"
+            dateFormat="yy-mm-dd"
+            placeholder="YYYY-MM-DD"
+            class="w-full border px-3 py-2 rounded"
+          />
+        </div>
+        <Button label="Save wedding date"
+          type="submit"
+          class="px-4 py-2 bg-blue-600 text-white rounded"
+        />
+
+      </form>
+    </template>
+  </Card>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
 import api from '@/api';
+import Banner from '@/components/ui/Banner.vue';
 
 const settings = ref({
   enable_global_countdown: false,
   wedding_date: null
 });
+const message = ref('');
+const success = ref(false);
 
 const localIsoDate = computed(() => {
   const dt = settings.value.wedding_date;
@@ -75,9 +83,11 @@ const saveSettings = async () => {
   };
   try {
     await api.put('/settings/main', payload);
-    console.log('Settings saved successfully');
+    message.value = 'Settings saved successfully';
+    success.value = true;
   } catch (err) {
-    console.error('Failed to save settings', err);
+    message.value = 'Failed to save settings';
+    success.value = false;
   }
 };
 </script>

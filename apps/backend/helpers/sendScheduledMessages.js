@@ -8,6 +8,8 @@ const resend = require('./resendClient'); // Assuming resendClient is already co
  */
 async function sendScheduledMessages() {
   const db = getDbConnection();
+  let globalSent = 0;
+  let globalFailed = 0;
   try {
     logger.info('📨 Starting scheduled message check...');
     
@@ -98,6 +100,7 @@ async function sendScheduledMessages() {
               );
             });
             sendResults.push({ recipientId: recipient.id, status: 'sent' });
+            globalSent++;
           } else {
             // Handle failure
             const errorMessage = sendResult && sendResult.error ? sendResult.error.message : 'Unknown error';
@@ -117,6 +120,7 @@ async function sendScheduledMessages() {
             });
 
             sendResults.push({ recipientId: recipient.id, status: 'failed' });
+            globalFailed++;
           }
 
           // Add a delay to avoid rate limit
@@ -135,6 +139,7 @@ async function sendScheduledMessages() {
             );
           });
           sendResults.push({ recipientId: recipient.id, status: 'failed' });
+          globalFailed++;
         }
       }
 
@@ -151,6 +156,7 @@ async function sendScheduledMessages() {
 
       logger.info(`✅ Finished sending message ID: ${message.id}. Results:`, sendResults);
     }
+    logger.info(`📝 Scheduler summary: processed ${globalSent + globalFailed} deliveries — ${globalSent} sent, ${globalFailed} failed.`);
   } catch (err) {
     logger.error('❌ Error in sendScheduledMessages:', err);
   }

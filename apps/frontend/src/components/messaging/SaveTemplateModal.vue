@@ -1,5 +1,3 @@
-
-
 <template>
   <div v-if="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
@@ -67,7 +65,7 @@
 <script setup>
 import { ref } from 'vue'
 import api from '@/api'
-import { useToast } from 'vue-toastification'
+import { useToast as usePrimeToast } from 'primevue/usetoast';
 
 const props = defineProps({
   subject: String,
@@ -78,7 +76,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
-const toast = useToast()
+const primeToast = usePrimeToast()
 
 const mode = ref('new')
 const templateName = ref('')
@@ -88,7 +86,7 @@ async function handleSave() {
   try {
     if (mode.value === 'new') {
       if (!templateName.value) {
-        toast.error('Template name is required')
+        primeToast.add({ severity: 'error', summary: 'Error', detail: 'Template name is required' });
         return
       }
       await api.post('/templates', {
@@ -99,7 +97,7 @@ async function handleSave() {
       })
     } else {
       if (!selectedId.value) {
-        toast.error('Select a template to overwrite')
+        primeToast.add({ severity: 'error', summary: 'Error', detail: 'Select a template to overwrite' });
         return
       }
       await api.put(`/templates/${selectedId.value}`, {
@@ -110,11 +108,21 @@ async function handleSave() {
       })
     }
 
-    toast.success('Template saved successfully')
+    primeToast.add({ 
+      severity: 'success', 
+      ummary: 'Success', 
+      detail: 'Template saved successfully',
+      life: '5000' 
+    });
     emit('saved')
     emit('close')
   } catch (err) {
-    toast.error('Failed to save template')
+    primeToast.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: 'Failed to save template',
+      life: '5000' 
+    });
   }
 }
 </script>

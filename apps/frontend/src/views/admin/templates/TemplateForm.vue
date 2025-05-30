@@ -32,10 +32,10 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
 import api from '@/api';
-import { useToast } from 'vue-toastification'
+import { useToast as usePrimeToast } from 'primevue/usetoast';
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 
-const toast = useToast()
+const primeToast = usePrimeToast();
 const route = useRoute()
 const router = useRouter()
 const isEditMode = ref(!!route.params.id)
@@ -58,7 +58,12 @@ onMounted(async () => {
         body_lt: data.template.body_lt
       }
     } catch (err) {
-      toast.error('Failed to load template.')
+      primeToast.add({ 
+        severity: 'error', 
+        summary: 'Error', 
+        detail: 'Failed to load template.',
+        life: '4000'
+      });
     }
   }
 })
@@ -67,14 +72,29 @@ async function saveTemplate() {
   try {
     if (isEditMode.value) {
       await api.put(`/templates/${route.params.id}`, form.value)
-      toast.success('Template updated.')
+      primeToast.add({ 
+        severity: 'success', 
+        summary:  'Success', 
+        detail:   'Template updated.',
+        life:     '5000'
+      });
     } else {
       await api.post('/templates', form.value)
-      toast.success('Template created.')
+      primeToast.add({ 
+        severity: 'success', 
+        summary: 'Success', 
+        detail: 'Template created.',
+        life: '5000'
+      });
     }
     router.push('/admin/templates')
   } catch (err) {
-    toast.error('Failed to save template.')
+    primeToast.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: 'Failed to save template.',
+      life: '5000'
+    });
   }
 }
 </script>

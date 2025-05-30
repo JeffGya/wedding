@@ -38,7 +38,7 @@ import { useI18n } from 'vue-i18n';
 import { useLangStore } from '@/store/lang';
 import { useRouter } from 'vue-router';
 import { defineComponent, ref, computed } from 'vue';
-import Select from 'primevue/select';
+
 import { IconGb, IconLt } from '@iconify-prerendered/vue-circle-flags';
 
 export default defineComponent({
@@ -105,7 +105,6 @@ export default defineComponent({
     };
   },
   components: {
-    Select,
     IconGb,
     IconLt,
   },

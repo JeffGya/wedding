@@ -52,9 +52,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/api';
-import { useToast } from 'vue-toastification'
+import { useToast as usePrimeToast } from 'primevue/usetoast'
 
-const toast = useToast()
+const primeToast = usePrimeToast()
 const templates = ref([])
 const loading = ref(true)
 
@@ -63,7 +63,12 @@ onMounted(async () => {
     const res = await api.get('/templates')
     templates.value = res.data.templates
   } catch (err) {
-    toast.error('Failed to load templates.')
+    primeToast.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: 'Failed to load templates.',
+      life: '5000'
+    });
   } finally {
     loading.value = false
   }
@@ -73,9 +78,19 @@ async function deleteTemplate(id) {
   try {
     await api.delete(`/templates/${id}`)
     templates.value = templates.value.filter(t => t.id !== id)
-    toast.success('Template deleted')
+    primeToast.add({ 
+      severity: 'success', 
+      summary: 'Success', 
+      detail: 'Template deleted',
+      life: '5000'
+    });
   } catch (err) {
-    toast.error('Failed to delete template.')
+    primeToast.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: 'Failed to delete template.',
+      life: '5000' 
+    });
   }
 }
 </script>
