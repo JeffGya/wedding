@@ -128,7 +128,7 @@ label {
 
 body {
   @apply font-sans text-txtl pr-40 pl-40;
-  background-color: #DAA520;
+  background-color: var(--bg-color);
   background-image: var(--bg-gradient);
 }
 

@@ -1,49 +1,50 @@
 <template>
-  <div class="p-4 bg-white rounded shadow">
-    <template v-if="chartType === 'doughnut' && items.length">
-      <p class="text-sm text-gray-500 mb-2">{{ title }}</p>
-      <div class="mb-4" style="position: relative; height: 200px; width: 100%;">
-        <canvas ref="canvasRef" class="w-full h-48"></canvas>
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <span class="text-xl font-semibold">{{ centerText }}</span>
+  <Card>
+    <template #content>
+      <template v-if="chartType === 'doughnut' && items.length">
+        <p class="text-lg/7 mt-0 font-serif font-semibold mb-8">{{ title }}</p>
+        <div class="mb-8" style="position: relative; width: 100%; aspect-ratio: 1 / 1;">
+          <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full h-full" />
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span class="text-5xl font-semibold font-serif">{{ centerText }}</span>
+          </div>
         </div>
-      </div>
-      <div class="flex justify-center space-x-4">
-        <div
-          v-for="(item, index) in items"
-          :key="item.label"
-          class="flex items-center space-x-1"
-        >
-          <span
-            class="w-3 h-3 rounded-full"
-            :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
-          ></span>
-          <span class="text-sm text-gray-600">{{ item.label }}</span>
+        <div class="flex flex-wrap justify-center gap-16">
+          <div
+            v-for="(item, index) in items"
+            :key="item.label"
+            class="flex items-center space-x-1"
+          >
+            <span
+              class="w-4 h-4 rounded-full"
+              :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
+            ></span>
+            <span class="text-sm font-serif">{{ item.label }}</span>
+          </div>
         </div>
-      </div>
+      </template>
+      <template v-else-if="chartType === 'bar' && items.length">
+        <p class="text-lg/7 font-serif font-semibold mb-8">{{ title }}</p>
+        <div class="mb-8" style="position: relative; width: 100%; aspect-ratio: 2 / 1;">
+          <Chart type="bar" :data="chartData" :options="chartOptions" class="w-full h-full" />
+        </div>
+      </template>
+      <template v-else-if="items.length">
+        <div v-for="item in items" :key="item.label" class="mb-8 last:mb-0">
+          <p class="text-lg/7 font-serif font-semibold">{{ item.label }}</p>
+          <p class="text-5xl font-serif font-semibold">{{ item.value }}</p>
+        </div>
+      </template>
+      <template v-else>
+        <p class="text-lg/7 font-semibold font-serif">{{ title }}</p>
+        <p class="text-5xl font-serif font-semibold">{{ value }}</p>
+      </template>
     </template>
-    <template v-else-if="chartType === 'bar' && items.length">
-      <p class="text-sm text-gray-500 mb-2">{{ title }}</p>
-      <div class="mb-4" style="position: relative; height: 200px; width: 100%;">
-        <canvas ref="canvasRef" class="w-full h-48"></canvas>
-      </div>
-    </template>
-    <template v-else-if="items.length">
-      <div v-for="item in items" :key="item.label" class="mb-4 last:mb-0">
-        <p class="text-sm text-gray-500">{{ item.label }}</p>
-        <p class="text-xl font-semibold">{{ item.value }}</p>
-      </div>
-    </template>
-    <template v-else>
-      <p class="text-sm text-gray-500">{{ title }}</p>
-      <p class="text-2xl font-semibold">{{ value }}</p>
-    </template>
-  </div>
+  </Card>
 </template>
 
 <script setup>
-import Chart from 'chart.js/auto';
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   title: { type: String, required: false },
@@ -53,18 +54,21 @@ const props = defineProps({
   chartType: { type: String, required: false, default: 'single' },
 });
 
-const canvasRef = ref(null);
-let chartInstance = null;
 const hoveredIndex = ref(null);
 
-const chartData = computed(() => ({
-  labels: props.items.map(i => i.label),
-  datasets: [{
-    data: props.items.map(i => Number(i.value)),
-    backgroundColor: ['#3B82F6', '#F59E0B', '#EF4444'],
-    hoverOffset: 4
-  }]
-}));
+const chartData = computed(() => {
+  const rootStyles = getComputedStyle(document.documentElement);
+  const cssVars = ['--int-base', '--acc-base', '--acc2-base'];
+  const bgColors = cssVars.map(varName => rootStyles.getPropertyValue(varName).trim());
+  return {
+    labels: props.items.map(i => i.label),
+    datasets: [{
+      data: props.items.map(i => Number(i.value)),
+      backgroundColor: bgColors,
+      hoverOffset: 4
+    }]
+  };
+});
 
 const totalValue = computed(() =>
   props.items.reduce((sum, i) => sum + Number(i.value), 0)
@@ -96,41 +100,5 @@ const chartOptions = computed(() => {
     };
   }
   return {};
-});
-
-onMounted(() => {
-  if (props.chartType !== 'single' && props.items.length && canvasRef.value) {
-    chartInstance = new Chart(canvasRef.value, {
-      type: props.chartType,
-      data: chartData.value,
-      options: chartOptions.value
-    });
-  }
-});
-
-watch(
-  () => props.items,
-  (newItems) => {
-    if (props.chartType !== 'single' && newItems.length && canvasRef.value) {
-      if (chartInstance) {
-        chartInstance.data = chartData.value;
-        chartInstance.options = chartOptions.value;
-        chartInstance.update();
-      } else {
-        chartInstance = new Chart(canvasRef.value, {
-          type: props.chartType,
-          data: chartData.value,
-          options: chartOptions.value
-        });
-      }
-    }
-  },
-  { immediate: true }
-);
-
-onBeforeUnmount(() => {
-  if (chartInstance) {
-    chartInstance.destroy();
-  }
 });
 </script>

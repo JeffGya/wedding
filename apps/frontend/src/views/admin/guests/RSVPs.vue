@@ -9,61 +9,67 @@
     </div>
 
     <!-- Filters -->
-    <div class="mb-4">
-      <label>Filter by attendance status:</label>
-      <select v-model="filters.attending" class="px-4 py-2 border rounded">
-        <option value="">All</option>
-        <option value="true">Attending</option>
-        <option value="false">Not Attending</option>
-      </select>
-    </div>
-
-    <div class="mb-4">
-      <label>Filter by Status:</label>
-      <select v-model="filters.rsvp_status" class="px-4 py-2 border rounded">
-        <option value="">All</option>
-        <option value="pending">Pending</option>
-        <option value="attending">Attending</option>
-        <option value="not_attending">Not Attending</option>
-      </select>
-    </div>
-
+    <div class="flex flex-row gap-8 center">
+      <FloatLabel variant="in" class="w-full md:w-56">
+        <Select
+          v-model="filters.attending"
+          :options="attendanceOptions"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+          inputId="in_label"
+        />
+        <label for="in_label">Filter by attendance</label>
+      </FloatLabel>
+      <FloatLabel variant="in" class="w-full md:w-56">
+        <Select
+          v-model="filters.rsvp_status"
+          :options="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+          inputId="in_label"
+        />
+        <label for="in_label">Filter by Status:</label>
+      </FloatLabel>
+    
     <!-- Clear Filters Button -->
-    <div class="mb-4">
-      <button @click="clearFilters" class="px-4 py-2 bg-red-500 text-white rounded">Clear Filters</button>
+      <Button severity="danger" @click="clearFilters">Clear Filters</Button>
     </div>
 
-    <!-- Table -->
-    <table class="min-w-full table-auto">
-      <thead>
-        <tr>
-          <th class="px-4 py-2 border">Guest Name</th>
-          <th class="px-4 py-2 border">Group</th>
-          <th class="px-4 py-2 border">Code</th>
-          <th class="px-4 py-2 border">Attending</th>
-          <th class="px-4 py-2 border">Dietary</th>
-          <th class="px-4 py-2 border">Notes</th>
-          <th class="px-4 py-2 border">Submission Date</th>
-          <th class="px-4 py-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="guest in filteredGuests" :key="guest.id">
-          <td class="px-4 py-2 border">{{ guest.name }}</td>
-          <td class="px-4 py-2 border">{{ guest.group_label || '' }}</td>
-          <td class="px-4 py-2 border">{{ guest.code || '' }}</td>
-          <td class="px-4 py-2 border">{{ guest.attending ? 'Yes' : 'No' }}</td>
-          <td class="px-4 py-2 border">{{ guest.dietary || '' }}</td>
-          <td class="px-4 py-2 border">{{ guest.notes || '' }}</td>
-          <td class="px-4 py-2 border">{{ guest.updated_at }}</td>
-          <td class="px-4 py-2 border">
-            <button @click="openEditModal(guest)" class="px-2 py-1 bg-blue-500 text-white rounded">
-              Edit
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Data Table -->
+    <DataTable
+      :value="guests"
+      :paginator="true"
+      :rows="guestsPerPage"
+      :totalRecords="totalGuests"
+      size="small"
+      stripedRows
+      lazy
+      :sortField="sortField"
+      :sortOrder="sortOrder"
+      sortMode="single"
+      @page="onPage"
+      @sort="onSort"
+      class="p-datatable-sm"
+    >
+      <Column field="name" header="Guest Name" sortable />
+      <Column field="group_label" header="Group" sortable />
+      <Column field="code" header="Code" sortable />
+      <Column header="Attending">
+        <template #body="slotProps">
+          {{ slotProps.data.attending ? 'Yes' : 'No' }}
+        </template>
+      </Column>
+      <Column field="dietary" header="Dietary" />
+      <Column field="notes" header="Notes" />
+      <Column field="updated_at" header="Submission Date" sortable />
+      <Column header="Actions">
+        <template #body="slotProps">
+          <Button rounded severity="secondary" icon="i-solar:pen-2-bold" @click="openEditModal(slotProps.data)" />
+        </template>
+      </Column>
+    </DataTable>
 
     <!-- Edit RSVP Modal -->
     <div v-if="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -71,13 +77,6 @@
         <button @click="closeEditModal" class="absolute top-2 right-2 text-gray-600 text-xl">&times;</button>
         <RSVPForm :guest="currentGuest" mode="admin" @submit="onRSVPFormSubmit" />
       </div>
-    </div>
-
-    <!-- Pagination -->
-    <div class="mt-4">
-      <button @click="prevPage" :disabled="currentPage <= 1">Previous</button>
-      <span>{{ currentPage }} / {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage >= totalPages">Next</button>
     </div>
 
   </div>
@@ -96,8 +95,31 @@ const filters = reactive({
   rsvp_status: '',
 });
 
+const statusOptions = [
+  { label: 'All', value: '' },
+  { label: 'Pending', value: 'pending' },
+  { label: 'Attending', value: 'attending' },
+  { label: 'Not Attending', value: 'not_attending' },
+];
+
+const attendanceOptions = [
+  { label: 'All', value: '' },
+  { label: 'Attending', value: 'true' },
+  { label: 'Not Attending', value: 'false' },
+];
+
 const currentPage = ref(1);
 const guestsPerPage = 40;
+
+const sortField = ref(null);
+const sortOrder = ref(null);
+
+const onSort = (event) => {
+  sortField.value = event.sortField;
+  sortOrder.value = event.sortOrder;
+  currentPage.value = 1;
+  fetchGuests();
+};
 
 const parseFilterValue = (val) => {
   if (val === 'true') return true;
@@ -114,12 +136,15 @@ const fetchGuests = async () => {
   const attendingVal = parseFilterValue(filters.attending);
   if (attendingVal !== null) {
     params.attending = attendingVal;
-    console.log("Added attending filter:", attendingVal);
   }
 
   if (filters.rsvp_status) {
     params.rsvp_status = filters.rsvp_status;
-    console.log("Added RSVP status filter:", filters.rsvp_status);
+  }
+
+  if (sortField.value) {
+    params.sort_by = sortField.value;
+    params.sort_order = sortOrder.value === 1 ? 'asc' : 'desc';
   }
 
   try {
@@ -154,6 +179,12 @@ const prevPage = () => {
     currentPage.value--;
     fetchGuests(); // Refetch data with updated page number
   }
+};
+
+// Handler for PrimeVue DataTable pagination
+const onPage = (event) => {
+  currentPage.value = event.first / event.rows + 1;
+  fetchGuests();
 };
 
 // Reset to page 1 whenever filters change and refetch guests

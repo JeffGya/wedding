@@ -9,13 +9,17 @@
       <input v-model="form.subject" placeholder="Subject" class="w-full px-3 py-2 border rounded" />
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Body (EN)</label>
-        <RichTextEditor v-model="form.body_en" />
+        <label>Body (EN)</label>
+        <RichTextEditor
+          v-model="form.body_en"
+        />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Body (LT)</label>
-        <RichTextEditor v-model="form.body_lt" />
+        <label>Body (LT)</label>
+        <RichTextEditor
+          v-model="form.body_lt"
+        />
       </div>
 
       <div class="flex justify-end gap-2">
@@ -34,6 +38,7 @@ import { useRoute, useRouter, RouterLink } from 'vue-router'
 import api from '@/api';
 import { useToast as usePrimeToast } from 'primevue/usetoast';
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
+
 
 const primeToast = usePrimeToast();
 const route = useRoute()

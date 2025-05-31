@@ -4,6 +4,7 @@ import PrimeVue from 'primevue/config';
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 import Button from "primevue/button";
+import ButtonGroup from 'primevue/buttongroup';
 import ToggleSwitch from 'primevue/toggleswitch';
 import Select from 'primevue/select';
 import ProgressBar from 'primevue/progressbar';
@@ -102,6 +103,7 @@ app.use(PrimeVue, {
   }
 });
 app.component('Button', Button);
+app.component('ButtonGroup', ButtonGroup);
 app.component('ToggleSwitch', ToggleSwitch);
 app.component('Select', Select);
 app.component('ProgressBar', ProgressBar);

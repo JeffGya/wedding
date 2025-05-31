@@ -1,12 +1,11 @@
 <template>
-  <div class="text-center mt-16">
-    <h1 class="text-4xl font-bold text-gray-800 mb-4">Guest Overview</h1>
-    <p class="text-gray-600 mb-8">Manage the full list of guests invited to the wedding.</p>
-    <div class="mb-4">
-      <button @click="openCreateModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">Add Guest</button>
-      <button v-if="selectedGuest" @click="openEditModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Edit Guest</button>
+  <div class="text-center">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8">Guest Overview</h1>
+    <p class="text-gray-600 mb-16">Manage the full list of guests invited to the wedding.</p>
+    <div class="mb-8">
+      <Button label="Add Guest" severity="primary" class="mr-2" @click="openCreateModal" />
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-7xl mx-auto mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-60rem mx-auto mb-16">
       <!-- RSVP Status -->
       <StatCard
         title="RSVP Status"
@@ -63,76 +62,49 @@
         <StatCard title="Dietary Requirements" :value="0" />
       </template>
     </div>
-    <div v-if="loading" class="text-gray-500">Loading guests...</div>
+    <div v-if="loading">Loading guests...</div>
     <div v-else>
-      <table class="min-w-full text-left border-collapse border border-gray-300 mx-auto">
-        <thead>
-          <tr class="bg-gray-100">
-            <th @click="setSort('id')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              #
-              <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('is_primary')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Primary
-              <span v-if="sortKey === 'is_primary'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('group_label')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Group
-              <span v-if="sortKey === 'group_label'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('name')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Name
-              <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('email')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Email
-              <span v-if="sortKey === 'email'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('preferred_language')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Language
-              <span v-if="sortKey === 'preferred_language'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('rsvp_status')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              RSVP
-              <span v-if="sortKey === 'rsvp_status'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('code')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Code
-              <span v-if="sortKey === 'code'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th @click="setSort('can_bring_plus_one')" class="p-2 border border-gray-300 cursor-pointer select-none">
-              Can Bring +1
-              <span v-if="sortKey === 'can_bring_plus_one'">{{ sortAsc ? '▲' : '▼' }}</span>
-            </th>
-            <th class="p-2 border border-gray-300">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(guest, index) in sortedGuests" :key="guest.id" class="border-t">
-            <td class="p-2 border border-gray-300">{{ index + 1 }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.is_primary ? 'Yes' : 'No' }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.group_label }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.name }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.email }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.preferred_language || '' }}</td>
-            <td class="p-2 border border-gray-300">
-              {{
-                guest.attending === true
-                  ? 'Yes'
-                  : guest.attending === false
-                  ? 'No'
-                  : 'Pending'
-              }}
-            </td>
-            <td class="p-2 border border-gray-300">{{ guest.code || '—' }}</td>
-            <td class="p-2 border border-gray-300">{{ guest.can_bring_plus_one ? 'Yes' : 'No' }}</td>
-            <td class="p-2 border border-gray-300">
-              <button @click="openEditForGuest(guest)" class="text-blue-600 hover:underline mr-2">Edit</button>
-              <button @click="deleteGuest(guest.id)" class="text-red-600 hover:underline">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <DataTable
+        :value="sortedGuests"
+        :sortField="sortKey"
+        :sortOrder="sortAsc ? 1 : -1"
+        :size="small"
+        stripedRows
+        paginator :rows="20" 
+        @sort="onSort"
+        class="min-w-full text-left"
+        responsiveLayout="scroll"
+      >
+        <Column header="#">
+          <template #body="slotProps">{{ slotProps.index + 1 }}</template>
+        </Column>
+        <Column field="is_primary" header="Primary" sortable>
+          <template #body="slotProps">{{ slotProps.data.is_primary ? 'Yes' : 'No' }}</template>
+        </Column>
+        <Column field="group_label" header="Group" sortable />
+        <Column field="name" header="Name" sortable />
+        <Column field="email" header="Email" sortable />
+        <Column field="preferred_language" header="Language" sortable />
+        <Column header="RSVP" sortField="attending" sortable>
+          <template #body="slotProps">{{ slotProps.data.attending === true ? 'Yes' : slotProps.data.attending === false ? 'No' : 'Pending' }}</template>
+        </Column>
+        <Column header="Code" field="code" sortable>
+          <template #body="slotProps">{{ slotProps.data.code || '—' }}</template>
+        </Column>
+        <Column field="can_bring_plus_one" header="Can Bring +1" sortable>
+          <template #body="slotProps">{{ slotProps.data.can_bring_plus_one ? 'Yes' : 'No' }}</template>
+        </Column>
+        <Column header="Actions">
+          <template #body="slotProps">
+            <div class="flex justify-center">
+            <ButtonGroup>
+              <Button severity="secondary" icon="i-solar:pen-2-bold" @click="openEditForGuest(slotProps.data)" />
+              <Button severity="danger" icon="i-solar:trash-bin-trash-bold" @click="deleteGuest(slotProps.data.id)" />
+            </ButtonGroup>
+          </div>
+          </template>
+        </Column>
+      </DataTable>
     </div>
   </div>
   <GuestModal
@@ -151,6 +123,7 @@ import GuestModal from '@/components/GuestModal.vue'
 import { fetchGuestAnalytics } from '@/api/analytics';
 import StatCard from '@/components/ui/StatCard.vue';
 import { ref as vueRef } from 'vue';
+import Button from 'primevue/button';
 
 const guests = ref([])
 const loading = ref(true)
@@ -202,6 +175,11 @@ const sortedGuests = computed(() => {
   }
   return list;
 });
+
+const onSort = (event) => {
+  sortKey.value = event.sortField;
+  sortAsc.value = event.sortOrder === 1;
+};
 
 const stats = ref({
   total: 0,

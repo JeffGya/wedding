@@ -121,6 +121,7 @@ export default defineConfig({
           --bg-glass-border: #E9E7D910;
 
           /* Background Gradient */
+          --bg-color: #DAA520;
           --bg-gradient: linear-gradient(to right bottom, #D2C6B280, #927D1480);
 
           /* Interactive Background Mahogany */
@@ -182,6 +183,7 @@ export default defineConfig({
           --bg-glass-border: #E3B13F10;
 
           /* Background Gradient */
+          --bg-color: #442727;
           --bg-gradient: linear-gradient(to right bottom, #0f0f0f, #2E1A1A, #442727);
 
           /* Interactive Background Gold */
