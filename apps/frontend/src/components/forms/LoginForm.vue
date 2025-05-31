@@ -1,38 +1,40 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-    <h2 class="text-2xl font-bold mb-4">Login</h2>
+  <Card>
+    <template #content>
+      <Form @submit="handleSubmit">
+        <h2 class="text-2xl font-bold mb-4">Login</h2>
 
-    <label class="block mb-2">
-      <span class="text-gray-700">Email</span>
-      <input
-        v-model="email"
-        type="email"
-        required
-        autocomplete="email"
-        class="w-full mt-1 p-2 border rounded"
-      />
-    </label>
+        <div class="mb-4">
+          <FloatLabel variant="in">
+            <InputText
+              id="email"
+              v-model="email"
+              type="email"
+              autocomplete="email"
+              class="w-full"
+              required
+            />
+            <label for="email">Email</label>
+          </FloatLabel>
+          <FloatLabel variant="in">
+            <Password
+              id="password"
+              v-model="password"
+              :feedback="false"
+              toggleMask
+              class="w-full"
+              required
+            />
+            <label for="password">Password</label>
+          </FloatLabel>
+        </div>
 
-    <label class="block mb-4">
-      <span class="text-gray-700">Password</span>
-      <input
-        v-model="password"
-        type="password"
-        required
-        autocomplete="current-password"
-        class="w-full mt-1 p-2 border rounded"
-      />
-    </label>
+        <Button label="Log In" type="submit" class="w-full" />
 
-    <button
-      type="submit"
-      class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-    >
-      Log In
-    </button>
-
-    <p v-if="error" class="mt-4 text-red-600">{{ error }}</p>
-  </form>
+        <p v-if="error" class="mt-4 text-red-600">{{ error }}</p>
+      </Form>
+    </template>
+  </Card>
 </template>
 
 <script setup>

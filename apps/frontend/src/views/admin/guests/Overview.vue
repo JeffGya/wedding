@@ -98,8 +98,8 @@
           <template #body="slotProps">
             <div class="flex justify-center">
             <ButtonGroup>
-              <Button severity="secondary" icon="i-solar:pen-2-bold" @click="openEditForGuest(slotProps.data)" />
-              <Button severity="danger" icon="i-solar:trash-bin-trash-bold" @click="deleteGuest(slotProps.data.id)" />
+              <Button severity="secondary" icon="i-solar:pen-new-square-bold-duotone" @click="openEditForGuest(slotProps.data)" />
+              <Button severity="danger" icon="i-solar:trash-bin-minimalistic-bold-duotone" @click="deleteGuest(slotProps.data.id)" />
             </ButtonGroup>
           </div>
           </template>

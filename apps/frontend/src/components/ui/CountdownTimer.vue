@@ -1,10 +1,15 @@
 
 
 <template>
-  <div v-if="!expired" class="text-center my-4">
-    <span class="font-mono text-lg">
-      {{ days }}d {{ hours }}h {{ minutes }}m {{ seconds }}s
+  <div v-if="!expired" class="my-4">
+    <p font="text-sm">You have
+    <span class="font-serif font-semibold text-base">
+      {{ days }}d {{ hours }}h {{ minutes }}m
     </span>
+    to confirm your rsvp. </p> 
+    <p>
+      <em>No RSVP means not attending.</em>
+    </p>
   </div>
   <div v-else class="text-center my-4 text-red-600">
     RSVP Closed

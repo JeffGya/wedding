@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-8">
+  <div class="min-h-screen">
     <h1 class="text-4xl font-bold text-gray-800 text-center mb-6">Guest Messages</h1>
     <p class="text-gray-600 text-center mb-6">View sent and scheduled emails to guests.</p>
 
@@ -18,45 +18,61 @@
       </RouterLink>
     </div>
 
-    <div v-if="messages.length > 0" class="space-y-4">
-      <div
-        v-for="msg in messages"
-        :key="msg.id"
-        class="bg-white border rounded shadow p-4 hover:shadow-md transition cursor-pointer"
-        @click="goToDetail(msg.id)"
-      >
-        <div class="flex justify-between items-center mb-2">
-          <h2 class="text-lg font-semibold text-gray-800">{{ msg.subject }}</h2>
-          <span
-            class="text-sm px-2 py-1 rounded"
-            :class="{
-              'bg-gray-300 text-gray-800': msg.status === 'draft',
-              'bg-yellow-300 text-yellow-800': msg.status === 'scheduled',
-              'bg-green-300 text-green-800': msg.status === 'sent'
-            }"
+    <div v-if="messages.length > 0">
+      <Timeline :value="events" class="w-full">
+        <template #opposite="{ item }">
+          <div class="text-sm text-gray-600">
+            <div>Created: {{ formatDate(item.created) }}</div>
+            <div v-if="item.updated && item.updated !== item.created">Updated: {{ formatDate(item.updated) }}</div>
+            <div v-if="item.scheduled">Scheduled: {{ formatDate(item.scheduled) }}</div>
+          </div>
+        </template>
+        <template #content="{ item }">
+          <Panel
+            :header="item.msg.subject"
+            class="mb-4 cursor-pointer"
+            @click="goToDetail(item.msg.id)"
           >
-            {{ msg.status }}
-          </span>
-          <RouterLink
-            v-if="msg.status === 'draft' || msg.status === 'scheduled'"
-            :to="`/admin/guests/messages/${msg.id}/edit`"
-            class="text-sm text-blue-600 hover:underline ml-4"
-            @click.stop
-          >
-            Edit
-          </RouterLink>
-          <button
-            v-if="msg.status === 'draft' || msg.status === 'scheduled'"
-            @click.stop="deleteMessage(msg.id)"
-          >
-            Delete
-          </button>
-        </div>
-        <p class="text-gray-500 text-sm">Created: {{ formatDate(msg.created_at) }}</p>
-        <p v-if="msg.status === 'scheduled'" class="text-gray-500 text-sm">Scheduled for: {{ formatDate(msg.scheduled_for) }}</p>
-        <p v-if="msg.status === 'sent'" class="text-gray-500 text-sm">Sent</p>
-        <p v-else class="text-gray-500 text-sm">Updated: {{ formatDate(msg.updated_at) }}</p>
-      </div>
+            <div class="flex justify-between items-center mb-2">
+              <Tag
+                :value="item.msg.status.charAt(0).toUpperCase() + item.msg.status.slice(1)"
+                :severity="{
+                  draft: 'info',
+                  scheduled: 'warning',
+                  sent: 'success'
+                }[item.msg.status]"
+              />
+            </div>
+            <div>
+              <p class="text-sm">
+                {{ item.msg.status === 'scheduled'
+                    ? `Scheduled for: ${formatDate(item.msg.scheduled_for)}`
+                    : item.msg.status === 'sent'
+                      ? 'Sent'
+                      : `Updated: ${formatDate(item.msg.updated_at)}` }}
+              </p>
+            </div>
+            <template #footer>
+              <div class="flex space-x-2">
+                <Button
+                  v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
+                  label="Delete"
+                  icon="i-solar:trash-bin-minimalistic-bold-duotone"
+                  severity="danger"
+                  @click.stop="deleteMessage(item.msg.id)"
+                />
+                <Button
+                  v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
+                  label="Edit"
+                  icon="i-solar:pen-new-square-bold-duotone"
+                  severity="secondary"
+                  @click.stop="goToDetail(item.msg.id, true)"
+                />
+              </div>
+            </template>
+          </Panel>
+        </template>
+      </Timeline>
     </div>
 
     <div v-else class="text-center text-gray-500 mt-10">No messages found.</div>
@@ -64,15 +80,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/api'
+import Timeline from 'primevue/timeline';
+import Panel from 'primevue/panel';
+import Button from 'primevue/button';
+import Tag from 'primevue/tag';
 
 const router = useRouter()
 const messages = ref([])
 
-const goToDetail = (id) => {
-  router.push(`/admin/guests/messages/${id}`)
+const events = computed(() =>
+  messages.value
+    .map(msg => ({
+      id: msg.id,
+      created: msg.created_at,
+      updated: msg.updated_at,
+      scheduled: msg.scheduled_for,
+      msg
+    }))
+    .sort((a, b) => new Date(b.created) - new Date(a.created))
+);
+
+const goToDetail = (id, edit = false) => {
+  router.push(edit ? `/admin/guests/messages/${id}/edit` : `/admin/guests/messages/${id}`);
 }
 
 const formatDate = (dateString) => {

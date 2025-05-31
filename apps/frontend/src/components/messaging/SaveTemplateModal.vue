@@ -9,14 +9,14 @@
       <div class="mb-4">
         <label class="block font-medium mb-1">Save Mode</label>
         <div class="flex gap-4">
-          <label class="inline-flex items-center">
-            <input type="radio" value="new" v-model="mode" class="mr-2" />
-            New Template
-          </label>
-          <label class="inline-flex items-center">
-            <input type="radio" value="overwrite" v-model="mode" class="mr-2" />
-            Overwrite Existing
-          </label>
+          <div class="flex items-center">
+            <RadioButton inputId="modeNew" value="new" v-model="mode" class="mr-2" />
+            <label for="modeNew">New Template</label>
+          </div>
+          <div class="flex items-center">
+            <RadioButton inputId="modeOverwrite" value="overwrite" v-model="mode" class="mr-2" />
+            <label for="modeOverwrite">Overwrite Existing</label>
+          </div>
         </div>
       </div>
 
@@ -25,15 +25,28 @@
           {{ mode === 'overwrite' ? 'Select Template to Overwrite' : 'Template Name' }}
         </label>
         <div v-if="mode === 'overwrite'">
-          <select v-model="selectedId" class="w-full border px-3 py-2 rounded">
-            <option disabled value="">Select template</option>
-            <option v-for="template in templates" :key="template.id" :value="template.id">
-              {{ template.name }}
-            </option>
-          </select>
+          <FloatLabel variant="in">
+            <Select
+              id="selected_template"
+              v-model="selectedId"
+              :options="templates"
+              optionLabel="name"
+              optionValue="id"
+              class="w-full"
+            />
+            <label for="selected_template">Select Template</label>
+          </FloatLabel>
         </div>
         <div v-else>
-          <input v-model="templateName" class="w-full border px-3 py-2 rounded" placeholder="Enter name..." />
+          <FloatLabel variant="in">
+            <InputText
+              id="templateName"
+              v-model="templateName"
+              type="text"
+              class="w-full"
+            />
+            <label for="templateName">Template Name</label>
+          </FloatLabel>
         </div>
       </div>
 
@@ -53,10 +66,21 @@
       </div>
 
       <div class="flex justify-end gap-2 mt-6">
-        <button @click="$emit('close')" class="px-4 py-2 border rounded">Cancel</button>
-        <button @click="handleSave" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Save
-        </button>
+        <Button
+          label="Cancel"
+          severity="secondary"
+          icon="i-solar:close-square-bold"
+          iconPos="right"
+          size="large"
+          @click="$emit('close')"
+        />
+        <Button
+          label="Save"
+          icon="i-solar:check-square-bold"
+          iconPos="right"
+          size="large"
+          @click="handleSave"
+        />
       </div>
     </div>
   </div>

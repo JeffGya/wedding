@@ -25,7 +25,7 @@
       </template>
       <template v-else-if="chartType === 'bar' && items.length">
         <p class="text-lg/7 font-serif font-semibold mb-8">{{ title }}</p>
-        <div class="mb-8" style="position: relative; width: 100%; aspect-ratio: 2 / 1;">
+        <div class="mb-8" style="position: relative; width: 100%; height: 100%; aspect-ratio: 2 / 1;">
           <Chart type="bar" :data="chartData" :options="chartOptions" class="w-full h-full" />
         </div>
       </template>

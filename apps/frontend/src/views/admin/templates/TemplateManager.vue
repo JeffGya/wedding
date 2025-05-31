@@ -5,47 +5,49 @@
     <div v-if="loading" class="text-gray-500">Loading templates...</div>
     <div v-else-if="templates.length === 0" class="text-gray-500">No templates found.</div>
  
-    <ul v-else class="space-y-4">
-      <li
+    <div v-else class="space-y-4">
+      <Panel
         v-for="template in templates"
         :key="template.id"
-        class="p-4 border rounded-md"
-      >
-        <details>
-          <summary class="flex justify-between items-start cursor-pointer">
-            <div>
-              <h2 class="font-medium text-lg">{{ template.name }}</h2>
-              <p class="text-sm text-gray-600">{{ template.subject }}</p>
-            </div>
-            <div class="flex gap-2">
-              <RouterLink
-                :to="`/admin/templates/${template.id}/edit`"
-                class="text-sm text-blue-600 hover:underline"
-              >
-                Edit
-              </RouterLink>
-              <button
-                class="text-sm text-red-600 hover:underline"
-                @click.stop="deleteTemplate(template.id)"
-              >
-                Delete
-              </button>
-            </div>
-          </summary>
-
-          <div class="mt-4 space-y-2">
-            <div>
-              <p class="font-semibold">Body (EN):</p>
-              <div class="whitespace-pre-line text-sm text-gray-800 border p-2 rounded bg-gray-50">{{ template.body_en }}</div>
-            </div>
-            <div>
-              <p class="font-semibold">Body (LT):</p>
-              <div class="whitespace-pre-line text-sm text-gray-800 border p-2 rounded bg-gray-50">{{ template.body_lt }}</div>
+        :header="template.name"
+        toggleable
+        :collapsed="true"
+      > 
+        <p class="font-semibold">Subject:</p>
+        <p class="text-base mb-2">{{ template.subject }}</p>
+        <div class="mt-2 space-y-4">
+          <div>
+            <p class="font-semibold">Body (EN):</p>
+            <div class="whitespace-pre-line text-sm text-gray-800 border p-2 rounded bg-gray-50">
+              {{ template.body_en }}
             </div>
           </div>
-        </details>
-      </li>
-    </ul>
+          <div>
+            <p class="font-semibold">Body (LT):</p>
+            <div class="whitespace-pre-line text-sm text-gray-800 border p-2 rounded bg-gray-50">
+              {{ template.body_lt }}
+            </div>
+          </div>
+        </div>
+        <template #footer>
+          <div class="flex justify-end gap-2">
+            <ButtonGroup>
+              <Button
+                label="Delete"
+                icon="i-solar:trash-bin-minimalistic-bold-duotone"
+                severity="danger"
+                @click="deleteTemplate(template.id)"
+              />
+              <Button
+                label="Edit"
+                icon="i-solar:pen-new-square-bold-duotone"
+                @click="router.push(`/admin/templates/${template.id}/edit`)"
+              />
+            </ButtonGroup>
+          </div>
+        </template>
+      </Panel>
+    </div>
   </section>
 </template>
  
@@ -53,6 +55,9 @@
 import { ref, onMounted } from 'vue'
 import api from '@/api';
 import { useToast as usePrimeToast } from 'primevue/usetoast'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const primeToast = usePrimeToast()
 const templates = ref([])

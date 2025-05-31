@@ -1,44 +1,71 @@
 <template>
-  <section class="max-w-2xl mx-auto">
-    <h1 class="text-2xl font-semibold mb-4">
-      {{ isEditMode ? 'Edit Template' : 'New Template' }}
-    </h1>
+  <Card class="max-w-2xl mx-auto mt-6">
+    <template #content>
+      <Form @submit="saveTemplate" class="space-y-4">
+        <h1 class="text-2xl font-semibold mb-0">
+          {{ isEditMode ? 'Edit Template' : 'New Template' }}
+        </h1>
 
-    <form @submit.prevent="saveTemplate" class="space-y-4">
-      <input v-model="form.name" placeholder="Template Name" class="w-full px-3 py-2 border rounded" />
-      <input v-model="form.subject" placeholder="Subject" class="w-full px-3 py-2 border rounded" />
+        <FloatLabel variant="in">
+          <InputText
+            id="template_name"
+            v-model="form.name"
+            class="w-full"
+            placeholder="Template Name"
+            required
+          />
+          <label for="template_name">Template Name</label>
+        </FloatLabel>
+        <FloatLabel variant="in">
+          <InputText
+            id="template_subject"
+            v-model="form.subject"
+            class="w-full"
+            placeholder="Subject"
+            required
+          />
+          <label for="template_subject">Subject</label>
+        </FloatLabel>
 
-      <div>
-        <label>Body (EN)</label>
-        <RichTextEditor
-          v-model="form.body_en"
-        />
-      </div>
+        <div>
+          <label>Body (EN)</label>
+          <RichTextEditor
+            v-model="form.body_en"
+          />
+        </div>
 
-      <div>
-        <label>Body (LT)</label>
-        <RichTextEditor
-          v-model="form.body_lt"
-        />
-      </div>
+        <div>
+          <label>Body (LT)</label>
+          <RichTextEditor
+            v-model="form.body_lt"
+          />
+        </div>
 
-      <div class="flex justify-end gap-2">
-        <RouterLink to="/admin/templates" class="px-4 py-2 border rounded">Cancel</RouterLink>
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          {{ isEditMode ? 'Save Changes' : 'Create Template' }}
-        </button>
-      </div>
-    </form>
-  </section>
+        <div class="flex justify-end gap-2">
+          <Button
+            label="Cancel"
+            class="p-button-outlined"
+            @click="router.push('/admin/templates')"
+          />
+          <Button
+            label="Save"
+            type="submit"
+            class="p-button-primary"
+          />
+        </div>
+      </Form>
+    </template>
+  </Card>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter, RouterLink } from 'vue-router'
+import { useRoute } from 'vue-router'
 import api from '@/api';
 import { useToast as usePrimeToast } from 'primevue/usetoast';
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 
+import { useRouter } from 'vue-router';
 
 const primeToast = usePrimeToast();
 const route = useRoute()

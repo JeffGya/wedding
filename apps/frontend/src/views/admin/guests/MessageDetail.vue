@@ -1,6 +1,10 @@
 <template>
-  <div class="relative flex flex-col p-6 max-w-6xl mx-auto min-h-screen">
-    <h1 class="text-3xl font-bold mb-6">Message Detail</h1>
+  <h1 class="text-3xl font-bold mb-6">Message Detail</h1>
+  <Card class="max-w-6xl mx-auto mt-6 p-6 relative">
+    <template #content> 
+
+      <Toast />
+      <ConfirmDialog />
 
     <div class="flex-1">
       <template v-if="message">
@@ -69,41 +73,41 @@
 
     <!-- Sticky Button Bar -->
     <div
-      class="sticky bottom-0 left-0 right-0 z-10 bg-white px-6 py-4 flex justify-between border-t shadow-inner"
+      class="sticky bottom-0 left-0 right-0 z-10 flex justify-between p-16 mt-8 bg-bg-glass backdrop-blur-sm"
       v-if="message"
     >
       <!-- Left: Delete button for drafts/scheduled -->
       <div>
-        <button
+        <Button
           v-if="message.status === 'draft' || message.status === 'scheduled'"
+          label="Delete Message"
+          icon="i-solar:pen-new-square-bold-duotone"
+          severity="danger"
           @click="deleteMessage(message.id)"
-          class="border border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-50"
-        >
-          Delete Message
-        </button>
+        />
       </div>
       <!-- Right: Other actions -->
       <div class="flex gap-4">
-        <button
+        <Button
           v-if="message.status === 'draft' || message.status === 'scheduled'"
+          label="Edit Message"
+          icon="pi pi-pencil"
+          class="p-button-warning"
           @click="$router.push(`/admin/guests/messages/${message.id}/edit`)"
-          class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-        >
-          Edit Message
-        </button>
-        <button
+        />
+        <Button
+          label="Resend Failed"
+          icon="pi pi-redo"
+          class="p-button-info"
           @click="resendFailed"
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="resendLoading"
-        >
-          Resend Failed
-        </button>
-        <button
+        />
+        <Button
+          label="Back to Messages"
+          icon="pi pi-arrow-left"
+          class="p-button-secondary p-button-outlined"
           @click="$router.push('/admin/guests/messages')"
-          class="border border-gray-400 px-4 py-2 rounded hover:bg-gray-100"
-        >
-          Back to Messages
-        </button>
+        />
       </div>
     </div>
 
@@ -122,32 +126,38 @@
       </div>
     </div>
 
-    <!-- Resend Summary Modal -->
-    <div
-      v-if="showSummaryModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-    >
-      <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
-        <h2 class="text-2xl font-bold mb-4">Resend Summary</h2>
-        <p class="mb-2">Sent: {{ summarySentCount }}</p>
-        <p class="mb-4">Failed: {{ summaryFailedCount }}</p>
-        <div v-if="summaryFailedCount > 0" class="mb-4 max-h-48 overflow-y-auto border rounded p-2">
-          <h3 class="font-semibold mb-2">Failed Recipients:</h3>
-          <ul class="list-disc list-inside text-sm text-red-600">
-            <li v-for="err in retryErrors" :key="err.guest_id">
-              {{ err.name || 'Guest ID ' + err.guest_id }}: {{ err.error }}
-            </li>
-          </ul>
-        </div>
-        <button
+    </template> 
+  </Card>
+
+  <!-- Resend Summary Modal -->
+  <Dialog
+    v-model:visible="showSummaryModal"
+    header="Resend Summary"
+    modal
+    class="w-full max-w-lg"
+  >
+    <div class="p-4">
+      <p class="mb-2">Sent: {{ summarySentCount }}</p>
+      <p class="mb-4">Failed: {{ summaryFailedCount }}</p>
+      <div v-if="summaryFailedCount > 0" class="mb-4 max-h-48 overflow-y-auto border rounded p-2">
+        <h3 class="font-semibold mb-2">Failed Recipients:</h3>
+        <ul class="list-disc list-inside text-sm text-red-600">
+          <li v-for="err in retryErrors" :key="err.guest_id">
+            {{ err.name || 'Guest ID ' + err.guest_id }}: {{ err.error }}
+          </li>
+        </ul>
+      </div>
+      <div class="flex justify-end">
+        <Button
+          label="Close"
+          icon="pi pi-times"
+          class="p-button-primary"
           @click="showSummaryModal = false"
-          class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Close
-        </button>
+        />
       </div>
     </div>
-  </div>
+  </Dialog>
+
 </template>
 
 <script setup>
@@ -155,9 +165,14 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import api from '@/api'
+import Toast from 'primevue/toast';
+import { useToast as usePrimeToast } from 'primevue/usetoast';
+import { useConfirm } from 'primevue/useconfirm';
 
 const route = useRoute()
 const router = useRouter()
+const confirm = useConfirm();
+const primeToast = usePrimeToast();
 const messageId = route.params.id
 
 const message = ref(null)
@@ -259,6 +274,7 @@ const resendFailed = async () => {
     summarySentCount.value = sent
     summaryFailedCount.value = failed
     showSummaryModal.value = true
+    primeToast.add({ severity: 'success', summary: 'Resend Complete', detail: `Sent: ${sent}, Failed: ${failed}` })
 
     console.log(`Resend complete. Sent: ${sent}, Failed: ${failed}`)
   } catch (err) {
@@ -270,13 +286,19 @@ const resendFailed = async () => {
 }
 
 async function deleteMessage(id) {
-  if (!confirm('Are you sure you want to delete this message?')) return;
-  try {
-    await api.delete(`/messages/${id}`);
-    // Redirect back to messages list
-    router.push('/admin/guests/messages');
-  } catch (error) {
-    console.error('Failed to delete message:', error);
-  }
+  confirm.require({
+    message: 'Are you sure you want to delete this message?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    accept: async () => {
+      try {
+        await api.delete(`/messages/${id}`);
+        router.push('/admin/guests/messages');
+        primeToast.add({ severity: 'success', summary: 'Deleted', detail: 'Message deleted successfully' });
+      } catch (error) {
+        console.error('Failed to delete message:', error);
+      }
+    }
+  });
 }
 </script>

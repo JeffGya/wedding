@@ -1,49 +1,80 @@
 <template>
-  <div class="max-w-2xl mx-auto p-6 bg-white shadow rounded">
-    <h1 class="text-2xl font-semibold mb-4">Email Settings</h1>
-    <form @submit.prevent="saveSettings" class="space-y-4">
-      <div>
-        <label for="provider" class="block font-medium">Provider</label>
-        <select v-model="form.provider" id="provider" class="w-full border px-3 py-2 rounded">
-          <option value="resend">Resend</option>
-          <!-- Future providers can go here -->
-        </select>
-      </div>
+  <Card class="max-w-2xl mx-auto mt-6">
+    <template #content>
+    <Form @submit="saveSettings" class="space-y-4">
+      <FloatLabel variant="in">
+        <Select
+          id="provider"
+          v-model="form.provider"
+          :options="[{ label: 'Resend', value: 'resend' }]"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+        />
+        <label for="provider">Provider</label>
+      </FloatLabel>
 
-      <div>
-        <label for="api_key" class="block font-medium">API Key</label>
-        <input v-model="form.api_key" type="text" id="api_key" class="w-full border px-3 py-2 rounded" />
-      </div>
+      <FloatLabel variant="in">
+        <InputText
+          id="api_key"
+          v-model="form.api_key"
+          class="w-full"
+        />
+        <label for="api_key">API Key</label>
+      </FloatLabel>
 
-      <div>
-        <label for="from_name" class="block font-medium">From Name</label>
-        <input v-model="form.from_name" type="text" id="from_name" class="w-full border px-3 py-2 rounded" />
-      </div>
+      <FloatLabel variant="in">
+        <InputText
+          id="from_name"
+          v-model="form.from_name"
+          class="w-full"
+        />
+        <label for="from_name">From Name</label>
+      </FloatLabel>
 
-      <div>
-        <label for="from_email" class="block font-medium">From Email</label>
-        <input v-model="form.from_email" type="email" id="from_email" class="w-full border px-3 py-2 rounded" />
-      </div>
+      <FloatLabel variant="in">
+        <InputText
+          id="from_email"
+          v-model="form.from_email"
+          class="w-full"
+        />
+        <label for="from_email">From Email</label>
+      </FloatLabel>
 
-      <div>
-        <label for="sender_name" class="block font-medium">Sender Name</label>
-        <input v-model="form.sender_name" type="text" id="sender_name" class="w-full border px-3 py-2 rounded" />
-      </div>
+      <FloatLabel variant="in">
+        <InputText
+          id="sender_name"
+          v-model="form.sender_name"
+          class="w-full"
+        />
+        <label for="sender_name">Sender Name</label>
+      </FloatLabel>
 
-      <div>
-        <label for="sender_email" class="block font-medium">Sender Email</label>
-        <input v-model="form.sender_email" type="email" id="sender_email" class="w-full border px-3 py-2 rounded" />
-      </div>
+      <FloatLabel variant="in">
+        <InputText
+          id="sender_email"
+          v-model="form.sender_email"
+          class="w-full"
+        />
+        <label for="sender_email">Sender Email</label>
+      </FloatLabel>
 
       <div class="flex items-center">
-        <input v-model="form.enabled" type="checkbox" id="enabled" class="mr-2" />
+        <ToggleSwitch
+          id="enabled"
+          v-model="form.enabled"
+          onLabel="Yes"
+          offLabel="No"
+          class="mr-2"
+        />
         <label for="enabled" class="font-medium">Enable Email Sending</label>
       </div>
 
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
-    </form>
-    <p v-if="message" class="text-green-600 mt-4">{{ message }}</p>
-  </div>
+      <Button label="Save Email Settings" type="submit" class="p-button-primary" />
+      <p v-if="message" class="text-green-600 mt-4">{{ message }}</p>
+    </Form>
+    </template>
+  </Card>
 </template>
 
 <script setup>

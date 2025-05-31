@@ -1,35 +1,41 @@
 <template>
-  <h1 class="text-3xl font-bold text-gray-800 mb-6 px-6">{{ isEditMode ? 'Edit Message' : 'New Message' }}</h1>
-    <div class="grid gap-6 w-full px-4 box-border grid-cols-1 md:grid-cols-3">
-      <!-- Left (Message Composer) -->
-      <div class="md:col-span-2 bg-gray-100 w-full">
-        <MessageComposer
-          ref="composerRef"
-          :templates="templates"
-          @save="() => handleComposerAction('draft')"
-          @schedule="() => handleComposerAction('scheduled')"
-          @send-now="() => handleComposerAction('sent')"
-        />
-        <div v-show="true" class="mt-4">
-          <label for="schedule-time" class="block text-sm font-medium text-gray-700 mb-1">Schedule time</label>
-          <DatePicker
-            v-model="scheduledAt"
-            showTime
-            dateFormat="yy-mm-dd"
-            timeFormat="HH:mm"
-            hourFormat="24"
-            mask="9999-99-99 99:99"
-            placeholder="YYYY-MM-DD HH:mm"
-            class="w-full max-w-full"
+  <Card>
+    <template #content> 
+      <h1 class="text-3xl font-semibold font-serif mb-6">{{ isEditMode ? 'Edit Message' : 'New Message' }}</h1>
+      <div class="grid gap-6 w-full box-border grid-cols-1 md:grid-cols-3">
+        <!-- Left (Message Composer) -->
+        <div class="md:col-span-2 w-full">
+          <MessageComposer
+            ref="composerRef"
+            :templates="templates"
+            @save="() => handleComposerAction('draft')"
+            @schedule="() => handleComposerAction('scheduled')"
+            @send-now="() => handleComposerAction('sent')"
           />
+          <div v-show="true" class="mt-4">
+            <FloatLabel variant="in">
+              <label for="schedule-time">Schedule time - YYYY-MM-DD HH:mm</label>
+              <DatePicker
+                v-model="scheduledAt"
+                showTime
+                dateFormat="yy-mm-dd"
+                timeFormat="HH:mm"
+                hourFormat="24"
+                mask="9999-99-99 99:99"
+                class="w-full max-w-full"
+              />
+            </FloatLabel>
+          </div>
+        </div>
+        <!-- Right (Recipient Picker) -->
+        <div class="md:col-span-1 w-full">
+          <h2 class="text-xl font-semibold mb-2">Recipients</h2>
+          <RecipientPicker ref="recipientsRef" />
         </div>
       </div>
-      <!-- Right (Recipient Picker) -->
-      <div class="md:col-span-1 bg-gray-100 w-full">
-        <h2 class="text-xl font-semibold text-gray-700 mb-2">Recipients</h2>
-        <RecipientPicker ref="recipientsRef" />
-      </div>
-    </div>
+    </template>
+  </Card>
+
     <div class="fixed bottom-0 left-0 right-0 z-10 bg-white px-6 py-4 flex justify-end gap-4 border-t shadow">
         <MessageActionBar
           :templates="templates"

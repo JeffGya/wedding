@@ -1,35 +1,45 @@
 <template>
-  <div class="max-w-2xl mx-auto p-6 bg-white shadow rounded">
-    <Banner
-        v-if="message"
-        :message="message"
-        :type="success ? 'success' : 'error'"
-        class="mt-4"
-      />
-    <h1 class="text-2xl font-semibold mb-4">Guest Settings</h1>
-    <form @submit.prevent="saveSettings" class="space-y-4">
-      <div>
-        <label for="rsvp_open" class="block font-medium">RSVP Open</label>
-        <input type="checkbox" id="rsvp_open" v-model="form.rsvp_open" class="mr-2" />
-        <span class="text-gray-600">When off, the public RSVP form is closed for everyone.</span>
-      </div>
-
-      <div>
-        <label for="rsvp_deadline" class="block font-medium">Global RSVP Deadline</label>
-        <DatePicker
-          v-model="dateValue"
-          showTime
-          dateFormat="yy-mm-dd"
-          hourFormat="24"
-          placeholder="Select date and time"
-          class="w-full border px-3 py-2 rounded"
+  <Card class="max-w-2xl mx-auto mt-6">
+    <template #content>
+      <Banner
+          v-if="message"
+          :message="message"
+          :type="success ? 'success' : 'error'"
+          class="mt-4"
         />
-        <span class="text-gray-600">After this datetime, RSVPs close automatically.</span>
-      </div>
+      <Form @submit="saveSettings" class="space-y-4">
+        <div class="flex items-center">
+          <ToggleSwitch
+            id="rsvp_open"
+            v-model="form.rsvp_open"
+            :on-label="'Yes'"
+            :off-label="'No'"
+            class="mr-2"
+          />
+          <label for="rsvp_open" class="font-medium">RSVP Open</label>
+          <span class="text-sm ml-2">When off, the public RSVP form is closed for everyone.</span>
+        </div>
 
-      <Button label="Save settings" type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" :disabled="saving" />
-    </form>
-  </div>
+        <div>
+          <FloatLabel variant="in">
+            <DatePicker
+              id="rsvp_deadline"
+              v-model="dateValue"
+              showTime
+              dateFormat="yy-mm-dd"
+              hourFormat="24"
+              class="w-full"
+              for="in_label"
+            />
+            <label for="rsvp_deadline">Global RSVP Deadline</label>
+          </FloatLabel>
+          <span class="text-sm mt-8">After this datetime, RSVPs close automatically.</span>
+        </div>
+
+        <Button label="Save Guest Settings" type="submit" :disabled="saving" />
+      </Form>
+    </template>
+  </Card>
 </template>
 
 <script setup>

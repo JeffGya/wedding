@@ -1,54 +1,48 @@
 <template>
-  <div class="space-y-4">
-    <h2 class="text-2xl font-semibold">Message Composer</h2>
-    
+  <div class="space-y-8">
     <div>
-      <label for="template" class="block text-sm font-medium text-gray-700">Load Template</label>
-      <select
-        id="template"
-        v-model="selectedTemplateId"
-        @change="loadTemplate"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      >
-        <option disabled value="">Select a template</option>
-        <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">
-          {{ tpl.name }}
-        </option>
-      </select>
+      <FloatLabel variant="in">
+        <Select
+          id="template"
+          v-model="selectedTemplateId"
+          :options="templates"
+          optionLabel="name"
+          optionValue="id"
+          @change="loadTemplate"
+          class="w-full"
+        />
+        <label for="template">Select a template</label>
+      </FloatLabel>
     </div>
 
     <div>
-      <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
-      <input
-        id="subject"
-        type="text"
-        v-model="form.subject"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      />
+      <FloatLabel variant="in">
+        <InputText
+          id="subject"
+          v-model="form.subject"
+          class="w-full"
+        />
+        <label for="subject">Subject</label>
+      </FloatLabel>
     </div>
 
     <div>
-      <div class="flex space-x-2 mb-2">
-        <button
-          :class="tab === 'en' ? activeTabClasses : inactiveTabClasses"
-          @click="tab = 'en'"
-        >
-          English
-        </button>
-        <button
-          :class="tab === 'lt' ? activeTabClasses : inactiveTabClasses"
-          @click="tab = 'lt'"
-        >
-          Lietuviškai
-        </button>
+      <div class="mb-4">
+        <SelectButton
+          v-model="tab"
+          :options="languageOptions"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+        />
       </div>
 
       <div v-show="tab === 'en'">
-        <label class="block text-sm font-medium text-gray-700">Message (EN)</label>
+        <label class="block text-sm font-medium mb-16">Message (EN)</label>
         <RichTextEditor v-model="form.bodyEn" />
       </div>
       <div v-show="tab === 'lt'">
-        <label class="block text-sm font-medium text-gray-700">Message (LT)</label>
+        <label class="block text-sm font-medium mb-16">Message (LT)</label>
         <RichTextEditor v-model="form.bodyLt" />
       </div>
     </div>
@@ -72,6 +66,12 @@
 import { computed, reactive, ref, watch } from 'vue'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
+import SelectButton from 'primevue/selectbutton';
+
+const languageOptions = [
+  { label: 'English', value: 'en' },
+  { label: 'Lietuviškai', value: 'lt' }
+];
 
 const props = defineProps({
   templates: {

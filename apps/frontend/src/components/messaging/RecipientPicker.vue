@@ -1,58 +1,91 @@
 <template>
   <div>
-    <h2 class="text-xl font-semibold mb-4">Select Recipients</h2>
- 
     <!-- Filters -->
     <div class="mb-4 space-x-4">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Search by name"
-        class="px-3 py-2 border rounded"
-      />
+      <FloatLabel variant="in">
+        <InputText
+          id="search"
+          v-model="search"
+          type="text"
+        />
+        <label for="search">Search by name</label>
+      </FloatLabel>
  
-      <select v-model="rsvpFilter" class="px-3 py-2 border rounded">
-        <option value="all">All RSVP</option>
-        <option value="attending">Attending</option>
-        <option value="not_attending">Not Attending</option>
-        <option value="pending">Pending</option>
-      </select>
+      <FloatLabel variant="in">
+        <Select
+          id="rsvpFilter"
+          v-model="rsvpFilter"
+          :options="[
+            { label: 'All RSVP', value: 'all' },
+            { label: 'Attending', value: 'attending' },
+            { label: 'Not Attending', value: 'not_attending' },
+            { label: 'Pending', value: 'pending' }
+          ]"
+          optionLabel="label"
+          optionValue="value"
+        />
+        <label for="rsvpFilter">RSVP Status</label>
+      </FloatLabel>
  
-      <select v-model="languageFilter" class="px-3 py-2 border rounded">
-        <option value="all">All Languages</option>
-        <option value="en">English</option>
-        <option value="lt">Lithuanian</option>
-      </select>
+      <FloatLabel variant="in">
+        <Select
+          id="languageFilter"
+          v-model="languageFilter"
+          :options="[
+            { label: 'All Languages', value: 'all' },
+            { label: 'English', value: 'en' },
+            { label: 'Lithuanian', value: 'lt' }
+          ]"
+          optionLabel="label"
+          optionValue="value"
+        />
+        <label for="languageFilter">Language</label>
+      </FloatLabel>
     </div>
+
+
  
     <!-- Guest List -->
     <div class="mb-4">
-      <label class="block mb-2 font-medium">
-        <input type="checkbox" :checked="allSelected" @change="toggleAll" class="mr-2" />
-        Select All
-      </label>
-      <ul class="space-y-2">
-        <li v-if="filteredGuests.length === 0" class="text-sm text-gray-500">
-          No guests match your filters.
-        </li>
-        <li v-for="guest in filteredGuests" :key="guest.id" class="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            :value="guest.id"
-            :checked="selectedGuests.includes(guest.id)"
-            @change="toggleGuest(guest.id)"
-          />
-          <span>
-            {{ guest.name }} ({{ guest.preferred_language || '' }}, RSVP: {{ guest.rsvp_status || '' }})
-          </span>
-        </li>
-      </ul>
+      <div class="mb-4 flex items-center">
+        <ToggleSwitch
+          id="allSelected"
+          :inputId="'allSelected'"
+          :checked="allSelected"
+          @change="toggleAll"
+          class="mr-2"
+        />
+        <label> Select All </label>
+      </div>
+          <!-- Summary -->
+      <p class="text-sm">
+        {{ selectedGuests.length }} recipient(s) selected.
+      </p>
+      <div v-if="filteredGuests.length === 0" class="text-sm">
+        No guests match your filters.
+      </div>
+      <Listbox
+        v-else
+        v-model="selectedGuests"
+        :options="filteredGuests"
+        optionLabel="name"
+        optionValue="id"
+        multiple
+        checkmark
+        class="w-full"
+      >
+        <template #option="{ option }">
+          <div class="flex items-center space-x-2">
+            <div>
+              <div class="font-semibold">{{ option.name }}</div>
+              <div class="text-sm text-form-placeholder-text">
+                Language: {{ option.preferred_language || 'N/A' }} &middot; RSVP: {{ option.rsvp_status || 'N/A' }}
+              </div>
+            </div>
+          </div>
+        </template>
+      </Listbox>
     </div>
- 
-    <!-- Summary -->
-    <p class="text-sm text-gray-600">
-      {{ selectedGuests.length }} recipient(s) selected.
-    </p>
   </div>
 </template>
 
@@ -60,6 +93,7 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import api from '@/api'
 import Fuse from 'fuse.js'
+import Listbox from 'primevue/listbox';
 
 const guests = ref([])
 const selectedGuests = ref([])

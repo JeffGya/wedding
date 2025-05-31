@@ -6,6 +6,9 @@
     :initial-values="initialValues"
     v-slot="{ errors, values }"
   >
+
+    <CountdownTimer v-if="props.guest.rsvp_deadline" :deadline="props.guest.rsvp_deadline" @expired="onExpired" />
+
     <Banner v-if="formError" :message="formError" type="error" />
 
     <div class="mb-4">
@@ -73,8 +76,6 @@
       >
         {{ t('rsvp.submitButton') }}
       </Button>
-
-    <CountdownTimer v-if="props.guest.rsvp_deadline" :deadline="props.guest.rsvp_deadline" @expired="onExpired" />
   </Form>
 </template>
 

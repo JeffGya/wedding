@@ -10,6 +10,7 @@ import Select from 'primevue/select';
 import ProgressBar from 'primevue/progressbar';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+import Password from 'primevue/password';
 import RadioButton from 'primevue/radiobutton';
 import RadioButtonGroup from 'primevue/radiobuttongroup';
 import FloatLabel from 'primevue/floatlabel';
@@ -28,6 +29,8 @@ import FileUpload from 'primevue/fileupload';
 import Panel from 'primevue/panel';
 import Fieldset from 'primevue/fieldset';
 import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmationService from 'primevue/confirmationservice';
 import Menu from 'primevue/menu';
 import { useLoaderStore } from '@/store/loader';
 import './style.css';
@@ -108,7 +111,8 @@ app.component('ToggleSwitch', ToggleSwitch);
 app.component('Select', Select);
 app.component('ProgressBar', ProgressBar);
 app.component('InputText', InputText);
-app.component('Textarea', Textarea)
+app.component('Textarea', Textarea);
+app.component('Password', Password);
 app.component('FloatLabel', FloatLabel);
 app.component('Message', Message);
 app.component('Card', Card);
@@ -127,6 +131,9 @@ app.component('FileUpload', FileUpload);
 app.component('Panel', Panel);
 app.component('Fieldset', Fieldset);
 app.component('ConfirmPopup', ConfirmPopup);
+app.component('ConfirmDialog', ConfirmDialog);
 app.component('Menu', Menu);
+
+app.use(ConfirmationService);
 
 app.mount('#app')

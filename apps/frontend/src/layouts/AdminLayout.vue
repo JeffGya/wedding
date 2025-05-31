@@ -1,29 +1,12 @@
 <template>
-  <div class="flex min-h-screen bg-gray-100">
+  <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md p-4 space-y-4">
-      <h2 class="text-xl font-semibold mb-4">Admin Panel</h2>
-      <nav class="space-y-2">
-        <ul class="space-y-1">
-          <li><RouterLink to="/admin/overview" :class="['hover:underline', $route.path === '/admin/overview' ? 'text-black font-bold' : 'text-blue-600']">Overview</RouterLink></li>
-          <li><RouterLink to="/admin/pages" :class="['hover:underline', $route.path === '/admin/pages' ? 'text-black font-bold' : 'text-blue-600']">Pages</RouterLink></li>
-          <li>
-            <button @click="toggleGuests" class="w-full text-left text-blue-600 hover:underline">
-              Guests
-            </button>
-            <ul v-show="showGuests" class="pl-4 mt-1 space-y-1">
-              <li><RouterLink to="/admin/guests/overview" :class="['hover:underline', $route.path === '/admin/guests/overview' ? 'text-black font-bold' : 'text-blue-600']">Overview</RouterLink></li>
-              <li><RouterLink to="/admin/guests/rsvps" :class="['hover:underline', $route.path === '/admin/guests/rsvps' ? 'text-black font-bold' : 'text-blue-600']">RSVPs</RouterLink></li>
-              <li><RouterLink to="/admin/guests/messages" :class="['hover:underline', $route.path === '/admin/guests/messages' ? 'text-black font-bold' : 'text-blue-600']">Messages</RouterLink></li>
-            </ul>
-          </li>
-          <li><RouterLink to="/admin/settings" :class="['hover:underline', $route.path === '/admin/settings' ? 'text-black font-bold' : 'text-blue-600']">Settings</RouterLink></li>
-        </ul>
-      </nav>
+    <aside class="w-64 p-8 space-y-4">
+      <Menu :model="menuItems" class="p-menu-vertical" />
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6">
+    <main class="flex-1 p-16">
       <router-view />
     </main>
   </div>
@@ -31,9 +14,52 @@
 
 <script setup>
 import { ref } from 'vue'
+import Menu from 'primevue/menu';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const showGuests = ref(false)
 const toggleGuests = () => {
   showGuests.value = !showGuests.value
 }
+
+const menuItems = [
+  {
+    label: 'Overview',
+    icon: 'i-solar:home-2-bold-duotone',
+    command: () => router.push('/admin/overview')
+  },
+  {
+    label: 'Pages',
+    icon: 'i-solar:documents-minimalistic-bold-duotone',
+    command: () => router.push('/admin/pages')
+  },
+  {
+    label: 'Guests',
+    items: [
+      {
+        label: 'Guest Management',
+        icon: 'i-solar:users-group-two-rounded-bold-duotone',
+        command: () => router.push('/admin/guests/overview')
+      },
+      {
+        label: 'RSVPs',
+        icon: 'i-solar:check-read-bold-duotone',
+        command: () => router.push('/admin/guests/rsvps')
+      },
+      {
+        label: 'Messages',
+        icon: 'i-solar:inbox-archive-bold-duotone',
+        command: () => router.push('/admin/guests/messages')
+      }
+    ]
+  },
+  {
+    label: 'Settings',
+    icon: 'i-solar:settings-bold-duotone',
+    command: () => router.push('/admin/settings')
+  }
+];
+
+// Script setup auto-registers imports, no explicit registration needed
 </script>

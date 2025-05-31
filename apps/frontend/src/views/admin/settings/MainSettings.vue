@@ -7,33 +7,35 @@
           :type="success ? 'success' : 'error'"
           class="mt-4"
         />
-      <h2 class="text-2xl font-semibold mb-4">Main Settings</h2>
-      <form @submit.prevent="saveSettings" class="space-y-4">
-        <div>
-          <label class="inline-flex items-center">
-            <input
-              type="checkbox"
-              v-model="settings.enable_global_countdown"
-              class="form-checkbox"
-            />
-            <span class="ml-2">Enable wedding countdown on home page</span>
+      <Form @submit="saveSettings" class="space-y-4">
+        <div class="flex items-center">
+          <ToggleSwitch
+            id="enable_global_countdown"
+            v-model="settings.enable_global_countdown"
+            :on-label="'Yes'"
+            :off-label="'No'"
+            class="mr-2"
+          />
+          <label for="enable_global_countdown" class="font-medium">
+            Enable wedding countdown on home page
           </label>
         </div>
         <div>
-          <label class="block mb-1">Wedding Date</label>
-          <DatePicker
-            v-model="settings.wedding_date"
-            dateFormat="yy-mm-dd"
-            placeholder="YYYY-MM-DD"
-            class="w-full border px-3 py-2 rounded"
-          />
+          <FloatLabel variant="in">
+            <DatePicker
+              v-model="settings.wedding_date"
+              dateFormat="yy-mm-dd"
+              class="w-full"
+            />
+            <label>Wedding Date - YYYY-MM-DD</label>
+          </FloatLabel>
         </div>
-        <Button label="Save wedding date"
+        <Button
+          label="Save Countdown Setting"
           type="submit"
-          class="px-4 py-2 bg-blue-600 text-white rounded"
+          class="p-button-primary"
         />
-
-      </form>
+      </Form>
     </template>
   </Card>
 </template>
