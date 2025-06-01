@@ -131,9 +131,16 @@ router.get('/', async (req, res) => {
     const row = await dbGet(
       'SELECT enable_global_countdown AS enableGlobalCountdown, wedding_date AS weddingDate FROM settings WHERE id = 1'
     );
+
+    let plainDate = null;
+    if (row && row.weddingDate) {
+      const d = new Date(row.weddingDate);
+      plainDate = d.toISOString().slice(0, 10);
+    }
+
     return res.json({
       enableGlobalCountdown: row ? Boolean(row.enableGlobalCountdown) : false,
-      weddingDate: row ? row.weddingDate : null
+      weddingDate: plainDate
     });
   } catch (err) {
     logger.error(err);

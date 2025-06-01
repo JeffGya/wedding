@@ -51,9 +51,23 @@ router.get('/', async (req, res) => {
     if (!row) {
       return res.json({ rsvp_open: false, rsvp_deadline: null });
     }
+    let deadlineString = null;
+    if (row.rsvp_deadline) {
+      // row.rsvp_deadline may be a JS Date (MySQL) or a string (SQLite)
+      const d = new Date(row.rsvp_deadline);
+      // Format as "YYYY-MM-DD HH:MM:SS"
+      const pad = num => String(num).padStart(2, '0');
+      const year = d.getUTCFullYear();
+      const month = pad(d.getUTCMonth() + 1);
+      const day = pad(d.getUTCDate());
+      const hours = pad(d.getUTCHours());
+      const minutes = pad(d.getUTCMinutes());
+      const seconds = pad(d.getUTCSeconds());
+      deadlineString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
     res.json({
       rsvp_open: !!row.rsvp_open,
-      rsvp_deadline: row.rsvp_deadline
+      rsvp_deadline: deadlineString
     });
   } catch (err) {
     console.error('Error fetching guest settings:', err);

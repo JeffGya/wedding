@@ -181,9 +181,17 @@ router.get('/', async (req, res) => {
   try {
     let rows = await dbAll(`SELECT * FROM messages ORDER BY created_at DESC`, []);
     rows = rows.map(row => {
+      // Convert scheduled_for to local ISO string
       if (row.scheduled_for) {
         const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
         row.scheduled_for = local.toISO({ suppressMilliseconds: true });
+      }
+      // Convert created_at and updated_at to ISO strings
+      if (row.created_at) {
+        row.created_at = new Date(row.created_at).toISOString();
+      }
+      if (row.updated_at) {
+        row.updated_at = new Date(row.updated_at).toISOString();
       }
       return row;
     });
@@ -417,7 +425,19 @@ router.get('/:id', async (req, res) => {
       const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
       row.scheduled_for = local.toISO({ suppressMilliseconds: true });
     }
+    // Convert created_at and updated_at to ISO strings
+    if (row.created_at) {
+      row.created_at = new Date(row.created_at).toISOString();
+    }
+    if (row.updated_at) {
+      row.updated_at = new Date(row.updated_at).toISOString();
+    }
     const recipients = await dbAll(`SELECT guest_id, delivery_status FROM message_recipients WHERE message_id = ?`, [req.params.id]);
+    recipients.forEach(r => {
+      if (r.created_at) {
+        r.created_at = new Date(r.created_at).toISOString();
+      }
+    });
     const recipientIds = recipients.map(r => r.guest_id);
     const sentCount = recipients.filter(r => r.delivery_status === 'sent').length;
     const failedCount = recipients.filter(r => r.delivery_status === 'failed').length;
@@ -836,6 +856,11 @@ router.get('/:id/logs', async (req, res) => {
        ORDER BY mr.created_at DESC`,
       [req.params.id]
     );
+    rows.forEach(r => {
+      if (r.created_at) {
+        r.created_at = new Date(r.created_at).toISOString();
+      }
+    });
     res.json({ success: true, logs: rows });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });

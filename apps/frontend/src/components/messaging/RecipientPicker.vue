@@ -124,19 +124,25 @@ onMounted(() => {
 
 // Filters
 const filteredGuests = computed(() => {
+  // Start with all guests
   let matchedGuests = guests.value
 
+  // Apply search if present
   if (search.value.trim() && fuse) {
     matchedGuests = fuse.search(search.value.trim()).map(result => result.item)
   }
 
+  // Filter by primary, RSVP status, and language
   return matchedGuests.filter((guest) => {
+    if (!guest.is_primary) return false
+
     const matchesRSVP =
       rsvpFilter.value === 'all' ||
-      guest.rsvp_status === rsvpFilter.value;
+      guest.rsvp_status === rsvpFilter.value
 
     const matchesLanguage =
-      languageFilter.value === 'all' || guest.preferred_language === languageFilter.value
+      languageFilter.value === 'all' ||
+      guest.preferred_language === languageFilter.value
 
     return matchesRSVP && matchesLanguage
   })

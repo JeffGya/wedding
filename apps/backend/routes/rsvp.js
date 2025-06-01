@@ -133,6 +133,12 @@ router.get('/:code', async (req, res) => {
        FROM guests WHERE code = ? OR (group_id = (SELECT group_id FROM guests WHERE code = ?) AND is_primary = 0)`,
       [code, code]
     );
+    // Convert date fields to human-readable strings
+    rows.forEach(row => {
+      if (row.rsvp_deadline) {
+        row.rsvp_deadline = formatDate(row.rsvp_deadline);
+      }
+    });
     if (!rows || rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
     const primaryGuest = rows.find(row => row.is_primary);
     const plusOne = rows.find(row => !row.is_primary);
