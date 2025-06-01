@@ -9,6 +9,29 @@ const router = express.Router();
 router.use(express.json());
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
+
+let dbGet, dbAll, dbRun;
+if (process.env.DB_TYPE === 'mysql') {
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbAll = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows;
+  };
+  dbRun = async (sql, params) => {
+    const [result] = await db.query(sql, params);
+    return result;
+  };
+} else {
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbAll = util.promisify(db.all.bind(db));
+  dbRun = util.promisify(db.run.bind(db));
+}
+
 const axios = require('axios');
 const logger = require('../helpers/logger');
 const getSenderInfo = require('../helpers/getSenderInfo');
@@ -19,49 +42,51 @@ async function sendConfirmationEmail(db, guest) {
     const senderInfo = await getSenderInfo(db);
 
     // Fetch full group to get both primary and plus one info
-    db.all(
+    const guests = await dbAll(
       'SELECT * FROM guests WHERE group_id = ?',
-      [guest.group_id],
-      (err, guests) => {
-        if (err || !guests) {
-          logger.error('Failed to load guest group data: %o', err);
-          return;
-        }
-
-        const primary = guests.find(g => g.is_primary);
-        const plusOne = guests.find(g => !g.is_primary);
-
-        db.get("SELECT * FROM templates WHERE name = ?", ["RSVP Confirmation"], (err, template) => {
-          if (err || !template) {
-            logger.error("Failed to load RSVP Confirmation template: %o", err);
-            return;
-          }
-          const lang = primary.preferred_language === 'lt' ? 'lt' : 'en';
-          const subject = template.subject;
-          const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
-          const html = bodyTemplate
-            .replace(/{{\s*name\s*}}/g, primary.name)
-            .replace(/{{\s*groupLabel\s*}}/g, primary.group_label)
-            .replace(/{{\s*code\s*}}/g, primary.code)
-            .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${primary.code}`)
-            // Use plusOne?.name for the template
-            .replace(/{{\s*plusOneName\s*}}/g, plusOne?.name || '')
-            .replace(/{{\s*rsvpDeadline\s*}}/g, primary.rsvp_deadline ? formatDate(primary.rsvp_deadline) : '');
-          axios.post("https://api.resend.com/emails", {
-            from: senderInfo,
-            to: primary.email,
-            subject,
-            html
-          }, {
-            headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
-          }).then(resp => {
-            logger.info("Confirmation email sent: %o", resp.data);
-          }).catch(err => {
-            logger.error("Error sending confirmation email: %o", err);
-          });
-        });
-      }
+      [guest.group_id]
     );
+
+    if (!guests) {
+      logger.error('Failed to load guest group data');
+      return;
+    }
+
+    const primary = guests.find(g => g.is_primary);
+    const plusOne = guests.find(g => !g.is_primary);
+
+    const template = await dbGet(
+      "SELECT * FROM templates WHERE name = ?",
+      ["RSVP Confirmation"]
+    );
+
+    if (!template) {
+      logger.error("Failed to load RSVP Confirmation template");
+      return;
+    }
+    const lang = primary.preferred_language === 'lt' ? 'lt' : 'en';
+    const subject = template.subject;
+    const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
+    const html = bodyTemplate
+      .replace(/{{\s*name\s*}}/g, primary.name)
+      .replace(/{{\s*groupLabel\s*}}/g, primary.group_label)
+      .replace(/{{\s*code\s*}}/g, primary.code)
+      .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${primary.code}`)
+      // Use plusOne?.name for the template
+      .replace(/{{\s*plusOneName\s*}}/g, plusOne?.name || '')
+      .replace(/{{\s*rsvpDeadline\s*}}/g, primary.rsvp_deadline ? formatDate(primary.rsvp_deadline) : '');
+    axios.post("https://api.resend.com/emails", {
+      from: senderInfo,
+      to: primary.email,
+      subject,
+      html
+    }, {
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
+    }).then(resp => {
+      logger.info("Confirmation email sent: %o", resp.data);
+    }).catch(err => {
+      logger.error("Error sending confirmation email: %o", err);
+    });
   } catch (e) {
     logger.error("Error in sendConfirmationEmail: %o", e);
   }
@@ -99,29 +124,27 @@ async function sendConfirmationEmail(db, guest) {
  */
 // Public: fetch guest by code
 // GET /api/rsvp/:code
-router.get('/:code', (req, res) => {
+router.get('/:code', async (req, res) => {
   const { code } = req.params;
   if (!code) return res.status(400).json({ error: 'Code is required' });
-  db.all(
-    `SELECT id, group_label, name, email, code, is_primary, can_bring_plus_one, dietary, notes, attending, rsvp_status, rsvp_deadline 
-     FROM guests WHERE code = ? OR (group_id = (SELECT group_id FROM guests WHERE code = ?) AND is_primary = 0)`,
-    [code, code],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: 'Database error' });
-      if (!rows || rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
-
-      const primaryGuest = rows.find(row => row.is_primary);
-      const plusOne = rows.find(row => !row.is_primary);
-
-      const guest = {
-        ...primaryGuest,
-        plus_one_name: plusOne?.name || null,
-        plus_one_dietary: plusOne?.dietary || null
-      };
-
-      res.json({ success: true, guest });
-    }
-  );
+  try {
+    const rows = await dbAll(
+      `SELECT id, group_label, name, email, code, is_primary, can_bring_plus_one, dietary, notes, attending, rsvp_status, rsvp_deadline 
+       FROM guests WHERE code = ? OR (group_id = (SELECT group_id FROM guests WHERE code = ?) AND is_primary = 0)`,
+      [code, code]
+    );
+    if (!rows || rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
+    const primaryGuest = rows.find(row => row.is_primary);
+    const plusOne = rows.find(row => !row.is_primary);
+    const guestData = {
+      ...primaryGuest,
+      plus_one_name: plusOne?.name || null,
+      plus_one_dietary: plusOne?.dietary || null
+    };
+    return res.json({ success: true, guest: guestData });
+  } catch (err) {
+    return res.status(500).json({ error: 'Database error' });
+  }
 });
 
 /**
@@ -156,7 +179,7 @@ router.get('/:code', (req, res) => {
  */
 // Public: submit RSVP by code
 // POST /api/rsvp
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   console.log('req.body →', req.body);
   const { code, attending, plus_one_name, dietary, notes, plus_one_dietary } = req.body;
   if (!code) return res.status(400).json({ error: 'Code is required' });
@@ -180,8 +203,8 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'plus_one_dietary must be a string' });
   }
 
-  db.get('SELECT * FROM guests WHERE code = ?', [code], (err, row) => {
-    if (err) return res.status(500).json({ error: 'Database error' });
+  try {
+    const row = await dbGet('SELECT * FROM guests WHERE code = ?', [code]);
     if (!row) return res.status(404).json({ error: 'Guest not found' });
 
     // Validation: plus_one_name only if allowed
@@ -216,127 +239,80 @@ router.post('/', (req, res) => {
 
     // Ensure group_id is set for primary guest
     if (!row.group_id) {
-      db.run('UPDATE guests SET group_id = ? WHERE id = ?', [row.id, row.id], (updateErr) => {
-        if (updateErr) {
-          logger.error('Failed to set group_id for primary guest', updateErr);
-          return res.status(500).json({ error: 'Failed to set group_id' });
-        }
-
-        // Update in-memory value for rest of logic
-        row.group_id = row.id;
-        proceedWithRsvp();
-      });
-    } else {
-      proceedWithRsvp();
+      await dbRun('UPDATE guests SET group_id = ? WHERE id = ?', [row.id, row.id]);
+      row.group_id = row.id;
     }
 
-    // Wrap the existing RSVP logic in a named function
-    function proceedWithRsvp() {
-      db.get(
-        'SELECT * FROM guests WHERE group_id = ? AND is_primary = 0 LIMIT 1',
-        [row.group_id],
-        (checkErr, existingPlusOne) => {
-          if (checkErr) return res.status(500).json({ error: 'Database error checking plus one' });
+    const existingPlusOne = await dbGet(
+      'SELECT * FROM guests WHERE group_id = ? AND is_primary = 0 LIMIT 1',
+      [row.group_id]
+    );
 
-          // Proceed with RSVP update
-          performRsvpUpdate(existingPlusOne);
-        }
+    await dbRun(`
+      UPDATE guests SET
+        attending = ?,
+        rsvp_status = ?,
+        dietary = ?,
+        notes = ?,
+        responded_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE code = ?
+    `, [attendingValue, rsvpStatusVal, dietary || null, notes || null, code]);
+
+    // Handle plus one logic
+    if (existingPlusOne && (plus_one_name === null || plus_one_name === '')) {
+      // Delete the plus one
+      await dbRun('DELETE FROM guests WHERE id = ?', [existingPlusOne.id]);
+    } else if (plus_one_name) {
+      if (existingPlusOne) {
+        // Update existing plus one
+        await dbRun(
+          `UPDATE guests SET name = ?, dietary = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+          [plus_one_name, plus_one_dietary || null, existingPlusOne.id]
+        );
+      } else {
+        // Insert new plus one
+        await dbRun(
+          `INSERT INTO guests (
+            group_id, group_label, name, email, code,
+            can_bring_plus_one, is_primary, preferred_language,
+            attending, rsvp_deadline, dietary, notes, rsvp_status
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            row.group_id,
+            row.group_label,
+            plus_one_name,
+            null,
+            null,
+            0,
+            0,
+            row.preferred_language,
+            null,
+            null,
+            plus_one_dietary || null,
+            null,
+            'pending'
+          ]
+        );
+      }
+    }
+
+    if (attendingValue === true) {
+      await dbRun(
+        `UPDATE guests
+          SET attending = 1,
+              rsvp_status = 'attending',
+              updated_at = CURRENT_TIMESTAMP
+          WHERE group_id = ? AND is_primary = 0`,
+        [row.group_id]
       );
     }
 
-    function performRsvpUpdate(existingPlusOne) {
-      const stmt = db.prepare(`
-        UPDATE guests SET
-          attending = ?,
-          rsvp_status = ?,
-          dietary = ?,
-          notes = ?,
-          responded_at = CURRENT_TIMESTAMP,
-          updated_at = CURRENT_TIMESTAMP
-        WHERE code = ?
-      `);
-
-      stmt.run(
-        attendingValue,
-        rsvpStatusVal,
-        dietary || null,
-        notes || null,
-        code,
-        function(err) {
-          if (err) return res.status(500).json({ error: 'Failed to update RSVP' });
-
-          // Handle plus one logic
-          if (existingPlusOne && (plus_one_name === null || plus_one_name === '')) {
-            // Delete the plus one
-            db.run(
-              'DELETE FROM guests WHERE id = ?',
-              [existingPlusOne.id],
-              (deleteErr) => {
-                if (deleteErr) logger.error('Failed to delete plus one:', deleteErr);
-              }
-            );
-          } else if (plus_one_name) {
-            if (existingPlusOne) {
-              // Update existing plus one
-              db.run(
-                `UPDATE guests SET
-                  name = ?, dietary = ?, updated_at = CURRENT_TIMESTAMP
-                  WHERE id = ?`,
-                [plus_one_name, plus_one_dietary || null, existingPlusOne.id],
-                (updateErr) => {
-                  if (updateErr) logger.error('Error updating plus one:', updateErr);
-                }
-              );
-            } else {
-              // Insert new plus one
-              db.run(
-                `INSERT INTO guests (
-                  group_id, group_label, name, email, code,
-                  can_bring_plus_one, is_primary, preferred_language,
-                  attending, rsvp_deadline, dietary, notes, rsvp_status
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [
-                  row.group_id,
-                  row.group_label,
-                  plus_one_name,
-                  null,
-                  null,
-                  0,
-                  0,
-                  row.preferred_language,
-                  null,
-                  null,
-                  plus_one_dietary || null,
-                  null,
-                  'pending'
-                ],
-                (insertErr) => {
-                  if (insertErr) logger.error('Error inserting plus one:', insertErr);
-                }
-              );
-            }
-          }
-
-          if (attendingValue === true) {
-            db.run(
-              `UPDATE guests
-                SET attending = 1,
-                    rsvp_status = 'attending',
-                    updated_at = CURRENT_TIMESTAMP
-                WHERE group_id = ? AND is_primary = 0`,
-              [row.group_id],
-              (updateSecErr) => {
-                if (updateSecErr) logger.error('Error updating secondary attendance:', updateSecErr);
-              }
-            );
-          }
-
-          res.json({ success: true });
-          sendConfirmationEmail(db, row);
-        }
-      );
-    }
-  });
+    res.json({ success: true });
+    await sendConfirmationEmail(db, row);
+  } catch (err) {
+    return res.status(500).json({ error: 'Database error' });
+  }
 });
 
 module.exports = router;

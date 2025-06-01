@@ -1,7 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
+
 const db = getDbConnection();
+let dbGet, dbRun;
+if (process.env.DB_TYPE === 'mysql') {
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbRun = async (sql, params) => {
+    const [result] = await db.query(sql, params);
+    return result;
+  };
+} else {
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbRun = util.promisify(db.run.bind(db));
+}
 
 /**
  * @openapi
@@ -28,25 +45,20 @@ const db = getDbConnection();
  *         description: Internal server error
  */
 // GET /api/settings/guests
-router.get('/', (req, res) => {
-  db.get(
-    'SELECT rsvp_open, rsvp_deadline FROM guest_settings LIMIT 1',
-    [],
-    (err, row) => {
-      if (err) {
-        console.error('Error fetching guest settings:', err);
-        return res.status(500).json({ error: 'Internal server error' });
-      }
-      if (!row) {
-        // No settings row yet, return defaults
-        return res.json({ rsvp_open: false, rsvp_deadline: null });
-      }
-      res.json({
-        rsvp_open: !!row.rsvp_open,
-        rsvp_deadline: row.rsvp_deadline
-      });
+router.get('/', async (req, res) => {
+  try {
+    const row = await dbGet('SELECT rsvp_open, rsvp_deadline FROM guest_settings LIMIT 1', []);
+    if (!row) {
+      return res.json({ rsvp_open: false, rsvp_deadline: null });
     }
-  );
+    res.json({
+      rsvp_open: !!row.rsvp_open,
+      rsvp_deadline: row.rsvp_deadline
+    });
+  } catch (err) {
+    console.error('Error fetching guest settings:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 /**
@@ -87,66 +99,32 @@ router.get('/', (req, res) => {
  *         description: Internal server error
  */
 // POST /api/settings/guests
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { rsvp_open, rsvp_deadline } = req.body;
-  // Upsert into guest_settings
-  db.get('SELECT id FROM guest_settings LIMIT 1', [], (err, row) => {
-    if (err) {
-      console.error('Error finding guest_settings row:', err);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+  try {
+    const existing = await dbGet('SELECT id FROM guest_settings LIMIT 1', []);
     const params = [rsvp_open ? 1 : 0, rsvp_deadline];
-    if (row) {
+    if (existing) {
       // Update existing row
-      params.push(row.id);
-      db.run(
+      params.push(existing.id);
+      await dbRun(
         'UPDATE guest_settings SET rsvp_open = ?, rsvp_deadline = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        params,
-        function (updateErr) {
-          if (updateErr) {
-            console.error('Error updating guest_settings:', updateErr);
-            return res.status(500).json({ error: 'Internal server error' });
-          }
-          // Bulk update guest deadlines
-          db.run(
-            'UPDATE guests SET rsvp_deadline = ?',
-            [rsvp_deadline],
-            function (guestErr) {
-              if (guestErr) {
-                console.error('Error updating guest deadlines:', guestErr);
-                return res.status(500).json({ error: 'Internal server error' });
-              }
-              res.json({ rsvp_open, rsvp_deadline });
-            }
-          );
-        }
+        params
       );
     } else {
       // Insert new row
-      db.run(
+      await dbRun(
         'INSERT INTO guest_settings (rsvp_open, rsvp_deadline) VALUES (?, ?)',
-        params,
-        function (insertErr) {
-          if (insertErr) {
-            console.error('Error inserting guest_settings:', insertErr);
-            return res.status(500).json({ error: 'Internal server error' });
-          }
-          // Bulk update guest deadlines
-          db.run(
-            'UPDATE guests SET rsvp_deadline = ?',
-            [rsvp_deadline],
-            function (guestErr) {
-              if (guestErr) {
-                console.error('Error updating guest deadlines:', guestErr);
-                return res.status(500).json({ error: 'Internal server error' });
-              }
-              res.json({ rsvp_open, rsvp_deadline });
-            }
-          );
-        }
+        params
       );
     }
-  });
+    // Bulk update guest deadlines
+    await dbRun('UPDATE guests SET rsvp_deadline = ?', [rsvp_deadline]);
+    return res.json({ rsvp_open, rsvp_deadline });
+  } catch (err) {
+    console.error('Error saving guest settings or updating deadlines:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 module.exports = router;

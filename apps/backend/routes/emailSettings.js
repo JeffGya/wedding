@@ -1,6 +1,22 @@
 const express = require('express');
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
+let dbGet, dbRun;
+if (process.env.DB_TYPE === 'mysql') {
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbRun = async (sql, params) => {
+    const [result] = await db.query(sql, params);
+    return result;
+  };
+} else {
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbRun = util.promisify(db.run.bind(db));
+}
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -23,17 +39,14 @@ const router = express.Router();
  *         description: Server error retrieving settings
  */
 // Get email settings
-router.get('/', requireAuth, (req, res) => {
-  const query = 'SELECT * FROM email_settings WHERE id = 1';
-
-  db.get(query, (err, row) => {
-    if (err) {
-      console.error('Error retrieving email settings:', err);
-      return res.status(500).json({ error: 'Failed to retrieve email settings' });
-    }
-
+router.get('/', requireAuth, async (req, res) => {
+  try {
+    const row = await dbGet('SELECT * FROM email_settings WHERE id = ?', [1]);
     res.json(row);
-  });
+  } catch (err) {
+    console.error('Error retrieving email settings:', err);
+    return res.status(500).json({ error: 'Failed to retrieve email settings' });
+  }
 });
 
 /**
@@ -65,7 +78,7 @@ router.get('/', requireAuth, (req, res) => {
  *         description: Server error updating settings
  */
 // Update email settings
-router.post('/', requireAuth, (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const {
     provider,
     api_key,
@@ -92,14 +105,13 @@ router.post('/', requireAuth, (req, res) => {
     enabled ? 1 : 0,
   ];
 
-  db.run(query, values, function (err) {
-    if (err) {
-      console.error('Error updating email settings:', err);
-      return res.status(500).json({ error: 'Failed to update email settings' });
-    }
-
-    res.json({ success: true, updated: this.changes });
-  });
+  try {
+    const result = await dbRun(query, values);
+    res.json({ success: true, updated: result.affectedRows || result.changes || 0 });
+  } catch (err) {
+    console.error('Error updating email settings:', err);
+    return res.status(500).json({ error: 'Failed to update email settings' });
+  }
 });
 
 module.exports = router;

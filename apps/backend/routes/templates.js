@@ -2,6 +2,29 @@ const express = require('express');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
+
+let dbGet, dbAll, dbRun;
+if (process.env.DB_TYPE === 'mysql') {
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbAll = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows;
+  };
+  dbRun = async (sql, params) => {
+    const [result] = await db.query(sql, params);
+    return result;
+  };
+} else {
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbAll = util.promisify(db.all.bind(db));
+  dbRun = util.promisify(db.run.bind(db));
+}
+
 const requireAuth = require('../middleware/auth');
 
 // Protect all routes
@@ -38,12 +61,14 @@ router.use((req, res, next) => {
  *         description: Database error
  */
 // Get all templates
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const sql = `SELECT * FROM templates ORDER BY created_at DESC`;
-  db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).json({ success: false, error: err.message });
+  try {
+    const rows = await dbAll(sql, []);
     res.json({ success: true, templates: rows });
-  });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 /**
@@ -77,13 +102,15 @@ router.get('/', (req, res) => {
  *         description: Database error
  */
 // Get a single template
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const sql = `SELECT * FROM templates WHERE id = ?`;
-  db.get(sql, [req.params.id], (err, row) => {
-    if (err) return res.status(500).json({ success: false, error: err.message });
+  try {
+    const row = await dbGet(sql, [req.params.id]);
     if (!row) return res.status(404).json({ success: false, error: 'Template not found' });
     res.json({ success: true, template: row });
-  });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 /**
@@ -117,7 +144,7 @@ router.get('/:id', (req, res) => {
  *         description: Database error
  */
 // Create a new template
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
 
   if (!name || !subject || !body_en || !body_lt) {
@@ -128,10 +155,13 @@ router.post('/', (req, res) => {
     INSERT INTO templates (name, subject, body_en, body_lt)
     VALUES (?, ?, ?, ?)
   `;
-  db.run(sql, [name, subject, body_en, body_lt], function (err) {
-    if (err) return res.status(500).json({ success: false, error: err.message });
-    res.json({ success: true, id: this.lastID });
-  });
+  try {
+    const result = await dbRun(sql, [name, subject, body_en, body_lt]);
+    const id = result.insertId || result.lastID;
+    res.json({ success: true, id });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 /**
@@ -171,7 +201,7 @@ router.post('/', (req, res) => {
  *         description: Database error
  */
 // Update a template
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { name, subject, body_en, body_lt } = req.body;
 
   if (!name || !subject || !body_en || !body_lt) {
@@ -183,13 +213,16 @@ router.put('/:id', (req, res) => {
     SET name = ?, subject = ?, body_en = ?, body_lt = ?, updated_at = CURRENT_TIMESTAMP 
     WHERE id = ?
   `;
-  db.run(sql, [name, subject, body_en, body_lt, req.params.id], function (err) {
-    if (err) return res.status(500).json({ success: false, error: err.message });
-    if (this.changes === 0) {
+  try {
+    const result = await dbRun(sql, [name, subject, body_en, body_lt, req.params.id]);
+    const changes = result.affectedRows !== undefined ? result.affectedRows : result.changes;
+    if (changes === 0) {
       return res.status(404).json({ success: false, error: 'Template not found' });
     }
     res.json({ success: true });
-  });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 /**
@@ -219,12 +252,14 @@ router.put('/:id', (req, res) => {
  *         description: Database error
  */
 // Delete a template
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   const sql = `DELETE FROM templates WHERE id = ?`;
-  db.run(sql, [req.params.id], function (err) {
-    if (err) return res.status(500).json({ success: false, error: err.message });
+  try {
+    await dbRun(sql, [req.params.id]);
     res.json({ success: true });
-  });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 module.exports = router;

@@ -1,0 +1,109 @@
+SET time_zone = '+00:00';
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Users table
+CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  passwordHash VARCHAR(255) NOT NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+  -- email settings - resend
+CREATE TABLE email_settings (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  provider VARCHAR(100) NOT NULL DEFAULT 'resend',
+  api_key VARCHAR(255),
+  from_name VARCHAR(255),
+  from_email VARCHAR(255),
+  enabled TINYINT(1) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  sender_name VARCHAR(255),
+  sender_email VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- messages table
+CREATE TABLE messages (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  subject VARCHAR(255) NOT NULL,
+  body_en TEXT NOT NULL,
+  body_lt TEXT,
+  status VARCHAR(50) NOT NULL DEFAULT 'draft', -- draft, scheduled, sent
+  scheduled_for TIMESTAMP NULL DEFAULT NULL, -- only used when status is 'scheduled'
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- templates table
+CREATE TABLE templates (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  subject VARCHAR(255) NOT NULL,
+  body_en TEXT NOT NULL,
+  body_lt TEXT,
+  html TEXT,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- guest_settings table
+CREATE TABLE guest_settings (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rsvp_open TINYINT(1) NOT NULL DEFAULT 0,
+  rsvp_deadline TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- settings table
+CREATE TABLE settings (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  enable_global_countdown TINYINT(1) NOT NULL DEFAULT FALSE,
+  wedding_date TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- guests table
+CREATE TABLE guests (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  group_id INT,
+  group_label VARCHAR(255),
+  name VARCHAR(255) NOT NULL,
+  preferred_language VARCHAR(10) DEFAULT 'en',
+  email VARCHAR(255),
+  code VARCHAR(255) UNIQUE,
+  can_bring_plus_one TINYINT(1) DEFAULT 0,
+  is_primary TINYINT(1) NOT NULL DEFAULT 1,
+  attending TINYINT(1),
+  rsvp_deadline TIMESTAMP NULL DEFAULT NULL,
+  dietary TEXT,
+  notes TEXT,
+  rsvp_status ENUM('pending','attending','not_attending') NOT NULL DEFAULT 'pending',
+  responded_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- message_recipients table
+CREATE TABLE message_recipients (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  message_id INT NOT NULL,
+  guest_id INT NOT NULL,
+  email VARCHAR(255), -- actual email used at send-time
+  language VARCHAR(10) DEFAULT 'en', -- language used at send-time
+  delivery_status VARCHAR(50) DEFAULT 'pending', -- 'pending' when message is created; updated on delivery attempt
+  delivery_error TEXT,
+  status VARCHAR(50) DEFAULT 'pending', -- pending, sent, failed
+  error_message TEXT,
+  sent_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  resend_message_id VARCHAR(255),
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (message_id) REFERENCES messages(id),
+  FOREIGN KEY (guest_id) REFERENCES guests(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+SET FOREIGN_KEY_CHECKS = 1;

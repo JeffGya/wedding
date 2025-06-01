@@ -3,26 +3,45 @@ const logger = require('./logger');
 const getSenderInfo = require('./getSenderInfo');
 const resend = require('./resendClient'); // Assuming resendClient is already configured
 
+const db = getDbConnection();
+let dbGet, dbAll, dbRun;
+if (process.env.DB_TYPE === 'mysql') {
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbAll = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows;
+  };
+  dbRun = async (sql, params) => {
+    const [result] = await db.query(sql, params);
+    return result;
+  };
+} else {
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbAll = util.promisify(db.all.bind(db));
+  dbRun = util.promisify(db.run.bind(db));
+}
+
 /**
  * Send all scheduled messages that are due.
  */
 async function sendScheduledMessages() {
-  const db = getDbConnection();
   let globalSent = 0;
   let globalFailed = 0;
   try {
     logger.info('📨 Starting scheduled message check...');
     
     // Get all scheduled messages that are due
-    const scheduledMessages = await new Promise((resolve, reject) => {
-      db.all(
-        `SELECT * FROM messages WHERE status = 'scheduled'`,
-        (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
-        }
-      );
-    });
+    const scheduledMessages = await dbAll(
+      process.env.DB_TYPE === 'mysql'
+        ? "SELECT * FROM messages WHERE status = 'scheduled'"
+        : "SELECT * FROM messages WHERE status = 'scheduled'",
+      []
+    );
 
     // Filter messages that are actually due based on 'scheduled_for'
     const now = new Date();
@@ -41,16 +60,10 @@ async function sendScheduledMessages() {
       logger.info(`➡️ Attempting to send message ID: ${message.id}`);
 
       // Retrieve recipients for the scheduled message
-      const recipients = await new Promise((resolve, reject) => {
-        db.all(
-          `SELECT * FROM message_recipients WHERE message_id = ? AND delivery_status = 'pending'`,
-          [message.id],
-          (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows);
-          }
-        );
-      });
+      const recipients = await dbAll(
+        `SELECT * FROM message_recipients WHERE message_id = ? AND delivery_status = 'pending'`,
+        [message.id]
+      );
 
       if (recipients.length === 0) {
         logger.info(`⚠️ No recipients found for message ID: ${message.id}. Skipping.`);
@@ -87,18 +100,11 @@ async function sendScheduledMessages() {
           // Check if the send result has data (success) or error (failure)
           if (sendResult && sendResult.data) {
             logger.info(`Email successfully sent to ${recipient.email}`);
-            
             // Update the status to 'sent' and store the message ID
-            await new Promise((resolve, reject) => {
-              db.run(
-                `UPDATE message_recipients SET delivery_status = ?, resend_message_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-                ['sent', sendResult.data.id, recipient.id],
-                function (err) {
-                  if (err) reject(err);
-                  else resolve();
-                }
-              );
-            });
+            await dbRun(
+              `UPDATE message_recipients SET delivery_status = ?, resend_message_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+              ['sent', sendResult.data.id, recipient.id]
+            );
             sendResults.push({ recipientId: recipient.id, status: 'sent' });
             globalSent++;
           } else {
@@ -106,18 +112,11 @@ async function sendScheduledMessages() {
             const errorMessage = sendResult && sendResult.error ? sendResult.error.message : 'Unknown error';
             logger.error(`Failed to send email to ${recipient.email}. Status: ${sendResult ? sendResult.status : 'undefined'}`);
             logger.error('Send result:', sendResult);
-            
             // Store the error in the database
-            await new Promise((resolve, reject) => {
-              db.run(
-                `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-                ['failed', errorMessage, recipient.id],
-                function (err) {
-                  if (err) reject(err);
-                  else resolve();
-                }
-              );
-            });
+            await dbRun(
+              `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+              ['failed', errorMessage, recipient.id]
+            );
 
             sendResults.push({ recipientId: recipient.id, status: 'failed' });
             globalFailed++;
@@ -128,31 +127,19 @@ async function sendScheduledMessages() {
 
         } catch (sendError) {
           logger.error('⚠️ Send failed for recipient', recipient.id, sendError);
-          await new Promise((resolve, reject) => {
-            db.run(
-              `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-              ['failed', JSON.stringify(sendError), recipient.id],
-              function (err) {
-                if (err) reject(err);
-                else resolve();
-              }
-            );
-          });
+          await dbRun(
+            `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+            ['failed', JSON.stringify(sendError), recipient.id]
+          );
           sendResults.push({ recipientId: recipient.id, status: 'failed' });
           globalFailed++;
         }
       }
 
-      await new Promise((resolve, reject) => {
-        db.run(
-          `UPDATE messages SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-          ['sent', message.id],
-          function (err) {
-            if (err) reject(err);
-            else resolve();
-          }
-        );
-      });
+      await dbRun(
+        `UPDATE messages SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+        ['sent', message.id]
+      );
 
       logger.info(`✅ Finished sending message ID: ${message.id}. Results:`, sendResults);
     }

@@ -1,13 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
-const db = getDbConnection();
 const requireAuth = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 const logger = require('../helpers/logger');
-const util = require('util');
-const dbGet = util.promisify(db.get.bind(db));
-const dbRun = util.promisify(db.run.bind(db));
+
+// Initialize database connection and helper methods for SQLite or MySQL
+const db = getDbConnection();
+let dbGet, dbRun;
+if (process.env.DB_TYPE === 'mysql') {
+  // MySQL: use promise-based pool
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbRun = async (sql, params) => {
+    const [result] = await db.query(sql, params);
+    return result;
+  };
+} else {
+  // SQLite: promisify get and run
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbRun = util.promisify(db.run.bind(db));
+}
 
 // Require authentication on all setting routes
 // router.use(requireAuth);
@@ -30,14 +47,14 @@ const dbRun = util.promisify(db.run.bind(db));
  *         description: Failed to fetch email settings
  */
 // GET email settings
-router.get('/email', requireAuth, (req, res) => {
-  db.get('SELECT * FROM email_settings WHERE id = 1', (err, row) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Failed to fetch email settings' });
-    }
+router.get('/email', requireAuth, async (req, res) => {
+  try {
+    const row = await dbGet('SELECT * FROM email_settings WHERE id = ?', [1]);
     res.json(row);
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Failed to fetch email settings' });
+  }
 });
 
 /**
@@ -67,7 +84,7 @@ router.get('/email', requireAuth, (req, res) => {
  *         description: Failed to update email settings
  */
 // UPDATE email settings
-router.put('/email', requireAuth, (req, res) => {
+router.put('/email', requireAuth, async (req, res) => {
   const { provider, api_key, from_name, from_email, sender_name, sender_email, enabled } = req.body;
   const sql = `
     UPDATE email_settings
@@ -75,13 +92,13 @@ router.put('/email', requireAuth, (req, res) => {
     WHERE id = 1
   `;
   const values = [provider, api_key, from_name, from_email, sender_name, sender_email, enabled ? 1 : 0];
-  db.run(sql, values, function (err) {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Failed to update email settings' });
-    }
+  try {
+    await dbRun(sql, values);
     res.json({ success: true });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Failed to update email settings' });
+  }
 });
 
 /**
@@ -182,14 +199,26 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
     const { enable_global_countdown, wedding_date } = req.body;
-    const sql = `
-      INSERT INTO settings (id, enable_global_countdown, wedding_date, created_at, updated_at)
-      VALUES (1, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-      ON CONFLICT(id) DO UPDATE SET
-        enable_global_countdown = excluded.enable_global_countdown,
-        wedding_date = excluded.wedding_date,
-        updated_at = CURRENT_TIMESTAMP
-    `;
+    let sql;
+    if (process.env.DB_TYPE === 'mysql') {
+      sql = `
+        INSERT INTO settings (id, enable_global_countdown, wedding_date, created_at, updated_at)
+        VALUES (1, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ON DUPLICATE KEY UPDATE
+          enable_global_countdown = VALUES(enable_global_countdown),
+          wedding_date = VALUES(wedding_date),
+          updated_at = CURRENT_TIMESTAMP
+      `;
+    } else {
+      sql = `
+        INSERT INTO settings (id, enable_global_countdown, wedding_date, created_at, updated_at)
+        VALUES (1, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ON CONFLICT(id) DO UPDATE SET
+          enable_global_countdown = excluded.enable_global_countdown,
+          wedding_date = excluded.wedding_date,
+          updated_at = CURRENT_TIMESTAMP
+      `;
+    }
     const values = [enable_global_countdown ? 1 : 0, wedding_date || null];
     try {
       await dbRun(sql, values);

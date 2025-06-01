@@ -2,6 +2,22 @@ const express = require('express');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
+let dbGet, dbAll;
+if (process.env.DB_TYPE === 'mysql') {
+  dbGet = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows[0];
+  };
+  dbAll = async (sql, params) => {
+    const [rows] = await db.query(sql, params);
+    return rows;
+  };
+} else {
+  const sqlite3 = require('sqlite3').verbose();
+  const util = require('util');
+  dbGet = util.promisify(db.get.bind(db));
+  dbAll = util.promisify(db.all.bind(db));
+}
 const requireAuth = require('../middleware/auth');
 
 // Require authentication for this route
@@ -39,9 +55,8 @@ router.use(requireAuth);
  *       '500':
  *         description: Failed to fetch delivery statistics
  */
-router.get('/:id/stats', (req, res) => {
+router.get('/:id/stats', async (req, res) => {
   const messageId = req.params.id;
-
   const sql = `
     SELECT 
       COUNT(CASE WHEN delivery_status = 'sent' THEN 1 END) AS sentCount,
@@ -50,14 +65,13 @@ router.get('/:id/stats', (req, res) => {
     FROM message_recipients
     WHERE message_id = ?
   `;
-
-  db.get(sql, [messageId], (err, row) => {
-    if (err) {
-      console.error('📉 Failed to fetch delivery stats:', err.message);
-      return res.status(500).json({ success: false, error: 'Failed to get delivery stats' });
-    }
+  try {
+    const row = await dbGet(sql, [messageId]);
     res.json({ success: true, ...row });
-  });
+  } catch (err) {
+    console.error('📉 Failed to fetch delivery stats:', err.message);
+    return res.status(500).json({ success: false, error: 'Failed to get delivery stats' });
+  }
 });
 
 /**
@@ -88,20 +102,19 @@ router.get('/:id/stats', (req, res) => {
  *       '500':
  *         description: Failed to fetch latest delivery statistics
  */
-router.get('/latest-delivery', (req, res) => {
+router.get('/latest-delivery', async (req, res) => {
   const sql = `
     SELECT id AS message_id
     FROM messages
     ORDER BY created_at DESC
     LIMIT 1
   `;
-
-  db.get(sql, [], (err, latest) => {
-    if (err || !latest) {
-      console.error('📉 Failed to find latest message ID:', err?.message);
+  try {
+    const latest = await dbGet(sql, []);
+    if (!latest) {
+      console.error('📉 Failed to find latest message ID');
       return res.status(500).json({ success: false, error: 'Failed to get latest message' });
     }
-
     const statsSql = `
       SELECT 
         COUNT(CASE WHEN delivery_status = 'sent' THEN 1 END) AS sentCount,
@@ -110,15 +123,12 @@ router.get('/latest-delivery', (req, res) => {
       FROM message_recipients
       WHERE message_id = ?
     `;
-
-    db.get(statsSql, [latest.message_id], (err, row) => {
-      if (err) {
-        console.error('📉 Failed to fetch delivery stats:', err.message);
-        return res.status(500).json({ success: false, error: 'Failed to get delivery stats' });
-      }
-      res.json({ success: true, message_id: latest.message_id, ...row });
-    });
-  });
+    const row = await dbGet(statsSql, [latest.message_id]);
+    res.json({ success: true, message_id: latest.message_id, ...row });
+  } catch (err) {
+    console.error('📉 Failed to fetch latest delivery stats:', err.message);
+    return res.status(500).json({ success: false, error: 'Failed to get latest delivery stats' });
+  }
 });
 
 module.exports = router;
