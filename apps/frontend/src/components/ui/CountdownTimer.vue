@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 
 // Define props
 const props = defineProps({
@@ -38,7 +38,12 @@ const deadlineDate = computed(() =>
 );
 
 // Reactive time remaining in milliseconds
-const timeLeft = ref(Math.max(0, deadlineDate.value - new Date()));
+const timeLeft = ref(0);
+
+// Watch for changes to deadlineDate and reset timeLeft
+watch(deadlineDate, (newVal) => {
+  timeLeft.value = Math.max(0, newVal - new Date());
+});
 
 // Computed breakdown
 const days = computed(() => Math.floor(timeLeft.value / (1000 * 60 * 60 * 24)));
@@ -53,6 +58,8 @@ let timer = null;
 
 // Update loop
 onMounted(() => {
+  // Initialize timeLeft now that deadlineDate is available
+  timeLeft.value = Math.max(0, deadlineDate.value - new Date());
   timer = setInterval(() => {
     const diff = deadlineDate.value - new Date();
     timeLeft.value = Math.max(0, diff);

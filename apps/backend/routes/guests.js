@@ -482,12 +482,18 @@ router.put('/:id', async (req, res) => {
     attending,
     dietary,
     notes,
-    rsvp_deadline
+    rsvp_deadline,
+    code,
+    preferred_language
   } = req.body;
 
   // Basic validation
   if (!group_label) return res.status(400).json({ error: 'group_label is required' });
   if (!name) return res.status(400).json({ error: 'name is required' });
+  if (!code) return res.status(400).json({ error: 'code is required' });
+  if (preferred_language && !['en', 'lt'].includes(preferred_language)) {
+    return res.status(400).json({ error: 'preferred_language must be either "en" or "lt"' });
+  }
   // Email format validation
   if (email && !/^\S+@\S+\.\S+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email format' });
@@ -516,7 +522,7 @@ router.put('/:id', async (req, res) => {
       `UPDATE guests SET
         name = ?, email = ?, group_label = ?,
         can_bring_plus_one = ?, is_primary = ?, attending = ?, rsvp_status = ?,
-        dietary = ?, notes = ?, rsvp_deadline = ?, updated_at = CURRENT_TIMESTAMP
+        dietary = ?, notes = ?, rsvp_deadline = ?, code = ?, preferred_language = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?`,
       [
         name,
@@ -529,6 +535,8 @@ router.put('/:id', async (req, res) => {
         dietary,
         notes,
         rsvp_deadline || null,
+        code,
+        preferred_language || row.preferred_language,
         id
       ]
     );

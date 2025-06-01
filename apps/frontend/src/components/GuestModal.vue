@@ -128,25 +128,25 @@
     preferred_language: 'en',
   })
   
-  watch(() => props.guest, (newGuest) => {
-    if (newGuest) {
-      form.group_label = newGuest.group_label
-      form.name = newGuest.name
-      form.email = newGuest.email
-      form.code = newGuest.code ?? ''
-      form.can_bring_plus_one = newGuest.can_bring_plus_one ?? false
-      form.is_primary = newGuest.is_primary ?? true
-      form.preferred_language = newGuest.preferred_language ?? 'en'
-    } else {
-      form.group_label = ''
-      form.name = ''
-      form.email = ''
-      form.code = ''
-      form.can_bring_plus_one = false
-      form.is_primary = true
-      form.preferred_language = 'en'
-    }
-  }, { immediate: true })
+watch(() => props.guest, (newGuest) => {
+  if (newGuest) {
+    form.group_label = newGuest.group_label || ''
+    form.name = newGuest.name || ''
+    form.email = newGuest.email || ''
+    form.code = newGuest.code || ''
+    form.can_bring_plus_one = Boolean(newGuest.can_bring_plus_one)
+    form.is_primary = Boolean(newGuest.is_primary)
+    form.preferred_language = newGuest.preferred_language || 'en'
+  } else {
+    form.group_label = ''
+    form.name = ''
+    form.email = ''
+    form.code = ''
+    form.can_bring_plus_one = false
+    form.is_primary = true
+    form.preferred_language = 'en'
+  }
+}, { immediate: true })
   
 const handleSubmit = () => {
   if (!guestForm.value.validate()) {

@@ -1,6 +1,13 @@
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('en-US', options);
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  };
+  return new Date(dateString).toLocaleString('en-US', options);
 }
 
 const express = require('express');
@@ -133,10 +140,11 @@ router.get('/:code', async (req, res) => {
        FROM guests WHERE code = ? OR (group_id = (SELECT group_id FROM guests WHERE code = ?) AND is_primary = 0)`,
       [code, code]
     );
-    // Convert date fields to human-readable strings
+    // Preserve original ISO deadline for countdown, and add formatted version
     rows.forEach(row => {
       if (row.rsvp_deadline) {
-        row.rsvp_deadline = formatDate(row.rsvp_deadline);
+        row.rsvp_deadline_formatted = formatDate(row.rsvp_deadline);
+        row.rsvp_deadline = new Date(row.rsvp_deadline).toISOString();
       }
     });
     if (!rows || rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
