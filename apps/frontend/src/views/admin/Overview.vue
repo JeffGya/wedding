@@ -1,8 +1,7 @@
 <template>
-  <div class="p-6">
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-gray-800">Admin Overview</h1>
-      <p class="text-gray-600">Admin dashboard with guest RSVP analytics.</p>
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-semibold">Admin Overview</h1>
+      <p class="text">Admin dashboard with guest RSVP analytics.</p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <StatCard title="Emails Sent" :value="emailsSent" />
@@ -24,7 +23,6 @@
         ]"
       />
     </div>
-  </div>
 </template>
 
 <script setup>

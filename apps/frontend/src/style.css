@@ -126,8 +126,8 @@ label {
   @apply text-text text-base;
 }
 
-body {
-  @apply font-sans text-txtl pr-40 pl-40;
+#mode {
+  @apply font-sans text-txt px-16 md:px-16 xl:px-40;
   background-color: var(--bg-color);
   background-image: var(--bg-gradient);
 }

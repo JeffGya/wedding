@@ -1,27 +1,32 @@
 <template>
-  <div class="flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 p-8 space-y-4">
-      <Menu :model="menuItems" class="p-menu-vertical" />
+  <div class="flex">
+    <aside class="hidden md:block basis-3xs p-8 pt-24 space-y-4 mr-24">
+      <Menu :model="menuItems" />
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-16">
-      <router-view />
-    </main>
+    <div class="flex-1">
+      <div class="md:hidden mt-16">
+        <Menubar :model="menuItems" />
+      </div>
+      <!-- Main Content -->
+      <main class="basis-full mb-40 md:pl-0 pl-0">
+        <router-view />
+      </main>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 import Menu from 'primevue/menu';
+import Menubar from 'primevue/menubar';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 
-const showGuests = ref(false)
-const toggleGuests = () => {
-  showGuests.value = !showGuests.value
-}
+const showMenu = ref(false);
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value;
+};
 
 const menuItems = [
   {

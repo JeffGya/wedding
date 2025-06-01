@@ -3,7 +3,7 @@
     <template #content>
       <template v-if="chartType === 'doughnut' && items.length">
         <p class="text-lg/7 mt-0 font-serif font-semibold mb-8">{{ title }}</p>
-        <div class="mb-8" style="position: relative; width: 100%; aspect-ratio: 1 / 1;">
+        <div class="mb-8" style="position: relative; aspect-ratio: 1 / 1; height:10rem; width:10rem">
           <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full h-full" />
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span class="text-5xl font-semibold font-serif">{{ centerText }}</span>
