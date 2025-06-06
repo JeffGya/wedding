@@ -135,7 +135,8 @@ router.get('/', async (req, res) => {
     let plainDate = null;
     if (row && row.weddingDate) {
       const d = new Date(row.weddingDate);
-      plainDate = d.toISOString().slice(0, 10);
+      d.setUTCHours(12, 0, 0, 0); // set to noon UTC to avoid timezone shifting
+      plainDate = d.toISOString(); // keep full timestamp
     }
 
     return res.json({

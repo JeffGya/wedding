@@ -2,8 +2,8 @@
   <div v-if="enabled && targetDate" class="wedding-countdown">
     <p>{{ t('home.countdown.label') }}</p>
     <p class="em">
-      {{ $t('home.countdown.months', { count: months }) }}
-      {{ $t('home.countdown.days', { count: days }) }}
+      {{ months }} {{ t('home.countdown.months', { count: months }) }}
+      {{ days }} {{ t('home.countdown.days', { count: days }) }}
     </p>
   </div>
 </template>

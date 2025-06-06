@@ -1,6 +1,5 @@
 {
-  "home.hero.title": "Brigita & Jeffrey \n are getting married!",
-  "home.hero.subtitle": "A celebration years in the making.",
+  "home.hero.subtitle": "are getting married!",
   "home.hero.cta": "RSVP",
   "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
   "home.story.title": "Our Story",
@@ -14,8 +13,8 @@
   "home.details.timeLabel": "Time",
   "home.details.timeValue": "5:00 PM",
   "home.countdown.label": "Time until our wedding",
-  "home.countdown.months": "{count} Month | {count} Months",
-  "home.countdown.days": "{count} Day | {count} Days",
+  "home.countdown.months": "Month(s)",
+  "home.countdown.days": "Day(s)",
   "rsvp.lookupTitle": "Enter your RSVP code",
   "rsvp.lookupLabel": "RSVP code",
   "rsvp.lookupButton": "Find my RSVP",

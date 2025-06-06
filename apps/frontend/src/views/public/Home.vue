@@ -1,7 +1,9 @@
 <template>
  <main class="home">
     <section class="hero">
-      <h1>{{ $t('home.hero.title') }}</h1>
+      <h1>
+        <span>Brigita</span> & <span>Jeffrey</span>
+      </h1>
       <p>{{ $t('home.hero.subtitle') }}</p>
       <div id="home-rsvp" v-if="!loading">
         <Button
@@ -14,10 +16,8 @@
         <Message v-else severity="contrast" variant="outlined" size="small" icon="i-solar:alarm-sleep-bold">{{ $t('home.rsvpClosed')}}</Message>
       </div>
     </section>
-    
-    <section class="wedding-countdown-section">
-      <WeddingCountdown />
-    </section>
+
+    <WeddingCountdown />
 
     <section class="story">
       <h2>{{ $t('home.story.title') }}</h2>
@@ -56,16 +56,26 @@ const lang = route.params.lang || 'en'
 }
 
 .hero h1 {
-  @apply font-cursive text-align-center text-[4.5rem]/5rem mt-24 mb-16;
+  @apply font-cursive text-align-center text-5xl mt-24 tracking-wide;
 }
 
+.hero h1 span {
+  @apply text-[6rem] ml-24;
+}
+
+.hero h1 span:first-of-type {
+  @apply ml-0 mr-24;
+}
+
+
+
 .hero p {
-  @apply font-serif text-2xl mt-16 mb-24;
+  @apply font-cursive text-5xl mt-8 mb-24;
 }
 
 section {
-  margin-bottom: 32px;
-  @apply width: var(--container-6xl);
+  @apply mb-24 w-80%; 
+  width: var(--container-6xl);
 }
 
 ul {
