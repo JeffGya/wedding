@@ -1,3 +1,15 @@
+<script setup>
+import { useHead } from '@vueuse/head'
+
+useHead({
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex, nofollow'
+    }
+  ]
+})
+</script>
 <template>
     <header>
       <GenericHeader />
@@ -21,5 +33,3 @@ export default {
 <style scoped>
 /* Add your styles here */
 </style>
-
-

@@ -17,6 +17,7 @@
     "@vee-validate/i18n": "^4.15.0",
     "@vee-validate/rules": "^4.15.0",
     "@vuepic/vue-datepicker": "^11.0.2",
+    "@vueuse/head": "^2.0.0",
     "axios": "^1.8.4",
     "chart.js": "^4.4.0",
     "concurrently": "^9.1.2",
