@@ -154,7 +154,7 @@ async function seedDatabase() {
         const newCode = Math.random().toString(36).substring(2, 10);
         const existRow = await runQuery(checkSql, [newCode]);
         if (existRow && (existRow.length > 0 || existRow.changes === 0)) {
-          tryCode();
+          return tryCode(); // Ensure proper recursion flow
         } else {
           resolve(newCode);
         }

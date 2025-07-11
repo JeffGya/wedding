@@ -16,7 +16,7 @@ const mysql = require('mysql2/promise');
 
   // Define your users to seed
   const users = [
-    { name: 'Future Husband Jeffrey', email: 'jeffogya@gmail..com', password: 'Fbjqp4H6woww9' },
+    { name: 'Future Husband Jeffrey', email: 'jeffogya@gmail.com', password: 'Fbjqp4H6woww9' },
     { name: 'Future Wife Brigita', email: 'brigitabruno@gmail.com', password: '6B2jt5qy8WHqm' }
   ];
 
