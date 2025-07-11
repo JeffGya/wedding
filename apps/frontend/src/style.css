@@ -14,7 +14,7 @@ body  {
   --p-message-content-gap:                    0.8rem;
   --p-message-border-width:                   4px;
 
-  --p-message-contrast-outlined-color:       var(--text);
+  --p-message-contrast-outlined-color:        var(--text);
   --p-message-contrast-outlined-border-color: var(--text);
 
   /* PrimeVue Card Overrides */
@@ -127,7 +127,7 @@ label {
 }
 
 #mode {
-  @apply font-sans text-txt px-16 md:px-16 xl:px-40;
+  @apply font-sans text-txt;
   background-color: var(--bg-color);
   background-image: var(--bg-gradient);
 }

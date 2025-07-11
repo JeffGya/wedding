@@ -1,13 +1,13 @@
 <template>
-  <div class="login-bar p-16 h-20 flex justify-between items-center">
-    <h1 class="text-2xl font-semibold">
+  <div class="login-bar flex justify-between items-center px-16 md:px-24 xl:px-40">
+    <p class="text-base font-serif font-medium">
       Welcome, {{ auth.user?.name || 'Admin' }}!
-    </h1>
+    </p>
     <Button
-      severity="danger"
       icon="i-solar:logout-3-bold-duotone"
       @click="auth.logout"
       label="Logout"
+      size="small"
     />
   </div>
 </template>
@@ -21,6 +21,6 @@ const auth = useAuthStore();
 .login-bar {
   background-image: var(--bg-glass);
   border: solid 2px var(--bg-glass-border);
-  border-radius: 0 0  1rem 1rem;
+  border-radius: 0 0  .75rem .75rem;
 }
 </style>

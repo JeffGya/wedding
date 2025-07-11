@@ -73,11 +73,19 @@ export default defineConfig({
     },
     // Spacing scale (8px increments, 0.5rem–2.5rem)
     spacing: {
+      '2':  '0.125rem', //  2px
+      '4':  '0.25rem',  //  4px
       '8':  '0.5rem',   //  8px
       '16': '1rem',     // 16px
       '24': '1.5rem',   // 24px
       '32': '2rem',     // 32px
       '40': '2.5rem',   // 40px
+      '48': '3rem',     // 48px
+      '64': '4rem',     // 64px
+      '80': '5rem',     // 80px
+      '96': '6rem',     // 96px
+      '128': '8rem',    // 128px
+      '160': '10rem',   // 160px
     },
     // Typography scale placeholder
     fontSize: {
@@ -92,16 +100,17 @@ export default defineConfig({
     },
     // Border radii
     borderRadius: {
-      'sm': '0.25rem',  // 4px
-      'md': '0.5rem',   // 8px
+      'sm': '0.5rem',  // 4px
+      'md': '1rem',   // 16px
+      'lg': '1.5rem',  // 24px
+      'xl': '2.5rem',     // 40px
     },
     // Responsive breakpoints
     breakpoints: {
       'sm':  '640px',
       'md':  '768px',
       'lg':  '1024px',
-      'xl':  '1280px',
-      '2xl': '1536px',
+      'xl':  '1280px'
     },
     // Opacity levels
     opacity: {
@@ -255,7 +264,7 @@ export default defineConfig({
         @font-face {
           font-family: 'Lora';
           font-style: medium;
-          font-weight: 700;
+          font-weight: 500;
           src: url('/fonts/Lora/Lora-Medium.ttf') format('truetype');
         }
         @font-face {

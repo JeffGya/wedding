@@ -1,9 +1,11 @@
 <template>
-  <div v-if="enabled && targetDate" class="wedding-countdown">
-    <p>{{ t('home.countdown.label') }}</p>
-    <p class="em">
+  <div v-if="enabled && targetDate" class="wedding-countdown text-center my-40 p-16 rounded-md backdrop-blur-md">
+    <p class="font-serif font-bold text-2xl mt-0 mb-8">
       {{ months }} {{ t('home.countdown.months', { count: months }) }}
       {{ days }} {{ t('home.countdown.days', { count: days }) }}
+    </p>
+    <p class="font-serif m-0">
+      {{ t('home.countdown.label') }}
     </p>
   </div>
 </template>
@@ -84,15 +86,9 @@ const { t } = useI18n();
 </script>
 
 <style scoped>
-.em {
-  font-weight: bold;
-  font-size: 2rem;
-}
-
-.wedding-countdown p {
-  font-family: 'Lora', serif;
-  text-align: center;
+.wedding-countdown{
   color: var(--int-base);
-  margin: 0;
+  background: var(--bg-glass);
+  border: 1px solid var(--bg-glass-border);
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
- <main class="home">
+ <main class="home mx-16 md:mx-40 lg:mx-80">
     <section class="hero">
-      <h1>
-        <span>Brigita</span> & <span>Jeffrey</span>
+      <h1 class="font-cursive text-align-center text-5xl lg:text-[4rem] my-8">
+        <span class="-ml-128 lg:-ml-[14rem]">Brigita</span>
+        <br/>&<br/>
+        <span class="ml-128 lg:ml-[14rem]">Jeffrey</span>
       </h1>
-      <p>{{ $t('home.hero.subtitle') }}</p>
+      <p class="font-cursive text-3xl">{{ $t('home.hero.subtitle') }}</p>
       <div id="home-rsvp" v-if="!loading">
         <Button
           v-if="!isClosed()"
@@ -55,22 +57,8 @@ const lang = route.params.lang || 'en'
   text-align: center;
 }
 
-.hero h1 {
-  @apply font-cursive text-align-center text-5xl mt-24 tracking-wide;
-}
-
-.hero h1 span {
-  @apply text-[6rem] ml-24;
-}
-
-.hero h1 span:first-of-type {
-  @apply ml-0 mr-24;
-}
-
-
-
 .hero p {
-  @apply font-cursive text-5xl mt-8 mb-24;
+  @apply ;
 }
 
 section {
@@ -85,12 +73,6 @@ ul {
 
 ul li {
   margin-bottom: 8px;
-}
-
-.story, .details{
-  background: var(--bg-glass);
-  border: 1px solid var(--bg-glass-border);;
-  @apply p-16 rounded-md backdrop-blur-sm;
 }
 
 .story h2, .details h2 {
