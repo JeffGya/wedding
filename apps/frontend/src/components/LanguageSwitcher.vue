@@ -6,7 +6,6 @@
       optionLabel="label"
       optionValue="value"
       :placeholder="currentLanguageLabel"
-      class="w-full md:w-40"
       @change="onLanguageChange"
     >
       <!-- Custom template for dropdown items -->

@@ -281,6 +281,12 @@ export default defineConfig({
         }
         @font-face {
           font-family: 'Open Sans';
+          font-style: medium;
+          font-weight: 500;
+          src: url('/fonts/OpenSans/OpenSans-Medium.ttf') format('truetype');
+        }
+        @font-face {
+          font-family: 'Open Sans';
           font-style: bold;
           font-weight: 700;
           src: url('/fonts/OpenSans/OpenSans-Bold.ttf') format('truetype');

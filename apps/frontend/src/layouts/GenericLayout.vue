@@ -11,7 +11,7 @@ useHead({
 })
 </script>
 <template>
-    <header>
+    <header class="mb-16 md:mb-24 lg:mb-32">
       <GenericHeader />
     </header>
     <router-view :key="$route.fullPath" />

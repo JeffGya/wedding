@@ -1,17 +1,17 @@
 <template>
-  <div class="rsvp-lookup max-w-md mx-auto p-6">
+  <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto">
     <!-- Wait until settingsLoading is false -->
     <template v-if="!settingsLoading">
       <!-- Show closed banner if RSVP is closed -->
       <Banner
         v-if="isClosed()"
         :message="t('rsvp.closed')"
-        class="mb-4"
+        class="mb-8"
         type="info"
       />
       <!-- Otherwise show lookup form -->
       <template v-else>
-        <h1 class="text-2xl font-semibold mb-4">{{ t('rsvp.lookupTitle') }}</h1>
+        <h1 class="mb-16">{{ t('rsvp.lookupTitle') }}</h1>
         <Card>
           <template #content>
               <Banner 
@@ -19,10 +19,10 @@
               :message="error" 
               type="error" 
               />
-            <Form @submit="submitLookup" class="space-y-4">
+            <Form @submit="submitLookup" class="space-y-8">
               <FloatLabel variant="in">
                 <InputText
-                  id="code"
+                  class="w-full md:w-1/2"
                   v-model="code"
                   type="text"
                   required
@@ -31,6 +31,8 @@
               </FloatLabel>
               <Button
                 type="submit"
+                class="w-full md:w-auto"
+                size="large"
                 :disabled="submitting"
                 :label="t('rsvp.lookupButton')"
                 aria-label="Lookup RSVP" 
@@ -42,7 +44,7 @@
         </Card>
       </template>
     </template>
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -97,7 +99,4 @@ async function submitLookup(event) {
 </script>
 
 <style scoped>
-.rsvp-lookup {
-  margin-top: 0rem;
-}
 </style>

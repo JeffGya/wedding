@@ -1,11 +1,11 @@
 <template>
-  <main class="rsvp-page">
+  <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto">
     <Banner
       v-if="!settingsLoading && isClosed()"
       :message="t('rsvp.closed')"
     />
     <div v-else>
-      <h1>{{ $t('rsvp.title') }}</h1>
+      <h1 class="mb-16">{{ $t('rsvp.title') }}</h1>
       <Card> 
         <template #content>
           <Banner v-if="error" :message="error" />
@@ -63,8 +63,4 @@ async function onSubmit(payload) {
 </script>
 
 <style scoped>
-.rsvp-page {
-  max-width: 568px;
-  margin: 0 auto;
-}
 </style>

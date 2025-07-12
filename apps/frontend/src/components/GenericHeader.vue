@@ -14,7 +14,7 @@
       </span>
     </div>
 
-    <Menubar class="MainNav mx-16 md:mx-24 lg:mx-80" :model="menuItems">
+    <Menubar class="MainNav mx-16 md:mx-40 lg:mx-80" :model="menuItems">
       <template #start>
         <span class="p-menubar-separator" />
       </template>
@@ -28,7 +28,7 @@
 
       <template #end>
         <div class="flex items-center">
-          <LanguageSwitcher class="mr-4" />
+          <LanguageSwitcher class="mr-8" />
           <ToggleSwitch
             v-model="darkMode"
             class="ml-2 custom-toggle"
@@ -38,7 +38,7 @@
             <template #handle="{ checked }">
               <i
                 :class="[
-                  'text-5xl p-8', // Adjust icon size
+                  'text-5xl', // Adjust icon size
                   { 'i-solar:moon-stars-outline': checked, 'i-solar:sun-2-linear': !checked }
                 ]"
               />
@@ -93,6 +93,7 @@ export default {
 .MainNav {
   background: transparent;
   border: none;
+  padding: 0;
 }
 
 svg {

@@ -1,5 +1,6 @@
 <template>
   <Form
+    class="space-y-8"
     :key="props.guest.code"
     :validation-schema="validationSchema"
     @submit="onSubmit"
@@ -11,51 +12,51 @@
 
     <Banner v-if="formError" :message="formError" type="error" />
 
-    <div class="mb-4">
-      <label class="font-medium">{{ t('rsvp.attendingLabel') }}</label>
+    <div>
+      <label class="font-500">{{ t('rsvp.attendingLabel') }}</label>
       <div class="flex items-center">
         <RadioButton id="attending-yes" name="attending" :value="true" v-model="form.attending" />
         <label for="attending-yes" class="ml-2">{{ t('rsvp.attendingYes') }}</label>
         <RadioButton id="attending-no" name="attending" :value="false" v-model="form.attending" class="ml-4" />
         <label for="attending-no" class="ml-2">{{ t('rsvp.attendingNo') }}</label>
       </div>
-      <Message v-if="errors.attending" severity="error" :closable="false" class="text-sm mt-1">
+      <Message v-if="errors.attending" severity="error" :closable="false" class="text-sm mt-4">
         {{ errors.attending }}
       </Message>
     </div>
 
-    <div class="mb-4">
+    <div>
       <label class="font-medium">{{ t('rsvp.dietaryLabel') }}</label>
       <Field name="dietary">
         <InputText v-model="form.dietary" class="w-full" />
       </Field>
-      <Message v-if="errors.dietary" severity="error" :closable="false" class="text-sm mt-1">
+      <Message v-if="errors.dietary" severity="error" :closable="false" class="text-sm mt-4">
         {{ errors.dietary }}
       </Message>
     </div>
 
-    <div class="mb-4">
-      <label class="font-medium">{{ t('rsvp.notesLabel') }}</label>
+    <div>
+      <label class="font-500">{{ t('rsvp.notesLabel') }}</label>
       <Field name="notes">
         <Textarea v-model="form.notes" class="w-full" />
       </Field>
-      <Message v-if="errors.notes" severity="error" :closable="false" class="text-sm mt-1">
+      <Message v-if="errors.notes" severity="error" :closable="false" class="text-sm mt-4">
         {{ errors.notes }}
       </Message>
     </div>
 
-    <div v-if="props.guest.can_bring_plus_one" class="mb-4 flex items-center">
-      <label class="font-medium mr-2">{{ t('rsvp.plusOneLabel') }}</label>
+    <div v-if="props.guest.can_bring_plus_one" class="flex items-center">
+      <label class="font-500">{{ t('rsvp.plusOneLabel') }}</label>
       <ToggleSwitch v-model="form.add_plus_one" class="mr-2" />
       <span class="font-semibold">{{ form.add_plus_one ? t('rsvp.yes') : t('rsvp.no') }}</span>
     </div>
 
-    <div v-if="props.guest.can_bring_plus_one && form.add_plus_one" class="mb-4">
-      <label class="font-medium">{{ t('rsvp.plusOneNameLabel') }}</label>
+    <div v-if="props.guest.can_bring_plus_one && form.add_plus_one">
+      <label class="font-500">{{ t('rsvp.plusOneNameLabel') }}</label>
       <Field name="plus_one_name">
         <InputText v-model="form.plus_one_name" class="w-full" />
       </Field>
-      <Message v-if="errors.plus_one_name" severity="error" :closable="false" class="text-sm mt-1">
+      <Message v-if="errors.plus_one_name" severity="error" :closable="false" class="text-sm mt-4">
         {{ errors.plus_one_name }}
       </Message>
       <div class="mb-4">
@@ -63,7 +64,7 @@
         <Field name="plus_one_dietary">
           <InputText v-model="form.plus_one_dietary" class="w-full" />
         </Field>
-        <Message v-if="errors.plus_one_dietary" severity="error" :closable="false" class="text-sm mt-1">
+        <Message v-if="errors.plus_one_dietary" severity="error" :closable="false" class="text-sm mt-4">
           {{ errors.plus_one_dietary }}
         </Message>
       </div>
@@ -71,7 +72,8 @@
 
       <Button
         type="submit"
-        class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+        size="large"
+        class="px-4 py-2 w-full"
         :disabled="isDisabled"
       >
         {{ t('rsvp.submitButton') }}
