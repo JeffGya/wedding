@@ -47,6 +47,12 @@ app.use(cors({
   credentials: true
 }));
 
+// Serve uploaded images
+app.use(
+  '/uploads',
+  express.static(path.join(__dirname, 'uploads'))
+);
+
 // Swagger setup
 const swaggerOptions = {
   definition: {
@@ -75,8 +81,10 @@ const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
 
 const adminRoutes = require('./routes/admin');
-// Admin-only protected routes
 app.use('/api/admin', adminRoutes);
+
+const imagesRoutes = require('./routes/images');
+app.use('/api/admin/images', imagesRoutes);
 
 const guestRoutes = require('./routes/guests');
 const rsvpRouter = require('./routes/rsvp');
