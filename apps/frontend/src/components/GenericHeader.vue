@@ -91,13 +91,13 @@ export default {
 
 <style scoped>
 .MainNav {
-  background: transparent;
-  border: none;
-  padding: 0;
+  background: var(--bg-glass);
+  border: 1px solid var(--bg-glass-border);
+  backdrop-filter: blur(10px);
 }
 
 svg {
-  @apply m-auto w-16 h-16 md:w-24 md:h-24;
+  @apply m-auto w-12 h-12 md:w-16 md:h-16;
 }
 
 .cls-1 {

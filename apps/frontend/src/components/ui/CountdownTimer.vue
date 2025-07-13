@@ -1,23 +1,19 @@
 
 
 <template>
-  <div v-if="!expired" class="my-4">
-    <p font="text-sm">You have
-    <span class="font-serif font-semibold text-base">
-      {{ days }}d {{ hours }}h {{ minutes }}m
-    </span>
-    to confirm your rsvp. </p> 
-    <p>
-      <em>No RSVP means not attending.</em>
-    </p>
+  <div v-if="!expired" class="text-sm">
+      No RSVP = not attending. You have
+        <span class="font-bold">
+          {{ days }}d {{ hours }}h {{ minutes }}m
+        </span>
+      to confirm your rsvp. 
   </div>
-  <div v-else class="text-center my-4 text-red-600">
-    RSVP Closed
-  </div>
+  <Banner v-else type="error" message="RSVPs are closed"/>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import Banner from '@/components/ui/Banner.vue';
 
 // Define props
 const props = defineProps({

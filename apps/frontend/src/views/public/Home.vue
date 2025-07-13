@@ -1,6 +1,6 @@
 <template>
- <main class="home mx-16 md:mx-40 lg:mx-80">
-    <section class="hero mt-8 mb-24">
+ <main class="home">
+    <section class="hero mb-24 md:mb-32 text-center">
       <h1 class="font-cursive text-align-center text-5xl/14 lg:text-[4rem]/20 m-0">
         <span class="-ml-128 lg:-ml-[14rem]">Brigita</span>
         <br/>&<br/>
@@ -11,7 +11,6 @@
         <Button
           v-if="!isClosed()"
           :label="$t('home.hero.cta')" size="large"
-          class="font-sans w-full md:w-auto"
           icon="i-solar:pen-new-square-bold"
           @click="router.push({ name: 'public-rsvp-lookup', params: { lang } })"
         />

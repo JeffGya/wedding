@@ -3,11 +3,24 @@
 @unocss;
 
 .hero {
-  white-space: pre-line;
+  
 }
 
 /* Increase specificity for ToggleSwitch styles */
 body  {
+  /* PrimeVue Button Overrides */
+  --p-button-primary-color:                   var(--acc2-base) !important;
+  --p-button-primary-background:              var(--int-base) !important;
+  --p-button-primary-border-color:            var(--int-hover) !important;
+
+  --p-button-primary-hover-background:        var(--int-hover) !important;
+  --p-button-primary-hover-border-color:      var(--int-active) !important;
+  --p-button-primary-hover-color:             var(--acc2-hover) !important;
+
+  --p-button-primary-active-background:       var(--int-active) !important;
+  --p-button-primary-active-border-color:     var(--int-base) !important;
+  --p-button-primary-active-color:            var(--acc2-active) !important;
+
   /* PrimeVue Banner Overrides */
   --p-message-icon-size:                      1.5rem;
   --p-message-content-padding:                1rem 1.2rem;
@@ -22,27 +35,27 @@ body  {
   --p-card-color:                             var(--text);
 
   /* PrimeVue ToggleSwitch Overrides */
-  --p-toggleswitch-background:                var(--int-base);
-  --p-toggleswitch-border-color:              var(--form-border);
-  --p-toggleswitch-hover-background:          var(--int-hover);
-  --p-toggleswitch-hover-border-color:        var(--form-border);
+  --p-toggleswitch-background:                var(--int-base) !important; 
+  --p-toggleswitch-border-color:              var(--form-border) !important;
+  --p-toggleswitch-hover-background:          var(--int-hover) !important;
+  --p-toggleswitch-hover-border-color:        var(--form-border) !important;
 
   --p-toggleswitch-checked-background:        var(--acc-base) !important;
   --p-toggleswitch-checked-border-color:      var(--form-border) !important;
   --p-toggleswitch-checked-hover-background:  var(--acc-hover) !important;
   --p-toggleswitch-checked-hover-border-color:var(--form-border) !important;
 
-  --p-toggleswitch-handle-background:         var(--form-background);
-  --p-toggleswitch-checked-handle-background: var(--form-background);
-  --p-toggleswitch-handle-color:              var(--text);
+  --p-toggleswitch-handle-background:         var(--form-background) !important;
+  --p-toggleswitch-checked-handle-background: var(--form-background) !important;
+  --p-toggleswitch-handle-color:              var(--text) !important;
 
-  --p-toggleswitch-focus-ring-color:          var(--form-border-focus);
+  --p-toggleswitch-focus-ring-color:          var(--form-border-focus) !important;
 
-  --p-toggleswitch-handle-hover-background:   var(--form-background-hover);
-  --p-toggleswitch-handle-checked-background: var(--form-background-focus);
+  --p-toggleswitch-handle-hover-background:   var(--form-background-hover) !important;
+  --p-toggleswitch-handle-checked-background: var(--form-background-focus) !important;
 
 
-  --p-toggleswitch-handle-hover-color:        var(--text);
+  --p-toggleswitch-handle-hover-color:        var(--text) !important;
 
   /* PrimeVue Select Overrides */
   --p-select-border-color:                    var(--form-border);
@@ -98,12 +111,35 @@ body  {
   
 
   /* PrimeVue InputText Overrides */
-  --p-inputtext-background:                   var(--form-background);
+  --p-inputtext-background:                   var(--form-background) !important;
   --p-inputtext-border-color:                 var(--form-border);
   --p-inputtext-color:                        var(--text);
 
   --p-inputtext-hover-border-color:           var(--form-border-hover);
   --p-inputtext-focus-border-color:           var(--form-border-focus);
+
+  /* PrimeVue Textarea Overrides */
+  --p-textarea-background:                    var(--form-background) !important;
+  --p-textarea-border-color:                  var(--form-border);
+  --p-textarea-color:                         var(--text);
+  --p-textarea-hover-border-color:            var(--form-border-hover);
+  --p-textarea-focus-border-color:            var(--form-border-focus);
+  --p-textarea-placeholder-color:             var(--form-placeholder-text);
+
+  /* PrimeVue Radio Button Overrides */
+  --p-radiobutton-background:                 var(--form-background);
+  --p-radiobutton-border-color:               var(--form-border);
+  --p-radiobutton-hover-border-color:         var(--form-border-hover);
+  --p-radiobutton-focus-border-color:         var(--form-border-focus);
+  --p-radiobutton-checked-background:         var(--acc-base);
+  --p-radiobutton-checked-border-color:       var(--form-border);
+  --p-radiobutton-checked-hover-background:   var(--acc-hover);
+  --p-radiobutton-checked-hover-border-color: var(--form-border-hover);
+  --p-radiobutton-checked-focus-background:   var(--acc-focus);
+  --p-radiobutton-checked-focus-border-color: var(--form-border-focus);
+  --p-radiobutton-checked-color:              var(--text);
+
+  white-space: pre-line;
 }
 
 p, li {
@@ -111,7 +147,7 @@ p, li {
 }
 
 h1 {
-  @apply font-serif text-txt text-3xl mb-24;
+  @apply font-serif text-txt text-3xl mb-16;
 }
 
 h2 {
@@ -132,27 +168,14 @@ label {
   background-image: var(--bg-gradient);
 }
 
-/* PrimeVue Button Overrides */
-button.p-button {
-  @apply bg-btn-primary-base text-btn-primary-text border-none;
-}
-button.p-button:not(:disabled):hover {
-  @apply bg-btn-primary-hover text-btn-primary-text border-none;
-}
-button.p-button:not(:disabled):active {
-  @apply bg-btn-primary-active text-btn-primary-text border-none;
+main {
+  @apply mx-16 md:mx-40 lg:mx-80 mt-8;
 }
 
-button.p-button.p-button-secondary {
-  @apply bg-btn-secondary-base text-btn-secondary-text border-none;
-}
-button.p-button.p-button-secondary:not(:disabled):hover {
-  @apply bg-btn-secondary-hover text-btn-secondary-text border-none;
-}
-button.p-button.p-button-secondary:not(:disabled):active {
-  @apply bg-btn-secondary-active text-btn-secondary-text border-none;
+Button {
+  @apply font-sans w-full md:w-auto;
 }
 
-.p-menubar-button:hover {
-  border: 1px solid var(--form-border-hover) !important;
+input, textarea {
+  @apply w-full md:w-2/3;
 }

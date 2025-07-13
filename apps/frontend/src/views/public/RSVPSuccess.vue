@@ -1,21 +1,33 @@
 <template>
-    <div class="rsvp-success max-w-md mx-auto p-6 text-center">
-      <h1 class="text-3xl font-bold mb-4">
+    <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto">
+      <h1 class="mb-16">
         {{ successTitle }}
       </h1>
-      <p class="mb-6">{{ successMessage }}</p>
-      <div v-if="guest" class="mt-6 text-left">
-        <p><strong>{{ t('rsvp.labelGuest') }}</strong> {{ guest.name }}</p>
-        <p><strong>{{ t('rsvp.labelDietary') }}</strong> {{ guest.dietary || t('rsvp.notAvailable') }}</p>
-        <p><strong>{{ t('rsvp.labelNotes') }}</strong> {{ guest.notes || t('rsvp.notAvailable') }}</p>
-        <br v-if="guest.plus_one_name" />
-        <p v-if="guest.plus_one_name"><strong>{{ t('rsvp.labelPlusOne') }}</strong> {{ guest.plus_one_name }}</p>
-        <p v-if="guest.plus_one_name"><strong>{{ t('rsvp.labelPlusOneDietary') }}</strong> {{ guest.plus_one_dietary || t('rsvp.notAvailable') }}</p>
-      </div>
-      <router-link :to="{ name: 'home', params: { lang: route.params.lang } }" class="text-blue-600 underline">
-        {{ t('rsvp.backHome') }}
-      </router-link>
-    </div>
+      <Card>
+        <template #content>
+          <p class="mt-0">{{ successMessage }}</p>
+          <div class="mb-16" v-if="guest">
+            <p class="m-0 my-4"><strong>{{ t('rsvp.labelGuest') }}:</strong> {{ guest.name }}</p>
+            <p class="m-0 my-4"><strong>{{ t('rsvp.labelDietary') }}:</strong> {{ guest.dietary || t('rsvp.notAvailable') }}</p>
+            <p class="m-0 my-4"><strong>{{ t('rsvp.labelNotes') }}:</strong> {{ guest.notes || t('rsvp.notAvailable') }}</p>
+            <br v-if="guest.plus_one_name" />
+            <p class="m-0 my-4" v-if="guest.plus_one_name"><strong>{{ t('rsvp.labelPlusOne') }}:</strong> {{ guest.plus_one_name }}</p>
+            <p class="m-0 my-4" v-if="guest.plus_one_name"><strong>{{ t('rsvp.labelPlusOneDietary') }}:</strong> {{ guest.plus_one_dietary || t('rsvp.notAvailable') }}</p>
+          </div>
+          
+          <Button
+          asChild
+          size="large"
+          v-slot="slotProps"
+          >
+          <router-link class="no-underline" :to="{ name: 'home', params: { lang: route.params.lang } }" :class="slotProps.class">
+            {{ t('rsvp.backHome') }}
+          </router-link>
+          </Button>
+        </template>
+      </Card>
+
+    </main>
   </template>
   
   <script setup>
@@ -63,5 +75,4 @@ onMounted(async () => {
   </script>
   
   <style scoped>
-  .rsvp-success { margin-top: 4rem; }
   </style>

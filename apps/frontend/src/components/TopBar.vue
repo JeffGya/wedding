@@ -1,6 +1,6 @@
 <template>
-  <div class="login-bar flex justify-between items-center px-16 md:px-24 xl:px-40">
-    <p class="text-base font-serif font-medium">
+  <div class="login-bar md:flex md:justify-between md:items-center p-16 pb-8 space-y-8 md:space-y-0 md:px-24 md:pb-16 xl:px-40">
+    <p class="text-base font-serif font-medium m-0">
       Welcome, {{ auth.user?.name || 'Admin' }}!
     </p>
     <Button

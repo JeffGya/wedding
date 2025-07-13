@@ -152,19 +152,6 @@ export default defineConfig({
           /* Text color */
           --text: #0F0F0F;
 
-          /* Button background tokens */
-          --btn--primary--base:    var(--int-base);
-          --btn--primary--hover:   var(--int-hover);
-          --btn--primary--active:  var(--int-active);
-
-          --btn--secondary--base:  var(--acc-base);
-          --btn--secondary--hover: var(--acc-hover);
-          --btn--secondary--active:var(--acc-active);
-
-          /* Button text color tokens */
-          --btn--primary--text:    var(--acc2-base);
-          --btn--secondary--text:  var(--int-base);
-
           /* Header/special text */
           --txt-header:            var(--btn--primary--base);
 
@@ -214,19 +201,6 @@ export default defineConfig({
           /* Text color */
           --text: var(--acc-base);
 
-          /* Button background tokens */
-          --btn--primary--base:    var(--int-base);
-          --btn--primary--hover:   var(--int-hover);
-          --btn--primary--active:  var(--int-active);
-
-          --btn--secondary--base:  var(--acc-base);
-          --btn--secondary--hover: var(--acc-hover);
-          --btn--secondary--active:var(--acc-active);
-
-          /* Button text color tokens */
-          --btn--primary--text:    var(--acc2-base);
-          --btn--secondary--text:  var(--int-base);
-
           /* Header/special text */
           --txt-header:   var(--btn--primary--base);
 
@@ -245,8 +219,6 @@ export default defineConfig({
           /* Card background */
           --card-bg: #442727;
         }
-
-
 
         /* Font Faces */
         @font-face {

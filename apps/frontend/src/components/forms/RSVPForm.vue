@@ -1,6 +1,6 @@
 <template>
   <Form
-    class="space-y-8"
+    class="space-y-16"
     :key="props.guest.code"
     :validation-schema="validationSchema"
     @submit="onSubmit"
@@ -13,67 +13,135 @@
     <Banner v-if="formError" :message="formError" type="error" />
 
     <div>
-      <label class="font-500">{{ t('rsvp.attendingLabel') }}</label>
-      <div class="flex items-center">
-        <RadioButton id="attending-yes" name="attending" :value="true" v-model="form.attending" />
-        <label for="attending-yes" class="ml-2">{{ t('rsvp.attendingYes') }}</label>
-        <RadioButton id="attending-no" name="attending" :value="false" v-model="form.attending" class="ml-4" />
-        <label for="attending-no" class="ml-2">{{ t('rsvp.attendingNo') }}</label>
+      <p
+        class="mb-4"
+        for="attending"
+      >
+        {{ t('rsvp.attendingLabel') }}
+    </p>
+      <div class="space-y-8 mt-4">
+        <div class="flex items-center gap-4">
+          <RadioButton 
+          v-model="form.attending" 
+          inputId="attending-yes" 
+          name="attending" 
+          :value="true"
+          />
+          <label for="attending-yes">{{ t('rsvp.attendingYes') }}</label>
+        </div>
+        <div class="flex items-center gap-4">
+          <RadioButton 
+            v-model="form.attending" 
+            inputId="attending-no" 
+            name="attending" 
+            :value="false" 
+            />
+          <label for="attending-no">{{ t('rsvp.attendingNo') }}</label>
+        </div>
       </div>
-      <Message v-if="errors.attending" severity="error" :closable="false" class="text-sm mt-4">
+      <Banner v-if="errors.attending" type="error" :closable="false" class="text-sm mt-4">
         {{ errors.attending }}
-      </Message>
+      </Banner>
     </div>
 
     <div>
-      <label class="font-medium">{{ t('rsvp.dietaryLabel') }}</label>
       <Field name="dietary">
-        <InputText v-model="form.dietary" class="w-full" />
+        <label
+          for="dietary"
+        >
+        {{ t('rsvp.dietaryLabel') }}
+      </label>
+          <InputText 
+            id="dietary" 
+            type="text"
+            class="mt-4"
+            v-model="form.dietary" 
+          />
       </Field>
-      <Message v-if="errors.dietary" severity="error" :closable="false" class="text-sm mt-4">
+      <Banner v-if="errors.dietary" type="error" :closable="false" class="text-sm mt-4">
         {{ errors.dietary }}
-      </Message>
+      </Banner>
     </div>
 
     <div>
-      <label class="font-500">{{ t('rsvp.notesLabel') }}</label>
       <Field name="notes">
-        <Textarea v-model="form.notes" class="w-full" />
+        <label 
+          for="notes" 
+        >
+          {{ t('rsvp.notesLabel') }}
+        </label>
+        <Textarea
+          id="notes" 
+          class="mt-4"
+          v-model="form.notes" 
+        />
       </Field>
-      <Message v-if="errors.notes" severity="error" :closable="false" class="text-sm mt-4">
+      <Banner v-if="errors.notes" type="error" :closable="false" class="text-sm mt-4">
         {{ errors.notes }}
-      </Message>
+      </Banner>
     </div>
 
-    <div v-if="props.guest.can_bring_plus_one" class="flex items-center">
-      <label class="font-500">{{ t('rsvp.plusOneLabel') }}</label>
-      <ToggleSwitch v-model="form.add_plus_one" class="mr-2" />
-      <span class="font-semibold">{{ form.add_plus_one ? t('rsvp.yes') : t('rsvp.no') }}</span>
+    <div 
+      v-if="props.guest.can_bring_plus_one"
+    >
+      <p class="mb-4">
+        {{ t('rsvp.plusOneLabel') }}
+      </p>
+        <div class="flex items-center mt-4 space-x-4">
+          <ToggleSwitch inputId="add-plus-one" v-model="form.add_plus_one" class="mr-2" />
+        <label 
+          for="add-plus-one"
+        >
+          {{ form.add_plus_one ? t('rsvp.yes') : t('rsvp.no') }}
+        </label>
+      </div>
     </div>
 
-    <div v-if="props.guest.can_bring_plus_one && form.add_plus_one">
-      <label class="font-500">{{ t('rsvp.plusOneNameLabel') }}</label>
-      <Field name="plus_one_name">
-        <InputText v-model="form.plus_one_name" class="w-full" />
-      </Field>
-      <Message v-if="errors.plus_one_name" severity="error" :closable="false" class="text-sm mt-4">
-        {{ errors.plus_one_name }}
-      </Message>
+    <div 
+      v-if="props.guest.can_bring_plus_one && form.add_plus_one"
+      class="plus-one p-16 rounded-sm space-y-16"
+      >
       <div class="mb-4">
-        <label class="font-medium">{{ t('rsvp.plusOneDietaryLabel') }}</label>
-        <Field name="plus_one_dietary">
-          <InputText v-model="form.plus_one_dietary" class="w-full" />
+        <Field name="plus_one_name">
+          <label 
+            for="plus_one_name"
+            class="font-500"
+          >
+            {{ t('rsvp.plusOneNameLabel') }}
+          </label>
+          <InputText
+            id="plus_one_name"
+            class="mt-4"
+            v-model="form.plus_one_name"
+          />
         </Field>
-        <Message v-if="errors.plus_one_dietary" severity="error" :closable="false" class="text-sm mt-4">
+      </div>
+      <Banner v-if="errors.plus_one_name" type="error" :closable="false" class="text-sm mt-4">
+        {{ errors.plus_one_name }}
+      </Banner>
+      <div class="mb-4">
+        <Field name="plus_one_dietary">
+          <label 
+            for="plus_one_dietary" 
+            class="font-500"
+          >
+            {{ t('rsvp.plusOneDietaryLabel') }}
+          </label>
+          <InputText 
+            id="plus_one_dietary" 
+            class="mt-4"
+            v-model="form.plus_one_dietary" 
+          />
+        </Field>
+        <Banner v-if="errors.plus_one_dietary" type="error" :closable="false" class="text-sm mt-4">
           {{ errors.plus_one_dietary }}
-        </Message>
+        </Banner>
       </div>
     </div>
 
       <Button
         type="submit"
         size="large"
-        class="px-4 py-2 w-full"
         :disabled="isDisabled"
       >
         {{ t('rsvp.submitButton') }}
@@ -83,7 +151,7 @@
 
 <script setup>
 import { computed, ref, reactive, watch } from 'vue';
-import { Form, Field, ErrorMessage } from 'vee-validate';
+import { Form, Field } from 'vee-validate';
 import Banner from '@/components/ui/Banner.vue';
 import CountdownTimer from '@/components/ui/CountdownTimer.vue';
 import { useI18n } from 'vue-i18n';
@@ -170,3 +238,10 @@ async function onSubmit(values) {
   }
 }
 </script>
+
+<style scoped>
+.plus-one {
+  background-image: var(--bg-glass);
+  border: 1px solid var(--bg-glass-border);
+}
+</style>

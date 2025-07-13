@@ -22,12 +22,14 @@
             <Form @submit="submitLookup" class="space-y-8">
               <FloatLabel variant="in">
                 <InputText
-                  class="w-full md:w-1/2"
+                  id="lookup-code"
                   v-model="code"
                   type="text"
                   required
                 />
-                <label for="in_label">{{ t('rsvp.lookupLabel') }}</label>
+                <label for="lookup-code">
+                  {{ t('rsvp.lookupLabel') }}
+                </label>
               </FloatLabel>
               <Button
                 type="submit"
