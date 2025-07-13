@@ -2,10 +2,6 @@
 
 @unocss;
 
-.hero {
-  
-}
-
 /* Increase specificity for ToggleSwitch styles */
 body  {
   /* PrimeVue Button Overrides */
@@ -138,8 +134,6 @@ body  {
   --p-radiobutton-checked-focus-background:   var(--acc-focus);
   --p-radiobutton-checked-focus-border-color: var(--form-border-focus);
   --p-radiobutton-checked-color:              var(--text);
-
-  white-space: pre-line;
 }
 
 p, li {

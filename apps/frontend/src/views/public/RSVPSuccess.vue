@@ -7,12 +7,12 @@
         <template #content>
           <p class="mt-0">{{ successMessage }}</p>
           <div class="mb-16" v-if="guest">
-            <p class="m-0 my-4"><strong>{{ t('rsvp.labelGuest') }}:</strong> {{ guest.name }}</p>
-            <p class="m-0 my-4"><strong>{{ t('rsvp.labelDietary') }}:</strong> {{ guest.dietary || t('rsvp.notAvailable') }}</p>
-            <p class="m-0 my-4"><strong>{{ t('rsvp.labelNotes') }}:</strong> {{ guest.notes || t('rsvp.notAvailable') }}</p>
+            <p class="m-0 my-4"><span class="font-600">{{ t('rsvp.labelGuest') }}:</span> {{ guest.name }}</p>
+            <p class="m-0 my-4"><span class="font-bold">{{ t('rsvp.labelDietary') }}:</span> {{ guest.dietary || t('rsvp.notAvailable') }}</p>
+            <p class="m-0 my-4"><span class="font-medium">{{ t('rsvp.labelNotes') }}:</span> {{ guest.notes || t('rsvp.notAvailable') }}</p>
             <br v-if="guest.plus_one_name" />
-            <p class="m-0 my-4" v-if="guest.plus_one_name"><strong>{{ t('rsvp.labelPlusOne') }}:</strong> {{ guest.plus_one_name }}</p>
-            <p class="m-0 my-4" v-if="guest.plus_one_name"><strong>{{ t('rsvp.labelPlusOneDietary') }}:</strong> {{ guest.plus_one_dietary || t('rsvp.notAvailable') }}</p>
+            <p class="m-0 my-4" v-if="guest.plus_one_name"><span class="font-medium">{{ t('rsvp.labelPlusOne') }}:</span> {{ guest.plus_one_name }}</p>
+            <p class="m-0 my-4" v-if="guest.plus_one_name"><span class="font-medium">{{ t('rsvp.labelPlusOneDietary') }}:</span> {{ guest.plus_one_dietary || t('rsvp.notAvailable') }}</p>
           </div>
           
           <Button
@@ -75,4 +75,7 @@ onMounted(async () => {
   </script>
   
   <style scoped>
+  main {
+    white-space: pre-line;
+  }
   </style>
