@@ -3,7 +3,7 @@
     v-model="content"
     :modules="modules"
     :formats="formats"
-    editorStyle="height: 150px"
+    editorStyle="height: 400px"
     ref="editorRef"
   >
     <template #toolbar>
@@ -37,12 +37,25 @@
       </span>
       <span class="ql-formats">
         <button class="ql-link"></button>
+        <button
+          type="button"
+          class="ql-insertImage"
+          @mousedown.prevent
+          @click="openImagePicker"
+        >
+          <i class="pi pi-image"></i>
+        </button>
       </span>
       <span class="ql-formats">
-        <button type="button" @click="toggleHtml">HTML</button>
+        <button type="button" @mousedown.prevent @click="toggleHtml">HTML</button>
       </span>
     </template>
   </Editor>
+  <ImagePicker
+    :visible="pickerVisible"
+    @update:visible="pickerVisible = $event"
+    @select="insertImage"
+  />
   <div v-if="showHtml" class="mt-2">
     <textarea v-model="content" rows="10" class="w-full border rounded p-2"></textarea>
   </div>
@@ -52,6 +65,7 @@
 import { computed, ref } from 'vue';
 import Editor from 'primevue/editor';
 import Quill from 'quill';
+import ImagePicker from '@/components/ui/ImagePicker.vue';
 const Font = Quill.import('formats/font');
 Font.whitelist = ['serif','sans','cursive','monospace'];
 Quill.register(Font, true);
@@ -73,13 +87,42 @@ const modules = {
   }
 };
 
-const formats = [ 'font', 'size', 'header', 'bold', 'italic', 'underline', 'list', 'bullet', 'link' ];
+const formats = [ 'font', 'size', 'header', 'bold', 'italic', 'underline', 'list', 'link', 'image' ];
 
 const editorRef = ref(null);
 const showHtml = ref(false);
 const toggleHtml = () => {
   showHtml.value = !showHtml.value;
 };
+
+const pickerVisible = ref(false);
+
+function openImagePicker() {
+  pickerVisible.value = true;
+}
+
+function insertImage(url) {
+  const quill = editorRef.value.quill;
+  const range = quill.getSelection(true);
+  quill.focus();
+  // Prompt for image size
+  const choice = window.prompt(
+    'Select image size: small, medium, large',
+    'medium'
+  );
+  const sizeMap = { small: 150, medium: 300, large: 600 };
+  const width = sizeMap[choice] || sizeMap.medium;
+  // Insert image embed
+  quill.insertEmbed(range.index, 'image', url, 'user');
+  // Apply inline styles to the inserted image
+  const [leaf] = quill.getLeaf(range.index);
+  if (leaf?.domNode instanceof HTMLImageElement) {
+    leaf.domNode.style.width = `${width}px`;
+    leaf.domNode.style.maxWidth = '100%';
+    leaf.domNode.style.height = 'auto';
+  }
+  pickerVisible.value = false;
+}
 </script>
 
 <style scoped>

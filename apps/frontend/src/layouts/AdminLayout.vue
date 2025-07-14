@@ -40,6 +40,11 @@ const menuItems = [
     command: () => router.push('/admin/pages')
   },
   {
+    label: 'Media',
+    icon: 'i-solar:gallery-minimalistic-bold-duotone',
+    command: () => router.push('/admin/media')
+  },
+  {
     label: 'Guests',
     items: [
       {

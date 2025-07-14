@@ -74,6 +74,7 @@ const routes = [
     children: [
       { path: 'overview', name: 'admin-overview', component: () => import('@/views/admin/Overview.vue') },
       { path: 'pages', name: 'admin-pages', component: () => import('@/views/admin/Pages.vue') },
+      { path: 'media', name: 'admin-media', component: () => import('@/views/admin/media/MediaManager.vue') },
       {
         path: 'settings',
         component: () => import('@/views/admin/Settings.vue'),
