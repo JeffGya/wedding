@@ -107,7 +107,9 @@ router.use((req, res, next) => {
  */
 // Create a new draft message
 router.post('/', async (req, res) => {
+  console.log('🧰 [messages.js] POST /messages hit with body:', req.body);
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
+  console.log('🧰 [messages.js] Extracted fields:', { subject, body_en, body_lt, status, scheduledAt, recipients });
   // Validate required fields
   if (!subject || !body_en || !body_lt || !status) {
     return res.status(400).json({ success: false, error: 'Subject, body_en, body_lt, and status are required.' });
@@ -115,6 +117,7 @@ router.post('/', async (req, res) => {
   // Special validation for scheduled messages
   let scheduledForFinal = null;
   if (status === 'scheduled') {
+    console.log('🧰 [messages.js] Status is scheduled; scheduledAt:', scheduledAt);
     if (!scheduledAt) {
       return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages.' });
     }
@@ -126,19 +129,26 @@ router.post('/', async (req, res) => {
     if (dt < DateTime.utc()) {
       return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
     }
-    scheduledForFinal = dt.toUTC().toISO();
+    // Format scheduledForFinal for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
+    scheduledForFinal = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
+    console.log('🧰 [messages.js] Formatted scheduledForFinal for MySQL:', scheduledForFinal);
   }
   try {
+    console.log('🧰 [messages.js] Inserting message with params:', [subject, body_en, body_lt, status, scheduledForFinal]);
     const insertResult = await dbRun(
       `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`,
       [subject, body_en, body_lt, status, scheduledForFinal]
     );
     const messageId = insertResult.insertId || insertResult.lastID;
+    console.log('🧰 [messages.js] Inserted messageId:', messageId);
     if (recipients && recipients.length) {
+      console.log('🧰 [messages.js] Recipients provided:', recipients);
       const guestSql = `SELECT id, email, preferred_language FROM guests WHERE id IN (${recipients.map(() => '?').join(',')})`;
       const guests = await dbAll(guestSql, recipients);
+      console.log('🧰 [messages.js] Guests fetched for recipients:', guests);
       const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, email, language, delivery_status) VALUES (?, ?, ?, ?, 'pending')`;
       for (const guest of guests) {
+        console.log('🧰 [messages.js] Inserting recipient for guest:', guest);
         try {
           await dbRun(insertRecipientSql, [messageId, guest.id, guest.email, guest.preferred_language || 'en']);
         } catch (e) {
@@ -148,6 +158,8 @@ router.post('/', async (req, res) => {
     }
     res.json({ success: true, messageId });
   } catch (err) {
+    console.error('❌ [messages.js] Error creating message:', err);
+    console.error(err.stack);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -179,23 +191,40 @@ router.post('/', async (req, res) => {
 // Get all messages
 router.get('/', async (req, res) => {
   try {
-    let rows = await dbAll(`SELECT * FROM messages ORDER BY created_at DESC`, []);
-    rows = rows.map(row => {
-      // Convert scheduled_for to local ISO string
+    // Explicitly select scheduled_for so it's included
+    const rows = await dbAll(
+      `SELECT id, subject, status, scheduled_for, created_at, updated_at
+       FROM messages
+       ORDER BY created_at DESC`,
+      []
+    );
+    // Normalize dates to ISO strings for frontend, handling both Date and string forms
+    const messages = rows.map(row => {
       if (row.scheduled_for) {
-        const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
-        row.scheduled_for = local.toISO({ suppressMilliseconds: true });
+        let scheduledDate;
+        if (row.scheduled_for instanceof Date) {
+          scheduledDate = row.scheduled_for;
+        } else {
+          // Convert "YYYY-MM-DD HH:mm:ss" to ISO with Z
+          scheduledDate = new Date(row.scheduled_for.replace(' ', 'T') + 'Z');
+        }
+        row.scheduled_for = scheduledDate.toISOString();
       }
-      // Convert created_at and updated_at to ISO strings
-      if (row.created_at) {
+      // created_at
+      if (row.created_at instanceof Date) {
+        row.created_at = row.created_at.toISOString();
+      } else {
         row.created_at = new Date(row.created_at).toISOString();
       }
-      if (row.updated_at) {
+      // updated_at
+      if (row.updated_at instanceof Date) {
+        row.updated_at = row.updated_at.toISOString();
+      } else {
         row.updated_at = new Date(row.updated_at).toISOString();
       }
       return row;
     });
-    res.json({ success: true, messages: rows });
+    res.json({ success: true, messages });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
@@ -508,7 +537,8 @@ router.put('/:id', async (req, res) => {
       if (dt < DateTime.utc()) {
         return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
       }
-      scheduled_for = dt.toUTC().toISO();
+      // Format scheduled_for for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
+      scheduled_for = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
     }
     await dbRun(
       `UPDATE messages 
@@ -719,7 +749,9 @@ router.post('/:id/send', async (req, res, next) => {
               data: response.data,
             });
             const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status) VALUES (?, ?, 'sent', ?, 'sent')`;
-            const sentAt = new Date().toISOString();
+            // Format timestamp for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
+            const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
+            console.log('🧰 [messages.js] Formatted sentAt for MySQL:', sentAt);
             await dbRun(logSql, [messageId, guest.id, sentAt]);
             results.push({ guest_id: guest.id, status: 'sent' });
             break;
@@ -809,9 +841,10 @@ router.post('/:id/schedule', async (req, res) => {
     return res.status(400).json({ success: false, error: 'scheduled_for must be in the future' });
   }
   try {
-    const scheduledUtc = dt.toUTC().toISO();
-    await dbRun(`UPDATE messages SET scheduled_for = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [scheduledUtc, messageId]);
-    res.json({ success: true, scheduled_for: scheduledUtc });
+    // Format scheduled_for for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
+    const formattedScheduled = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
+    await dbRun(`UPDATE messages SET scheduled_for = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [formattedScheduled, messageId]);
+    res.json({ success: true, scheduled_for: formattedScheduled });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
@@ -1031,7 +1064,9 @@ router.post('/:id/resend', async (req, res, next) => {
               status: response.status,
               data: response.data,
             });
-            const sentAt = new Date().toISOString();
+            // Format sentAt for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
+            const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
+            console.log('🧰 [messages.js] Resend formatted sentAt:', sentAt);
             const logSql = `UPDATE message_recipients SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL WHERE message_id = ? AND guest_id = ?`;
             await dbRun(logSql, [sentAt, messageId, guest.id]);
             results.push({ guest_id: guest.id, status: 'sent' });

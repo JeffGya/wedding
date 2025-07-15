@@ -1,11 +1,12 @@
 // apps/backend/knexfile.js
 require('dotenv').config();
+const path = require('path');
 
 const isMysql = process.env.DB_TYPE === 'mysql';
 
 const baseConfig = {
   migrations: {
-    directory: './migrations'
+    directory: path.join(__dirname, 'migrations')
   }
 };
 

@@ -46,7 +46,7 @@
             <div>
               <p class="text-sm">
                 {{ item.msg.status === 'scheduled'
-                    ? `Scheduled for: ${formatDate(item.msg.scheduled_for)}`
+                    ? `Scheduled for: ${formatDate(item.scheduled)}`
                     : item.msg.status === 'sent'
                       ? 'Sent'
                       : `Updated: ${formatDate(item.msg.updated_at)}` }}
@@ -97,7 +97,7 @@ const events = computed(() =>
       id: msg.id,
       created: msg.created_at,
       updated: msg.updated_at,
-      scheduled: msg.scheduled_for,
+      scheduled: msg.status === 'scheduled' ? msg.scheduled_for : null,
       msg
     }))
     .sort((a, b) => new Date(b.created) - new Date(a.created))
@@ -107,15 +107,22 @@ const goToDetail = (id, edit = false) => {
   router.push(edit ? `/admin/guests/messages/${id}/edit` : `/admin/guests/messages/${id}`);
 }
 
-const formatDate = (dateString) => {
-  if (!dateString) return '';
-  // If no timezone offset or Z in string, assume UTC
-  let iso = dateString;
-  if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(dateString)) {
+const formatDate = (dateValue) => {
+  if (!dateValue) return '';
+  let dateObj;
+  if (typeof dateValue === 'string') {
+    let iso = dateValue;
     // Normalize "YYYY-MM-DD HH:mm:ss" to "YYYY-MM-DDTHH:mm:ssZ"
-    iso = dateString.replace(' ', 'T') + 'Z';
+    if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
+      iso = iso.replace(' ', 'T') + 'Z';
+    }
+    dateObj = new Date(iso);
+  } else if (dateValue instanceof Date) {
+    dateObj = dateValue;
+  } else {
+    // Fallback for other types (e.g., timestamps)
+    dateObj = new Date(dateValue);
   }
-  const date = new Date(iso);
   return new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: '2-digit',
@@ -124,7 +131,7 @@ const formatDate = (dateString) => {
     minute: '2-digit',
     hour12: false,
     timeZone: 'Europe/Amsterdam'
-  }).format(date);
+  }).format(dateObj);
 }
 
 const fetchMessages = async () => {

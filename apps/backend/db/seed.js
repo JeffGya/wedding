@@ -2,6 +2,10 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 
+// Load environment variables from the backend .env file
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+console.log('🧰 [seed.js] Using DB_TYPE:', process.env.DB_TYPE);
+
 // Add support for MySQL
 let db, execSql, runQuery, closeDb;
 
@@ -55,10 +59,15 @@ let db, execSql, runQuery, closeDb;
   try {
     await execSql(initSql);
     console.log('✅ Schema applied successfully.');
-    await seedDatabase();
   } catch (err) {
-    console.error('Failed to apply schema:', err.message);
+    if (err.message.includes('already exists')) {
+      console.warn('⚠️ [seed.js] Schema already exists, continuing to seeding.');
+    } else {
+      console.error('Failed to apply schema:', err.message);
+      process.exit(1);
+    }
   }
+  await seedDatabase();
 })();
 
 
