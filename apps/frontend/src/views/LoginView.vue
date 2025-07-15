@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
-    <h1 class="text-3xl font-semibold mb-6">Admin Login</h1>
+  <main class="max-w-md mx-auto mt-16 p-8">
+    <h1>Admin Login</h1>
     <LoginForm />
-  </div>
+  </main>
 </template>
 
 <script setup>
