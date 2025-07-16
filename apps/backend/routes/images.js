@@ -31,6 +31,13 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+
+/**
+ * Sanitize filenames by replacing unsafe characters with underscores
+ * Keeps letters, numbers, dots, hyphens, and underscores.
+ */
+const sanitizeFilename = name => name.replace(/[^a-z0-9._-]/gi, '_');
+
 const router = express.Router();
 
 const getDbConnection = require('../db/connection');
@@ -76,8 +83,10 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+    const ext = path.extname(file.originalname);
+    const base = path.basename(file.originalname, ext);
+    const safeName = sanitizeFilename(base);
+    cb(null, `${safeName}${ext}`);
   }
 });
 
@@ -139,16 +148,25 @@ const upload = multer({
 // POST /api/admin/images → upload new image
 router.post('/', upload.single('image'), async (req, res, next) => {
   try {
-    const { filename, path: filePath } = req.file;
+    const { filename } = req.file;
     const alt_text = req.body.alt_text || null;
     const url = `${req.protocol}://${req.get('host')}/uploads/${filename}`;
 
+    // Insert into database
     const result = await dbRun(
       'INSERT INTO images (filename, url, alt_text) VALUES (?, ?, ?)',
       [filename, url, alt_text]
     );
-    const id = result.lastID;
-    res.status(201).json({ id, filename, url, alt_text });
+    const id = result.insertId || result.lastID;
+
+    // Retrieve the complete record
+    const image = await dbGet(
+      'SELECT id, filename, url, alt_text, created_at, updated_at FROM images WHERE id = ?',
+      [id]
+    );
+
+    // Respond with full image metadata
+    return res.status(201).json(image);
   } catch (err) {
     next(err);
   }

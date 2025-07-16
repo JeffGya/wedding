@@ -16,7 +16,7 @@ useHead({
     </header>
     <router-view :key="$route.fullPath" />
     <footer>
-      <!-- footer content -->
+     Test
     </footer>
 </template>
 

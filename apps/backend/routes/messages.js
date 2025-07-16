@@ -107,6 +107,8 @@ router.use((req, res, next) => {
  */
 // Create a new draft message
 router.post('/', async (req, res) => {
+  console.log('🧰 [messages.js] POST /api/messages hit with headers:', req.headers);
+  console.log('🧰 [messages.js] POST /api/messages hit with body:', req.body);
   console.log('🧰 [messages.js] POST /messages hit with body:', req.body);
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
   console.log('🧰 [messages.js] Extracted fields:', { subject, body_en, body_lt, status, scheduledAt, recipients });

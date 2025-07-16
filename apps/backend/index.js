@@ -1,3 +1,27 @@
+const fs = require('fs');
+const path = require('path');
+
+// Ensure logs directory exists
+const logDir = path.join(__dirname, 'logs');
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
+}
+
+// Simple file logger that appends timestamped messages
+const logFile = path.join(logDir, 'server.log');
+function fileLog(...args) {
+  const line = `[${new Date().toISOString()}] ` +
+    args.map(a => typeof a === 'string' ? a : JSON.stringify(a)).join(' ') +
+    '\n';
+  fs.appendFile(logFile, line, err => {
+    if (err) process.stderr.write('Log write failed: ' + err + '\n');
+  });
+}
+
+// Override console methods to also write to file
+console.log = fileLog;
+console.error = fileLog;
+
 // Backend entry point for wedding website
 // Load environment vars from .env, .env-staging, or .env-production based on NODE_ENV
 const envFile = process.env.NODE_ENV ? `.env-${process.env.NODE_ENV}` : '.env';
@@ -6,7 +30,6 @@ require('dotenv').config({ path: envFile });
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const path = require('path');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const startScheduler = require('./jobs/scheduler');
@@ -50,6 +73,11 @@ app.use(cors({
 // Serve uploaded images
 app.use(
   '/uploads',
+  express.static(path.join(__dirname, 'uploads'))
+);
+// Serve uploaded images via API path for staging proxies
+app.use(
+  '/api/uploads',
   express.static(path.join(__dirname, 'uploads'))
 );
 

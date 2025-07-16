@@ -7,6 +7,7 @@ import EmailSettings from '@/views/admin/settings/EmailSettings.vue';
 import GuestSettings from '@/views/admin/settings/GuestSettings.vue';
 import { useLangStore } from '@/store/lang';
 import i18n from '@/i18n';
+import NotFound from '@/views/NotFound.vue';
 
 const routes = [
   // Default route redirects to the English homepage
@@ -63,6 +64,12 @@ const routes = [
         next();
       }
     },
+    // Catch-all for undefined public routes under language prefix
+    {
+      path: ':pathMatch(.*)*',
+      name: 'public-not-found',
+      component: NotFound
+    }
   ]
 },
 
@@ -128,6 +135,12 @@ const routes = [
         ]
       }
     ]
+  },
+  // Catch-all for undefined routes
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
   }
 ];
 
