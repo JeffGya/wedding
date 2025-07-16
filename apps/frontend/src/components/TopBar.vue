@@ -3,6 +3,22 @@
     <p class="text-base font-serif font-medium m-0">
       Welcome, {{ auth.user?.name || 'Admin' }}!
     </p>
+    <ButtonGroup class="w-full md:w-auto">
+      <Button
+        @click="$router.push('/admin/overview')"
+        label="Admin Overview"
+        severity="contrast"
+        variant="outlined"
+        size="small"
+      />
+      <Button
+        @click="$router.push('/')"
+        label="Public Site"
+        severity="contrast"
+        variant="outlined"
+        size="small"
+      />
+    </ButtonGroup>
     <Button
       icon="i-solar:logout-3-bold-duotone"
       @click="auth.logout"

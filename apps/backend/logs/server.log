@@ -1,0 +1,8 @@
+[2025-07-16T21:57:38.958Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-16T21:57:38.961Z] Server is running on port 5001
+[2025-07-16T21:57:39.013Z] ✅ Connected to MySQL database.
+[2025-07-16T21:58:31.869Z] Login request received: {"email":"jeffrey@example.com","password":"password123"}
+[2025-07-16T22:00:00.127Z] ℹ️ [INFO] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-07-16T22:00:00.127Z] ℹ️ [INFO] 📨 Starting scheduled message check...
+[2025-07-16T22:00:00.152Z] ℹ️ [INFO] ✅ Scheduled message check completed.
+[2025-07-16T22:00:00.152Z] ℹ️ [INFO] ✅ No scheduled messages ready to send.
