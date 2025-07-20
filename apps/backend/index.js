@@ -134,8 +134,12 @@ app.use('/api/messages', messageRoutes); // All message-related routes including
 
 const templateRoutes = require('./routes/templates');
 const messageStatsRoutes = require('./routes/messageStats');
+const pagesRoutes = require('./routes/adminPages');
+const publicPagesRoutes = require('./routes/publicPages');
 app.use('/api/templates', templateRoutes);
 app.use('/api/message-stats', messageStatsRoutes); // Adds message delivery stats route
+app.use('/api/admin/pages', pagesRoutes);
+app.use('/api/pages', publicPagesRoutes);
 
 // Start the background scheduler
 startScheduler();

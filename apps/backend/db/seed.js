@@ -264,5 +264,34 @@ async function seedDatabase() {
   await runQuery(recSql, [messageId, 3, 'pending', 'alice@example.com', 'lt']);
   console.log('Recipients seeded successfully.');
 
+  // Insert example page and translations
+  const pageInsertSql = process.env.DB_TYPE === 'mysql'
+    ? 'INSERT INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)'
+    : 'INSERT INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)';
+  const pageResult = await runQuery(pageInsertSql, ['our-story', 1, 0, 1, 1]);
+  const pageId = pageResult.insertId || pageResult.lastID;
+
+  const contentEn = JSON.stringify([
+    { type: 'richText', content: '<p>We met in 2015, and the rest is history...</p>' },
+    { type: 'image', url: '/uploads/story.jpg', alt: 'Us smiling' },
+    { type: 'divider' },
+    { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
+  ]);
+
+  const contentLt = JSON.stringify([
+    { type: 'richText', content: '<p>Susipažinome 2015 metais, o visa kita – istorija...</p>' },
+    { type: 'image', url: '/uploads/story.jpg', alt: 'Mes šypsomės' },
+    { type: 'divider' },
+    { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
+  ]);
+
+  const transInsertSql = process.env.DB_TYPE === 'mysql'
+    ? 'INSERT INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)'
+    : 'INSERT INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)';
+  await runQuery(transInsertSql, [pageId, 'en', 'Our Story', contentEn]);
+  await runQuery(transInsertSql, [pageId, 'lt', 'Mūsų istorija', contentLt]);
+
+  console.log('Example page and translations seeded successfully.');
+
   await closeDb();
 }

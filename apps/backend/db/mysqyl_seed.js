@@ -87,6 +87,45 @@ const mysql = require('mysql2/promise');
     console.log(`– seeded template ${t.name}`);
   }
 
+  // Seed example page and translations
+  const [pageResult] = await connection.execute(
+    `INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order)
+     VALUES (?, ?, ?, ?, ?)`,
+    ['our-story', 1, 0, 1, 1]
+  );
+  const [pageRow] = await connection.execute(`SELECT id FROM pages WHERE slug = ?`, ['our-story']);
+  const pageId = pageRow[0].id;
+
+  const contentEn = JSON.stringify([
+    { type: 'richText', content: '<p>We met in 2015, and the rest is history…</p>' },
+    { type: 'image', url: '/uploads/story.jpg', alt: 'Us smiling' },
+    { type: 'divider' },
+    { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
+  ]);
+
+  const contentLt = JSON.stringify([
+    { type: 'richText', content: '<p>Susipažinome 2015 metais, o visa kita – istorija…</p>' },
+    { type: 'image', url: '/uploads/story.jpg', alt: 'Mes šypsomės' },
+    { type: 'divider' },
+    { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
+  ]);
+
+  await connection.execute(
+    `INSERT INTO page_translations (page_id, locale, title, content)
+     VALUES (?, ?, ?, ?)
+     ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content)`,
+    [pageId, 'en', 'Our Story', contentEn]
+  );
+
+  await connection.execute(
+    `INSERT INTO page_translations (page_id, locale, title, content)
+     VALUES (?, ?, ?, ?)
+     ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content)`,
+    [pageId, 'lt', 'Mūsų istorija', contentLt]
+  );
+
+  console.log('– seeded example page and translations');
+
   await connection.end();
   console.log('✅ MySQL: users seeded.');
   process.exit(0);
