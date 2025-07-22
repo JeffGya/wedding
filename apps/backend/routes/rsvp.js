@@ -322,6 +322,15 @@ router.post('/', async (req, res) => {
       );
     }
 
+    res.cookie('rsvp_session', JSON.stringify({
+      guestId: row.id,
+      code: row.code
+    }), {
+      httpOnly: true,
+      sameSite: 'lax',
+      signed: true,
+      maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
+    });
     res.json({ success: true });
     await sendConfirmationEmail(db, row);
   } catch (err) {

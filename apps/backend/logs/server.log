@@ -1,12 +1,3 @@
-[2025-07-20T20:58:10.072Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-20T20:58:10.075Z] Server is running on port 5001
-[2025-07-20T20:58:10.088Z] ✅ Connected to MySQL database.
-[2025-07-20T20:58:53.032Z] [POST /api/pages] Request body: {"slug":"test-page","is_published":true,"requires_rsvp":false,"show_in_nav":true,"nav_order":1,"translations":[{"locale":"en","title":"Test Page EN","content":[{"type":"rich-text","html":"<p>Hello in English</p>"}]},{"locale":"lt","title":"Test Page LT","content":[{"type":"rich-text","html":"<p>Sveiki lietuviškai</p>"}]}]}
-[2025-07-20T20:58:53.038Z] [POST /api/pages] Error creating page: A page with slug "test-page" already exists. Error: A page with slug "test-page" already exists.
-    at Object.create (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/db/models/pages.js:42:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/adminPages.js:48:21
-[2025-07-20T21:00:00.210Z] ℹ️ [INFO] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-07-20T21:00:00.211Z] ℹ️ [INFO] 📨 Starting scheduled message check...
-[2025-07-20T21:00:00.218Z] ℹ️ [INFO] ✅ No scheduled messages ready to send.
-[2025-07-20T21:00:00.218Z] ℹ️ [INFO] ✅ Scheduled message check completed.
+[2025-07-22T20:45:15.339Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-22T20:45:15.347Z] Server is running on port 5001
+[2025-07-22T20:45:15.398Z] ✅ Connected to MySQL database.

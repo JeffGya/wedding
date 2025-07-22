@@ -50,6 +50,12 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to parse signed cookies using session secret
 app.use(cookieParser(process.env.SESSION_SECRET));
 
+// Add RSVP session cookie parser with a separate secret
+const cookieParserRSVP = cookieParser(process.env.RSVP_SESSION_SECRET);
+app.use((req, res, next) => {
+  cookieParserRSVP(req, res, next);
+});
+
 // Dynamic CORS based on CORS_ORIGINS env var
 app.use(cors({
   origin: (origin, callback) => {
@@ -136,10 +142,11 @@ const templateRoutes = require('./routes/templates');
 const messageStatsRoutes = require('./routes/messageStats');
 const pagesRoutes = require('./routes/adminPages');
 const publicPagesRoutes = require('./routes/publicPages');
+const { parseGuestSession } = require('./middleware/guestSession');
 app.use('/api/templates', templateRoutes);
 app.use('/api/message-stats', messageStatsRoutes); // Adds message delivery stats route
 app.use('/api/admin/pages', pagesRoutes);
-app.use('/api/pages', publicPagesRoutes);
+app.use('/api/pages', parseGuestSession, publicPagesRoutes);
 
 // Start the background scheduler
 startScheduler();
