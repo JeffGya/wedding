@@ -8,7 +8,8 @@ const PageTranslation = require('../db/models/pageTranslation');
 router.get('/', async (req, res) => {
   try {
     console.log('[GET /api/pages] Fetching all pages...');
-    const pages = await Page.getAll();
+    const includeDeleted = req.query.includeDeleted === 'true';
+    const pages = await Page.getAll({ includeDeleted });
     console.log('[GET /api/pages] Pages fetched:', pages);
     res.json(pages);
   } catch (err) {
@@ -22,8 +23,8 @@ router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[GET /api/pages/${id}] Fetching page and translations...`);
-    const page = await Page.getById(id);
-    const translations = await PageTranslation.getAllByPageId(id);
+    const page = await Page.getById(id, { includeDeleted: true });
+    const translations = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
     res.json({ ...page, translations });
   } catch (err) {
     console.error(`[GET /api/pages/${req.params.id}] Error:`, err.message, err.stack);
@@ -55,26 +56,32 @@ router.post('/', async (req, res) => {
 
     console.log('[POST /api/pages] Created page:', newPage);
 
+    const createdTranslations = [];
     for (const translation of translations) {
-      const { locale, title, content } = translation;
+      const { locale, title, content } = translation || {};
       console.log('[POST /api/pages] Processing translation:', translation);
 
-      if (!locale || !title || typeof content === 'undefined') {
+      if (!locale || typeof content === 'undefined') {
         console.warn('[POST /api/pages] Skipping invalid translation:', translation);
         continue;
       }
 
-      await PageTranslation.create({
-        page_id: newPage.id,
-        locale,
-        title,
-        content: Array.isArray(content) ? content : [],
-      });
-
-      console.log(`[POST /api/pages] Translation saved for locale: ${locale}`);
+      try {
+        const created = await PageTranslation.create({
+          page_id: newPage.id,
+          locale,
+          title: title || '',
+          content: Array.isArray(content) ? content : content || [],
+        });
+        createdTranslations.push(created);
+        console.log(`[POST /api/pages] Translation saved for locale: ${locale}`);
+      } catch (e) {
+        console.error('[POST /api/pages] Failed to save translation:', e.message);
+        // decide whether to fail whole request or continue; for now continue
+      }
     }
 
-    res.status(201).json(newPage);
+    res.status(201).json({ ...newPage, translations: createdTranslations });
   } catch (err) {
     console.error('[POST /api/pages] Error creating page:', err.message, err.stack);
     if (err.message.includes('UNIQUE constraint failed') || err.message.includes('duplicate key')) {
@@ -100,7 +107,7 @@ router.put('/:id', async (req, res) => {
     console.log(`[PUT /api/pages/${id}] Updating page...`, req.body);
 
     // Check if page exists
-    const page = await Page.getById(id);
+    const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
       console.warn(`[PUT /api/pages/${id}] Page not found.`);
       return res.status(404).json({ error: 'Page not found' });
@@ -117,34 +124,39 @@ router.put('/:id', async (req, res) => {
 
     // Update or insert translations
     for (const translation of translations) {
-      const { locale, title, content } = translation;
+      const { locale, title, content } = translation || {};
       console.log(`[PUT /api/pages/${id}] Processing translation for ${locale}...`, translation);
 
-      if (!locale || !title || typeof content === 'undefined') {
+      if (!locale || typeof content === 'undefined') {
         console.warn(`[PUT /api/pages/${id}] Skipping invalid translation:`, translation);
         continue;
       }
 
-      // Check if translation exists for this page and locale
-      const existing = await PageTranslation.getByPageIdAndLocale(id, locale);
-      if (existing) {
-        await PageTranslation.update(existing.id, {
-          title,
-          content: Array.isArray(content) ? content : [],
-        });
-        console.log(`[PUT /api/pages/${id}] Updated translation for locale: ${locale}`);
-      } else {
-        await PageTranslation.create({
-          page_id: id,
-          locale,
-          title,
-          content: Array.isArray(content) ? content : [],
-        });
-        console.log(`[PUT /api/pages/${id}] Created translation for locale: ${locale}`);
+      try {
+        const existing = await PageTranslation.getByPageIdAndLocale(id, locale);
+        if (existing) {
+          await PageTranslation.update(existing.id, {
+            title: title || '',
+            content: Array.isArray(content) ? content : content || [],
+          });
+          console.log(`[PUT /api/pages/${id}] Updated translation for locale: ${locale}`);
+        } else {
+          await PageTranslation.create({
+            page_id: id,
+            locale,
+            title: title || '',
+            content: Array.isArray(content) ? content : content || [],
+          });
+          console.log(`[PUT /api/pages/${id}] Created translation for locale: ${locale}`);
+        }
+      } catch (e) {
+        console.error(`[PUT /api/pages/${id}] Translation error (${locale}):`, e.message);
       }
     }
 
-    res.json({ message: 'Page and translations updated' });
+    const updatedTranslations = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
+    const updatedPage = await Page.getById(id, { includeDeleted: true });
+    res.json({ ...updatedPage, translations: updatedTranslations });
   } catch (err) {
     console.error(`[PUT /api/pages/${req.params.id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to update page: ${err.message}` });
@@ -156,9 +168,13 @@ router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[DELETE /api/pages/${id}] Deleting page and translations...`);
-    await PageTranslation.deleteAllByPageId(id);
-    await Page.remove(id);
-    res.status(204).end();
+    // Soft delete translations then page
+    const trs = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
+    for (const tr of trs) {
+      await PageTranslation.softDelete(tr.id);
+    }
+    await Page.softDelete(id);
+    res.status(200).json({ success: true });
   } catch (err) {
     console.error(`[DELETE /api/pages/${req.params.id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to delete page: ${err.message}` });

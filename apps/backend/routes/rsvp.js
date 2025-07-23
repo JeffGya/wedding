@@ -1,3 +1,5 @@
+'use strict';
+
 function formatDate(dateString) {
   const options = {
     year: 'numeric',
@@ -11,7 +13,28 @@ function formatDate(dateString) {
 }
 
 const express = require('express');
+const { setGuestSession } = require('../middleware/guestSession');
 const router = express.Router();
+// Simple in-memory rate limiter (IP-based) for lookup route
+const rateBuckets = new Map();
+function rateLimit(windowMs = 15 * 60 * 1000, max = 10) {
+  return (req, res, next) => {
+    const key = req.ip;
+    const now = Date.now();
+    let bucket = rateBuckets.get(key);
+    if (!bucket || bucket.reset < now) {
+      bucket = { count: 1, reset: now + windowMs };
+      rateBuckets.set(key, bucket);
+      return next();
+    }
+    if (bucket.count >= max) {
+      return res.status(429).json({ error: 'Too many requests. Try again later.' });
+    }
+    bucket.count++;
+    next();
+  };
+}
+const lookupRateLimit = rateLimit();
 // parse JSON bodies on this router
 router.use(express.json());
 const getDbConnection = require('../db/connection');
@@ -131,7 +154,7 @@ async function sendConfirmationEmail(db, guest) {
  */
 // Public: fetch guest by code
 // GET /api/rsvp/:code
-router.get('/:code', async (req, res) => {
+router.get('/:code', lookupRateLimit, async (req, res) => {
   const { code } = req.params;
   if (!code) return res.status(400).json({ error: 'Code is required' });
   try {
@@ -155,7 +178,14 @@ router.get('/:code', async (req, res) => {
       plus_one_name: plusOne?.name || null,
       plus_one_dietary: plusOne?.dietary || null
     };
-    return res.json({ success: true, guest: guestData });
+    // Establish guest session on lookup
+    setGuestSession(res, primaryGuest.id, primaryGuest.code);
+    const auth = {
+      name: primaryGuest.name,
+      group_label: primaryGuest.group_label,
+      rsvp_status: primaryGuest.rsvp_status
+    };
+    return res.json({ success: true, guest: guestData, auth });
   } catch (err) {
     return res.status(500).json({ error: 'Database error' });
   }
@@ -322,15 +352,6 @@ router.post('/', async (req, res) => {
       );
     }
 
-    res.cookie('rsvp_session', JSON.stringify({
-      guestId: row.id,
-      code: row.code
-    }), {
-      httpOnly: true,
-      sameSite: 'lax',
-      signed: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
-    });
     res.json({ success: true });
     await sendConfirmationEmail(db, row);
   } catch (err) {

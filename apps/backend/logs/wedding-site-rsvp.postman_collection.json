@@ -1,0 +1,137 @@
+{
+  "info": {
+    "name": "Wedding Site - RSVP Flow",
+    "_postman_id": "11111111-2222-3333-4444-555555555555",
+    "description": "Tests RSVP lookup (session set), submission, and gated page access.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK', ()=> pm.response.code === 200);",
+                  "const j = pm.response.json();",
+                  "pm.test('ok true', ()=> j.ok === true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1 RSVP Flow",
+      "item": [
+        {
+          "name": "Lookup by code (sets session cookie)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/rsvp/{{code}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK', ()=> pm.response.code === 200);",
+                  "const j = pm.response.json();",
+                  "pm.test('auth object present', ()=> j.auth && j.auth.name);",
+                  "pm.environment.set('guest_name', j.auth.name);",
+                  "pm.environment.set('rsvp_status', j.auth.rsvp_status);",
+                  "const cookie = pm.cookies.get('rsvp_session');",
+                  "pm.test('rsvp_session cookie set', ()=> !!cookie);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Try gated page BEFORE submitting RSVP",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/pages/{{gated_slug}}?locale=en"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('403 if pending', function () {",
+                  "  if (pm.environment.get('rsvp_status') === 'pending') {",
+                  "    pm.expect(pm.response.code).to.equal(403);",
+                  "  } else {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,404]);",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Submit RSVP (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"{{code}}\",\n  \"attending\": true,\n  \"dietary\": \"\",\n  \"notes\": \"\",\n  \"plus_one_name\": \"\",\n  \"plus_one_dietary\": \"\"\n}"
+            },
+            "url": "{{base_url}}/rsvp"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK', ()=> pm.response.code === 200);",
+                  "pm.test('success true', ()=> pm.response.json().success === true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Try gated page AFTER submitting RSVP",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/pages/{{gated_slug}}?locale=en"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK after attending', ()=> pm.response.code === 200);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

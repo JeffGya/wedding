@@ -34,6 +34,32 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const startScheduler = require('./jobs/scheduler');
 
+const requireAuth = require('./middleware/auth');
+
+const adminRoutes = require('./routes/admin');
+const imagesRoutes = require('./routes/images');
+const pagesRoutes = require('./routes/adminPages');
+
+const publicPagesRoutes = require('./routes/publicPages');
+const { parseGuestSession } = require('./middleware/guestSession');
+
+// ---- Grouped admin router (all /api/admin/*)
+const adminRouter = express.Router();
+adminRouter.use(requireAuth);
+adminRouter.use('/', adminRoutes);
+adminRouter.use('/pages', pagesRoutes);
+adminRouter.use('/images', imagesRoutes);
+
+
+
+// ---- Global process-level error handlers ----
+process.on('unhandledRejection', (err) => {
+  console.error('UnhandledRejection:', err);
+});
+process.on('uncaughtException', (err) => {
+  console.error('UncaughtException:', err);
+});
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5001; // Changed fallback port from 5000 to 5001
@@ -43,9 +69,9 @@ const allowedOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(',').map(o => o.trim())
   : [];
 
-// Middleware to parse incoming JSON requests
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+// Middleware to parse incoming JSON requests with sane limits
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Middleware to parse signed cookies using session secret
 app.use(cookieParser(process.env.SESSION_SECRET));
@@ -114,11 +140,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
 
-const adminRoutes = require('./routes/admin');
-app.use('/api/admin', adminRoutes);
-
-const imagesRoutes = require('./routes/images');
-app.use('/api/admin/images', imagesRoutes);
+app.use('/api/admin', adminRouter);
 
 const guestRoutes = require('./routes/guests');
 const rsvpRouter = require('./routes/rsvp');
@@ -140,13 +162,27 @@ app.use('/api/messages', messageRoutes); // All message-related routes including
 
 const templateRoutes = require('./routes/templates');
 const messageStatsRoutes = require('./routes/messageStats');
-const pagesRoutes = require('./routes/adminPages');
-const publicPagesRoutes = require('./routes/publicPages');
-const { parseGuestSession } = require('./middleware/guestSession');
 app.use('/api/templates', templateRoutes);
 app.use('/api/message-stats', messageStatsRoutes); // Adds message delivery stats route
-app.use('/api/admin/pages', pagesRoutes);
 app.use('/api/pages', parseGuestSession, publicPagesRoutes);
+
+// Simple health check endpoint
+app.get('/api/health', (_req, res) => {
+  res.json({ ok: true, ts: Date.now() });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
+// Central error handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error('🔥 Error handler caught:', err);
+  const status = err.status || 500;
+  res.status(status).json({ error: err.message || 'Server error' });
+});
 
 // Start the background scheduler
 startScheduler();

@@ -1,163 +1,278 @@
 // apps/backend/db/models/pages.js
+// Driver-agnostic Page model with explicit field schema validation + loud debugging.
+
+'use strict';
 
 const getDb = require('../connection');
 
+// ---------------------------------------------
+// Query wrapper to normalize mysql2 & sqlite3
+// ---------------------------------------------
+async function query(sql, params = []) {
+  const db = getDb();
+
+  // mysql2/promise style
+  if (typeof db.query === 'function') {
+    return db.query(sql, params);
+  }
+
+  // sqlite3 verbose style
+  return new Promise((resolve, reject) => {
+    const trimmed = sql.trim().toLowerCase();
+    const isSelect = trimmed.startsWith('select');
+    const isInsert = trimmed.startsWith('insert');
+
+    if (isSelect) {
+      db.all(sql, params, (err, rows) => {
+        if (err) return reject(err);
+        resolve([rows]);
+      });
+    } else if (isInsert) {
+      db.run(sql, params, function (err) {
+        if (err) return reject(err);
+        resolve([{ insertId: this.lastID }]);
+      });
+    } else {
+      db.run(sql, params, function (err) {
+        if (err) return reject(err);
+        resolve([{ affectedRows: this.changes }]);
+      });
+    }
+  });
+}
+
+// ---------------------------------------------
+// Field schema + validators
+// ---------------------------------------------
+const SLUG_REGEX = /^[a-z0-9-]+$/i;
+
+const FIELD_DEFS = {
+  slug: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (typeof v !== 'string' || !SLUG_REGEX.test(v)) {
+        throw new Error('Field "slug" must contain only letters, numbers, or hyphens.');
+      }
+      return v;
+    },
+  },
+  is_published: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (typeof v !== 'boolean') throw new Error('Field "is_published" must be boolean.');
+      return v;
+    },
+  },
+  requires_rsvp: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (typeof v !== 'boolean') throw new Error('Field "requires_rsvp" must be boolean.');
+      return v;
+    },
+  },
+  show_in_nav: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (typeof v !== 'boolean') throw new Error('Field "show_in_nav" must be boolean.');
+      return v;
+    },
+  },
+  nav_order: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (!Number.isInteger(v) || v < 0) {
+        throw new Error('Field "nav_order" must be a non-negative integer.');
+      }
+      return v;
+    },
+  },
+  created_at: { modes: [], validate: v => v }, // DB managed
+  updated_at: { modes: [], validate: v => v }, // DB managed
+};
+
 /**
- * Page model - handles basic CRUD operations for 'pages' table
- * (Explicitly retrieves the database instance via getDb)
+ * Build and validate payload for create/update.
+ * @param {'create'|'update'} mode
+ * @param {Object} input
  */
+function buildPayload(mode, input) {
+  if (!input || typeof input !== 'object') {
+    throw new Error('Payload must be an object.');
+  }
+
+  const allowedForMode = Object.entries(FIELD_DEFS)
+    .filter(([, def]) => def.modes.includes(mode))
+    .map(([k]) => k);
+
+  const payload = {};
+  const unknownKeys = [];
+  for (const [key, value] of Object.entries(input)) {
+    if (!allowedForMode.includes(key)) {
+      unknownKeys.push(key);
+      continue;
+    }
+    payload[key] = FIELD_DEFS[key].validate(value);
+  }
+
+  if (unknownKeys.length) {
+    // Fail loud; debugging made easy
+    throw new Error(
+      `Unknown/unsupported field(s) for ${mode}: ${unknownKeys.join(', ')}`
+    );
+  }
+
+  if (mode === 'create' && payload.slug == null) {
+    throw new Error('"slug" is required when creating a page.');
+  }
+
+  if (Object.keys(payload).length === 0) {
+    throw new Error(`No valid fields provided for ${mode}.`);
+  }
+
+  return payload;
+}
+
+// ---------------------------------------------
+// Core model
+// ---------------------------------------------
 const Page = {
-  /**
-   * Create a new page
-   * @param {Object} pageData - Must include slug; other fields are optional
-   */
-  async create(pageData) {
-    const db = getDb();
+  async create(data = {}) {
+    const payload = buildPayload('create', data);
 
-    if (!pageData || typeof pageData !== 'object') {
-      throw new Error('Invalid page data payload.');
-    }
-
-    if (!pageData.slug || typeof pageData.slug !== 'string') {
-      throw new Error('A valid "slug" is required to create a page.');
-    }
-
-    const keys = Object.keys(pageData);
-    const values = Object.values(pageData);
-
-    if (keys.length === 0) {
-      throw new Error('No data provided to create the page.');
-    }
-
+    const keys = Object.keys(payload);
     const placeholders = keys.map(() => '?').join(', ');
+    const values = Object.values(payload);
 
     try {
-      const [result] = await db.query(
+      const [result] = await query(
         `INSERT INTO pages (${keys.join(', ')}) VALUES (${placeholders})`,
         values
       );
-      return Page.findById(result.insertId);
+      return this.findById(result.insertId);
     } catch (err) {
-      if (err.code === 'ER_DUP_ENTRY') {
-        throw new Error(`A page with slug "${pageData.slug}" already exists.`);
+      if (err.code === 'ER_DUP_ENTRY' || err.code === 'SQLITE_CONSTRAINT') {
+        throw new Error(`A page with slug "${payload.slug}" already exists.`);
       }
       throw new Error('Database error while creating page: ' + err.message);
     }
   },
 
-  /**
-   * Get a single page by its ID
-   */
-  async findById(id) {
-    const db = getDb();
+  async findById(id, { includeDeleted = false } = {}) {
+    if (!id) throw new Error('Page ID is required.');
+
+    const where = includeDeleted ? 'id = ?' : 'id = ? AND deleted_at IS NULL';
     try {
-      const [rows] = await db.query('SELECT * FROM pages WHERE id = ?', [id]);
-      return rows[0];
+      const [rows] = await query(`SELECT * FROM pages WHERE ${where}`, [id]);
+      return rows[0] || null;
     } catch (err) {
-      throw new Error(`Database error while fetching page by ID (${id}): ${err.message}`);
+      throw new Error(
+        `Database error while fetching page by ID (${id}): ${err.message}`
+      );
     }
   },
 
-  /**
-   * Get a page by its slug (used for public rendering)
-   */
-  async findBySlug(slug) {
-    const db = getDb();
+  async findBySlug(slug, { includeDeleted = false } = {}) {
+    FIELD_DEFS.slug.validate(slug);
+    const where = includeDeleted ? 'slug = ?' : 'slug = ? AND deleted_at IS NULL';
     try {
-      const [rows] = await db.query('SELECT * FROM pages WHERE slug = ?', [slug]);
-      return rows[0];
+      const [rows] = await query(`SELECT * FROM pages WHERE ${where}`, [slug]);
+      return rows[0] || null;
     } catch (err) {
-      throw new Error(`Database error while fetching page by slug ("${slug}"): ${err.message}`);
+      throw new Error(
+        `Database error while fetching page by slug ("${slug}"): ${err.message}`
+      );
     }
   },
 
-  /**
-   * Get all pages
-   * Optional: filter for published ones or include trashed later if needed
-   */
-  async findAll() {
-    const db = getDb();
+  async getAll({ includeDeleted = false } = {}) {
+    const where = includeDeleted ? '' : 'WHERE deleted_at IS NULL';
     try {
-      const [rows] = await db.query('SELECT * FROM pages ORDER BY created_at DESC');
+      const [rows] = await query(
+        `SELECT * FROM pages ${where} ORDER BY created_at DESC`
+      );
       return rows;
     } catch (err) {
       throw new Error('Database error while fetching all pages: ' + err.message);
     }
   },
 
-  /**
-   * Get all pages (ordered by creation date)
-   */
-  async getAll() {
-    const db = getDb();
-    try {
-      const [rows] = await db.query('SELECT * FROM pages ORDER BY created_at DESC');
-      return rows;
-    } catch (err) {
-      throw new Error('Database error while fetching all pages: ' + err.message);
-    }
-  },
+  async update(id, updates = {}) {
+    if (!id) throw new Error('Page ID is required for update.');
 
-  /**
-   * Update a page with new values
-   * @param {Number} id - ID of the page to update
-   * @param {Object} updates - Fields to update
-   */
-  async update(id, updates) {
-    if (!id) {
-      throw new Error('Page ID is required for update.');
-    }
-    if (!updates || typeof updates !== 'object' || Object.keys(updates).length === 0) {
-      throw new Error('A valid updates object with at least one field is required.');
-    }
-    const db = getDb();
-    const keys = Object.keys(updates).filter(k => k !== 'translations');
-    const values = keys.map(k => updates[k]);
-    const assignments = keys.map(k => `${k} = ?`).join(', ');
-    values.push(id);
+    const payload = buildPayload('update', updates);
+
+    // never allow manual timestamp manipulation
+    delete payload.created_at;
+    delete payload.updated_at;
+
+    const assignments = Object.keys(payload)
+      .map((k) => `${k} = ?`)
+      .join(', ');
+
+    const values = [...Object.values(payload), id];
+
     try {
-      await db.query(
+      await query(
         `UPDATE pages SET ${assignments}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
         values
       );
-      return Page.findById(id);
+      return this.findById(id);
     } catch (err) {
-      throw new Error(`Database error while updating page (ID: ${id}): ${err.message}`);
+      if (err.code === 'ER_DUP_ENTRY' || err.code === 'SQLITE_CONSTRAINT') {
+        throw new Error(`A page with slug "${updates.slug}" already exists.`);
+      }
+      throw new Error(
+        `Database error while updating page (ID: ${id}): ${err.message}`
+      );
     }
   },
 
-  /**
-   * Delete a page (hard delete)
-   * You could change this to a soft delete in the future if needed
-   */
-  async delete(id) {
-    const db = getDb();
+  // Soft delete (sets deleted_at). Hard delete kept as destroy()
+  async softDelete(id) {
+    if (!id) throw new Error('Page ID is required to delete.');
     try {
-      await db.query('DELETE FROM pages WHERE id = ?', [id]);
+      await query('UPDATE pages SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?', [id]);
+      return { success: true };
     } catch (err) {
-      throw new Error(`Database error while deleting page (ID: ${id}): ${err.message}`);
+      throw new Error(
+        `Database error while soft-deleting page (ID: ${id}): ${err.message}`
+      );
     }
   },
 
-  /**
-   * Remove a page by ID (hard delete)
-   * @param {Number} id - ID of the page to delete
-   */
-  async remove(id) {
-    const db = getDb();
+  async restore(id) {
+    if (!id) throw new Error('Page ID is required to restore.');
     try {
-      const [result] = await db.query('DELETE FROM pages WHERE id = ?', [id]);
+      await query('UPDATE pages SET deleted_at = NULL WHERE id = ?', [id]);
+      return this.findById(id);
+    } catch (err) {
+      throw new Error(
+        `Database error while restoring page (ID: ${id}): ${err.message}`
+      );
+    }
+  },
+
+  async destroy(id) {
+    if (!id) throw new Error('Page ID is required to hard delete.');
+    try {
+      const [result] = await query('DELETE FROM pages WHERE id = ?', [id]);
       return result;
     } catch (err) {
-      throw new Error(`Database error while removing page (ID: ${id}): ${err.message}`);
+      throw new Error(
+        `Database error while hard-deleting page (ID: ${id}): ${err.message}`
+      );
     }
-  }
+  },
 };
 
 module.exports = {
   getAll: Page.getAll.bind(Page),
-  getById: Page.findById,
-  create: Page.create,
-  update: Page.update,
-  remove: Page.remove,
+  getById: Page.findById.bind(Page),
+  getBySlug: Page.findBySlug.bind(Page),
+  create: Page.create.bind(Page),
+  update: Page.update.bind(Page),
+  softDelete: Page.softDelete.bind(Page),
+  restore: Page.restore.bind(Page),
+  destroy: Page.destroy.bind(Page),
+  _Page: Page,
 };

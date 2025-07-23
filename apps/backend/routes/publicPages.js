@@ -1,109 +1,82 @@
-const express = require('express');
-const getDbConnection = require('../db/connection');
-const db = getDbConnection();
-let dbGet, dbAll, dbRun;
+// apps/backend/routes/publicPages.js
+// Public-facing page fetch with RSVP gating, locale fallback, and model-based DB access.
 
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbAll = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows;
-  };
-  dbRun = async (sql, params) => {
-    const [result] = await db.query(sql, params);
-    return result;
-  };
-} else {
-  const util = require('util');
-  dbGet = util.promisify(db.get).bind(db);
-  dbAll = util.promisify(db.all).bind(db);
-  dbRun = util.promisify(db.run).bind(db);
-}
+'use strict';
+
+const express = require('express');
+const Page = require('../db/models/pages');
+const PageTranslation = require('../db/models/pageTranslation');
 
 const router = express.Router();
 
-// GET a public page by slug and locale, enforcing RSVP gating
+/**
+ * GET /api/pages/:slug?locale=en
+ * - Only returns published, non-deleted pages
+ * - Enforces RSVP if page.requires_rsvp === true
+ * - Attempts to fetch requested locale, then falls back to 'en'
+ */
 router.get('/:slug', async (req, res) => {
-  const slug = req.params.slug;
-  const locale = req.query.locale || 'en';
+  const { slug } = req.params;
+  const requestedLocale = req.query.locale || 'en';
+  const fallbackLocale = 'en';
   const guest = req.guest || null;
 
-  console.log(`[GET /api/pages/${slug}] Fetching published page with locale=${locale}`);
-  console.log(`[GET /api/pages/${slug}] guestId: ${guest?.id || ''}`);
-  console.log(`[GET /api/pages/${slug}] Session: ${JSON.stringify(req.signedCookies || {})}`);
+  console.log(`[PUBLIC PAGE] slug="${slug}" locale="${requestedLocale}" guestId=${guest?.id || 'none'}`);
 
   try {
-    // Step 1: Get page
-    let page;
-    try {
-      page = await dbGet(
-        'SELECT * FROM pages WHERE slug = ? AND is_published = 1',
-        [slug]
-      );
-    } catch (err) {
-      console.error(`[GET /api/pages/${slug}] ❌ Error fetching page:`, err?.stack || err);
-      return res.status(500).json({ error: 'Database error fetching page' });
+    // 1. Fetch page by slug
+    const page = await Page.getBySlug(slug);
+    if (!page || !page.is_published) {
+      return res.status(404).json({ error: 'Page not found or unpublished' });
     }
 
-    if (!page) return res.status(404).json({ error: 'Page not found or unpublished' });
-    console.log(`[GET /api/pages/${slug}] → Found page:`, page);
+    // 2. RSVP gating (allow ONLY guests who are attending)
+    if (page.requires_rsvp) {
+      const isAttending =
+        guest &&
+        (
+          (typeof guest.rsvp_status === 'string' && guest.rsvp_status.toLowerCase() === 'attending') ||
+          guest.attending === 1 ||
+          guest.attending === true
+        );
 
-    // Step 2: Get page translation for locale
-    console.log(`[GET /api/pages/${slug}] → Looking for translation in locale: ${locale}`);
-    let translation;
-    try {
-      translation = await dbGet(
-        'SELECT * FROM page_translations WHERE page_id = ? AND locale = ?',
-        [page.id, locale]
-      );
-    } catch (err) {
-      console.error(`[GET /api/pages/${slug}] ❌ Error fetching translation:`, err?.stack || err);
-      return res.status(500).json({ error: 'Database error fetching translation' });
+      if (!isAttending) {
+        const reason = !guest
+          ? 'no_session'
+          : (guest.rsvp_status || (guest.attending ? 'unknown' : 'not_attending'));
+        return res.status(403).json({ error: 'Not allowed to access this page', reason });
+      }
     }
 
-    console.log(`[GET /api/pages/${slug}] → Translation result:`, translation);
-    if (!translation) return res.status(404).json({ error: 'Translation not found for requested locale' });
+    // 3. Fetch translation for requested locale (or fallback)
+    let translation = await PageTranslation.getByPageIdAndLocale(page.id, requestedLocale);
+    if (!translation && requestedLocale !== fallbackLocale) {
+      console.warn(`[PUBLIC PAGE] No translation for "${requestedLocale}", falling back to "${fallbackLocale}"`);
+      translation = await PageTranslation.getByPageIdAndLocale(page.id, fallbackLocale);
+    }
+
+    if (!translation) {
+      return res.status(404).json({ error: 'Translation not found' });
+    }
 
     if (!translation.content) {
-      console.error(`[GET /api/pages/${slug}] ⚠️ Missing content in translation object`);
+      console.error('[PUBLIC PAGE] Missing content in translation.');
       return res.status(500).json({ error: 'Missing content in translation' });
     }
 
-    console.log(`[GET /api/pages/${slug}] Found translation for locale=${locale}`);
+    // translation.content is already parsed in the model; ensure object/array
+    const content = translation.content;
 
-    // Step 3: Enforce RSVP requirement
-    if (page.requires_rsvp) {
-      if (!guest || guest.rsvp_status === 'pending') {
-        return res.status(403).json({ error: 'RSVP required to view this page' });
-      }
-    }
-
-    // Step 4: Parse content safely
-    let parsedContent;
-    try {
-      if (typeof translation.content === 'string') {
-        parsedContent = JSON.parse(translation.content);
-      } else {
-        parsedContent = translation.content;
-      }
-    } catch (err) {
-      console.log(`[GET /api/pages/${slug}] Failed to parse content JSON: ${translation.content}`);
-      return res.status(500).json({ error: 'Invalid page content format' });
-    }
-
-    console.log(`[GET /api/pages/${slug}] ✅ Parsed content successfully`);
+    console.log(`[PUBLIC PAGE] ✅ Served page "${slug}" (${translation.locale})`);
 
     return res.json({
       slug: page.slug,
       locale: translation.locale,
       title: translation.title,
-      content: parsedContent
+      content,
     });
   } catch (err) {
-    console.error(`[GET /api/pages/${slug}] Unexpected error:\n`, util.inspect(err, { depth: null }));
+    console.error('[PUBLIC PAGE] Unexpected error:', err);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 });
