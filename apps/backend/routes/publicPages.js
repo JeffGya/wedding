@@ -6,6 +6,8 @@
 const express = require('express');
 const Page = require('../db/models/pages');
 const PageTranslation = require('../db/models/pageTranslation');
+const { processBlocks } = require('../utils/blockSchema');
+const SurveyBlock = require('../db/models/surveyBlock');
 
 const router = express.Router();
 
@@ -64,8 +66,58 @@ router.get('/:slug', async (req, res) => {
       return res.status(500).json({ error: 'Missing content in translation' });
     }
 
-    // translation.content is already parsed in the model; ensure object/array
-    const content = translation.content;
+    // translation.content is parsed in the model; sanitize & drop invalid blocks for public output
+    let content = Array.isArray(translation.content) ? translation.content : [];
+    try {
+      const { blocks, errors } = processBlocks(content, { mode: 'public', skipInvalid: true });
+      if (errors.length) {
+        console.warn('[PUBLIC PAGE] Dropped invalid blocks:', errors.map(e => e.index));
+      }
+      content = blocks;
+    } catch (ve) {
+      console.error('[PUBLIC PAGE] Block processing error:', ve.message);
+      return res.status(500).json({ error: 'Failed to process page content' });
+    }
+
+    // 4. Optionally preload survey configs inline
+    const withSurveys = req.query.withSurveys === 'true';
+    if (withSurveys) {
+      const surveyIds = content.filter(b => b.type === 'survey').map(b => b.id);
+      if (surveyIds.length) {
+        const surveyMap = {};
+        for (const sid of surveyIds) {
+          try {
+            const sb = await SurveyBlock.getById(sid, { includeDeleted: false });
+            if (sb) {
+              // options already parsed in model
+              surveyMap[sid] = {
+                question: sb.question,
+                type: sb.type,
+                options: sb.options || [],
+                is_required: sb.is_required,
+                is_anonymous: sb.is_anonymous
+              };
+            } else {
+              console.warn('[PUBLIC PAGE] Missing survey block id:', sid);
+            }
+          } catch (e) {
+            console.error('[PUBLIC PAGE] Error loading survey block id', sid, e.message);
+          }
+        }
+
+        // Attach or drop missing ones
+        content = content.filter(block => {
+          if (block.type !== 'survey') return true;
+          const data = surveyMap[block.id];
+          if (!data) {
+            console.warn('[PUBLIC PAGE] Dropping survey block with missing id:', block.id);
+            return false;
+          }
+          block.survey = data;
+          return true;
+        });
+      }
+    }
 
     console.log(`[PUBLIC PAGE] ✅ Served page "${slug}" (${translation.locale})`);
 

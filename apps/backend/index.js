@@ -42,6 +42,8 @@ const pagesRoutes = require('./routes/adminPages');
 
 const publicPagesRoutes = require('./routes/publicPages');
 const { parseGuestSession } = require('./middleware/guestSession');
+const adminSurveysRoutes = require('./routes/adminSurveys');
+const publicSurveysRoutes = require('./routes/publicSurveys');
 
 // ---- Grouped admin router (all /api/admin/*)
 const adminRouter = express.Router();
@@ -49,6 +51,7 @@ adminRouter.use(requireAuth);
 adminRouter.use('/', adminRoutes);
 adminRouter.use('/pages', pagesRoutes);
 adminRouter.use('/images', imagesRoutes);
+adminRouter.use('/surveys', adminSurveysRoutes);
 
 
 
@@ -81,6 +84,8 @@ const cookieParserRSVP = cookieParser(process.env.RSVP_SESSION_SECRET);
 app.use((req, res, next) => {
   cookieParserRSVP(req, res, next);
 });
+// Attach guest session globally so req.guest is available everywhere (RSVP/session endpoint, public pages, etc.)
+app.use(parseGuestSession);
 
 // Dynamic CORS based on CORS_ORIGINS env var
 app.use(cors({
@@ -147,6 +152,7 @@ const rsvpRouter = require('./routes/rsvp');
 // Guest management routes
 app.use('/api/guests', guestRoutes); // Added guests route
 app.use('/api/rsvp', rsvpRouter);
+app.use('/api/surveys', publicSurveysRoutes);
 
 // Import email settings routes
 const emailSettingsRoutes = require('./routes/emailSettings');
@@ -176,12 +182,30 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// Central error handler
+// Central error handler (backward-compatible shape)
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error('🔥 Error handler caught:', err);
-  const status = err.status || 500;
-  res.status(status).json({ error: err.message || 'Server error' });
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || 'Server error';
+  const code = err.code || err.errorCode;
+
+  // Log full error & stack
+  console.error('🔥 Error handler caught:', err.stack || err);
+
+  const payload = {
+    error: { message },
+    // legacy field so existing frontend code using `message` still works
+    message
+  };
+
+  if (code) payload.error.code = code;
+
+  // Expose stack only in non-production
+  if (process.env.NODE_ENV !== 'production' && err.stack) {
+    payload.error.stack = err.stack;
+  }
+
+  res.status(status).json(payload);
 });
 
 // Start the background scheduler

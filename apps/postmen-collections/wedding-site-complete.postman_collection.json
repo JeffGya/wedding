@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "Wedding Site - Complete (RSVP • Pages • Surveys)",
+    "_postman_id": "11111111-2222-3333-4444-555555555555",
+    "description": "End-to-end tests for RSVP flow, page CRUD with blocks, and survey CRUD/respond.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "url": "{{base_url}}/health" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": [
+                "pm.test('200 OK', ()=> pm.response.code===200);",
+                "pm.test('ok true', ()=> pm.response.json().ok===true);"
+              ], "type": "text/javascript" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1 RSVP Flow",
+      "item": [
+        {
+          "name": "RSVP Lookup (sets cookie)",
+          "request": { "method": "GET", "url": "{{base_url}}/rsvp/{{code}}" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": [
+                "pm.test('200', ()=> pm.response.code===200);",
+                "const j=pm.response.json();",
+                "pm.test('auth object', ()=> j.auth && j.auth.name);",
+                "pm.environment.set('guest_name', j.auth.name);",
+                "pm.environment.set('rsvp_status', j.auth.rsvp_status);",
+                "pm.test('cookie set', ()=> !!pm.cookies.get('rsvp_session'));"
+              ], "type": "text/javascript" }
+            }
+          ]
+        },
+        {
+          "name": "RSVP Session (who am I)",
+          "request": { "method": "GET", "url": "{{base_url}}/rsvp/session" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": [
+                "pm.test('200', ()=> pm.response.code===200);",
+                "pm.test('auth present', ()=> pm.response.json().auth);"
+              ], "type":"text/javascript" }
+            }
+          ]
+        },
+        {
+          "name": "Submit RSVP (POST)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key":"Content-Type","value":"application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"{{code}}\",\n  \"attending\": true,\n  \"dietary\": \"\",\n  \"notes\": \"\",\n  \"plus_one_name\": \"\"\n}"
+            },
+            "url": "{{base_url}}/rsvp"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": [
+                "pm.test('200', ()=> pm.response.code===200);",
+                "pm.test('success true', ()=> pm.response.json().success===true);"
+              ], "type":"text/javascript" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2 Admin Surveys",
+      "item": [
+        {
+          "name": "List surveys (paginated)",
+          "request": { "method":"GET", "url":"{{base_url}}/admin/surveys?page=1&limit=5&includeDeleted=false" },
+          "event": [
+            { "listen":"test","script":{ "exec":[
+              "pm.test('200',()=>pm.response.code===200);",
+              "pm.test('data array',()=>Array.isArray(pm.response.json().data));"
+            ],"type":"text/javascript"}}
+          ]
+        },
+        {
+          "name": "Create survey (radio)",
+          "request": {
+            "method":"POST",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\n  \"question\": \"Will you join the brunch?\",\n  \"type\": \"radio\",\n  \"options\": [\"Yes\",\"No\"],\n  \"is_required\": true,\n  \"is_anonymous\": false,\n  \"locale\": \"en\",\n  \"page_id\": null\n}"},
+            "url":"{{base_url}}/admin/surveys"
+          },
+          "event":[
+            {"listen":"test","script":{"exec":[
+              "pm.test('201',()=>pm.response.code===201);",
+              "const j=pm.response.json();",
+              "pm.environment.set('survey_id', j.id);"
+            ],"type":"text/javascript"}}
+          ]
+        },
+        {
+          "name": "Get survey by ID",
+          "request": { "method":"GET","url":"{{base_url}}/admin/surveys/{{survey_id}}" },
+          "event":[
+            {"listen":"test","script":{"exec":[
+              "pm.test('200',()=>pm.response.code===200);",
+              "pm.test('id matches',()=> pm.response.json().id==pm.environment.get('survey_id'));"
+            ],"type":"text/javascript"}}
+          ]
+        },
+        {
+          "name": "Update survey",
+          "request": {
+            "method":"PUT",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\n  \"question\": \"Will you join the after party?\",\n  \"options\": [\"Yes\",\"No\",\"Maybe\"]\n}"},
+            "url":"{{base_url}}/admin/surveys/{{survey_id}}"
+          },
+          "event":[
+            {"listen":"test","script":{"exec":[
+              "pm.test('200',()=>pm.response.code===200);",
+              "pm.test('question updated',()=> pm.response.json().question.includes('after party'));"
+            ],"type":"text/javascript"}}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3 Admin Pages (Blocks)",
+      "item": [
+        {
+          "name": "List pages (paginated)",
+          "request": { "method":"GET","url":"{{base_url}}/admin/pages?page=1&limit=5&status=all&includeDeleted=false" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('meta ok',()=> pm.response.json().meta.total !== undefined);"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Create page (valid blocks incl. survey)",
+          "request": {
+            "method":"POST",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\n  \"slug\": \"{{page_slug}}\",\n  \"is_published\": true,\n  \"requires_rsvp\": false,\n  \"show_in_nav\": true,\n  \"nav_order\": 5,\n  \"translations\": [\n    {\n      \"locale\": \"en\",\n      \"title\": \"Blocks Test EN\",\n      \"content\": [\n        { \"type\": \"rich-text\", \"html\": \"<p>Hello <strong>world</strong></p>\" },\n        { \"type\": \"image\", \"src\": \"/uploads/sample.jpg\", \"alt\": \"Sample\" },\n        { \"type\": \"divider\" },\n        { \"type\": \"video\", \"embed\": \"https://www.youtube.com/embed/dQw4w9WgXcQ\" },\n        { \"type\": \"map\", \"embed\": \"https://www.google.com/maps/embed?pb=!1m18!2m3\" },\n        { \"type\": \"survey\", \"id\": {{survey_id}} }\n      ]\n    }\n  ]\n}"},
+            "url":"{{base_url}}/admin/pages"
+          },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('201',()=>pm.response.code===201);",
+            "const j=pm.response.json();",
+            "pm.environment.set('page_id', j.id);",
+            "pm.environment.set('created_slug', j.slug);"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Create page (invalid block → 400)",
+          "request": {
+            "method":"POST",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\n  \"slug\": \"invalid-block-page\",\n  \"is_published\": false,\n  \"requires_rsvp\": false,\n  \"show_in_nav\": false,\n  \"nav_order\": 1,\n  \"translations\": [\n    {\n      \"locale\": \"en\",\n      \"title\": \"Invalid block\",\n      \"content\": [ { \"type\": \"image\" } ]\n    }\n  ]\n}"},
+            "url":"{{base_url}}/admin/pages"
+          },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('400',()=>pm.response.code===400);",
+            "pm.test('INVALID_BLOCK',()=> pm.response.json().error && pm.response.json().error.code==='INVALID_BLOCK');"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Get page by ID",
+          "request": { "method":"GET","url":"{{base_url}}/admin/pages/{{page_id}}?includeDeleted=true" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('translations array',()=> pm.response.json().translations.length>0);"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Update page blocks",
+          "request": {
+            "method":"PUT",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\n  \"slug\": \"{{created_slug}}\",\n  \"is_published\": true,\n  \"requires_rsvp\": false,\n  \"show_in_nav\": true,\n  \"nav_order\": 6,\n  \"translations\": [\n    {\n      \"locale\": \"en\",\n      \"title\": \"Blocks Test EN (updated)\",\n      \"content\": [\n        { \"type\": \"rich-text\", \"html\": \"<p>Updated & sanitized <script>alert('x')</script></p>\" },\n        { \"type\": \"divider\" }\n      ]\n    }\n  ]\n}"},
+            "url":"{{base_url}}/admin/pages/{{page_id}}"
+          },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('updated title',()=> pm.response.json().translations.some(t=>t.title.includes('(updated)')));"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Soft delete page",
+          "request": { "method":"DELETE","url":"{{base_url}}/admin/pages/{{page_id}}" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('success',()=> pm.response.json().success===true);"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Restore page",
+          "request": { "method":"PUT","url":"{{base_url}}/admin/pages/{{page_id}}/restore" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('deleted_at null',()=> pm.response.json().deleted_at===null);"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Hard destroy page",
+          "request": { "method":"DELETE","url":"{{base_url}}/admin/pages/{{page_id}}/destroy" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('success',()=> pm.response.json().success===true);"
+          ],"type":"text/javascript"}}]
+        }
+      ]
+    },
+    {
+      "name": "4 Public Pages & Surveys",
+      "item": [
+        {
+          "name": "Public page (no surveys preload)",
+          "request": { "method":"GET","url":"{{base_url}}/pages/{{created_slug}}?locale=en" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200/404/403',()=>[200,404,403].includes(pm.response.code));",
+            "if(pm.response.code===200){const j=pm.response.json();pm.test('content arr',()=>Array.isArray(j.content));}"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Public page (withSurveys=true)",
+          "request": { "method":"GET","url":"{{base_url}}/pages/{{created_slug}}?locale=en&withSurveys=true" },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200/404/403',()=>[200,404,403].includes(pm.response.code));",
+            "if(pm.response.code===200){const j=pm.response.json();const s=j.content.filter(b=>b.type==='survey');if(s.length){pm.test('survey preload',()=>!!s[0].survey);}}"
+          ],"type":"text/javascript"}}]
+        },
+        {
+          "name": "Submit survey response (radio)",
+          "request": {
+            "method":"POST",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\n  \"response\": \"Yes\"\n}"},
+            "url":"{{base_url}}/surveys/{{survey_id}}/respond"
+          },
+          "event":[{"listen":"test","script":{"exec":[
+            "pm.test('200',()=>pm.response.code===200);",
+            "pm.test('success',()=> pm.response.json().success===true);"
+          ],"type":"text/javascript"}}]
+        }
+      ]
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

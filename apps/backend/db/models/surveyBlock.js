@@ -92,7 +92,8 @@ const FIELD_DEFS = {
   page_id: {
     modes: ['create', 'update'],
     validate(v) {
-      if (!Number.isInteger(v) || v <= 0) throw new Error('"page_id" must be a positive integer.');
+      if (v == null) return null;
+      if (!Number.isInteger(v) || v <= 0) throw new Error('"page_id" must be a positive integer or null.');
       return v;
     },
   },
@@ -142,9 +143,17 @@ const FIELD_DEFS = {
       return v;
     },
   },
+  requires_rsvp: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (typeof v !== 'boolean') throw new Error('"requires_rsvp" must be boolean.');
+      return v;
+    },
+  },
   block_order: {
     modes: ['create', 'update'],
     validate(v) {
+      if (v == null) return 0;
       if (!Number.isInteger(v) || v < 0) throw new Error('"block_order" must be a non-negative integer.');
       return v;
     },
@@ -182,9 +191,15 @@ function buildPayload(mode, input) {
   }
 
   if (mode === 'create') {
-    ['page_id', 'locale', 'question', 'type'].forEach((req) => {
+    ['locale', 'question', 'type'].forEach((req) => {
       if (payload[req] == null) throw new Error(`"${req}" is required when creating a survey block.`);
     });
+    if (payload.page_id === undefined) payload.page_id = null;
+    if (payload.is_required === undefined) payload.is_required = false;
+    if (payload.is_anonymous === undefined) payload.is_anonymous = false;
+    if (payload.requires_rsvp === undefined) payload.requires_rsvp = false;
+    if (payload.block_order === undefined) payload.block_order = 0;
+    if (payload.options === undefined) payload.options = payload.type === 'text' ? [] : [];
   }
 
   if (Object.keys(payload).length === 0) {
@@ -208,6 +223,15 @@ const SurveyBlock = {
     const where = includeDeleted ? 'id = ?' : 'id = ? AND deleted_at IS NULL';
     const [rows] = await query(`SELECT * FROM survey_blocks WHERE ${where}`, [id]);
     return parseRow(rows[0] || null);
+  },
+
+  async getAll({ includeDeleted = false } = {}) {
+    const where = includeDeleted ? '1=1' : 'deleted_at IS NULL';
+    const [rows] = await query(
+      `SELECT * FROM survey_blocks WHERE ${where} ORDER BY created_at DESC`,
+      []
+    );
+    return parseRows(rows);
   },
 
   async getByPageId(pageId, { includeDeleted = false, locale } = {}) {
@@ -290,12 +314,12 @@ const SurveyBlock = {
 
 module.exports = {
   getById: SurveyBlock.getById.bind(SurveyBlock),
+  getAll: SurveyBlock.getAll.bind(SurveyBlock),
   getByPageId: SurveyBlock.getByPageId.bind(SurveyBlock),
-  createSurveyBlock: SurveyBlock.create.bind(SurveyBlock),
-  updateSurveyBlock: SurveyBlock.update.bind(SurveyBlock),
+  create: SurveyBlock.create.bind(SurveyBlock),
+  update: SurveyBlock.update.bind(SurveyBlock),
   softDelete: SurveyBlock.softDelete.bind(SurveyBlock),
   restore: SurveyBlock.restore.bind(SurveyBlock),
   destroy: SurveyBlock.destroy.bind(SurveyBlock),
-
   _SurveyBlock: SurveyBlock,
 };

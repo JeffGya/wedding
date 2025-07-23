@@ -34,7 +34,10 @@ function rateLimit(windowMs = 15 * 60 * 1000, max = 10) {
     next();
   };
 }
-const lookupRateLimit = rateLimit();
+// Allow overriding via env, but default to 15min / 10 req
+const WINDOW_MS = Number(process.env.RSVP_LOOKUP_WINDOW_MS) || 15 * 60 * 1000;
+const MAX_REQ = Number(process.env.RSVP_LOOKUP_MAX) || 10;
+const lookupRateLimit = rateLimit(WINDOW_MS, MAX_REQ);
 // parse JSON bodies on this router
 router.use(express.json());
 const getDbConnection = require('../db/connection');
@@ -152,6 +155,24 @@ async function sendConfirmationEmail(db, guest) {
  *       '500':
  *         description: Database error
  */
+// GET /api/rsvp/session  -> return minimal auth info if cookie/session is valid
+router.get('/session', (req, res) => {
+  // req.guest should be populated by parseGuestSession mounted globally
+  if (!req.guest) {
+    return res.status(401).json({
+      error: { message: 'Not authenticated' },
+      message: 'Not authenticated'
+    });
+  }
+
+  const auth = {
+    name: req.guest.name,
+    group_label: req.guest.group_label,
+    rsvp_status: req.guest.rsvp_status
+  };
+  return res.json({ auth });
+});
+
 // Public: fetch guest by code
 // GET /api/rsvp/:code
 router.get('/:code', lookupRateLimit, async (req, res) => {

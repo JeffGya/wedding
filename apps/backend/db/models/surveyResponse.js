@@ -1,28 +1,23 @@
 // apps/backend/db/models/surveyResponse.js
-// SurveyResponse model with:
-// - driver-agnostic query wrapper
-// - schema-based validation
-// - JSON-safe response payloads (arrays/objects -> stringified)
-// - soft-delete helpers (deleted_at)
-// - loud errors on unknown fields
-// - convenience aggregators
+// Lightweight model aligned with other models (pages, surveyBlock)
+// Provides: create, getBySurveyId, deleteBySurveyId, getAllByGuest, getAllBySurvey, destroyByGuest, etc.
 
 'use strict';
 
 const getDb = require('../connection');
 
 // --------------------------------------------------
-// Query wrapper (mysql2 <-> sqlite3 normalizer)
+// Query wrapper (mysql2 / sqlite3)
 // --------------------------------------------------
 async function query(sql, params = []) {
   const db = getDb();
 
-  // mysql2/promise
+  // mysql2 promise
   if (typeof db.query === 'function') {
     return db.query(sql, params);
   }
 
-  // sqlite3 verbose
+  // sqlite3
   return new Promise((resolve, reject) => {
     const trimmed = sql.trim().toLowerCase();
     const isSelect = trimmed.startsWith('select');
@@ -48,222 +43,97 @@ async function query(sql, params = []) {
 }
 
 // --------------------------------------------------
-// Helpers
+// Helpers / validation
 // --------------------------------------------------
-function parseRow(row) {
-  if (!row) return row;
-  // try to parse JSON-ish responses
-  if (typeof row.response_text === 'string') {
-    const txt = row.response_text.trim();
-    if ((txt.startsWith('[') && txt.endsWith(']')) || (txt.startsWith('{') && txt.endsWith('}'))) {
-      try {
-        row.response_text = JSON.parse(txt);
-      } catch {
-        // leave as string
-      }
-    }
-  }
-  return row;
+function ensureInt(val, name) {
+  if (!Number.isInteger(val) || val <= 0) throw new Error(`${name} must be positive integer`);
+  return val;
 }
 
-function parseRows(rows) {
-  return rows.map(parseRow);
+function normalizeResponse(resp) {
+  // Store as stringified JSON to be safe for checkboxes (array) and text/radio (string)
+  if (Array.isArray(resp)) return JSON.stringify(resp);
+  if (typeof resp === 'object' && resp !== null) return JSON.stringify(resp);
+  if (typeof resp === 'string') return resp;
+  return String(resp ?? '');
 }
 
-// --------------------------------------------------
-// Field schema
-// --------------------------------------------------
-const FIELD_DEFS = {
-  survey_block_id: {
-    modes: ['create', 'update'],
-    validate(v) {
-      if (!Number.isInteger(v) || v <= 0) throw new Error('"survey_block_id" must be a positive integer.');
-      return v;
-    },
-  },
-  guest_id: {
-    modes: ['create', 'update'],
-    validate(v) {
-      if (v == null) return null;
-      if (!Number.isInteger(v) || v <= 0) throw new Error('"guest_id" must be a positive integer or null.');
-      return v;
-    },
-  },
-  response_text: {
-    modes: ['create', 'update'],
-    validate(v) {
-      // Allow string, array, or object (we'll stringify non-strings)
-      if (v == null) return '';
-      if (typeof v === 'string') return v;
-      if (Array.isArray(v) || (v && typeof v === 'object')) return JSON.stringify(v);
-      throw new Error('"response_text" must be a string, array, or object.');
-    },
-  },
-  responded_at: {
-    modes: ['create', 'update'],
-    validate(v) {
-      if (v == null) return new Date();
-      const d = new Date(v);
-      if (isNaN(d.getTime())) throw new Error('"responded_at" must be a valid date.');
-      return d;
-    },
-  },
-  created_at: { modes: [], validate: (v) => v },
-  updated_at: { modes: [], validate: (v) => v },
-  deleted_at: { modes: [], validate: (v) => v },
-};
-
-function buildPayload(mode, input) {
-  if (!input || typeof input !== 'object') {
-    throw new Error('Payload must be an object.');
-  }
-
-  const allowed = Object.entries(FIELD_DEFS)
-    .filter(([, def]) => def.modes.includes(mode))
-    .map(([k]) => k);
-
-  const payload = {};
-  const unknown = [];
-
-  for (const [key, val] of Object.entries(input)) {
-    if (!allowed.includes(key)) {
-      unknown.push(key);
-      continue;
-    }
-    payload[key] = FIELD_DEFS[key].validate(val);
-  }
-
-  if (unknown.length) {
-    throw new Error(`Unknown/unsupported field(s) for ${mode}: ${unknown.join(', ')}`);
-  }
-
-  if (mode === 'create') {
-    if (payload.survey_block_id == null) throw new Error('"survey_block_id" is required.');
-    if (payload.response_text == null) payload.response_text = '';
-    if (payload.responded_at == null) payload.responded_at = new Date();
-  }
-
-  if (Object.keys(payload).length === 0) {
-    throw new Error(`No valid fields provided for ${mode}.`);
-  }
-
-  return payload;
-}
+// Name of the response column in DB.
+// We recently switched to `response_text` in code. If your DB still has `response`,
+// either add a migration to rename, or change this constant to 'response'.
+const RESPONSE_COL = 'response_text';
 
 // --------------------------------------------------
-// Core model
+// Model
 // --------------------------------------------------
 const SurveyResponse = {
-  async getById(id, { includeDeleted = false } = {}) {
-    if (!id) throw new Error('SurveyResponse ID is required.');
-    const where = includeDeleted ? 'id = ?' : 'id = ? AND deleted_at IS NULL';
-    const [rows] = await query(`SELECT * FROM survey_responses WHERE ${where}`, [id]);
-    return parseRow(rows[0] || null);
-  },
 
-  async getResponsesBySurveyId(survey_block_id, { includeDeleted = false } = {}) {
-    if (!survey_block_id) throw new Error('survey_block_id is required.');
-    const where = includeDeleted
-      ? 'survey_block_id = ?'
-      : 'survey_block_id = ? AND deleted_at IS NULL';
-    const [rows] = await query(
-      `SELECT * FROM survey_responses WHERE ${where} ORDER BY responded_at ASC`,
-      [survey_block_id]
-    );
-    return parseRows(rows);
-  },
+  async create({ survey_block_id, guest_id = null, response_text }) {
+    ensureInt(survey_block_id, 'survey_block_id');
 
-  async create(data = {}) {
-    const payload = buildPayload('create', data);
+    const respValue = normalizeResponse(response_text);
+
     const now = new Date();
-
-    const keys = Object.keys(payload).concat(['created_at', 'updated_at']);
-    const placeholders = keys.map(() => '?').join(', ');
-    const values = Object.values(payload).concat([now, now]);
+    const cols = ['survey_block_id', 'guest_id', RESPONSE_COL, 'created_at'];
+    const placeholders = cols.map(() => '?').join(', ');
+    const values = [survey_block_id, guest_id, respValue, now];
 
     const [res] = await query(
-      `INSERT INTO survey_responses (${keys.join(', ')}) VALUES (${placeholders})`,
+      `INSERT INTO survey_responses (${cols.join(', ')}) VALUES (${placeholders})`,
       values
     );
     return this.getById(res.insertId);
   },
 
-  async createSurveyResponse(data) {
-    const created = await this.create(data);
-    return { id: created.id };
+  async getById(id) {
+    ensureInt(id, 'id');
+    const [rows] = await query(`SELECT * FROM survey_responses WHERE id = ?`, [id]);
+    return rows[0] || null;
   },
 
-  async update(id, updates = {}) {
-    if (!id) throw new Error('SurveyResponse ID is required to update.');
-    const payload = buildPayload('update', updates);
-    delete payload.created_at;
-    delete payload.updated_at;
-    delete payload.deleted_at;
-
-    const assignments = Object.keys(payload)
-      .map((k) => `${k} = ?`)
-      .join(', ');
-    const values = [...Object.values(payload), id];
-
-    const [res] = await query(
-      `UPDATE survey_responses SET ${assignments}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-      values
+  async getAllBySurvey(survey_block_id) {
+    ensureInt(survey_block_id, 'survey_block_id');
+    const [rows] = await query(
+      `SELECT * FROM survey_responses WHERE survey_block_id = ? ORDER BY created_at DESC`,
+      [survey_block_id]
     );
-    if (res.affectedRows === 0) {
-      throw new Error(`No survey response found with id ${id}.`);
-    }
-    return this.getById(id);
+    return rows;
   },
 
-  async softDelete(id) {
-    if (!id) throw new Error('SurveyResponse ID is required to delete.');
+  async getAllByGuest(guest_id) {
+    ensureInt(guest_id, 'guest_id');
+    const [rows] = await query(
+      `SELECT * FROM survey_responses WHERE guest_id = ? ORDER BY created_at DESC`,
+      [guest_id]
+    );
+    return rows;
+  },
+
+  async deleteBySurveyId(survey_block_id) {
+    ensureInt(survey_block_id, 'survey_block_id');
     const [res] = await query(
-      'UPDATE survey_responses SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?',
-      [id]
+      `DELETE FROM survey_responses WHERE survey_block_id = ?`,
+      [survey_block_id]
     );
     return res.affectedRows || 0;
   },
 
-  async restore(id) {
-    if (!id) throw new Error('SurveyResponse ID is required to restore.');
+  async destroyByGuest(guest_id) {
+    ensureInt(guest_id, 'guest_id');
     const [res] = await query(
-      'UPDATE survey_responses SET deleted_at = NULL WHERE id = ?',
-      [id]
+      `DELETE FROM survey_responses WHERE guest_id = ?`,
+      [guest_id]
     );
     return res.affectedRows || 0;
-  },
-
-  async destroy(id) {
-    const [res] = await query('DELETE FROM survey_responses WHERE id = ?', [id]);
-    return res.affectedRows || 0;
-  },
-
-  // Simple aggregation helpers
-  async countByOption(survey_block_id) {
-    const rows = await this.getResponsesBySurveyId(survey_block_id);
-    const tally = {};
-    for (const r of rows) {
-      const val = r.response_text;
-      if (Array.isArray(val)) {
-        val.forEach((v) => (tally[v] = (tally[v] || 0) + 1));
-      } else if (typeof val === 'string') {
-        tally[val] = (tally[val] || 0) + 1;
-      }
-    }
-    return tally;
   },
 };
 
 module.exports = {
-  getById: SurveyResponse.getById.bind(SurveyResponse),
-  getResponsesBySurveyId: SurveyResponse.getResponsesBySurveyId.bind(SurveyResponse),
-  createSurveyResponse: SurveyResponse.createSurveyResponse.bind(SurveyResponse),
   create: SurveyResponse.create.bind(SurveyResponse),
-  update: SurveyResponse.update.bind(SurveyResponse),
-  softDelete: SurveyResponse.softDelete.bind(SurveyResponse),
-  restore: SurveyResponse.restore.bind(SurveyResponse),
-  destroy: SurveyResponse.destroy.bind(SurveyResponse),
-  countByOption: SurveyResponse.countByOption.bind(SurveyResponse),
-
+  getById: SurveyResponse.getById.bind(SurveyResponse),
+  getAllBySurvey: SurveyResponse.getAllBySurvey.bind(SurveyResponse),
+  getAllByGuest: SurveyResponse.getAllByGuest.bind(SurveyResponse),
+  deleteBySurveyId: SurveyResponse.deleteBySurveyId.bind(SurveyResponse),
+  destroyByGuest: SurveyResponse.destroyByGuest.bind(SurveyResponse),
   _SurveyResponse: SurveyResponse,
 };
