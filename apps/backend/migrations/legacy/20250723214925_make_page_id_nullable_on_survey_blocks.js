@@ -83,10 +83,15 @@ exports.up = async function (knex) {
         await knex.raw(`ALTER TABLE survey_blocks DROP FOREIGN KEY \`${row.CONSTRAINT_NAME}\``);
       }
   
-      // Make NOT NULL again
+    // Attempt to revert page_id to NOT NULL
+    try {
       await knex.raw(`ALTER TABLE survey_blocks MODIFY page_id ${columnType} NOT NULL`);
-  
-      // Re-add FK with RESTRICT on delete (original stricter behavior)
+    } catch (err) {
+      console.warn('Down migration: could not modify page_id to NOT NULL (likely null values exist):', err.message);
+    }
+
+    // Attempt to re-add FK with RESTRICT on delete
+    try {
       await knex.schema.alterTable('survey_blocks', (t) => {
         t
           .foreign('page_id')
@@ -95,6 +100,9 @@ exports.up = async function (knex) {
           .onDelete('RESTRICT')
           .onUpdate('CASCADE');
       });
+    } catch (err) {
+      console.warn('Down migration: could not re-add FK with RESTRICT:', err.message);
+    }
     } else {
       await knex.schema.alterTable('survey_blocks', (t) => {
         t.integer('page_id').notNullable().alter();

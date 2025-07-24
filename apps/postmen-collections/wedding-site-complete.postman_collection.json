@@ -137,6 +137,70 @@
       ]
     },
     {
+      "name": "2.1 Admin Survey Responses",
+      "item": [
+        {
+          "name": "List survey responses (JSON)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/admin/surveys/{{survey_id}}/responses?filter=all&page=1&limit=10"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.code === 200);",
+                  "const j = pm.response.json();",
+                  "pm.test('data is array', () => Array.isArray(j.data));",
+                  "pm.test('meta.total exists', () => j.meta && j.meta.total !== undefined);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "List survey responses (CSV)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/admin/surveys/{{survey_id}}/responses?format=csv"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.code === 200);",
+                  "pm.test('CSV header present', () => pm.response.text().startsWith('id,survey_block_id,guest_id,response_text,created_at'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete survey responses",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/admin/surveys/{{survey_id}}/responses"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.code === 200);",
+                  "pm.test('deleted count exists', () => pm.response.json().deleted !== undefined);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "3 Admin Pages (Blocks)",
       "item": [
         {

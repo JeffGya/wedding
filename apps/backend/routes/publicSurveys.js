@@ -55,6 +55,57 @@ function isStringArray(arr) {
 }
 
 // ---------------- POST respond ----------------
+/**
+ * @openapi
+ * /api/surveys/{id}/respond:
+ *   post:
+ *     summary: Submit a response to a survey block
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Survey block ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               response:
+ *                 oneOf:
+ *                   - type: string
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *             description: The response value. For radio/text it's a string, for checkbox it's an array of strings.
+ *     responses:
+ *       '200':
+ *         description: Survey response submitted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         $ref: '#/components/responses/InvalidResponse'
+ *       '401':
+ *         $ref: '#/components/responses/AuthRequired'
+ *       '403':
+ *         $ref: '#/components/responses/RSVPRequired'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '429':
+ *         $ref: '#/components/responses/RateLimit'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 router.post('/:id/respond', respondLimiter, async (req, res) => {
   const rawId = req.params.id;
   const id = Number(rawId);

@@ -127,6 +127,51 @@ async function sendConfirmationEmail(db, guest) {
 
 /**
  * @openapi
+ * /api/rsvp/session:
+ *   get:
+ *     summary: Get current RSVP session information
+ *     tags:
+ *       - RSVP
+ *     responses:
+ *       '200':
+ *         description: Authenticated guest session info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 auth:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     group_label:
+ *                       type: string
+ *                     rsvp_status:
+ *                       type: string
+ *       '401':
+ *         description: Not authenticated
+ */
+ // GET /api/rsvp/session  -> return minimal auth info if cookie/session is valid
+router.get('/session', (req, res) => {
+  // req.guest should be populated by parseGuestSession mounted globally
+  if (!req.guest) {
+    return res.status(401).json({
+      error: { message: 'Not authenticated' },
+      message: 'Not authenticated'
+    });
+  }
+
+  const auth = {
+    name: req.guest.name,
+    group_label: req.guest.group_label,
+    rsvp_status: req.guest.rsvp_status
+  };
+  return res.json({ auth });
+});
+
+/**
+ * @openapi
  * /rsvp/{code}:
  *   get:
  *     summary: Retrieve RSVP info by invitation code
@@ -155,24 +200,6 @@ async function sendConfirmationEmail(db, guest) {
  *       '500':
  *         description: Database error
  */
-// GET /api/rsvp/session  -> return minimal auth info if cookie/session is valid
-router.get('/session', (req, res) => {
-  // req.guest should be populated by parseGuestSession mounted globally
-  if (!req.guest) {
-    return res.status(401).json({
-      error: { message: 'Not authenticated' },
-      message: 'Not authenticated'
-    });
-  }
-
-  const auth = {
-    name: req.guest.name,
-    group_label: req.guest.group_label,
-    rsvp_status: req.guest.rsvp_status
-  };
-  return res.json({ auth });
-});
-
 // Public: fetch guest by code
 // GET /api/rsvp/:code
 router.get('/:code', lookupRateLimit, async (req, res) => {

@@ -6,6 +6,62 @@ const PageTranslation = require('../db/models/pageTranslation');
 const { processBlocks } = require('../utils/blockSchema');
 const SurveyBlock = require('../db/models/surveyBlock');
 
+/**
+ * @openapi
+ * /api/admin/pages:
+ *   get:
+ *     summary: List all pages with pagination and filters
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: query
+ *         name: includeDeleted
+ *         schema:
+ *           type: boolean
+ *         description: Include soft-deleted pages
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [all, published, draft]
+ *         description: Filter by publish status
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *           enum: [created_at, updated_at, nav_order, slug, id]
+ *       - in: query
+ *         name: orderDir
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *     responses:
+ *       '200':
+ *         description: A paginated list of pages
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Page'
+ *                 meta:
+ *                   $ref: '#/components/schemas/PaginationMeta'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // GET /api/pages — fetch all pages
 router.get('/', async (req, res) => {
   try {
@@ -71,6 +127,46 @@ router.get('/', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/pages/{id}:
+ *   get:
+ *     summary: Get a page by ID
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page ID
+ *       - in: query
+ *         name: includeDeleted
+ *         schema:
+ *           type: boolean
+ *         description: Include soft-deleted translations
+ *     responses:
+ *       '200':
+ *         description: Page detail with translations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Page'
+ *                 - type: object
+ *                   properties:
+ *                     translations:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/PageTranslation'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // GET /api/pages/:id — fetch a single page with its translations
 router.get('/:id', async (req, res) => {
   try {
@@ -92,6 +188,60 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/pages:
+ *   post:
+ *     summary: Create a new page with translations
+ *     tags:
+ *       - Pages
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - slug
+ *               - is_published
+ *               - requires_rsvp
+ *               - show_in_nav
+ *               - nav_order
+ *               - translations
+ *             properties:
+ *               slug:
+ *                 type: string
+ *               is_published:
+ *                 type: boolean
+ *               requires_rsvp:
+ *                 type: boolean
+ *               show_in_nav:
+ *                 type: boolean
+ *               nav_order:
+ *                 type: integer
+ *               translations:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/PageTranslationInput'
+ *     responses:
+ *       '201':
+ *         description: Created page with translations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Page'
+ *                 - type: object
+ *                   properties:
+ *                     translations:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/PageTranslation'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidRequest'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // POST /api/pages — create a new page and add translations
 router.post('/', async (req, res) => {
   try {
@@ -187,6 +337,23 @@ router.post('/', async (req, res) => {
 
     console.log('[POST /api/pages] Created page:', newPage);
 
+    // Auto-link any survey blocks with null page_id to this new page
+    const surveyIdsToLinkPost = preparedTranslations
+      .flatMap(t => t.content.filter(b => b.type === 'survey').map(b => b.id))
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    for (const sid of surveyIdsToLinkPost) {
+      try {
+        const sb2 = await SurveyBlock.getById(sid, { includeDeleted: true });
+        if (sb2 && sb2.page_id == null) {
+          await SurveyBlock.update(sid, { page_id: newPage.id });
+          console.log(`[POST /api/pages] Linked survey block ${sid} to page ${newPage.id}`);
+        }
+      } catch (linkErr) {
+        console.warn(`[POST /api/pages] Could not link survey block ${sid}:`, linkErr.message);
+      }
+    }
+
     const createdTranslations = [];
     try {
       for (const t of preparedTranslations) {
@@ -223,6 +390,62 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/pages/{id}:
+ *   put:
+ *     summary: Update an existing page and its translations
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               slug:
+ *                 type: string
+ *               is_published:
+ *                 type: boolean
+ *               requires_rsvp:
+ *                 type: boolean
+ *               show_in_nav:
+ *                 type: boolean
+ *               nav_order:
+ *                 type: integer
+ *               translations:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/PageTranslationInput'
+ *     responses:
+ *       '200':
+ *         description: Updated page with translations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Page'
+ *                 - type: object
+ *                   properties:
+ *                     translations:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/PageTranslation'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidRequest'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // PUT /api/pages/:id — update main page fields and translations
 router.put('/:id', async (req, res) => {
   try {
@@ -320,6 +543,23 @@ router.put('/:id', async (req, res) => {
     });
     console.log(`[PUT /api/pages/${id}] Page updated.`);
 
+    // Auto-link any survey blocks with null page_id to this page
+    const surveyIdsToLinkPut = preparedTranslations
+      .flatMap(t => t.content.filter(b => b.type === 'survey').map(b => b.id))
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    for (const sid of surveyIdsToLinkPut) {
+      try {
+        const sb2 = await SurveyBlock.getById(sid, { includeDeleted: true });
+        if (sb2 && sb2.page_id == null) {
+          await SurveyBlock.update(sid, { page_id: id });
+          console.log(`[PUT /api/pages/${id}] Linked survey block ${sid} to page ${id}`);
+        }
+      } catch (linkErr) {
+        console.warn(`[PUT /api/pages/${id}] Could not link survey block ${sid}:`, linkErr.message);
+      }
+    }
+
     // --------------------------------------------------
     // 3) Upsert translations with prepared content
     // --------------------------------------------------
@@ -351,6 +591,35 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/pages/{id}:
+ *   delete:
+ *     summary: Soft-delete a page and its translations
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page ID
+ *     responses:
+ *       '200':
+ *         description: Deletion success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // DELETE /api/pages/:id — delete page and its translations
 router.delete('/:id', async (req, res) => {
   try {
@@ -377,6 +646,41 @@ router.delete('/:id', async (req, res) => {
 });
 
 
+/**
+ * @openapi
+ * /api/admin/pages/{id}/restore:
+ *   put:
+ *     summary: Restore a soft-deleted page and its translations
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page ID
+ *     responses:
+ *       '200':
+ *         description: Restored page and translations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Page'
+ *                 - type: object
+ *                   properties:
+ *                     translations:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/PageTranslation'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // PUT /api/pages/:id/restore — restore a soft-deleted page and its translations
 router.put('/:id/restore', async (req, res) => {
   const rawId = req.params.id;
@@ -416,6 +720,37 @@ router.put('/:id/restore', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/pages/{id}/destroy:
+ *   delete:
+ *     summary: Permanently delete a page and its translations
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page ID
+ *     responses:
+ *       '200':
+ *         description: Deletion success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // DELETE /api/pages/:id/destroy — Permanently delete page and translations
 router.delete('/:id/destroy', async (req, res) => {
   const rawId = req.params.id;

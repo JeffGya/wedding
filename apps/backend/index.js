@@ -44,6 +44,7 @@ const publicPagesRoutes = require('./routes/publicPages');
 const { parseGuestSession } = require('./middleware/guestSession');
 const adminSurveysRoutes = require('./routes/adminSurveys');
 const publicSurveysRoutes = require('./routes/publicSurveys');
+const adminSurveyResponsesRoutes = require('./routes/adminSurveyResponses');
 
 // ---- Grouped admin router (all /api/admin/*)
 const adminRouter = express.Router();
@@ -51,7 +52,9 @@ adminRouter.use(requireAuth);
 adminRouter.use('/', adminRoutes);
 adminRouter.use('/pages', pagesRoutes);
 adminRouter.use('/images', imagesRoutes);
+
 adminRouter.use('/surveys', adminSurveysRoutes);
+adminRouter.use('/surveys/:id/responses', adminSurveyResponsesRoutes);
 
 
 
@@ -136,7 +139,10 @@ const swaggerOptions = {
       },
     },
   },
-  apis: [path.join(__dirname, 'routes/*.js')],
+  apis: [
+    path.join(__dirname, 'routes', '*.js'),
+    path.join(__dirname, 'routes', '**', '*.js')
+  ],
 };
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

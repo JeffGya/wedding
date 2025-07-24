@@ -12,10 +12,71 @@ const SurveyBlock = require('../db/models/surveyBlock');
 const router = express.Router();
 
 /**
- * GET /api/pages/:slug?locale=en
- * - Only returns published, non-deleted pages
- * - Enforces RSVP if page.requires_rsvp === true
- * - Attempts to fetch requested locale, then falls back to 'en'
+ * @openapi
+ * /api/pages/{slug}:
+ *   get:
+ *     summary: Fetch a public page by slug
+ *     tags:
+ *       - Pages
+ *     parameters:
+ *       - in: path
+ *         name: slug
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique slug identifier for the page
+ *       - in: query
+ *         name: locale
+ *         schema:
+ *           type: string
+ *           default: en
+ *         description: Desired locale (falls back to 'en' if not available)
+ *       - in: query
+ *         name: withSurveys
+ *         schema:
+ *           type: boolean
+ *         description: If true, preload survey configurations for survey blocks
+ *     responses:
+ *       '200':
+ *         description: Page content and metadata
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 slug:
+ *                   type: string
+ *                 locale:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 content:
+ *                   type: array
+ *                   description: Array of content blocks
+ *                   items:
+ *                     type: object
+ *       '403':
+ *         description: Access denied because RSVP required or not attending
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                 reason:
+ *                   type: string
+ *       '404':
+ *         description: Page or translation not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
  */
 router.get('/:slug', async (req, res) => {
   const { slug } = req.params;

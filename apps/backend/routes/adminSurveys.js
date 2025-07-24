@@ -72,7 +72,8 @@ function validateSurveyPayload(body, forUpdate = false) {
     }
   }
 
-  if (!forUpdate || body.requires_rsvp !== undefined) {
+  // Only validate requires_rsvp if explicitly provided
+  if (body.requires_rsvp !== undefined) {
     if (!isBool(body.requires_rsvp)) {
       errors.push('requires_rsvp must be boolean');
     }
@@ -93,6 +94,46 @@ function validateSurveyPayload(body, forUpdate = false) {
   return errors;
 }
 
+/**
+ * @openapi
+ * /api/admin/surveys:
+ *   get:
+ *     summary: List all survey blocks with pagination and optional includeDeleted
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: query
+ *         name: includeDeleted
+ *         schema:
+ *           type: boolean
+ *         description: Include soft-deleted surveys
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *     responses:
+ *       '200':
+ *         description: A paginated list of surveys
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/SurveyBlock'
+ *                 meta:
+ *                   $ref: '#/components/schemas/PaginationMeta'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- List ----------
 router.get('/', async (req, res) => {
   try {
@@ -126,6 +167,56 @@ router.get('/', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/surveys:
+ *   post:
+ *     summary: Create a new survey block
+ *     tags:
+ *       - Surveys
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - question
+ *               - type
+ *               - locale
+ *             properties:
+ *               question:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *                 enum: [radio, checkbox, text]
+ *               options:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               is_required:
+ *                 type: boolean
+ *               is_anonymous:
+ *                 type: boolean
+ *               requires_rsvp:
+ *                 type: boolean
+ *               locale:
+ *                 type: string
+ *               page_id:
+ *                 type: integer
+ *                 nullable: true
+ *     responses:
+ *       '201':
+ *         description: Created survey block
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SurveyBlock'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidSurvey'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- Create ----------
 router.post('/', async (req, res) => {
   try {
@@ -172,6 +263,34 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/surveys/{id}:
+ *   get:
+ *     summary: Get a survey block by ID
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Survey ID
+ *     responses:
+ *       '200':
+ *         description: Survey block object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SurveyBlock'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- Get by ID ----------
 router.get('/:id', async (req, res) => {
   const rawId = req.params.id;
@@ -198,6 +317,61 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/surveys/{id}:
+ *   put:
+ *     summary: Update an existing survey block
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Survey ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *                 enum: [radio, checkbox, text]
+ *               options:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               is_required:
+ *                 type: boolean
+ *               is_anonymous:
+ *                 type: boolean
+ *               requires_rsvp:
+ *                 type: boolean
+ *               locale:
+ *                 type: string
+ *               page_id:
+ *                 type: integer
+ *                 nullable: true
+ *     responses:
+ *       '200':
+ *         description: Updated survey block
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SurveyBlock'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidSurvey'
+ *       '404':
+ *         $ref: '#/components/responses/NotFound'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- Update ----------
 router.put('/:id', async (req, res) => {
   const rawId = req.params.id;
@@ -247,6 +421,35 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/surveys/{id}:
+ *   delete:
+ *     summary: Soft-delete a survey block
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Survey ID
+ *     responses:
+ *       '200':
+ *         description: Deletion success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- Soft delete ----------
 router.delete('/:id', async (req, res) => {
   const rawId = req.params.id;
@@ -270,6 +473,32 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/surveys/{id}/restore:
+ *   put:
+ *     summary: Restore a soft-deleted survey block
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Survey ID
+ *     responses:
+ *       '200':
+ *         description: Restored survey block
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SurveyBlock'
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- Restore ----------
 router.put('/:id/restore', async (req, res) => {
   const rawId = req.params.id;
@@ -294,6 +523,35 @@ router.put('/:id/restore', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/admin/surveys/{id}/destroy:
+ *   delete:
+ *     summary: Permanently delete a survey block
+ *     tags:
+ *       - Surveys
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Survey ID
+ *     responses:
+ *       '200':
+ *         description: Deletion success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       '400':
+ *         $ref: '#/components/responses/InvalidId'
+ *       '500':
+ *         $ref: '#/components/responses/ServerError'
+ */
 // ---------- Hard destroy ----------
 router.delete('/:id/destroy', async (req, res) => {
   const rawId = req.params.id;
