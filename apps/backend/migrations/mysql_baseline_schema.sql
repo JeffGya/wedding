@@ -73,6 +73,19 @@ CREATE TABLE `knex_migrations_lock` (
   PRIMARY KEY (`index`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE `messages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `subject` varchar(255) NOT NULL,
+  `body_en` text NOT NULL,
+  `body_lt` text,
+  `status` varchar(50) NOT NULL DEFAULT 'draft',
+  `scheduled_for` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 DROP TABLE IF EXISTS `message_recipients`;
 CREATE TABLE `message_recipients` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -95,18 +108,21 @@ CREATE TABLE `message_recipients` (
   CONSTRAINT `message_recipients_ibfk_2` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-DROP TABLE IF EXISTS `messages`;
-CREATE TABLE `messages` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `subject` varchar(255) NOT NULL,
-  `body_en` text NOT NULL,
-  `body_lt` text,
-  `status` varchar(50) NOT NULL DEFAULT 'draft',
-  `scheduled_for` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+DROP TABLE IF EXISTS `pages`;
+CREATE TABLE `pages` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_published` tinyint(1) DEFAULT '0',
+  `requires_rsvp` tinyint(1) DEFAULT '0',
+  `show_in_nav` tinyint(1) DEFAULT '1',
+  `nav_order` int DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pages_slug_unique` (`slug`),
+  KEY `idx_pages_deleted_at` (`deleted_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `page_translations`;
 CREATE TABLE `page_translations` (
@@ -123,22 +139,6 @@ CREATE TABLE `page_translations` (
   KEY `idx_page_translations_deleted_at` (`deleted_at`),
   CONSTRAINT `page_translations_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `pages`;
-CREATE TABLE `pages` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_published` tinyint(1) DEFAULT '0',
-  `requires_rsvp` tinyint(1) DEFAULT '0',
-  `show_in_nav` tinyint(1) DEFAULT '1',
-  `nav_order` int DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `deleted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `pages_slug_unique` (`slug`),
-  KEY `idx_pages_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (

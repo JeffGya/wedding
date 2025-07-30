@@ -11,6 +11,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "joi": "^17.13.3",
     "knex": "^2.5.1",
     "luxon": "^3.6.1",
     "multer": "^1.4.4",
@@ -28,8 +29,10 @@
     "start": "node index.js",
     "start:dev": "cross-env NODE_ENV=development node apps/backend/index.js",
     "start:prod": "cross-env NODE_ENV=production node apps/backend/index.js",
+    "seed:dev": "node db/seed.js",
     "seed:users": "node db/seedUsers.js",
     "seed:mysql": "node db/mysqyl_seed.js",
+    "import:baseline": "mysql -u root -p wedding_site < migrations/mysql_baseline_schema.sql",
     "migrate": "knex migrate:latest"
   }
 }

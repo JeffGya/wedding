@@ -1,0 +1,120 @@
+{
+    "info": {
+      "name": "Wedding Site Backend",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": "Tests for public page fetching, survey-in-page support, and block ingestion"
+    },
+    "item": [
+      {
+        "name": "Get Public Page",
+        "request": {
+          "method": "GET",
+          "url": {
+            "raw": "{{base_url}}/api/pages/{{slug}}?locale={{locale}}",
+            "host": ["{{base_url}}"],
+            "path": ["api","pages","{{slug}}"],
+            "query": [
+              { "key": "locale", "value": "{{locale}}" }
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+                "const json = pm.response.json();",
+                "pm.test(\"Response has blocks array\", () => pm.expect(json.blocks).to.be.an('array'));"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Get Public Page (withSurveys)",
+        "request": {
+          "method": "GET",
+          "url": {
+            "raw": "{{base_url}}/api/pages/{{slug}}?locale={{locale}}&withSurveys=true",
+            "host": ["{{base_url}}"],
+            "path": ["api","pages","{{slug}}"],
+            "query": [
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "withSurveys", "value": "true" }
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+                "const json = pm.response.json();",
+                "pm.test(\"Response has blocks array\", () => pm.expect(json.blocks).to.be.an('array'));",
+                "",
+                "const surveyBlocks = json.blocks.filter(b => b.type === 'survey');",
+                "pm.test(\"Survey blocks have required fields\", () => {",
+                "  surveyBlocks.forEach(b => {",
+                "    pm.expect(b).to.have.property('id');",
+                "    pm.expect(b).to.have.property('question');",
+                "    pm.expect(b).to.have.property('inputType');",
+                "    pm.expect(b).to.have.property('isRequired');",
+                "    pm.expect(b).to.have.property('isAnonymous');",
+                "    pm.expect(b).to.have.property('alreadyResponded');",
+                "    if (['radio','checkbox'].includes(b.inputType)) {",
+                "      pm.expect(b.options).to.be.an('array');",
+                "      b.options.forEach(o => {",
+                "        pm.expect(o).to.have.property('id');",
+                "        pm.expect(o).to.have.property('label');",
+                "      });",
+                "    } else {",
+                "      pm.expect(b).to.have.property('placeholder');",
+                "    }",
+                "  });",
+                "});"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Create Page Translation (all block types)",
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "{{base_url}}/api/admin/pages/{{pageId}}/translations/{{locale}}",
+            "host": ["{{base_url}}"],
+            "path": ["api","admin","pages","{{pageId}}","translations","{{locale}}"]
+          },
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"Test All Blocks Page\",\n  \"content\": [\n    { \"type\": \"rich-text\", \"html\": \"<p>Hello <strong>World</strong></p>\" },\n    { \"type\": \"image\", \"src\": \"https://example.com/photo.jpg\", \"alt\": \"Example photo\" },\n    { \"type\": \"video\", \"embed\": \"https://www.youtube.com/embed/dQw4w9WgXcQ\" },\n    { \"type\": \"map\", \"embed\": \"https://www.google.com/maps/embed?pb=!1m18!…\" },\n    { \"type\": \"divider\" },\n    { \"type\": \"survey\", \"id\": 1 }\n  ]\n}"
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 200 or 201\", () => pm.expect(pm.response.code).to.be.oneOf([200,201]));",
+                "const json = pm.response.json();",
+                "pm.test(\"Returns translation ID\", () => pm.expect(json).to.have.property('id'));",
+                "pm.test(\"Echoes content array with errors or normalized blocks\", () => pm.expect(json.content).to.be.an('array'));"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      { "key": "base_url", "value": "http://localhost:3000" },
+      { "key": "slug", "value": "sample-page" },
+      { "key": "locale", "value": "en" },
+      { "key": "pageId", "value": "123" }
+    ]
+  }

@@ -96,18 +96,40 @@ const mysql = require('mysql2/promise');
   const [pageRow] = await connection.execute(`SELECT id FROM pages WHERE slug = ?`, ['our-story']);
   const pageId = pageRow[0].id;
 
+  // Seed survey blocks for example page
+  const [surveyResEn] = await connection.execute(
+    `INSERT IGNORE INTO survey_blocks
+      (page_id, locale, question, type, options, is_required, is_anonymous)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [pageId, 'en', 'Will you join us for brunch?', 'radio',
+     JSON.stringify(['Yes', 'No']), 1, 0]
+  );
+  const surveyEnId = surveyResEn.insertId;
+
+  const [surveyResLt] = await connection.execute(
+    `INSERT IGNORE INTO survey_blocks
+      (page_id, locale, question, type, options, is_required, is_anonymous)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [pageId, 'lt', 'Ar prisijungsite prie mūsų pusryčių?', 'radio',
+     JSON.stringify(['Taip', 'Ne']), 1, 0]
+  );
+  const surveyLtId = surveyResLt.insertId;
+
+  // Define updated translation content including survey blocks
   const contentEn = JSON.stringify([
-    { type: 'richText', content: '<p>We met in 2015, and the rest is history…</p>' },
-    { type: 'image', url: '/uploads/story.jpg', alt: 'Us smiling' },
+    { type: 'rich-text', html: '<p>We met in 2015, and the rest is history…</p>' },
+    { type: 'image', src: '/uploads/story.jpg', alt: 'Us smiling' },
     { type: 'divider' },
-    { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
+    { type: 'map', embed: 'https://maps.google.com/your-venue' },
+    { type: 'survey', id: surveyEnId }
   ]);
 
   const contentLt = JSON.stringify([
-    { type: 'richText', content: '<p>Susipažinome 2015 metais, o visa kita – istorija…</p>' },
-    { type: 'image', url: '/uploads/story.jpg', alt: 'Mes šypsomės' },
+    { type: 'rich-text', html: '<p>Susipažinome 2015 metais, o visa kita – istorija…</p>' },
+    { type: 'image', src: '/uploads/story.jpg', alt: 'Mes šypsomės' },
     { type: 'divider' },
-    { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
+    { type: 'map', embed: 'https://maps.google.com/your-venue' },
+    { type: 'survey', id: surveyLtId }
   ]);
 
   await connection.execute(
@@ -125,6 +147,68 @@ const mysql = require('mysql2/promise');
   );
 
   console.log('– seeded example page and translations');
+
+  // Seed "All Blocks" test page with every block type
+  const [allPageRes] = await connection.execute(
+    `INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order)
+     VALUES (?, ?, ?, ?, ?)`,
+    ['all-blocks', 1, 0, 0, 99]
+  );
+  const [allPageRow] = await connection.execute(
+    `SELECT id FROM pages WHERE slug = ?`,
+    ['all-blocks']
+  );
+  const allPageId = allPageRow[0].id;
+
+  // Seed survey blocks for "All Blocks" page
+  const [surveyAllEn] = await connection.execute(
+    `INSERT IGNORE INTO survey_blocks
+      (page_id, locale, question, type, options, is_required, is_anonymous)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [allPageId, 'en', 'Do you like our site?', 'radio',
+     JSON.stringify(['Option A', 'Option B']), 1, 0]
+  );
+  const surveyAllEnId = surveyAllEn.insertId;
+
+  const [surveyAllLt] = await connection.execute(
+    `INSERT IGNORE INTO survey_blocks
+      (page_id, locale, question, type, options, is_required, is_anonymous)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [allPageId, 'lt', 'Ar patinka mūsų svetainė?', 'radio',
+     JSON.stringify(['Parinktis A', 'Parinktis B']), 1, 0]
+  );
+  const surveyAllLtId = surveyAllLt.insertId;
+
+  // Define translations including all block types
+  const allContentEn = JSON.stringify([
+    { type: 'rich-text', html: '<p>Welcome to the all-blocks test page.</p>' },
+    { type: 'image', src: '/uploads/story.jpg', alt: 'Us smiling' },
+    { type: 'video', embed: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    { type: 'map', embed: 'https://maps.google.com/maps?q=London&output=embed' },
+    { type: 'divider' },
+    { type: 'survey', id: surveyAllEnId }
+  ]);
+  const allContentLt = JSON.stringify([
+    { type: 'rich-text', html: '<p>Sveiki atvykę į puslapį su visais blokais.</p>' },
+    { type: 'image', src: '/uploads/story.jpg', alt: 'Mūsų nuotrauka' },
+    { type: 'video', embed: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    { type: 'map', embed: 'https://maps.google.com/maps?q=Vilnius&output=embed' },
+    { type: 'divider' },
+    { type: 'survey', id: surveyAllLtId }
+  ]);
+
+  // Insert translations for "All Blocks" page
+  await connection.execute(
+    `INSERT IGNORE INTO page_translations (page_id, locale, title, content)
+     VALUES (?, ?, ?, ?)`,
+    [allPageId, 'en', 'All Blocks Test', allContentEn]
+  );
+  await connection.execute(
+    `INSERT IGNORE INTO page_translations (page_id, locale, title, content)
+     VALUES (?, ?, ?, ?)`,
+    [allPageId, 'lt', 'Visi blokai', allContentLt]
+  );
+  console.log('– seeded "All Blocks" test page and translations');
 
   await connection.end();
   console.log('✅ MySQL: users seeded.');

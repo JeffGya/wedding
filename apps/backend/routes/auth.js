@@ -56,7 +56,7 @@ const router = express.Router();
  *         description: Database error
  */
 router.post('/login', async (req, res) => {
-  console.log('Login request received:', req.body);
+  console.log('Login request received:');
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });

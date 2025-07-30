@@ -1,5 +1,3 @@
-
-
 // apps/backend/utils/blockSchema.js
 // Single source of truth for page content blocks:
 // - validateBlock: structural/type checks
@@ -10,6 +8,8 @@
 'use strict';
 
 const sanitizeHtml = require('sanitize-html');
+const Joi = require('joi');
+const ERRORS = require('./errors');
 
 // -------------------- Config --------------------
 const ALLOWED_TYPES = ['rich-text', 'image', 'video', 'divider', 'map', 'survey'];
@@ -17,11 +17,8 @@ const ALLOWED_TYPES = ['rich-text', 'image', 'video', 'divider', 'map', 'survey'
 const ALLOWED_IFRAME_HOSTS = [
   'www.youtube.com',
   'youtube.com',
-  'player.vimeo.com',
-  'www.google.com', // maps
+  'www.google.com',
   'maps.google.com',
-  'www.google.lt',
-  'www.google.lv',
 ];
 
 const SANITIZE_HTML_OPTIONS = {
@@ -47,6 +44,32 @@ const SANITIZE_HTML_OPTIONS = {
   allowProtocolRelative: false,
 };
 
+// -------------------- Joi Schemas --------------------
+const richTextSchema = Joi.object({
+  type: Joi.string().valid('rich-text').required(),
+  html: Joi.string().required()
+});
+
+const imageSchema = Joi.object({
+  type: Joi.string().valid('image').required(),
+  src: Joi.string().uri().required(),
+  alt: Joi.string().allow('').default('')
+});
+
+const embedSchema = Joi.object({
+  type: Joi.string().valid('video', 'map').required(),
+  embed: Joi.string().required()
+});
+
+const dividerSchema = Joi.object({
+  type: Joi.string().valid('divider').required()
+});
+
+const surveySchema = Joi.object({
+  type: Joi.string().valid('survey').required(),
+  id: Joi.number().integer().positive().required()
+});
+
 // -------------------- Helpers --------------------
 function isPlainObject(v) {
   return v && typeof v === 'object' && !Array.isArray(v);
@@ -67,28 +90,54 @@ function ensureIframeHost(src) {
 
 // -------------------- Validation --------------------
 function validateBlock(block) {
-  if (!isPlainObject(block)) throw new Error('Block must be an object.');
-  if (!block.type || typeof block.type !== 'string') throw new Error('Block requires a "type" string.');
+  if (!isPlainObject(block)) {
+    const err = new Error('Block must be an object.');
+    err.code = ERRORS.INVALID_BLOCK_DATA;
+    throw err;
+  }
+  if (!block.type || typeof block.type !== 'string') {
+    const err = new Error('Block requires a "type" string.');
+    err.code = ERRORS.INVALID_BLOCK_TYPE;
+    throw err;
+  }
   if (!ALLOWED_TYPES.includes(block.type)) {
-    throw new Error(`Unsupported block type "${block.type}". Allowed: ${ALLOWED_TYPES.join(', ')}`);
+    const err = new Error(`Unsupported block type "${block.type}". Allowed: ${ALLOWED_TYPES.join(', ')}`);
+    err.code = ERRORS.INVALID_BLOCK_TYPE;
+    throw err;
   }
 
   switch (block.type) {
     case 'rich-text':
-      if (typeof block.html !== 'string') throw new Error('rich-text block requires "html" string.');
+      if (typeof block.html !== 'string') {
+        const err = new Error('rich-text block requires "html" string.');
+        err.code = ERRORS.INVALID_BLOCK_DATA;
+        throw err;
+      }
       break;
 
     case 'image':
-      if (typeof block.src !== 'string' || !block.src.trim()) throw new Error('image block requires non-empty "src".');
+      if (typeof block.src !== 'string' || !block.src.trim()) {
+        const err = new Error('image block requires non-empty "src".');
+        err.code = ERRORS.INVALID_BLOCK_DATA;
+        throw err;
+      }
       // alt optional
       break;
 
     case 'video':
-      if (typeof block.embed !== 'string') throw new Error('video block requires "embed" string (iframe HTML or URL).');
+      if (typeof block.embed !== 'string') {
+        const err = new Error('video block requires "embed" string (iframe HTML or URL).');
+        err.code = ERRORS.INVALID_BLOCK_DATA;
+        throw err;
+      }
       break;
 
     case 'map':
-      if (typeof block.embed !== 'string') throw new Error('map block requires "embed" string (iframe HTML or URL).');
+      if (typeof block.embed !== 'string') {
+        const err = new Error('map block requires "embed" string (iframe HTML or URL).');
+        err.code = ERRORS.INVALID_BLOCK_DATA;
+        throw err;
+      }
       break;
 
     case 'divider':
@@ -96,7 +145,11 @@ function validateBlock(block) {
       break;
 
     case 'survey':
-      if (!Number.isInteger(block.id) || block.id <= 0) throw new Error('survey block requires numeric positive "id".');
+      if (!Number.isInteger(block.id) || block.id <= 0) {
+        const err = new Error('survey block requires numeric positive "id".');
+        err.code = ERRORS.INVALID_BLOCK_DATA;
+        throw err;
+      }
       break;
   }
   return true;
@@ -145,31 +198,35 @@ function sanitizeBlock(block) {
     // If it's a bare URL, wrap it
     const isUrlOnly = /^https?:\/\//i.test(html) && !/<iframe/i.test(html);
     if (isUrlOnly) {
+      const urlHost = new URL(html).hostname;
       if (!ensureIframeHost(html)) {
-        // Drop unsafe host
-        b.embed = '';
-        return b;
+        const err = new Error(`Embed sanitization failed: host "${urlHost}" not allowed`);
+        err.code = ERRORS.EMBED_SANITIZATION_FAIL;
+        throw err;
       }
       html = `<iframe src="${html}" frameborder="0" allowfullscreen></iframe>`;
     }
 
+    // Sanitize the iframe HTML
     const sanitized = sanitizeHtml(html, SANITIZE_HTML_OPTIONS);
 
-    // After sanitize, check iframe src host again
+    // After sanitize, ensure there is an iframe and host is allowed
     const match = sanitized.match(/<iframe[^>]+src=["']([^"']+)["']/i);
-    if (match) {
-      const src = match[1];
-      if (!ensureIframeHost(src)) {
-        b.embed = '';
-        return b;
-      }
-    } else {
-      // iframe stripped
-      b.embed = '';
-      return b;
+    if (!match) {
+      const err = new Error('Embed sanitization failed: <iframe> tag was stripped');
+      err.code = ERRORS.EMBED_SANITIZATION_FAIL;
+      throw err;
+    }
+    const src = match[1];
+    const srcHost = new URL(src).hostname;
+    if (!ensureIframeHost(src)) {
+      const err = new Error(`Embed sanitization failed: host "${srcHost}" not allowed`);
+      err.code = ERRORS.EMBED_SANITIZATION_FAIL;
+      throw err;
     }
 
     b.embed = sanitized;
+    return b;
   }
 
   return b;
@@ -194,13 +251,48 @@ function processBlocks(blocks, opts = {}) {
 
   blocks.forEach((blk, i) => {
     try {
+      // Base type check:
       validateBlock(blk);
-      let n = normalizeBlock(blk);
+
+      // Joi validation per schema:
+      let validated = (() => {
+        switch (blk.type) {
+          case 'rich-text':
+            return Joi.attempt(blk, richTextSchema);
+          case 'image':
+            return Joi.attempt(blk, imageSchema);
+          case 'video':
+          case 'map':
+            return Joi.attempt(blk, embedSchema);
+          case 'divider':
+            return Joi.attempt(blk, dividerSchema);
+          case 'survey':
+            return Joi.attempt(blk, surveySchema);
+          default:
+            // Shouldn't happen due to validateBlock, but guard anyway
+            throw new Error(`Unsupported block type "${blk.type}".`);
+        }
+      })();
+
+      // Normalize and sanitize the validated block
+      let n = normalizeBlock(validated);
       n = sanitizeBlock(n);
       out.push(n);
+
     } catch (err) {
+      // Record the error
       errors.push({ index: i, error: err });
-      if (!skipInvalid) {
+
+      // Always insert a placeholder in public mode
+      if (skipInvalid) {
+        out.push({
+          type: 'error',
+          index: i,
+          originalType: typeof blk.type === 'string' ? blk.type : null,
+          message: err.message
+        });
+      } else {
+        // In admin mode, rethrow so we notice failures immediately
         throw err;
       }
     }
@@ -215,4 +307,9 @@ module.exports = {
   normalizeBlock,
   sanitizeBlock,
   processBlocks,
+  richTextSchema,
+  imageSchema,
+  embedSchema,
+  dividerSchema,
+  surveySchema,
 };

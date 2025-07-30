@@ -8,6 +8,7 @@ const Page = require('../db/models/pages');
 const PageTranslation = require('../db/models/pageTranslation');
 const { processBlocks } = require('../utils/blockSchema');
 const SurveyBlock = require('../db/models/surveyBlock');
+const SurveyResponse = require('../db/models/surveyResponse');
 
 const router = express.Router();
 
@@ -90,7 +91,10 @@ router.get('/:slug', async (req, res) => {
     // 1. Fetch page by slug
     const page = await Page.getBySlug(slug);
     if (!page || !page.is_published) {
-      return res.status(404).json({ error: 'Page not found or unpublished' });
+      return res.status(404).json({
+        error: 'Page not found or unpublished',
+        message: 'Page "' + slug + '" not found or unpublished.'
+      });
     }
 
     // 2. RSVP gating (allow ONLY guests who are attending)
@@ -119,12 +123,18 @@ router.get('/:slug', async (req, res) => {
     }
 
     if (!translation) {
-      return res.status(404).json({ error: 'Translation not found' });
+      return res.status(404).json({
+        error: 'Page not found or unpublished',
+        message: 'Translation for locale "' + requestedLocale + '" not found on page "' + slug + '".'
+      });
     }
 
     if (!translation.content) {
       console.error('[PUBLIC PAGE] Missing content in translation.');
-      return res.status(500).json({ error: 'Missing content in translation' });
+      return res.status(500).json({
+        error: 'Invalid block data',
+        message: 'Translation content is missing or invalid for page "' + slug + '" locale "' + translation.locale + '".'
+      });
     }
 
     // translation.content is parsed in the model; sanitize & drop invalid blocks for public output
@@ -137,7 +147,10 @@ router.get('/:slug', async (req, res) => {
       content = blocks;
     } catch (ve) {
       console.error('[PUBLIC PAGE] Block processing error:', ve.message);
-      return res.status(500).json({ error: 'Failed to process page content' });
+      return res.status(500).json({
+        error: 'Invalid block data',
+        message: 'Failed to process page content: ' + ve.message
+      });
     }
 
     // 4. Optionally preload survey configs inline
@@ -149,24 +162,39 @@ router.get('/:slug', async (req, res) => {
         for (const sid of surveyIds) {
           try {
             const sb = await SurveyBlock.getById(sid, { includeDeleted: false });
-            if (sb) {
-              // options already parsed in model
-              surveyMap[sid] = {
-                question: sb.question,
-                type: sb.type,
-                options: sb.options || [],
-                is_required: sb.is_required,
-                is_anonymous: sb.is_anonymous
-              };
-            } else {
+            if (!sb) {
               console.warn('[PUBLIC PAGE] Missing survey block id:', sid);
+              continue;
             }
+            // Transform options for choice types into [{id, label}]
+            const rawOpts = sb.options || [];
+            const options = Array.isArray(rawOpts)
+              ? rawOpts.map((label, idx) => ({ id: idx + 1, label }))
+              : [];
+
+            // Determine if this guest has already responded (only for non-anonymous)
+            let alreadyResponded = false;
+            if (!sb.is_anonymous && guest) {
+              const responses = await SurveyResponse.getAllBySurvey(sid);
+              alreadyResponded = responses.some(r => r.guest_id === guest.id);
+            }
+
+            // Build enriched survey data
+            surveyMap[sid] = {
+              question: sb.question,
+              inputType: sb.type,
+              options: ['radio','checkbox'].includes(sb.type) ? options : undefined,
+              placeholder: sb.type === 'text' ? (sb.placeholder || '') : undefined,
+              isRequired: !!sb.is_required,
+              isAnonymous: !!sb.is_anonymous,
+              alreadyResponded
+            };
           } catch (e) {
             console.error('[PUBLIC PAGE] Error loading survey block id', sid, e.message);
           }
         }
 
-        // Attach or drop missing ones
+        // Attach enriched data or drop missing blocks
         content = content.filter(block => {
           if (block.type !== 'survey') return true;
           const data = surveyMap[block.id];
@@ -174,7 +202,7 @@ router.get('/:slug', async (req, res) => {
             console.warn('[PUBLIC PAGE] Dropping survey block with missing id:', block.id);
             return false;
           }
-          block.survey = data;
+          Object.assign(block, data);
           return true;
         });
       }
@@ -190,7 +218,10 @@ router.get('/:slug', async (req, res) => {
     });
   } catch (err) {
     console.error('[PUBLIC PAGE] Unexpected error:', err);
-    return res.status(500).json({ error: 'Something went wrong' });
+    return res.status(500).json({
+      error: 'Invalid block data',
+      message: 'Unexpected error processing request: ' + err.message
+    });
   }
 });
 

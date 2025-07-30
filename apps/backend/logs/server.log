@@ -1,95 +1,27 @@
-[2025-07-24T20:49:53.428Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T20:49:53.431Z] Server is running on port 5001
-[2025-07-24T20:49:53.442Z] ✅ Connected to MySQL database.
-[2025-07-24T20:50:33.010Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T20:50:33.013Z] Server is running on port 5001
-[2025-07-24T20:50:33.024Z] ✅ Connected to MySQL database.
-[2025-07-24T20:52:00.770Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T20:52:00.773Z] Server is running on port 5001
-[2025-07-24T20:52:00.785Z] ✅ Connected to MySQL database.
-[2025-07-24T20:52:53.225Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T20:52:53.227Z] Server is running on port 5001
-[2025-07-24T20:52:53.237Z] ✅ Connected to MySQL database.
-[2025-07-24T20:54:16.018Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T20:54:16.021Z] Server is running on port 5001
-[2025-07-24T20:54:16.030Z] ✅ Connected to MySQL database.
-[2025-07-24T20:55:10.252Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T20:55:10.255Z] Server is running on port 5001
-[2025-07-24T20:55:10.266Z] ✅ Connected to MySQL database.
-[2025-07-24T21:00:00.633Z] ℹ️ [INFO] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-07-24T21:00:00.634Z] ℹ️ [INFO] 📨 Starting scheduled message check...
-[2025-07-24T21:00:00.643Z] ℹ️ [INFO] ✅ No scheduled messages ready to send.
-[2025-07-24T21:00:00.643Z] ℹ️ [INFO] ✅ Scheduled message check completed.
-[2025-07-24T21:26:52.740Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:26:52.743Z] Server is running on port 5001
-[2025-07-24T21:26:52.767Z] ✅ Connected to MySQL database.
-[2025-07-24T21:30:00.969Z] ℹ️ [INFO] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-07-24T21:30:00.971Z] ℹ️ [INFO] 📨 Starting scheduled message check...
-[2025-07-24T21:30:00.978Z] ℹ️ [INFO] ✅ No scheduled messages ready to send.
-[2025-07-24T21:30:00.979Z] ℹ️ [INFO] ✅ Scheduled message check completed.
-[2025-07-24T21:30:04.287Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:30:04.290Z] Server is running on port 5001
-[2025-07-24T21:30:04.301Z] ✅ Connected to MySQL database.
-[2025-07-24T21:30:12.762Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:30:12.764Z] Server is running on port 5001
-[2025-07-24T21:30:12.773Z] ✅ Connected to MySQL database.
-[2025-07-24T21:31:47.367Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:31:47.369Z] Server is running on port 5001
-[2025-07-24T21:31:47.381Z] ✅ Connected to MySQL database.
-[2025-07-24T21:32:53.156Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:32:53.162Z] Server is running on port 5001
-[2025-07-24T21:32:53.183Z] ✅ Connected to MySQL database.
-[2025-07-24T21:34:47.005Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:34:47.008Z] Server is running on port 5001
-[2025-07-24T21:34:47.017Z] ✅ Connected to MySQL database.
-[2025-07-24T21:38:08.549Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:38:08.552Z] Server is running on port 5001
-[2025-07-24T21:38:08.564Z] ✅ Connected to MySQL database.
-[2025-07-24T21:40:46.408Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:40:46.411Z] Server is running on port 5001
-[2025-07-24T21:40:46.423Z] ✅ Connected to MySQL database.
-[2025-07-24T21:42:10.184Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:42:10.187Z] Server is running on port 5001
-[2025-07-24T21:42:10.199Z] ✅ Connected to MySQL database.
-[2025-07-24T21:43:50.931Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:43:50.934Z] Server is running on port 5001
-[2025-07-24T21:43:50.943Z] ✅ Connected to MySQL database.
-[2025-07-24T21:51:29.964Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-07-24T21:51:29.966Z] Server is running on port 5001
-[2025-07-24T21:51:29.977Z] ✅ Connected to MySQL database.
-[2025-07-24T21:52:51.642Z] [guestSession] Invalid guest cookie. Clearing.
-[2025-07-24T21:53:42.130Z] Login request received: {"email":"jeffrey@example.com","password":"password123"}
-[2025-07-24T21:53:47.321Z] Login request received: {"email":"jeffrey@example.com","password":"password123"}
-[2025-07-24T21:53:48.750Z] Login request received: {"email":"jeffrey@example.com","password":"password123"}
-[2025-07-24T21:59:30.171Z] Login request received: {"email":"jeffogya@gmail.com","password":"Fbjqp4H6woww9"}
-[2025-07-24T22:00:00.598Z] ℹ️ [INFO] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-07-24T22:00:00.598Z] ℹ️ [INFO] 📨 Starting scheduled message check...
-[2025-07-24T22:00:00.603Z] ℹ️ [INFO] ✅ No scheduled messages ready to send.
-[2025-07-24T22:00:00.603Z] ℹ️ [INFO] ✅ Scheduled message check completed.
-[2025-07-24T22:00:20.221Z] Login request received: {"email":"jeffogya@gmail.com","password":"Fbjqp4H6woww9"}
-[2025-07-24T22:00:33.322Z] 📉 Failed to find latest message ID
-[2025-07-24T22:02:48.671Z] [guestSession] Setting session for guestId=31
-[2025-07-24T22:02:48.704Z] req.body → {"code":"5qliwqyd","attending":true,"dietary":"","notes":"","plus_one_name":""}
-[2025-07-24T22:02:48.705Z] ℹ️ [INFO] RSVP PUBLIC UPDATE: code=5qliwqyd {"attending":true,"rsvp_status":"attending","plus_one_name":"","dietary":null,"notes":null}
-[2025-07-24T22:02:48.711Z] ❌ [ERROR] Failed to load RSVP Confirmation template
-[2025-07-24T22:02:48.743Z] [POST /api/admin/surveys] body: {"question":"Will you join the brunch?","type":"radio","options":["Yes","No"],"is_required":true,"is_anonymous":false,"locale":"en","page_id":null}
-[2025-07-24T22:02:48.847Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-07-24T22:02:48.849Z] [GET /api/pages] Returning 1 of 1
-[2025-07-24T22:02:48.866Z] [POST /api/pages] Request body: {"slug":"blocks-test-page","is_published":true,"requires_rsvp":false,"show_in_nav":true,"nav_order":5,"translations":[{"locale":"en","title":"Blocks Test EN","content":[{"type":"rich-text","html":"<p>Hello <strong>world</strong></p>"},{"type":"image","src":"/uploads/sample.jpg","alt":"Sample"},{"type":"divider"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://www.google.com/maps/embed?pb=!1m18!2m3"},{"type":"survey","id":4}]}]}
-[2025-07-24T22:02:48.866Z] [POST /api/pages] Pre-validating translation: {"locale":"en","title":"Blocks Test EN","content":[{"type":"rich-text","html":"<p>Hello <strong>world</strong></p>"},{"type":"image","src":"/uploads/sample.jpg","alt":"Sample"},{"type":"divider"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://www.google.com/maps/embed?pb=!1m18!2m3"},{"type":"survey","id":4}]}
-[2025-07-24T22:02:48.876Z] [POST /api/pages] Created page: {"id":33,"slug":"blocks-test-page","is_published":1,"requires_rsvp":0,"show_in_nav":1,"nav_order":5,"created_at":"2025-07-24T22:02:48.000Z","updated_at":"2025-07-24T22:02:48.000Z","deleted_at":null}
-[2025-07-24T22:02:48.878Z] [POST /api/pages] Linked survey block 4 to page 33
-[2025-07-24T22:02:48.880Z] [POST /api/pages] Translation saved for locale: en
-[2025-07-24T22:02:48.896Z] [POST /api/pages] Request body: {"slug":"invalid-block-page","is_published":false,"requires_rsvp":false,"show_in_nav":false,"nav_order":1,"translations":[{"locale":"en","title":"Invalid block","content":[{"type":"image"}]}]}
-[2025-07-24T22:02:48.896Z] [POST /api/pages] Pre-validating translation: {"locale":"en","title":"Invalid block","content":[{"type":"image"}]}
-[2025-07-24T22:02:48.896Z] [POST /api/pages] Block validation error: image block requires non-empty "src".
-[2025-07-24T22:02:48.911Z] [GET /api/pages/33] Fetching page and translations...
-[2025-07-24T22:02:48.929Z] [PUT /api/pages/33] Updating page... {"slug":"blocks-test-page","is_published":true,"requires_rsvp":false,"show_in_nav":true,"nav_order":6,"translations":[{"locale":"en","title":"Blocks Test EN (updated)","content":[{"type":"rich-text","html":"<p>Updated & sanitized <script>alert('x')</script></p>"},{"type":"divider"}]}]}
-[2025-07-24T22:02:48.930Z] [PUT /api/pages/33] Pre-validating translation for en... {"locale":"en","title":"Blocks Test EN (updated)","content":[{"type":"rich-text","html":"<p>Updated & sanitized <script>alert('x')</script></p>"},{"type":"divider"}]}
-[2025-07-24T22:02:48.932Z] [PUT /api/pages/33] Page updated.
-[2025-07-24T22:02:48.934Z] [PUT /api/pages/33] Updated translation for locale: en
-[2025-07-24T22:02:48.950Z] [DELETE /api/pages/33] Deleting page and translations...
-[2025-07-24T22:02:48.967Z] [RESTORE /api/pages/33] Restoring page and translations...
-[2025-07-24T22:02:48.989Z] [DESTROY /api/pages/33] Hard deleting page and translations...
-[2025-07-24T22:02:49.007Z] [PUBLIC PAGE] slug="blocks-test-page" locale="en" guestId=31
-[2025-07-24T22:02:49.024Z] [PUBLIC PAGE] slug="blocks-test-page" locale="en" guestId=31
+[2025-07-29T21:32:50.936Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-29T21:32:50.939Z] Server is running on port 5001
+[2025-07-29T21:32:50.953Z] ✅ Connected to MySQL database.
+[2025-07-29T21:35:04.981Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-29T21:35:04.984Z] Server is running on port 5001
+[2025-07-29T21:35:04.996Z] ✅ Connected to MySQL database.
+[2025-07-29T21:36:06.189Z] Login request received: {"email":"jeffrey@example.com","password":"password123"}
+[2025-07-29T21:36:09.147Z] 🧭 Route hit: GET /api/messages
+[2025-07-29T21:36:11.399Z] 🧭 Route hit: DELETE /api/messages/9
+[2025-07-29T21:38:51.037Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-29T21:38:51.040Z] Server is running on port 5001
+[2025-07-29T21:38:51.065Z] ✅ Connected to MySQL database.
+[2025-07-29T21:41:52.419Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-29T21:41:52.422Z] Server is running on port 5001
+[2025-07-29T21:41:52.435Z] ✅ Connected to MySQL database.
+[2025-07-29T21:42:13.832Z] [guestSession] Invalid guest cookie. Clearing.
+[2025-07-29T21:43:26.487Z] Login request received: {"email":"jeffrey@example.com","password":"password123"}
+[2025-07-29T21:45:06.546Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-29T21:45:06.549Z] Server is running on port 5001
+[2025-07-29T21:45:06.563Z] ✅ Connected to MySQL database.
+[2025-07-29T21:48:36.890Z] Login request received:
+[2025-07-29T21:49:13.830Z] [PUBLIC PAGE] slug="null" locale="en" guestId=none
+[2025-07-29T21:49:22.442Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-07-29T21:49:22.451Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-07-29T21:51:20.198Z] ℹ️ [INFO] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-07-29T21:51:20.201Z] Server is running on port 5001
+[2025-07-29T21:51:20.215Z] ✅ Connected to MySQL database.

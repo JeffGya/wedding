@@ -24,8 +24,10 @@ let db, execSql, runQuery, closeDb;
     execSql = async (sql) => {
       await db.query(sql);
     };
-    runQuery = async (sql, params) => {
-      const [result] = await db.execute(sql, params);
+    runQuery = async (sql, params = []) => {
+      // Convert undefined parameters to null for MySQL binding
+      const safeParams = params.map(p => p === undefined ? null : p);
+      const [result] = await db.execute(sql, safeParams);
       return result;
     };
     closeDb = async () => {
@@ -54,7 +56,7 @@ let db, execSql, runQuery, closeDb;
   }
 
   // Run schema for SQLite or MySQL
-  const initSqlPath = path.resolve(__dirname, process.env.DB_TYPE === 'mysql' ? '../schema/mysql_init.sql' : '../schema/init.sql');
+  const initSqlPath = path.resolve(__dirname, process.env.DB_TYPE === 'mysql' ? '../migrations/mysql_baseline_schema.sql' : '../migrations/mysql_baseline_schema.sql');
   const initSql = fs.readFileSync(initSqlPath, 'utf-8');
   try {
     await execSql(initSql);
@@ -256,18 +258,41 @@ async function seedDatabase() {
   ]);
 
   console.log('Messages seeded successfully.');
+  // Fetch first three guest IDs to avoid FK constraint errors
+  const [guestRows] = await db.execute(
+    'SELECT id FROM guests ORDER BY id LIMIT 3'
+  );
+  const guestIds = guestRows.map(r => r.id);
   const recSql = process.env.DB_TYPE === 'mysql'
     ? `INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at) VALUES (?, ?, ?, ?, ?, UTC_TIMESTAMP())`
     : `INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))`;
-  await runQuery(recSql, [messageId, 1, 'sent', 'jeffrey@example.com', 'en']);
-  await runQuery(recSql, [messageId, 2, 'failed', 'john@example.com', 'en']);
-  await runQuery(recSql, [messageId, 3, 'pending', 'alice@example.com', 'lt']);
+  await runQuery(recSql, [
+    messageId,
+    guestIds[0],
+    'sent',
+    'jeffrey@example.com',
+    'en'
+  ]);
+  await runQuery(recSql, [
+    messageId,
+    guestIds[1],
+    'failed',
+    'john@example.com',
+    'en'
+  ]);
+  await runQuery(recSql, [
+    messageId,
+    guestIds[2],
+    'pending',
+    'alice@example.com',
+    'lt'
+  ]);
   console.log('Recipients seeded successfully.');
 
   // Insert example page and translations
   const pageInsertSql = process.env.DB_TYPE === 'mysql'
-    ? 'INSERT INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)'
-    : 'INSERT INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)';
+    ? 'INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)'
+    : 'INSERT OR IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)';
   const pageResult = await runQuery(pageInsertSql, ['our-story', 1, 0, 1, 1]);
   const pageId = pageResult.insertId || pageResult.lastID;
 
@@ -286,12 +311,42 @@ async function seedDatabase() {
   ]);
 
   const transInsertSql = process.env.DB_TYPE === 'mysql'
-    ? 'INSERT INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)'
-    : 'INSERT INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)';
+    ? 'INSERT IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)'
+    : 'INSERT OR IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)';
   await runQuery(transInsertSql, [pageId, 'en', 'Our Story', contentEn]);
   await runQuery(transInsertSql, [pageId, 'lt', 'Mūsų istorija', contentLt]);
 
   console.log('Example page and translations seeded successfully.');
+
+  // Insert "All Blocks" test page with survey
+  const pageAllRes = await runQuery(pageInsertSql, ['all-blocks', 1, 0, 1, 2]);
+  const pageAllId = pageAllRes.insertId || pageAllRes.lastID;
+  // Create a simple survey block for the new page
+  const surveyBlockSql = process.env.DB_TYPE === 'mysql'
+    ? 'INSERT INTO survey_blocks (page_id, locale, question, type, options, is_required, is_anonymous) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    : 'INSERT OR IGNORE INTO survey_blocks (page_id, locale, question, type, options, is_required, is_anonymous) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const surveyOptions = JSON.stringify(['Option A', 'Option B']);
+  const surveyAllRes = await runQuery(surveyBlockSql, [
+    pageAllId,
+    'en',
+    'Do you like our site?',
+    'radio',
+    surveyOptions,
+    1, // is_required
+    0  // is_anonymous
+  ]);
+  const surveyAllId = surveyAllRes.insertId || surveyAllRes.lastID;
+  // Insert translation for "All Blocks" page
+  const allBlocksContent = JSON.stringify([
+    { type: 'rich-text', html: '<p>Welcome to the all-blocks test page.</p>' },
+    { type: 'image', src: '/uploads/story.jpg', alt: 'Us smiling' },
+    { type: 'video', embed: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    { type: 'map', embed: 'https://maps.google.com/maps?q=London&output=embed' },
+    { type: 'divider' },
+    { type: 'survey', id: surveyAllId }
+  ]);
+  await runQuery(transInsertSql, [pageAllId, 'en', 'All Blocks Test', allBlocksContent]);
+  console.log('All Blocks test page seeded successfully.');
 
   await closeDb();
 }
