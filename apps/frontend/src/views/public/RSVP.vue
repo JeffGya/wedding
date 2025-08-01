@@ -26,7 +26,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { fetchGuestByCode, submitGuestRSVP } from '@/api/rsvp'
+import { fetchGuestByCode, submitGuestRSVP, fetchRSVPSession } from '@/api/rsvp'
 import Banner from '@/components/ui/Banner.vue'
 import RSVPForm from '@/components/forms/RSVPForm.vue'
 import { useGuestSettings } from '@/hooks/useGuestSettings'
@@ -40,10 +40,38 @@ const guest = ref(null)
 const loading = ref(true)
 const error = ref('')
 
+// Auto-redirect if a valid RSVP session exists (has a code)
+onMounted(async () => {
+  try {
+    const session = await fetchRSVPSession()
+    if (session?.code) {
+      // Already have a valid session: go straight to the RSVP form with code in URL
+      router.replace({
+        name: 'public-rsvp',
+        params: { lang: route.params.lang, code: session.code }
+      })
+      return
+    }
+  } catch {
+    // No valid session: stay on lookup page
+  }
+})
+
+// The rest of the component logic (fetches guest by code) will only run if no session redirect
 onMounted(async () => {
   locale.value = route.params.lang
+  let codeToUse = route.params.code
   try {
-    guest.value = await fetchGuestByCode(route.params.code)
+    const session = await fetchRSVPSession()
+    if (session?.code) {
+      codeToUse = session.code
+    }
+  } catch {
+    router.replace({ name: 'public-rsvp-lookup', params: { lang: route.params.lang } })
+    return
+  }
+  try {
+    guest.value = await fetchGuestByCode(codeToUse)
   } catch {
     error.value = t('rsvp.errorFetch')
   } finally {

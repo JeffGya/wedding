@@ -35,11 +35,6 @@ const menuItems = [
     command: () => router.push('/admin/overview')
   },
   {
-    label: 'Pages',
-    icon: 'i-solar:documents-minimalistic-bold-duotone',
-    command: () => router.push('/admin/pages')
-  },
-  {
     label: 'Media',
     icon: 'i-solar:gallery-minimalistic-bold-duotone',
     command: () => router.push('/admin/media')
@@ -61,6 +56,21 @@ const menuItems = [
         label: 'Messages',
         icon: 'i-solar:inbox-archive-bold-duotone',
         command: () => router.push('/admin/guests/messages')
+      }
+    ]
+  },
+  {
+    label: 'Pages & Surveys',
+    items: [
+      {
+        label: 'Pages',
+        icon: 'i-solar:documents-minimalistic-bold-duotone',
+        command: () => router.push('/admin/pages')
+      },
+      {
+        label: 'Surveys',
+        icon: 'i-solar:survey-bold-duotone',
+        command: () => router.push('/admin/surveys')
       }
     ]
   },

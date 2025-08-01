@@ -165,7 +165,8 @@ router.get('/session', (req, res) => {
   const auth = {
     name: req.guest.name,
     group_label: req.guest.group_label,
-    rsvp_status: req.guest.rsvp_status
+    rsvp_status: req.guest.rsvp_status,
+    code: req.guest.code
   };
   return res.json({ auth });
 });

@@ -173,3 +173,7 @@ Button {
 input, textarea {
   @apply w-full md:w-2/3;
 }
+
+.video-container {
+  overscroll-behavior: contain;
+}

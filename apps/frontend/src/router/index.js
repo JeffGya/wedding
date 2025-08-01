@@ -64,6 +64,17 @@ const routes = [
         next();
       }
     },
+    {
+      path: 'pages/:slug',
+      name: 'public-page',
+      component: () => import('@/views/public/PageView.vue'),
+      beforeEnter: (to, from, next) => {
+        const lang = to.params.lang || 'en';
+        const langStore = useLangStore();
+        langStore.setLanguage(lang);
+        next();
+      }
+    },
     // Catch-all for undefined public routes under language prefix
     {
       path: ':pathMatch(.*)*',
@@ -80,7 +91,43 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: 'overview', name: 'admin-overview', component: () => import('@/views/admin/Overview.vue') },
-      { path: 'pages', name: 'admin-pages', component: () => import('@/views/admin/Pages.vue') },
+      { path: 'pages', name: 'admin-pages', component: () => import('@/views/admin/pages/PageList.vue') },
+      {
+        path: 'surveys',
+        name: 'admin-surveys',
+        component: () => import('@/views/admin/survey/SurveyOverview.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'surveys/new',
+        name: 'admin-survey-create',
+        component: () => import('@/views/admin/survey/SurveyDetail.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'surveys/:id',
+        name: 'admin-survey-detail',
+        component: () => import('@/views/admin/survey/SurveyDetail.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'pages/:id/preview',
+        name: 'admin-page-preview',
+        component: () => import('@/views/admin/pages/PagePreview.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'pages/new',
+        name: 'admin-page-create',
+        component: () => import('@/views/admin/pages/PageForm.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'pages/:id/edit',
+        name: 'admin-page-edit',
+        component: () => import('@/views/admin/pages/PageForm.vue'),
+        meta: { requiresAuth: true }
+      },
       { path: 'media', name: 'admin-media', component: () => import('@/views/admin/media/MediaManager.vue') },
       {
         path: 'settings',

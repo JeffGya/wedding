@@ -32,11 +32,26 @@ import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmationService from 'primevue/confirmationservice';
 import Menu from 'primevue/menu';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+import Divider from 'primevue/divider';
+import Checkbox from 'primevue/checkbox';
+import InputNumber from 'primevue/inputnumber';
+import Skeleton from 'primevue/skeleton';
+
+import RichTextEditor from '@/components/forms/RichTextEditor.vue';
+import ImagePicker from '@/components/ui/ImagePicker.vue';
+import EmbedEditor from '@/components/EmbedEditor.vue';
+import SurveySelector from '@/components/SurveySelector.vue';
 import { useLoaderStore } from '@/store/loader';
 import './style.css';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createHead } from '@vueuse/head'
 import App from './App.vue'
 import router from '@/router'
 import { configure, defineRule } from 'vee-validate';
@@ -61,6 +76,7 @@ configure({
 });
 
 const app = createApp(App)
+const head = createHead()
 
 const MyPreset = definePreset(Aura, {
   components: {
@@ -82,6 +98,7 @@ const MyPreset = definePreset(Aura, {
 app.use(createPinia())
 app.use(ToastService)
 app.use(i18n)
+app.use(head)
 app.use(router)
 
 // Global loader for route navigation
@@ -133,7 +150,20 @@ app.component('Fieldset', Fieldset);
 app.component('ConfirmPopup', ConfirmPopup);
 app.component('ConfirmDialog', ConfirmDialog);
 app.component('Menu', Menu);
+app.component('Tabs', Tabs);
+app.component('TabList', TabList);
+app.component('Tab', Tab);
+app.component('TabPanels', TabPanels);
+app.component('TabPanel', TabPanel);
+app.component('Divider', Divider);
+app.component('Checkbox', Checkbox);
+app.component('InputNumber', InputNumber);
+app.component('Skeleton', Skeleton);
 
+app.component('RichTextEditor', RichTextEditor);
+app.component('ImagePicker', ImagePicker);
+app.component('EmbedEditor', EmbedEditor);
+app.component('SurveySelector', SurveySelector);
 app.use(ConfirmationService);
 
 app.mount('#app')

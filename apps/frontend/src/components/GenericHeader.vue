@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { fetchRSVPSession } from '@/api/rsvp';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import Menubar from 'primevue/menubar';
 
@@ -64,19 +65,8 @@ export default {
       menuItems: [
         {
           label: 'RSVP',
-          command: () => this.$router.push({ name: 'public-rsvp-lookup', params: { lang: this.selectedLanguage } }),
+          command: () => this.goToRSVP(),
         },
-        {
-          label: 'Event details'
-        },
-      /*
-        {
-          label: 'Keliautojų Namai'
-        },
-        {
-          label: 'Our suggestions'
-        }
-        */
       ],
     };
   },
@@ -84,6 +74,20 @@ export default {
     toggleDarkMode() {
       const element = document.getElementById('mode');
       element.classList.toggle('dark-mode');
+    },
+    async goToRSVP() {
+      const lang = this.$route.params.lang || this.selectedLanguage;
+      try {
+        const session = await fetchRSVPSession();
+        const code = session?.code || session?.guest?.code;
+        if (code) {
+          this.$router.push({ name: 'public-rsvp', params: { lang, code } });
+        } else {
+          this.$router.push({ name: 'public-rsvp-lookup', params: { lang } });
+        }
+      } catch {
+        this.$router.push({ name: 'public-rsvp-lookup', params: { lang } });
+      }
     },
   },
 };

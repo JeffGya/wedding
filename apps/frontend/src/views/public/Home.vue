@@ -12,7 +12,7 @@
           v-if="!isClosed()"
           :label="$t('home.hero.cta')" size="large"
           icon="i-solar:pen-new-square-bold"
-          @click="router.push({ name: 'public-rsvp-lookup', params: { lang } })"
+          @click="goToRSVP"
         />
         <Message v-else severity="contrast" variant="outlined" size="small" icon="i-solar:alarm-sleep-bold">{{ $t('home.rsvpClosed')}}</Message>
       </div>
@@ -43,12 +43,31 @@ import { useGuestSettings } from '@/hooks/useGuestSettings'
 import { useRoute } from 'vue-router'
 import WeddingCountdown from '@/components/WeddingCountdown.vue'
 import { useRouter } from 'vue-router'
+import { fetchRSVPSession } from '@/api/rsvp'
 import SolarLetterLinear from '~icons/solar/letter-linear'
 const { t } = useI18n()
 const { settings, loading, isClosed } = useGuestSettings()
 const route = useRoute()
 const router = useRouter()
 const lang = route.params.lang || 'en'
+
+/**
+ * Navigate to the full RSVP form if there’s an active session; otherwise, go to lookup.
+ */
+async function goToRSVP() {
+  try {
+    const session = await fetchRSVPSession()
+    if (session?.code) {
+      // Jump directly to the form
+      router.push({ name: 'public-rsvp', params: { lang, code: session.code } })
+      return
+    }
+  } catch {
+    // No valid session
+  }
+  // Fallback to lookup
+  router.push({ name: 'public-rsvp-lookup', params: { lang } })
+}
 </script>
 
 <style scoped>
