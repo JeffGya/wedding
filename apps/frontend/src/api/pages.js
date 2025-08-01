@@ -186,8 +186,8 @@ export async function fetchSurvey(id) {
   const { data } = await api.get(`/admin/surveys/${id}`, {
     meta: { showLoader: true }
   });
-  // The API returns the survey under `data.data` or `data.survey`
-  return data.data ?? data.survey;
+  // Support data under data.data, data.survey, or direct data payload
+  return data.data ?? data.survey ?? data;
 }
 
 /**

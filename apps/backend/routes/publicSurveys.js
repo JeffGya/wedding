@@ -156,6 +156,25 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     }
 
     // Validate response body
+    // Map numeric IDs back to option labels if needed
+    const rawResponse = req.body.response;
+    // Radio: single ID or label
+    if (survey.type === 'radio' && rawResponse != null) {
+      let r = rawResponse;
+      const idx = Number(r) - 1;
+      if (!isNaN(idx) && survey.options[idx] !== undefined) {
+        req.body.response = survey.options[idx];
+      }
+    }
+    // Checkbox: array of IDs or labels
+    if (survey.type === 'checkbox' && Array.isArray(rawResponse)) {
+      req.body.response = rawResponse.map(r => {
+        const idx = Number(r) - 1;
+        return (!isNaN(idx) && survey.options[idx] !== undefined)
+          ? survey.options[idx]
+          : r;
+      });
+    }
     const body = req.body || {};
     const type = survey.type;
     const required = !!survey.is_required;
@@ -204,7 +223,12 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     await SurveyResponse.create({
       survey_block_id: id,
       guest_id: guestId,
-      response: normalizedResponse
+      response_text: typeof normalizedResponse === 'string'
+        ? normalizedResponse
+        : null,
+      response_json: Array.isArray(normalizedResponse)
+        ? JSON.stringify(normalizedResponse)
+        : null
     });
 
     return res.json({ success: true });

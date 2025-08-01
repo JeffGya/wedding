@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="survey-selector">
     <!-- Existing surveys dropdown -->
@@ -83,7 +81,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Checkbox from 'primevue/checkbox';
-import { fetchSurveys, createSurvey } from '@/api/pages';
+import { fetchAllSurveys, createSurvey } from '@/api/pages';
 
 // Props: the page ID and the current selected survey ID
 const props = defineProps({
@@ -115,7 +113,8 @@ const newSurvey = ref({
 
 // Load existing surveys for this page
 async function loadSurveys() {
-  surveyOptions.value = await fetchSurveys(props.pageId);
+  // Fetch all surveys and assign directly to options array
+  surveyOptions.value = await fetchAllSurveys();
 }
 onMounted(loadSurveys);
 

@@ -9,7 +9,19 @@
  */
 
 const express = require('express');
+
 const SurveyResponse = require('../db/models/surveyResponse');
+
+const getDbConnection = require('../db/connection');
+const db = getDbConnection();
+const sqlite3 = require('sqlite3').verbose();
+const util = require('util');
+const dbGet = process.env.DB_TYPE === 'mysql'
+  ? async (sql, params) => {
+      const [rows] = await db.query(sql, params);
+      return rows[0];
+    }
+  : util.promisify(db.get.bind(db));
 
 const router = express.Router({ mergeParams: true });
 
@@ -102,21 +114,37 @@ router.get('/', async (req, res) => {
     const offset = (pageNum - 1) * limit;
     const pageRows = rows.slice(offset, offset + limit);
 
+    // Enrich each response with the guest's name
+    const enrichedRows = await Promise.all(pageRows.map(async (r) => {
+      if (r.guest_id != null) {
+        try {
+          const row = await dbGet('SELECT name FROM guests WHERE id = ?', [r.guest_id]);
+          r.guest_name = row ? row.name : null;
+        } catch (e) {
+          r.guest_name = null;
+        }
+      } else {
+        r.guest_name = null;
+      }
+      return r;
+    }));
+
     // CSV export
     if (req.query.format === 'csv') {
-      let csv = 'id,survey_block_id,guest_id,response_text,created_at\n';
-      pageRows.forEach(r => {
+      let csv = 'id,survey_block_id,guest_id,guest_name,response_text,created_at\n';
+      enrichedRows.forEach(r => {
         const guest = r.guest_id != null ? r.guest_id : '';
+        const guestName = r.guest_name != null ? `"${String(r.guest_name).replace(/"/g, '""')}"` : '';
         const resp = String(r.response_text || '').replace(/"/g, '""');
         const created = new Date(r.created_at).toISOString();
-        csv += `${r.id},${r.survey_block_id},${guest},"${resp}","${created}"\n`;
+        csv += `${r.id},${r.survey_block_id},${guest},${guestName},"${resp}","${created}"\n`;
       });
       res.header('Content-Type', 'text/csv');
       return res.send(csv);
     }
 
     res.json({
-      data: pageRows,
+      data: enrichedRows,
       meta: { filter, page: pageNum, limit, total, total_pages: totalPages }
     });
   } catch (err) {

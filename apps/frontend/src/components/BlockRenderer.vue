@@ -11,7 +11,7 @@
       <div v-else-if="block.type === 'video' || block.type === 'map'" v-html="getContent(block).embed"></div>
       <hr v-else-if="block.type === 'divider'" />
       <div v-else-if="block.type === 'survey' && withSurveys">
-        <SurveyForm :survey-id="block.id" />
+        <SurveyForm :survey="block" />
       </div>
       <Banner
         v-else-if="block.type === 'error'"

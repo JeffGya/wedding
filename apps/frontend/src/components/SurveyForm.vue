@@ -1,69 +1,74 @@
 <template>
-  <div>
-    <!-- Loading state -->
-    <div v-if="loading">
-      <p>Loading survey...</p>
-    </div>
+  <div class="survey-form">
+    <!-- Thank-you message -->
+    <Banner
+      v-if="responded"
+      type="success"
+      :message="t('survey.submitSuccess')"
+      class="mb-4"
+    />
 
-    <!-- Thank-you message after submit -->
-    <div v-else-if="responded">
-      <p>Thank you for your response!</p>
-    </div>
-
-    <!-- Error loading or submitting -->
+    <!-- Survey form -->
     <div v-else>
-      <h3>{{ survey.question }}</h3>
+      <h3 class="mb-3">{{ survey.question }}</h3>
 
-      <form @submit.prevent="onSubmit">
-        <!-- Radio options -->
-        <div v-if="survey.type === 'radio'">
-          <RadioButton
+      <!-- Inline error banner -->
+      <Banner
+        v-if="error"
+        type="error"
+        :message="error"
+        class="mb-4"
+      />
+
+      <form @submit.prevent="onSubmit" class="space-y-4">
+        <!-- Radio -->
+        <div v-if="surveyType === 'radio'">
+          <div
             v-for="opt in survey.options"
-            :key="opt"
-            v-model="response"
-            :inputId="`opt-${opt}`"
-            :value="opt"
-          />
-          <label
-            v-for="opt in survey.options"
-            :key="opt"
-            :for="`opt-${opt}`"
-          >{{ opt }}</label>
+            :key="opt.id"
+            class="flex items-center mb-2"
+          >
+            <RadioButton
+              v-model="response"
+              :inputId="`opt-${opt.id}`"
+              :name="`survey-${props.survey.id}`"
+              :value="opt.label"
+            />
+            <label :for="`opt-${opt.id}`" class="ml-2">{{ opt.label }}</label>
+          </div>
         </div>
 
-        <!-- Checkbox options -->
-        <div v-else-if="survey.type === 'checkbox'">
-          <Checkbox
+        <!-- Checkbox -->
+        <div v-else-if="surveyType === 'checkbox'">
+          <div
             v-for="opt in survey.options"
-            :key="opt"
-            v-model="responseArray"
-            :inputId="`chk-${opt}`"
-            :value="opt"
-          />
-          <label
-            v-for="opt in survey.options"
-            :key="opt"
-            :for="`chk-${opt}`"
-          >{{ opt }}</label>
+            :key="opt.id"
+            class="flex items-center mb-2"
+          >
+            <Checkbox
+              v-model="responseArray"
+              :inputId="`chk-${opt.id}`"
+              :value="opt.label"
+            />
+            <label :for="`chk-${opt.id}`" class="ml-2">{{ opt.label }}</label>
+          </div>
         </div>
 
-        <!-- Text input -->
-        <div v-else-if="survey.type === 'text'">
+        <!-- Text -->
+        <div v-else-if="surveyType === 'text'">
           <InputText
             v-model="response"
             :placeholder="survey.placeholder || ''"
+            class="w-full"
           />
         </div>
 
-        <!-- Validation or submission error -->
-        <div v-if="error" class="p-text-danger">
-          {{ error }}
-        </div>
-
+        <!-- Submit -->
         <Button
           type="submit"
           label="Submit"
           :disabled="!canSubmit"
+          class="mt-3"
         />
       </form>
     </div>
@@ -71,60 +76,83 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import RadioButton from 'primevue/radiobutton';
 import Checkbox from 'primevue/checkbox';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { fetchPublicSurveyById, createSurveyResponse } from '@/api/publicSurveys';
+import Banner from '@/components/ui/Banner.vue';
+import { createSurveyResponse } from '@/api/publicSurveys';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
-  surveyId: { type: Number, required: true }
+  survey: {
+    type: Object,
+    required: true,
+    // Expected shape: { id, question, type, options?, placeholder?, ... }
+  }
 });
 
-const survey = ref({ question: '', type: 'radio', options: [], placeholder: '' });
+const surveyType = props.survey.inputType || props.survey.type;
+
 const response = ref('');
 const responseArray = ref([]);
-const loading = ref(true);
 const responded = ref(false);
 const error = ref('');
 
+// Only enable submit if there's at least one selection/entry
 const canSubmit = computed(() => {
-  if (survey.value.type === 'checkbox') {
+  if (surveyType === 'checkbox') {
     return responseArray.value.length > 0;
   }
-  return response.value !== '';
-});
-
-onMounted(async () => {
-  loading.value = true;
-  try {
-    const data = await fetchPublicSurveyById(props.surveyId);
-    survey.value = {
-      question: data.question || '',
-      type: data.type,
-      options: Array.isArray(data.options) ? data.options : [],
-      placeholder: data.placeholder || ''
-    };
-    // If the API returns an 'alreadyResponded' flag, use it
-    responded.value = data.alreadyResponded || false;
-  } catch (e) {
-    console.error('Failed to load survey', e);
-    error.value = 'Unable to load survey.';
-  } finally {
-    loading.value = false;
-  }
+  return response.value.trim() !== '';
 });
 
 async function onSubmit() {
   error.value = '';
   try {
-    const payload = { response_text: survey.value.type === 'checkbox' ? responseArray.value : response.value };
-    await createSurveyResponse(props.surveyId, payload);
+    // Build payload according to type
+    const payload = {
+      response:
+        surveyType === 'checkbox'
+          ? responseArray.value
+          : response.value
+    };
+
+    // Send to backend
+    const resp = await createSurveyResponse(props.survey.id, payload);
+    console.log('Survey submit response:', resp);
+
+    // Show thank-you
     responded.value = true;
   } catch (e) {
     console.error('Survey submit failed', e);
-    error.value = e.response?.data?.message || 'Submission failed. Please try again.';
+    // Extract API error message if present
+    error.value = e.response?.data?.message || t('survey.submitError');
   }
 }
 </script>
+
+<style scoped>
+.survey-form {
+  max-width: 600px;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+</style>

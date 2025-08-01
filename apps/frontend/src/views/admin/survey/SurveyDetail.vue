@@ -91,7 +91,16 @@
             paginator
             :rows="10"
           >
-            <Column field="guest_id" header="Guest ID" style="width: 6rem" />
+            <Column header="Guest ID" style="width: 6rem">
+              <template #body="slotProps">
+                {{ slotProps.data.guest_id }}
+              </template>
+            </Column>
+            <Column header="Guest Name" style="width: 12rem">
+              <template #body="slotProps">
+                {{ slotProps.data.guest_name || '-' }}
+              </template>
+            </Column>
             <Column field="response_text" header="Response" />
             <Column header="Created At" style="width: 12rem">
               <template #body="slotProps">

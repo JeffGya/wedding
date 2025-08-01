@@ -8,7 +8,7 @@ import http from './index';
  */
 export function fetchPublicSurveyById(surveyId) {
   return http
-    .get(`/public/surveys/${surveyId}`)
+    .get(`/surveys/${surveyId}`)
     .then(res => res.data);
 }
 
@@ -20,6 +20,6 @@ export function fetchPublicSurveyById(surveyId) {
  */
 export function createSurveyResponse(surveyId, payload) {
   return http
-    .post(`/public/surveys/${surveyId}/responses`, payload)
+    .post(`/surveys/${surveyId}/respond`, payload)
     .then(res => res.data);
 }
