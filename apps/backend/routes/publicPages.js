@@ -12,6 +12,47 @@ const SurveyResponse = require('../db/models/surveyResponse');
 
 const router = express.Router();
 
+// GET /api/pages/navigation
+router.get('/navigation', async (req, res) => {
+  const locale = req.query.locale || 'en';
+  console.log('[NAV] Navigation endpoint hit with locale:', locale);
+  // Debug logs before try/catch
+  console.log('[NAV][DEBUG] typeof Page:', typeof Page);
+  console.log('[NAV][DEBUG] Page model keys:', Object.keys(Page));
+  console.log('[NAV][DEBUG] Page.findAll:', typeof Page.findAll);
+  try {
+    // Debug log before calling Page.findAll
+    console.log('[NAV][DEBUG] About to call Page.findAll');
+    // Fetch only published pages that should show in nav, ordered by nav_order
+    const pages = await Page.findAll({
+      where: { is_published: true, show_in_nav: true },
+      order: [['nav_order', 'ASC']],
+    });
+    console.log('[NAV] Pages fetched:', Array.isArray(pages) ? pages.map(p => ({id: p.id, slug: p.slug, is_published: p.is_published, show_in_nav: p.show_in_nav, nav_order: p.nav_order})) : pages);
+
+    // Map to minimal nav payload with locale fallback
+    const nav = await Promise.all(pages.map(async (p) => {
+      let tr = await PageTranslation.getByPageIdAndLocale(p.id, locale);
+      console.log(`[NAV] Translation for page ${p.slug} (${locale}):`, tr);
+      if (!tr && locale !== 'en') {
+        tr = await PageTranslation.getByPageIdAndLocale(p.id, 'en');
+        console.log(`[NAV] Fallback translation for page ${p.slug} (en):`, tr);
+      }
+      return {
+        slug: p.slug,
+        title: tr ? tr.title : p.slug,
+        order: p.nav_order
+      };
+    }));
+    console.log('[NAV] Final nav array:', nav);
+
+    return res.json(nav);
+  } catch (err) {
+    console.error('[NAV] error fetching navigation:', err, err && err.stack);
+    return res.status(500).json({ error: 'Could not load navigation' });
+  }
+});
+
 /**
  * @openapi
  * /api/pages/{slug}:

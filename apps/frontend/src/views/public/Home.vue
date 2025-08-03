@@ -1,13 +1,27 @@
 <template>
- <main class="home">
-    <section class="hero mb-24 md:mb-32 text-center">
-      <h1 class="font-cursive text-align-center text-5xl/14 lg:text-[4rem]/20 m-0">
-        <span class="-ml-128 lg:-ml-[14rem]">Brigita</span>
-        <br/>&<br/>
-        <span class="ml-128 lg:ml-[14rem]">Jeffrey</span>
+ <main class="home md:mt-80 lg:mt-96">
+    <section class="hero mb-24 md:mb-32 text-center relative">
+      <img 
+        src="http://localhost:5001/uploads/hero.png"
+        alt="Brigita and Jeffrey in tokyo smiling at each other"
+        class="w-full h-auto rounded-md -z-10 -mb-24 lg:-mb-40 border-solid border-[1rem] border-[var(--int-text)]"
+      />
+      <h1
+        class="font-cursive w-full text-[var(--int-base)] text-5xl md:text-[5rem] lg:text-[rem] m-0 z-0
+          md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:-translate-y-1/2
+          md:px-4 md:py-4 md:text-shadow-sm"
+      >
+        Brigita & Jeffrey
       </h1>
-      <p class="font-cursive text-3xl/10 mt-24 mb-8">{{ $t('home.hero.subtitle') }}</p>
-      <div id="home-rsvp" v-if="!loading">
+
+      <p 
+        class="font-cursive text-2xl/10 md:text-[4rem]/10 mt-2 mb-8 text-[var(--int-base)] md:text-shadow-sm"
+      >
+      {{ $t('home.hero.subtitle') }}</p>
+      <div 
+      id="home-rsvp"
+      v-if="!loading"
+      >
         <Button
           v-if="!isClosed()"
           :label="$t('home.hero.cta')" size="large"

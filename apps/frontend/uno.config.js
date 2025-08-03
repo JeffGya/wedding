@@ -38,6 +38,11 @@ export default defineConfig({
       'ac-hover':  'var(--acc-hover)',
       'ac-active': 'var(--acc-active)',
 
+      // Accent 2 background
+      'ac2-base':   'var(--acc2-base)',
+      'ac2-hover':  'var(--acc2-hover)',
+      'ac2-active': 'var(--acc2-active)',
+
       // Interactive background
       'int-base':   'var(--int-base)',
       'int-hover':  'var(--int-hover)',

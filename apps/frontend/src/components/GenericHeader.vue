@@ -17,15 +17,57 @@
     <Menubar class="MainNav mx-16 md:mx-40 lg:mx-80" :model="menuItems">
       <template #start>
         <span class="p-menubar-separator" />
+        <div class="p-menubar-item" role="menuitem" aria-label="Home">
+          <div class="p-menubar-item-content">
+            <a
+              tabindex="0"
+              class="p-menubar-item-link p-menubar-home"
+              @click.prevent="goToHome"
+              style="cursor:pointer;"
+            >
+              <i class="i-solar:home-smile-bold text-lg" />
+              <span class="p-menubar-item-label hidden sm:inline">Home</span>
+            </a>
+          </div>
+        </div>
+        <div class="p-menubar-item" role="menuitem" aria-label="RSVP">
+          <div class="p-menubar-item-content">
+            <a
+              tabindex="0"
+              class="p-menubar-item-link p-menubar-rsvp"
+              @click.prevent="goToRSVP"
+              style="cursor:pointer;"
+            >
+              <i class="i-solar:letter-opened-bold text-lg" />
+              <span class="p-menubar-item-label hidden sm:inline">RSVP</span>
+            </a>
+          </div>
+        </div>
       </template>
-      
-      <template v-for="(item, index) in menuItems" :key="index">
-        <span class="p-menubar-separator" />
-        <router-link :to="item.to || item.url">
-          {{ item.label }}
-        </router-link>
+      <template #item="{ item, props }">
+        <div class="p-menubar-item-content" data-pc-section="itemcontent">
+          <a
+            v-if="item.to"
+            v-bind="props.action"
+            :href="item.to"
+            tabindex="-1"
+            class="p-menubar-item-link"
+            @click.prevent="onNavClick(item.to)"
+          >
+            <i v-if="item.icon" :class="item.icon + ' text-lg'" />
+            <span class="p-menubar-item-label">{{ item.label }}</span>
+          </a>
+          <a
+            v-else
+            v-bind="props.action"
+            tabindex="-1"
+            class="p-menubar-item-link"
+            @click="item.command"
+          >
+            <span class="p-menubar-item-label">{{ item.label }}</span>
+          </a>
+        </div>
       </template>
-
       <template #end>
         <div class="flex items-center">
           <LanguageSwitcher class="mr-8" />
@@ -38,7 +80,7 @@
             <template #handle="{ checked }">
               <i
                 :class="[
-                  'text-5xl', // Adjust icon size
+                  'text-sm', // Adjust icon size
                   { 'i-solar:moon-stars-outline': checked, 'i-solar:sun-2-linear': !checked }
                 ]"
               />
@@ -50,9 +92,16 @@
 </template>
 
 <script>
+import { fetchNavigation } from '@/api/navigation';
 import { fetchRSVPSession } from '@/api/rsvp';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import Menubar from 'primevue/menubar';
+
+const PAGE_ICON_MAP = {
+  'our-story': 'i-solar:heart-angle-bold',
+  'all-blocks': 'i-solar:layers-minimalistic-bold',
+  // Add more slug: icon-class pairs as needed
+};
 
 export default {
   components: {
@@ -62,18 +111,17 @@ export default {
   data() {
     return {
       darkMode: false, // Default mode
-      menuItems: [
-        {
-          label: 'RSVP',
-          command: () => this.goToRSVP(),
-        },
-      ],
+      menuItems: [],
     };
   },
   methods: {
     toggleDarkMode() {
       const element = document.getElementById('mode');
       element.classList.toggle('dark-mode');
+    },
+    goToHome() {
+      const lang = this.$route.params.lang || 'en';
+      this.$router.push({ name: 'home', params: { lang } });
     },
     async goToRSVP() {
       const lang = this.$route.params.lang || this.selectedLanguage;
@@ -89,6 +137,29 @@ export default {
         this.$router.push({ name: 'public-rsvp-lookup', params: { lang } });
       }
     },
+    onNavClick(to) {
+      if (to) this.$router.push(to);
+    },
+  },
+  async created() {
+    const lang = this.$route.params.lang || 'en';
+    try {
+      const pages = await fetchNavigation(lang);
+      if (Array.isArray(pages)) {
+        this.menuItems = [
+          ...pages.map(p => ({
+            label: p.title,
+            to: `/${lang}/pages/${p.slug}`,
+            icon: PAGE_ICON_MAP[p.slug] || '', // fallback: no icon
+          }))
+        ];
+      } else {
+        this.menuItems = [];
+      }
+    } catch (err) {
+      console.error('Failed to load navigation', err);
+      this.menuItems = [];
+    }
   },
 };
 </script>
@@ -112,5 +183,11 @@ svg {
 #logo {
   width: 100%;
   text-align: center;;
+}
+/* Elevate menubar z-index above overlays */
+.p-menubar-root-list,
+.p-menubar-mobile-active,
+.p-menubar-overlay {
+  z-index: 50 !important;
 }
 </style>

@@ -139,6 +139,15 @@ const Page = {
   async create(data = {}) {
     const payload = buildPayload('create', data);
 
+    // Prevent duplicate nav_order when showing in nav
+    if (payload.show_in_nav && payload.nav_order != null) {
+      const checkSql = 'SELECT COUNT(*) AS count FROM pages WHERE show_in_nav = TRUE AND nav_order = ?';
+      const [[{ count }]] = await query(checkSql, [payload.nav_order]);
+      if (count > 0) {
+        throw new Error(`Navigation order ${payload.nav_order} is already in use.`);
+      }
+    }
+
     const keys = Object.keys(payload);
     const placeholders = keys.map(() => '?').join(', ');
     const values = Object.values(payload);
@@ -200,6 +209,19 @@ const Page = {
     if (!id) throw new Error('Page ID is required for update.');
 
     const payload = buildPayload('update', updates);
+
+    // Prevent duplicate nav_order when showing in nav
+    if (payload.show_in_nav === true || payload.nav_order != null) {
+      const newShow = payload.show_in_nav === true;
+      const newOrder = payload.nav_order != null ? payload.nav_order : null;
+      if (newShow && newOrder != null) {
+        const checkSql = 'SELECT COUNT(*) AS count FROM pages WHERE show_in_nav = TRUE AND nav_order = ? AND id != ?';
+        const [[{ count }]] = await query(checkSql, [newOrder, id]);
+        if (count > 0) {
+          throw new Error(`Navigation order ${newOrder} is already in use.`);
+        }
+      }
+    }
 
     // never allow manual timestamp manipulation
     delete payload.created_at;
@@ -263,6 +285,32 @@ const Page = {
       );
     }
   },
+
+  /**
+   * Flexible findAll for compatibility with "where" and "order" like Sequelize.
+   * Only supports basic { is_published: true, show_in_nav: true } and order by nav_order.
+   */
+  async findAll({ where = {}, order = [] } = {}) {
+    // Build WHERE clause
+    const wheres = [];
+    const params = [];
+    Object.entries(where).forEach(([k, v]) => {
+      wheres.push(`${k} = ?`);
+      params.push(v);
+    });
+    const whereSql = wheres.length ? `WHERE ${wheres.join(' AND ')}` : '';
+
+    // Only support order: [['nav_order', 'ASC']]
+    let orderSql = '';
+    if (Array.isArray(order) && order.length && Array.isArray(order[0])) {
+      const [col, dir] = order[0];
+      orderSql = `ORDER BY ${col} ${dir}`;
+    }
+
+    const sql = `SELECT * FROM pages ${whereSql} ${orderSql}`;
+    const [rows] = await query(sql, params);
+    return rows;
+  },
 };
 
 module.exports = {
@@ -274,5 +322,6 @@ module.exports = {
   softDelete: Page.softDelete.bind(Page),
   restore: Page.restore.bind(Page),
   destroy: Page.destroy.bind(Page),
+  findAll: Page.findAll.bind(Page),
   _Page: Page,
 };
