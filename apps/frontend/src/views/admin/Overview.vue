@@ -3,8 +3,11 @@
       <h1 class="text-4xl font-semibold">Admin Overview</h1>
       <p class="text">Admin dashboard with guest RSVP analytics.</p>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <StatCard title="Emails Sent" :value="emailsSent" />
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <StatCard 
+        title="Emails Sent" 
+        :value="emailsSent" 
+      />
       <StatCard
         title="RSVP Status"
         chartType="doughnut"

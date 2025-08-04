@@ -1,15 +1,16 @@
 <template>
-  <Card>
+  <Card class="aspect-square relative overflow-hidden">
     <template #content>
       <template v-if="chartType === 'doughnut' && items.length">
-        <p class="text-lg/7 mt-0 font-serif font-semibold mb-8">{{ title }}</p>
-        <div class="mb-8" style="position: relative; aspect-ratio: 1 / 1; height:10rem; width:10rem">
-          <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full h-full" />
+        <p class="text-lg/7 font-serif text-center">{{ title }}</p>
+        <div class="absolute inset-x-0 top-[5rem] bottom-[5rem] flex flex-col items-center justify-center">
+          <Chart type="doughnut" :data="chartData" :options="chartOptions"
+            class="w-full h-full max-w-full max-h-full" />
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span class="text-5xl font-semibold font-serif">{{ centerText }}</span>
           </div>
         </div>
-        <div class="flex flex-wrap justify-center gap-16">
+        <div class="absolute inset-x-0 bottom-0 px-2 pb-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 justify-items-center w-full">
           <div
             v-for="(item, index) in items"
             :key="item.label"
@@ -24,20 +25,36 @@
         </div>
       </template>
       <template v-else-if="chartType === 'bar' && items.length">
-        <p class="text-lg/7 font-serif font-semibold mb-8">{{ title }}</p>
-        <div class="mb-8" style="position: relative; width: 100%; height: 100%; aspect-ratio: 2 / 1;">
-          <Chart type="bar" :data="chartData" :options="chartOptions" class="w-full h-full" />
+        <p class="text-lg/7 font-serif font-semibold mb-2 text-center">{{ title }}</p>
+        <div class="absolute inset-x-0 top-[2.5rem] bottom-[4.5rem] flex flex-col items-center justify-center">
+          <Chart type="bar" :data="chartData" :options="chartOptions"
+            class="w-full h-full max-w-full max-h-full" />
+        </div>
+        <div class="absolute inset-x-0 bottom-0 px-2 pb-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 justify-items-center w-full">
+          <div
+            v-for="(item, index) in items"
+            :key="item.label"
+            class="flex items-center space-x-1"
+          >
+            <span
+              class="w-4 h-4 rounded-full"
+              :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
+            ></span>
+            <span class="text-sm font-serif">{{ item.label }}</span>
+          </div>
         </div>
       </template>
       <template v-else-if="items.length">
-        <div v-for="item in items" :key="item.label" class="mb-8 last:mb-0">
-          <p class="text-lg/7 font-serif font-semibold">{{ item.label }}</p>
-          <p class="text-5xl font-serif font-semibold">{{ item.value }}</p>
+        <p class="text-lg mb-2 text-center">{{ title }}</p>
+        <div class="absolute inset-x-0 flex flex-col items-center justify-center">
+          <p class="text-5xl font-serif font-semibold">{{ items[0].value }}</p>
         </div>
       </template>
       <template v-else>
-        <p class="text-lg/7 font-semibold font-serif">{{ title }}</p>
-        <p class="text-5xl font-serif font-semibold">{{ value }}</p>
+        <p class="text-xl mb-2 text-center">{{ title }}</p>
+        <div class="absolute inset-x-0 top-[5rem] bottom-[4.5rem] flex flex-col items-center justify-center">
+          <p class="text-[8rem] font-serif font-bold">{{ value }}</p>
+        </div>
       </template>
     </template>
   </Card>

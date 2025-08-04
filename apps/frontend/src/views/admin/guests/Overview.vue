@@ -1,11 +1,11 @@
 <template>
   <div class="text-center">
-    <h1 class="text-4xl font-bold text-gray-800 mb-8">Guest Overview</h1>
-    <p class="text-gray-600 mb-16">Manage the full list of guests invited to the wedding.</p>
+    <h1 class="text-4xl font-bold mb-8">Guest Overview</h1>
+    <p class="mb-16">Manage the full list of guests invited to the wedding.</p>
     <div class="mb-8">
-      <Button label="Add Guest" severity="primary" class="mr-2" @click="openCreateModal" />
+      <Button label="Add Guest" severity="primary" class="mr-8" @click="openCreateModal" />
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-60rem mx-auto mb-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       <!-- RSVP Status -->
       <StatCard
         title="RSVP Status"
@@ -64,47 +64,52 @@
     </div>
     <div v-if="loading">Loading guests...</div>
     <div v-else>
-      <DataTable
-        :value="sortedGuests"
-        :sortField="sortKey"
-        :sortOrder="sortAsc ? 1 : -1"
-        :size="small"
-        stripedRows
-        paginator :rows="20" 
-        @sort="onSort"
-        class="min-w-full text-left"
-        responsiveLayout="scroll"
-      >
-        <Column header="#">
-          <template #body="slotProps">{{ slotProps.index + 1 }}</template>
-        </Column>
-        <Column field="is_primary" header="Primary" sortable>
-          <template #body="slotProps">{{ slotProps.data.is_primary ? 'Yes' : 'No' }}</template>
-        </Column>
-        <Column field="group_label" header="Group" sortable />
-        <Column field="name" header="Name" sortable />
-        <Column field="email" header="Email" sortable />
-        <Column field="preferred_language" header="Language" sortable />
-        <Column header="RSVP" sortField="attending" sortable>
-          <template #body="slotProps">{{ slotProps.data.attending === true ? 'Yes' : slotProps.data.attending === false ? 'No' : 'Pending' }}</template>
-        </Column>
-        <Column header="Code" field="code" sortable>
-          <template #body="slotProps">{{ slotProps.data.code || '—' }}</template>
-        </Column>
-        <Column field="can_bring_plus_one" header="Can Bring +1" sortable>
-          <template #body="slotProps">{{ slotProps.data.can_bring_plus_one ? 'Yes' : 'No' }}</template>
-        </Column>
-        <Column header="Actions">
-          <template #body="slotProps">
-            <div class="flex justify-center">
-            <ButtonGroup>
-              <Button severity="secondary" icon="i-solar:pen-new-square-bold-duotone" @click="openEditForGuest(slotProps.data)" />
-              <Button severity="danger" icon="i-solar:trash-bin-minimalistic-bold-duotone" @click="deleteGuest(slotProps.data.id)" />
-            </ButtonGroup>
+      <Card >
+        <template #content>
+          <div>
+            <DataTable
+              :value="sortedGuests"
+              :sortField="sortKey"
+              :sortOrder="sortAsc ? 1 : -1"
+              stripedRows
+              paginator :rows="80" 
+              @sort="onSort"
+              tableStyle="min-width: 50rem"
+              responsiveLayout="scroll"
+            >
+              <Column header="#">
+                <template #body="slotProps">{{ slotProps.index + 1 }}</template>
+              </Column>
+              <Column field="is_primary" header="Primary" sortable>
+                <template #body="slotProps">{{ slotProps.data.is_primary ? 'Yes' : 'No' }}</template>
+              </Column>
+              <Column field="group_label" header="Group" sortable />
+              <Column field="name" header="Name" sortable />
+              <Column field="email" header="Email" sortable />
+              <Column field="preferred_language" header="Language" sortable />
+              <Column header="RSVP" sortField="attending" sortable>
+                <template #body="slotProps">{{ slotProps.data.attending === true ? 'Yes' : slotProps.data.attending === false ? 'No' : 'Pending' }}</template>
+              </Column>
+              <Column header="Code" field="code" sortable>
+                <template #body="slotProps">{{ slotProps.data.code || '—' }}</template>
+              </Column>
+              <Column field="can_bring_plus_one" header="Can Bring +1" sortable>
+                <template #body="slotProps">{{ slotProps.data.can_bring_plus_one ? 'Yes' : 'No' }}</template>
+              </Column>
+              <Column header="Actions">
+                <template #body="slotProps">
+                  <div class="flex justify-center">
+                  <ButtonGroup>
+                    <Button severity="secondary" icon="i-solar:pen-new-square-bold-duotone" @click="openEditForGuest(slotProps.data)" />
+                    <Button severity="danger" icon="i-solar:trash-bin-minimalistic-bold-duotone" @click="deleteGuest(slotProps.data.id)" />
+                  </ButtonGroup>
+                </div>
+                </template>
+              </Column>
+            </DataTable>
           </div>
-          </template>
-        </Column>
-      </DataTable>
+        </template>
+      </Card>
     </div>
   </div>
   <GuestModal

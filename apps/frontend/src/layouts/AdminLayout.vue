@@ -1,15 +1,23 @@
 <template>
-  <div class="flex">
-    <aside class="hidden md:block basis-3xs p-8 pt-24 space-y-4 mr-24">
-      <Menu :model="menuItems" />
+  <div 
+    class="admin mx-24 md:mx-40 md:mt-40 md:flex md:flex-row gap-16"
+  >
+    <aside class="hidden md:flex p-16 md:flex-none md:h-full">
+      <Menu 
+        :model="menuItems" 
+      />
     </aside>
 
-    <div class="flex-1">
+    <div class="flex flex-col gap-16 md:grow md:flex-auto">
       <div class="md:hidden mt-16">
-        <Menubar :model="menuItems" />
+        <Menubar 
+          :model="menuItems" 
+          />
       </div>
       <!-- Main Content -->
-      <main class="basis-full mb-40 md:pl-0 pl-0">
+      <main 
+        class="admin-main basis-full mb-40 md:pl-0 pl-0"
+      >
         <router-view />
       </main>
     </div>
@@ -40,10 +48,10 @@ const menuItems = [
     command: () => router.push('/admin/media')
   },
   {
-    label: 'Guests',
+    label: 'Guests Management',
     items: [
       {
-        label: 'Guest Management',
+        label: 'Guests',
         icon: 'i-solar:users-group-two-rounded-bold-duotone',
         command: () => router.push('/admin/guests/overview')
       },
@@ -69,7 +77,7 @@ const menuItems = [
       },
       {
         label: 'Surveys',
-        icon: 'i-solar:survey-bold-duotone',
+        icon: 'i-solar:letter-opened-bold',
         command: () => router.push('/admin/surveys')
       }
     ]

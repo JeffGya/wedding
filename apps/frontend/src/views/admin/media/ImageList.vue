@@ -2,33 +2,50 @@
   <div class="image-list">
     <ConfirmDialog />
     <h2>Image Library</h2>
-    <DataTable :value="images" paginator :rows="10" responsiveLayout="scroll">
-      <Column header="Preview">
-        <template #body="slotProps">
-          <img
-            :src="slotProps.data.url"
-            :alt="slotProps.data.alt_text"
-            style="height: 50px;"
-          />
-        </template>
-      </Column>
-      <Column field="filename" header="Filename" />
-      <Column field="alt_text" header="Alt Text" />
-      <Column field="created_at" header="Created At" />
-      <Column field="updated_at" header="Updated At" />
-      <Column header="Actions">
-        <template #body="slotProps">
-          <Button
-            icon="i-solar:pen-new-square-bold-duotone"
-            @click="openEditDialog(slotProps.data)"
-          />
-          <Button
-            icon="i-solar:trash-bin-minimalistic-bold-duotone"
-            @click="confirmDelete(slotProps.data.id)"
-          />
-        </template>
-      </Column>
-    </DataTable>
+    <Card
+      class="w-full"
+    >
+      <template #content>
+        <DataTable 
+          :value="images" 
+          tableStyle="min-width: 30rem" 
+          paginator :rows="10" 
+          responsiveLayout="scroll"
+          stripedRows
+        >
+          <Column header="Preview">
+            <template #body="slotProps">
+              <img
+                :src="slotProps.data.url"
+                :alt="slotProps.data.alt_text"
+                style="height: 50px;"
+                class="rounded"
+              />
+            </template>
+          </Column>
+          <Column field="filename" header="Filename" />
+          <Column field="alt_text" header="Alt Text" />
+          <Column field="created_at" header="Created At" />
+          <Column field="updated_at" header="Updated At" />
+          <Column header="Actions">
+            <template #body="slotProps">
+              <ButtonGroup>
+                <Button
+                  severity="contrast"
+                  icon="i-solar:pen-new-square-bold-duotone"
+                  @click="openEditDialog(slotProps.data)"
+                />
+                <Button
+                  severity="danger"
+                  icon="i-solar:trash-bin-minimalistic-bold-duotone"
+                  @click="confirmDelete(slotProps.data.id)"
+                />
+              </ButtonGroup>
+            </template>
+          </Column>
+        </DataTable>
+      </template>
+    </Card>
 
     <Dialog header="Edit Image" v-model:visible="editDialog" modal>
       <div class="p-field">

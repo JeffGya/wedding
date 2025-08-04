@@ -134,6 +134,17 @@ body  {
   --p-radiobutton-checked-focus-background:   var(--acc-focus);
   --p-radiobutton-checked-focus-border-color: var(--form-border-focus);
   --p-radiobutton-checked-color:              var(--text);
+
+  /* PrimeVue Table Overrides */
+  --p-datatable-header-cell-color:            var(--text);
+  --p-datatable-header-cell-background:       var(--form-background);
+  --p-datatable-header-cell-border-color:     var(--form-border);
+  --p-datatable-row-background:               transparent;
+  --p-datatable-row-color:                    var(--text);
+  --p-paginator-background:                   transparent;
+  --p-paginator-color:                        var(--text);
+
+  --p-datatable-row-striped-background:       var(--form-background);
 }
 
 p, li {
@@ -164,6 +175,10 @@ label {
 
 main {
   @apply mx-16 md:mx-40 lg:mx-80 mt-8;
+}
+
+.admin main {
+  margin: 0;
 }
 
 Button {
