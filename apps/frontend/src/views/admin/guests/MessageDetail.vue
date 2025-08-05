@@ -1,304 +1,383 @@
 <template>
-  <h1 class="text-3xl font-bold mb-6">Message Detail</h1>
-  <Card class="max-w-6xl mx-auto mt-6 p-6 relative">
-    <template #content> 
+  <AdminPageWrapper 
+    title="Message Details" 
+    description="View message content and delivery statistics"
+  >
+    <template #headerActions>
+      <Button 
+        icon="pi pi-arrow-left" 
+        severity="secondary" 
+        text
+        @click="$router.push('/admin/guests/messages')"
+        v-tooltip.top="'Back to Messages'"
+      />
+    </template>
 
-      <Toast />
-      <ConfirmDialog />
+    <div v-if="message" class="space-y-6">
+      <!-- Message Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <StatCard
+          title="Total Recipients"
+          :value="deliveryLogs.length"
+        />
+        <StatCard
+          title="Successfully Sent"
+          :value="sentCount"
+        />
+        <StatCard
+          title="Failed Deliveries"
+          :value="failedCount"
+        />
+      </div>
 
-    <div class="flex-1">
-      <template v-if="message">
-        <div class="md:flex md:gap-8">
-          <!-- Left column: Message content -->
-          <div class="md:w-1/2 space-y-6">
+      <!-- Message Content -->
+      <Card>
+        <template #title>
+          <div class="flex items-center gap-2">
+            <i class="pi pi-envelope text-acc-base"></i>
+            <span>Message Content</span>
+          </div>
+        </template>
+        <template #content>
+          <div class="space-y-6">
+            <!-- Subject -->
             <div>
-              <h2 class="text-xl font-semibold">Subject:</h2>
-              <p class="text-gray-800">{{ message.subject }}</p>
+              <label class="text-sm font-semibold text-form-placeholder-text">Subject</label>
+              <p class="text-lg text-text mt-1">{{ message.subject }}</p>
             </div>
 
-            <div>
-              <h2 class="text-xl font-semibold">Message Content (EN):</h2>
-              <div class="prose bg-white p-4 rounded border" v-html="message.body_en"></div>
+            <!-- Status -->
+            <div class="flex items-center gap-4">
+              <div>
+                <label class="text-sm font-semibold text-form-placeholder-text">Status</label>
+                <div class="mt-1">
+                  <Tag 
+                    :value="getStatusLabel(message.status)" 
+                    :severity="getStatusSeverity(message.status)"
+                  />
+                </div>
+              </div>
+              
+              <div v-if="message.status === 'scheduled'">
+                <label class="text-sm font-semibold text-form-placeholder-text">Scheduled For</label>
+                <p class="text-text mt-1">{{ formatScheduledTime(message.scheduled_for) }}</p>
+              </div>
             </div>
 
-            <div>
-              <h2 class="text-xl font-semibold">Message Content (LT):</h2>
-              <div class="prose bg-white p-4 rounded border" v-html="message.body_lt"></div>
-            </div>
-
-            <div>
-              <h2 class="text-xl font-semibold">Status:</h2>
-              <p class="text-gray-600 capitalize">{{ message.status }}</p>
-            </div>
-
-            <!-- Display scheduled time if the message is scheduled -->
-            <div v-if="message.status === 'scheduled'" class="space-y-1">
-              <h2 class="text-xl font-semibold">Scheduled Time:</h2>
-              <p class="text-gray-800">
-                {{ formatScheduledTime(message.scheduled_for) }}
-              </p>
-            </div>
-
-            <div>
-              <h2 class="text-xl font-semibold">Delivery Summary:</h2>
-              <div class="space-y-1">
-                <p class="text-gray-700">Total Recipients: {{ deliveryLogs.length }}</p>
-                <p :class="sentCount > 0 ? 'text-green-600' : 'text-gray-600'">Sent: {{ sentCount }}</p>
-                <p :class="failedCount > 0 ? 'text-red-600' : 'text-gray-600'">Failed: {{ failedCount }}</p>
-                <p :class="pendingCount > 0 ? 'text-yellow-600' : 'text-gray-600'">Pending: {{ pendingCount }}</p>
+            <!-- Message Bodies -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <label class="text-sm font-semibold text-form-placeholder-text">English Content</label>
+                <div class="mt-2 p-4 bg-card-bg border border-form-border rounded-lg prose max-w-none">
+                  <div v-html="message.body_en"></div>
+                </div>
+              </div>
+              
+              <div>
+                <label class="text-sm font-semibold text-form-placeholder-text">Lithuanian Content</label>
+                <div class="mt-2 p-4 bg-card-bg border border-form-border rounded-lg prose max-w-none">
+                  <div v-html="message.body_lt"></div>
+                </div>
               </div>
             </div>
           </div>
+        </template>
+      </Card>
 
-          <!-- Right column: Recipients -->
-          <div class="md:w-1/2 mt-8 md:mt-0">
-            <h2 class="text-xl font-semibold mb-2">Recipients:</h2>
-            <ul class="list-disc list-inside">
-              <li v-for="log in deliveryLogs" :key="log.id">
-                {{ log.name }} ({{ log.email }}) — 
-                <span :class="{
-                  'text-green-600': log.delivery_status === 'sent',
-                  'text-yellow-600': log.delivery_status === 'pending',
-                  'text-red-600': log.delivery_status === 'failed'
-                }">{{ log.delivery_status }}</span>
-              </li>
-            </ul>
+      <!-- Delivery Logs -->
+      <Card>
+        <template #title>
+          <div class="flex items-center gap-2">
+            <i class="pi pi-users text-acc-base"></i>
+            <span>Recipient Delivery Logs</span>
           </div>
+        </template>
+        <template #content>
+          <DataTable
+            :value="deliveryLogs"
+            stripedRows
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[10, 25, 50]"
+            filterDisplay="menu"
+            :globalFilterFields="['name', 'email', 'group_label']"
+            class="p-datatable-sm"
+          >
+            <template #header>
+              <div class="flex justify-between items-center">
+                <span class="text-lg font-semibold">Recipients</span>
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText v-model="filters.global" placeholder="Search recipients..." />
+                </span>
+              </div>
+            </template>
+
+            <Column field="name" header="Name" sortable>
+              <template #body="{ data }">
+                <div class="flex items-center gap-2">
+                  <span class="font-medium">{{ data.name }}</span>
+                  <span v-if="data.group_label" class="text-xs bg-acc-base text-white px-2 py-1 rounded-full">
+                    {{ data.group_label }}
+                  </span>
+                </div>
+              </template>
+            </Column>
+
+            <Column field="email" header="Email" sortable>
+              <template #body="{ data }">
+                <span class="text-sm">{{ data.email }}</span>
+              </template>
+            </Column>
+
+            <Column field="delivery_status" header="Status" sortable>
+              <template #body="{ data }">
+                <Tag 
+                  :value="getDeliveryStatusLabel(data.delivery_status)" 
+                  :severity="getDeliveryStatusSeverity(data.delivery_status)"
+                />
+              </template>
+            </Column>
+
+            <Column field="created_at" header="Sent At" sortable>
+              <template #body="{ data }">
+                <span v-if="data.created_at" class="text-sm text-form-placeholder-text">
+                  {{ formatDate(data.created_at) }}
+                </span>
+                <span v-else class="text-form-placeholder-text">—</span>
+              </template>
+            </Column>
+
+            <Column field="error_message" header="Error" sortable>
+              <template #body="{ data }">
+                <span v-if="data.error_message" class="text-sm text-danger">
+                  {{ data.error_message }}
+                </span>
+                <span v-else class="text-form-placeholder-text">—</span>
+              </template>
+            </Column>
+          </DataTable>
+        </template>
+      </Card>
+    </div>
+
+    <div v-else class="text-center py-12">
+      <i class="pi pi-spin pi-spinner text-4xl text-form-placeholder-text mb-4"></i>
+      <p class="text-form-placeholder-text">Loading message details...</p>
+    </div>
+
+    <!-- Action Buttons - Fixed to respect sidebar -->
+    <div v-if="message" class="fixed bottom-0 z-10 bg-bg-glass backdrop-blur-sm border-t border-form-border p-4 transition-all duration-300"
+         :class="[
+           'md:left-64', // Account for sidebar width on desktop
+           'left-0 right-0', // Full width on mobile
+           'md:right-0' // Stop at right edge on desktop
+         ]">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div>
+          <Button
+            v-if="message.status === 'draft' || message.status === 'scheduled'"
+            label="Delete Message"
+            icon="pi pi-trash"
+            severity="danger"
+            @click="deleteMessage(message.id)"
+          />
         </div>
-      </template>
-      <template v-else>
-        <p>Loading message details...</p>
-      </template>
-    </div>
-
-    <!-- Sticky Button Bar -->
-    <div
-      class="sticky bottom-0 left-0 right-0 z-10 flex justify-between p-16 mt-8 bg-bg-glass backdrop-blur-sm"
-      v-if="message"
-    >
-      <!-- Left: Delete button for drafts/scheduled -->
-      <div>
-        <Button
-          v-if="message.status === 'draft' || message.status === 'scheduled'"
-          label="Delete Message"
-          icon="i-solar:pen-new-square-bold-duotone"
-          severity="danger"
-          @click="deleteMessage(message.id)"
-        />
-      </div>
-      <!-- Right: Other actions -->
-      <div class="flex gap-4">
-        <Button
-          v-if="message.status === 'draft' || message.status === 'scheduled'"
-          label="Edit Message"
-          icon="pi pi-pencil"
-          class="p-button-warning"
-          @click="$router.push(`/admin/guests/messages/${message.id}/edit`)"
-        />
-        <Button
-          label="Resend Failed"
-          icon="pi pi-redo"
-          class="p-button-info"
-          @click="resendFailed"
-          :disabled="resendLoading"
-        />
-        <Button
-          label="Back to Messages"
-          icon="pi pi-arrow-left"
-          class="p-button-secondary p-button-outlined"
-          @click="$router.push('/admin/guests/messages')"
-        />
+        
+        <div class="flex gap-4">
+          <Button
+            v-if="message.status === 'draft' || message.status === 'scheduled'"
+            label="Edit Message"
+            icon="pi pi-pencil"
+            severity="secondary"
+            @click="$router.push(`/admin/guests/messages/${message.id}/edit`)"
+          />
+          <Button
+            v-if="message.status === 'sent' && failedCount > 0"
+            label="Resend Failed"
+            icon="pi pi-redo"
+            severity="warning"
+            @click="resendFailed"
+          />
+        </div>
       </div>
     </div>
-
-    <!-- Resend Loading Overlay -->
-    <div
-      v-if="resendLoading"
-      class="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center z-50"
-    >
-      <div class="bg-white rounded p-6 shadow-lg max-w-md w-full text-center">
-        <svg class="animate-spin h-10 w-10 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-        </svg>
-        <p class="text-lg font-semibold mb-2">Resending failed messages...</p>
-        <p class="text-gray-700">{{ resendProgressMessage }}</p>
-      </div>
-    </div>
-
-    </template> 
-  </Card>
-
-  <!-- Resend Summary Modal -->
-  <Dialog
-    v-model:visible="showSummaryModal"
-    header="Resend Summary"
-    modal
-    class="w-full max-w-lg"
-  >
-    <div class="p-4">
-      <p class="mb-2">Sent: {{ summarySentCount }}</p>
-      <p class="mb-4">Failed: {{ summaryFailedCount }}</p>
-      <div v-if="summaryFailedCount > 0" class="mb-4 max-h-48 overflow-y-auto border rounded p-2">
-        <h3 class="font-semibold mb-2">Failed Recipients:</h3>
-        <ul class="list-disc list-inside text-sm text-red-600">
-          <li v-for="err in retryErrors" :key="err.guest_id">
-            {{ err.name || 'Guest ID ' + err.guest_id }}: {{ err.error }}
-          </li>
-        </ul>
-      </div>
-      <div class="flex justify-end">
-        <Button
-          label="Close"
-          icon="pi pi-times"
-          class="p-button-primary"
-          @click="showSummaryModal = false"
-        />
-      </div>
-    </div>
-  </Dialog>
-
+  </AdminPageWrapper>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
 import api from '@/api'
-import Toast from 'primevue/toast';
-import { useToast as usePrimeToast } from 'primevue/usetoast';
-import { useConfirm } from 'primevue/useconfirm';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
+import StatCard from '@/components/ui/StatCard.vue'
 
 const route = useRoute()
 const router = useRouter()
-const confirm = useConfirm();
-const primeToast = usePrimeToast();
-const messageId = route.params.id
+const toast = useToast()
 
 const message = ref(null)
 const deliveryLogs = ref([])
+const filters = ref({
+  global: null
+})
 
-const sentCount = ref(0)
-const failedCount = ref(0)
+// Stats computation
+const sentCount = computed(() => deliveryLogs.value.filter(log => log.delivery_status === 'sent').length)
+const failedCount = computed(() => deliveryLogs.value.filter(log => log.delivery_status === 'failed').length)
+const pendingCount = computed(() => deliveryLogs.value.filter(log => log.delivery_status === 'pending').length)
 
-const resendLoading = ref(false)
-const resendProgressMessage = ref('')
-const retryErrors = ref([])
+const getStatusLabel = (status) => {
+  const labels = {
+    draft: 'Draft',
+    scheduled: 'Scheduled',
+    sent: 'Sent'
+  }
+  return labels[status] || status
+}
 
-const showSummaryModal = ref(false)
-const summarySentCount = ref(0)
-const summaryFailedCount = ref(0)
+const getStatusSeverity = (status) => {
+  const severities = {
+    draft: 'info',
+    scheduled: 'warning',
+    sent: 'success'
+  }
+  return severities[status] || 'info'
+}
 
-// New method to format the scheduled time
-const formatScheduledTime = (scheduledAt) => {
-  if (!scheduledAt) return 'N/A'
-  const date = new Date(scheduledAt)
-  // Format in Europe/Amsterdam timezone, preserving YYYY-MM-DD HH:mm
+const getDeliveryStatusLabel = (status) => {
+  const labels = {
+    sent: 'Sent',
+    failed: 'Failed',
+    pending: 'Pending'
+  }
+  return labels[status] || status
+}
+
+const getDeliveryStatusSeverity = (status) => {
+  const severities = {
+    sent: 'success',
+    failed: 'danger',
+    pending: 'warning'
+  }
+  return severities[status] || 'info'
+}
+
+const formatScheduledTime = (dateValue) => {
+  if (!dateValue) return ''
+  let dateObj
+  if (typeof dateValue === 'string') {
+    let iso = dateValue
+    if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
+      iso = iso.replace(' ', 'T') + 'Z'
+    }
+    dateObj = new Date(iso)
+  } else {
+    dateObj = new Date(dateValue)
+  }
+  return new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Europe/Amsterdam'
+  }).format(dateObj)
+}
+
+const formatDate = (dateValue) => {
+  if (!dateValue) return ''
+  let dateObj
+  if (typeof dateValue === 'string') {
+    let iso = dateValue
+    if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
+      iso = iso.replace(' ', 'T') + 'Z'
+    }
+    dateObj = new Date(iso)
+  } else {
+    dateObj = new Date(dateValue)
+  }
   return new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
+    hour12: false,
     timeZone: 'Europe/Amsterdam'
-  }).format(date)
+  }).format(dateObj)
 }
 
-onMounted(async () => {
-  const res = await api.get(`/messages/${messageId}`)
-  message.value = res.data.message
-
-  const logRes = await api.get(`/messages/${messageId}/logs`)
-  deliveryLogs.value = logRes.data.logs
-  sentCount.value = logRes.data.sentCount || 0
-  failedCount.value = logRes.data.failedCount || 0
-})
-
-const pendingCount = computed(() => {
-  return deliveryLogs.value.length - sentCount.value - failedCount.value
-})
-
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
-
-const resendFailed = async () => {
+const fetchMessage = async () => {
   try {
-    console.log('Starting resend of failed messages...')
-    resendLoading.value = true
-    retryErrors.value = []
-    resendProgressMessage.value = ''
-    const failedRecipients = deliveryLogs.value.filter(log => log.delivery_status === 'failed')
-
-    let sent = 0
-    let failed = 0
-
-    for (let i = 0; i < failedRecipients.length; i++) {
-      const recipient = failedRecipients[i]
-      resendProgressMessage.value = `Sending ${i + 1} of ${failedRecipients.length}...`
-      console.log(`Resending message to guest_id ${recipient.guest_id} (${i + 1} of ${failedRecipients.length})`)
-      let attempt = 0
-      let success = false
-      let lastError = null
-
-      while (attempt < 3 && !success) {
-        try {
-          await delay(attempt === 0 ? 300 : 1000 * Math.pow(2, attempt - 1)) // 300ms, then exponential backoff
-          const response = await api.post(`/messages/${messageId}/resend`, { guestId: recipient.guest_id })
-          if (response.data.success) {
-            success = true
-          }
-        } catch (error) {
-          lastError = error
-          if (error.response?.status !== 429) break
-          attempt++
-        }
-      }
-
-      if (success) {
-        sent++
-      } else {
-        failed++
-        retryErrors.value.push({
-          guest_id: recipient.guest_id,
-          name: recipient.name,
-          error: lastError?.message || 'Unknown error'
-        })
-      }
-    }
-
-    // Refresh logs after resend attempts
-    const logRes = await api.get(`/messages/${messageId}/logs`)
-    deliveryLogs.value = logRes.data.logs
-    sentCount.value = deliveryLogs.value.filter(log => log.delivery_status === 'sent').length
-    failedCount.value = deliveryLogs.value.filter(log => log.delivery_status === 'failed').length
-
-    summarySentCount.value = sent
-    summaryFailedCount.value = failed
-    showSummaryModal.value = true
-    primeToast.add({ severity: 'success', summary: 'Resend Complete', detail: `Sent: ${sent}, Failed: ${failed}` })
-
-    console.log(`Resend complete. Sent: ${sent}, Failed: ${failed}`)
-  } catch (err) {
-    console.error('Failed to resend failed messages', err)
-  } finally {
-    resendLoading.value = false
-    resendProgressMessage.value = ''
+    const response = await api.get(`/messages/${route.params.id}`)
+    message.value = response.data.message
+    
+    // Fetch delivery logs
+    const logsResponse = await api.get(`/messages/${route.params.id}/logs`)
+    deliveryLogs.value = logsResponse.data.logs
+  } catch (error) {
+    console.error('Failed to load message:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to load message details',
+      life: 3000
+    })
   }
 }
 
-async function deleteMessage(id) {
-  confirm.require({
-    message: 'Are you sure you want to delete this message?',
-    header: 'Confirmation',
-    icon: 'pi pi-exclamation-triangle',
-    accept: async () => {
-      try {
-        await api.delete(`/messages/${id}`);
-        router.push('/admin/guests/messages');
-        primeToast.add({ severity: 'success', summary: 'Deleted', detail: 'Message deleted successfully' });
-      } catch (error) {
-        console.error('Failed to delete message:', error);
-      }
-    }
-  });
+const deleteMessage = async (id) => {
+  if (!confirm('Are you sure you want to delete this message?')) return
+  
+  try {
+    await api.delete(`/messages/${id}`)
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Message deleted successfully',
+      life: 3000
+    })
+    router.push('/admin/guests/messages')
+  } catch (error) {
+    console.error('Failed to delete message:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to delete message',
+      life: 3000
+    })
+  }
 }
+
+const resendFailed = async () => {
+  try {
+    const response = await api.post(`/messages/${message.value.id}/resend`)
+    const { sentCount, failedCount } = response.data
+    
+    toast.add({
+      severity: 'success',
+      summary: 'Resend Complete',
+      detail: `✅ ${sentCount} sent, ❌ ${failedCount} failed`,
+      life: 5000
+    })
+    
+    // Refresh data
+    await fetchMessage()
+  } catch (error) {
+    console.error('Failed to resend failed messages:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to resend failed messages',
+      life: 3000
+    })
+  }
+}
+
+onMounted(() => {
+  fetchMessage()
+})
 </script>

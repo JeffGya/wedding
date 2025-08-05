@@ -1,99 +1,174 @@
 <template>
-  <div class="p-m-4">
-    <ProgressBar v-if="loading" mode="indeterminate" class="p-mb-4" />
+  <AdminPageWrapper 
+    :title="isEditMode ? 'Edit Page' : 'Create Page'"
+    description="Create and edit wedding website pages with rich content blocks"
+  >
+    <template #headerActions>
+      <Button 
+        icon="pi pi-arrow-left" 
+        severity="secondary" 
+        text
+        @click="goBack"
+        v-tooltip.top="'Back to Pages'"
+      />
+    </template>
+
+    <ProgressBar v-if="loading" mode="indeterminate" class="mb-4" />
     <Alert position="top-right" :life="5000" />
+    
     <Banner
       v-if="bannerMessage"
       :message="bannerMessage"
       type="error"
+      class="mb-4"
     />
-    <Button icon="pi pi-arrow-left" class="p-button-text p-mb-2" @click="goBack">Back</Button>
-    <h1 class="p-text-2xl p-font-bold p-mb-4">
-      {{ isEditMode ? 'Edit Page' : 'Create Page' }}
-    </h1>
 
     <!-- Page Settings -->
-    <div class="p-grid p-formgrid p-fluid p-mb-4">
-      <FormField
-        class="p-col-12 p-md-6"
-        for="slug"
-        label="Slug"
-        :helper="slugError"
-        :state="slugError ? 'error' : null"
-      >
-        <label for="slug">Slug</label>
-        <InputText id="slug" v-model="page.slug" />
-      </FormField>
-      <div class="p-field p-col-12 p-md-2">
-        <label for="is_published">Published</label>
-        <Checkbox binary id="is_published" v-model="page.is_published" />
-      </div>
-      <FormField
-        class="p-col-12 p-md-2"
-        for="requires_rsvp"
-        label="RSVP Required"
-        :helper="page.requires_rsvp ? 'Ensure RSVP flow is configured under Settings before requiring RSVPs.' : ''"
-      >
-        <label for="requires_rsvp">RSVP Required</label>
-        <Checkbox binary id="requires_rsvp" v-model="page.requires_rsvp" />
-      </FormField>
-      <div class="p-field p-col-12 p-md-2">
-        <label for="show_in_nav">Show in Nav</label>
-        <Checkbox binary id="show_in_nav" v-model="page.show_in_nav" />
-      </div>
-      <FormField
-        class="p-col-12 p-md-2"
-        for="nav_order"
-        label="Nav Order"
-        :state="navError ? 'error' : null"
-        :helper="navError"
-      >
-        <InputNumber id="nav_order" v-model="page.nav_order" :min="1" :disabled="!page.show_in_nav" />
-      </FormField>
-    </div>
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-cog text-acc-base"></i>
+          <span>Page Settings</span>
+        </div>
+      </template>
+      <template #content>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <FormField
+            class="md:col-span-6"
+            for="slug"
+            label="Slug"
+            :helper="slugError"
+            :state="slugError ? 'error' : null"
+          >
+            <label for="slug">Slug</label>
+            <InputText id="slug" v-model="page.slug" />
+          </FormField>
+          
+          <div class="md:col-span-2">
+            <label for="is_published" class="block text-sm font-medium text-text mb-2">Published</label>
+            <Checkbox binary id="is_published" v-model="page.is_published" />
+          </div>
+          
+          <FormField
+            class="md:col-span-2"
+            for="requires_rsvp"
+            label="RSVP Required"
+            :helper="page.requires_rsvp ? 'Ensure RSVP flow is configured under Settings before requiring RSVPs.' : ''"
+          >
+            <label for="requires_rsvp">RSVP Required</label>
+            <Checkbox binary id="requires_rsvp" v-model="page.requires_rsvp" />
+          </FormField>
+          
+          <div class="md:col-span-2">
+            <label for="show_in_nav" class="block text-sm font-medium text-text mb-2">Show in Nav</label>
+            <Checkbox binary id="show_in_nav" v-model="page.show_in_nav" />
+          </div>
+          
+          <FormField
+            class="md:col-span-2"
+            for="nav_order"
+            label="Nav Order"
+            :state="navError ? 'error' : null"
+            :helper="navError"
+          >
+            <InputNumber id="nav_order" v-model="page.nav_order" :min="1" :disabled="!page.show_in_nav" />
+          </FormField>
+        </div>
+      </template>
+    </Card>
 
     <!-- Locale Selector & Title -->
-    <div class="p-grid p-formgrid p-fluid p-mb-4">
-      <div class="p-field p-col-12 p-md-3">
-        <label for="locale">Language</label>
-        <Select
-          id="locale"
-          v-model="currentLocale"
-          :options="localeOptions"
-          optionLabel="label"
-          optionValue="value"
-        />
-      </div>
-      <FormField
-        class="p-col-12 p-md-9"
-        for="title"
-        label="Title"
-        :helper="titleError"
-        :state="titleError ? 'error' : null"
-      >
-        <label for="title">Title ({{ currentLocale }})</label>
-        <InputText id="title" v-model="pageTranslations[currentLocale].title" />
-      </FormField>
-    </div>
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-globe text-acc-base"></i>
+          <span>Content</span>
+        </div>
+      </template>
+      <template #content>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div class="md:col-span-3">
+            <label for="locale" class="block text-sm font-medium text-text mb-2">Language</label>
+            <Select
+              id="locale"
+              v-model="currentLocale"
+              :options="localeOptions"
+              optionLabel="label"
+              optionValue="value"
+            />
+          </div>
+          
+          <FormField
+            class="md:col-span-9"
+            for="title"
+            label="Title"
+            :helper="titleError"
+            :state="titleError ? 'error' : null"
+          >
+            <label for="title">Title ({{ currentLocale }})</label>
+            <InputText id="title" v-model="pageTranslations[currentLocale].title" />
+          </FormField>
+        </div>
+      </template>
+    </Card>
 
     <!-- Block Builder -->
-    <div v-if="loading">
-      <Skeleton width="100%" height="200px" />
-    </div>
-    <BlockBuilder
-      v-else
-      :blocks="blocks"
-      :locale="currentLocale"
-      :page-id="pageId"
-      @update:blocks="blocks = $event"
-    />
-    <small v-if="blocksError" class="p-error">{{ blocksError }}</small>
-    <small v-if="contentErrors" class="p-error">{{ contentErrors }}</small>
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-palette text-acc-base"></i>
+          <span>Content Blocks</span>
+        </div>
+      </template>
+      <template #content>
+        <div v-if="loading">
+          <Skeleton width="100%" height="200px" />
+        </div>
+        <BlockBuilder
+          v-else
+          :blocks="blocks"
+          :locale="currentLocale"
+          :page-id="pageId"
+          @update:blocks="blocks = $event"
+        />
+        <small v-if="blocksError" class="text-red-500">{{ blocksError }}</small>
+        <small v-if="contentErrors" class="text-red-500">{{ contentErrors }}</small>
+      </template>
+    </Card>
 
     <!-- Preview & Validate -->
-    <div class="p-mb-4">
-      <Button label="Preview" severity="info" class="p-mr-2" @click="previewPage" />
-      <Button label="Validate" severity="warning" @click="validateContent" />
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-eye text-acc-base"></i>
+          <span>Preview & Validation</span>
+        </div>
+      </template>
+      <template #content>
+        <div class="flex gap-2">
+          <Button label="Preview" icon="pi pi-eye" severity="info" @click="previewPage" />
+          <Button label="Validate" icon="pi pi-check-circle" severity="warning" @click="validateContent" />
+        </div>
+      </template>
+    </Card>
+
+    <!-- Actions -->
+    <div class="flex gap-2">
+      <Button
+        label="Save"
+        icon="pi pi-save"
+        severity="primary"
+        @click="savePage"
+        :loading="saving"
+        :disabled="hasErrors"
+      />
+      <Button 
+        label="Cancel" 
+        icon="pi pi-times"
+        severity="secondary" 
+        text
+        @click="cancel" 
+      />
     </div>
 
     <!-- Preview Modal -->
@@ -106,34 +181,25 @@
     >
       <BlockRenderer :blocks="blocks" :locale="currentLocale" withSurveys />
     </Dialog>
-
-    <!-- Actions -->
-    <div>
-      <Button
-        label="Save"
-        severity="primary"
-        @click="savePage"
-        :loading="saving"
-        :disabled="hasErrors"
-      />
-      <Button label="Cancel" class="p-button-text" @click="cancel" />
-    </div>
-  </div>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import BlockBuilder from '@/components/BlockBuilder.vue';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
+import Dialog from 'primevue/dialog';
+import BlockRenderer from '@/components/BlockRenderer.vue';
+import ProgressBar from 'primevue/progressbar';
+import Skeleton from 'primevue/skeleton';
+import Banner from '@/components/ui/Banner.vue';
 
 import {
   fetchPage,
   createPage,
   updatePage
 } from '@/api/pages';
-import Banner from '@/components/ui/Banner.vue';
-import Dialog from 'primevue/dialog';
-import BlockRenderer from '@/components/BlockRenderer.vue';
 import pageFormSchema from '@/validation/pageForm.schema.js';
 
 defineExpose({ components: { Dialog, BlockRenderer } });
@@ -288,6 +354,7 @@ onMounted(async () => {
   }
   loading.value = false;
 });
+
 // Snapshot initial state for change detection
 initialPage.value = JSON.parse(JSON.stringify(page.value));
 initialTranslations.value = JSON.parse(JSON.stringify(pageTranslations.value));

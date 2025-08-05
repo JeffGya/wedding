@@ -10,6 +10,7 @@
           optionValue="id"
           @change="loadTemplate"
           class="w-full"
+          placeholder="Select a template (optional)"
         />
         <label for="template">Select a template</label>
       </FloatLabel>
@@ -21,6 +22,7 @@
           id="subject"
           v-model="form.subject"
           class="w-full"
+          placeholder="Enter message subject"
         />
         <label for="subject">Subject</label>
       </FloatLabel>
@@ -38,17 +40,15 @@
       </div>
 
       <div v-show="tab === 'en'">
-        <label class="block text-sm font-medium mb-16">Message (EN)</label>
+        <label class="block text-sm font-medium mb-2">Message (English)</label>
         <RichTextEditor v-model="form.bodyEn" />
       </div>
       <div v-show="tab === 'lt'">
-        <label class="block text-sm font-medium mb-16">Message (LT)</label>
+        <label class="block text-sm font-medium mb-2">Message (Lietuviškai)</label>
         <RichTextEditor v-model="form.bodyLt" />
       </div>
     </div>
 
-    <!-- Action buttons moved to dedicated MessageActionsBar component -->
-    
     <SaveTemplateModal
       v-if="showSaveTemplate"
       :show="showSaveTemplate"
@@ -66,7 +66,6 @@
 import { computed, reactive, ref, watch } from 'vue'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
-import SelectButton from 'primevue/selectbutton';
 
 const languageOptions = [
   { label: 'English', value: 'en' },
@@ -88,6 +87,7 @@ const emit = defineEmits([
   'save',
   'schedule',
   'sendNow',
+  'templateSaved'
 ])
 
 const selectedTemplateId = ref('')
@@ -99,9 +99,6 @@ const form = reactive({
   bodyEn: '',
   bodyLt: '',
 })
-
-const activeTabClasses = 'px-4 py-2 rounded bg-blue-600 text-white'
-const inactiveTabClasses = 'px-4 py-2 rounded bg-gray-200 text-gray-800'
 
 function loadTemplate() {
   const selected = props.templates.find(t => t.id === parseInt(selectedTemplateId.value))
@@ -137,8 +134,8 @@ const setData = ({ subject, body_en, body_lt }) => {
 }
 
 function handleTemplateSaved() {
-  // You could emit an event here or trigger a reload of templates
-  console.log('✅ Template saved')
+  emit('templateSaved')
+  showSaveTemplate.value = false
 }
 
 defineExpose({

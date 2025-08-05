@@ -1,292 +1,369 @@
 <template>
-  <div>
-    <Button
-      icon="pi pi-arrow-left"
-      label="Back"
-      @click="cancel"
-    />
-    <h1>
-      {{ isEditMode ? 'Edit Survey' : 'Create Survey' }}
-    </h1>
+  <AdminPageWrapper 
+    :title="isEditMode ? 'Edit Survey' : 'Create Survey'"
+    description="Configure survey questions and response options"
+  >
+    <template #headerActions>
+      <Button 
+        icon="pi pi-arrow-left" 
+        severity="secondary" 
+        text
+        @click="cancel"
+        v-tooltip.top="'Back to Surveys'"
+      />
+    </template>
+
+    <Banner v-if="errorMsg" :message="errorMsg" type="error" class="mb-4" />
+
     <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-list text-acc-base"></i>
+          <span>Survey Configuration</span>
+        </div>
+      </template>
       <template #content>
-        <Banner v-if="errorMsg" :message="errorMsg" type="error" />
-        <Tabs 
-          v-model:activeIndex="activeIndex"
-          value="survey"
-        >
-      <TabList>
-        <Tab value="survey">Survey</Tab>
-        <Tab value="responses">Responses</Tab>
-      </TabList>
-      <TabPanels>
-        <!-- Survey Edit Tab -->
-        <TabPanel
-          value="survey"
-        >
-          <div>
-            <div>
-              <label for="question">Question</label>
-              <InputText id="question" v-model="survey.question" :class="{ 'p-invalid': fieldErrors.question }" />
-            </div>
-            <div>
-              <label for="locale">Locale</label>
-              <Select id="locale" v-model="survey.locale" :options="locales" optionLabel="label" optionValue="value" :class="{ 'p-invalid': fieldErrors.locale }" />
-            </div>
-            <div>
-              <label for="page">Page</label>
-              <Select id="page" v-model="survey.page_id" :options="pageOptions" optionLabel="slug" optionValue="id" :class="{ 'p-invalid': fieldErrors.page_id }" />
-            </div>
-            <div>
-              <label for="type">Input Type</label>
-              <Select id="type" v-model="survey.type" :options="typeOptions" optionLabel="label" optionValue="value" :class="{ 'p-invalid': fieldErrors.type }" />
-            </div>
-            <div>
-              <label for="is_required">Required</label>
-              <Checkbox id="is_required" v-model="survey.is_required" binary />
-            </div>
-            <div>
-              <label for="is_anonymous">Anonymous</label>
-              <Checkbox id="is_anonymous" v-model="survey.is_anonymous" binary />
-            </div>
-          </div>
-          <div :class="{ 'p-invalid': fieldErrors.options }">
-            <label>Options</label>
-            <div
-              v-for="(opt, idx) in survey.options"
-              :key="idx"
-            >
-              <div>
-                <InputText v-model="survey.options[idx]" placeholder="Option text" />
+        <Tabs v-model:activeIndex="activeIndex" value="survey">
+          <TabList>
+            <Tab value="survey">Survey</Tab>
+            <Tab value="responses">Responses</Tab>
+          </TabList>
+          
+          <TabPanels>
+            <!-- Survey Edit Tab -->
+            <TabPanel value="survey">
+              <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    for="question"
+                    label="Question"
+                    :state="fieldErrors.question ? 'error' : null"
+                    :helper="fieldErrors.question"
+                  >
+                    <InputText 
+                      id="question" 
+                      v-model="survey.question" 
+                      class="w-full"
+                    />
+                  </FormField>
+
+                  <FormField
+                    for="locale"
+                    label="Locale"
+                    :state="fieldErrors.locale ? 'error' : null"
+                    :helper="fieldErrors.locale"
+                  >
+                    <Select 
+                      id="locale" 
+                      v-model="survey.locale" 
+                      :options="locales" 
+                      optionLabel="label" 
+                      optionValue="value" 
+                      class="w-full"
+                    />
+                  </FormField>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    for="page"
+                    label="Page"
+                    :state="fieldErrors.page_id ? 'error' : null"
+                    :helper="fieldErrors.page_id"
+                  >
+                    <Select 
+                      id="page" 
+                      v-model="survey.page_id" 
+                      :options="pageOptions" 
+                      optionLabel="slug" 
+                      optionValue="id" 
+                      class="w-full"
+                    />
+                  </FormField>
+
+                  <FormField
+                    for="type"
+                    label="Input Type"
+                    :state="fieldErrors.type ? 'error' : null"
+                    :helper="fieldErrors.type"
+                  >
+                    <Select 
+                      id="type" 
+                      v-model="survey.type" 
+                      :options="typeOptions" 
+                      optionLabel="label" 
+                      optionValue="value" 
+                      class="w-full"
+                    />
+                  </FormField>
+                </div>
+
+                <div class="flex items-center gap-6">
+                  <div class="flex items-center gap-2">
+                    <Checkbox id="is_required" v-model="survey.is_required" binary />
+                    <label for="is_required" class="text-sm font-medium text-text">Required</label>
+                  </div>
+                  
+                  <div class="flex items-center gap-2">
+                    <Checkbox id="is_anonymous" v-model="survey.is_anonymous" binary />
+                    <label for="is_anonymous" class="text-sm font-medium text-text">Anonymous</label>
+                  </div>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between">
+                    <label class="text-sm font-medium text-text">Options</label>
+                    <Button 
+                      label="Add Option" 
+                      icon="pi pi-plus" 
+                      severity="secondary"
+                      size="small"
+                      @click="addOption" 
+                    />
+                  </div>
+                  
+                  <div 
+                    v-for="(opt, idx) in survey.options"
+                    :key="idx"
+                    class="flex items-center gap-2"
+                  >
+                    <InputText 
+                      v-model="survey.options[idx]" 
+                      placeholder="Option text" 
+                      class="flex-1"
+                    />
+                    <Button
+                      icon="pi pi-trash"
+                      severity="danger"
+                      text
+                      size="small"
+                      @click="removeOption(idx)"
+                      v-tooltip.top="'Remove Option'"
+                    />
+                  </div>
+                  
+                  <small v-if="fieldErrors.options" class="text-red-500">{{ fieldErrors.options }}</small>
+                </div>
+
+                <div class="flex gap-2">
+                  <Button
+                    :label="isEditMode ? 'Update' : 'Create'"
+                    icon="pi pi-save"
+                    severity="primary"
+                    @click="saveSurvey"
+                    :loading="saving"
+                  />
+                  <Button 
+                    label="Cancel" 
+                    icon="pi pi-times"
+                    severity="secondary" 
+                    text
+                    @click="cancel" 
+                  />
+                </div>
               </div>
-              <div>
-                <Button
-                  icon="pi pi-trash"
-                  class="p-button-text p-button-danger"
-                  @click="removeOption(idx)"
-                />
+            </TabPanel>
+
+            <!-- Responses Tab -->
+            <TabPanel value="responses">
+              <div v-if="responses.length === 0 && !respLoading" class="text-center py-8">
+                <p class="text-gray-500">No responses yet for this survey.</p>
               </div>
-            </div>
-            <Button label="Add Option" icon="pi pi-plus" @click="addOption" />
-          </div>
-          <div>
-            <Button
-              :label="isEditMode ? 'Update' : 'Create'"
-              severity="primary"
-              @click="saveSurvey"
-              :loading="saving"
-            />
-            <Button label="Cancel" class="p-button-text" @click="cancel" />
-          </div>
-        </TabPanel>
-        <!-- Responses Tab -->
-        <TabPanel
-         value="responses"
-         >
-          <DataTable
-            :value="responses"
-            :loading="respLoading"
-            dataKey="id"
-            stripedRows
-            paginator
-            :rows="10"
-          >
-            <Column header="Guest ID" style="width: 6rem">
-              <template #body="slotProps">
-                {{ slotProps.data.guest_id }}
-              </template>
-            </Column>
-            <Column header="Guest Name" style="width: 12rem">
-              <template #body="slotProps">
-                {{ slotProps.data.guest_name || '-' }}
-              </template>
-            </Column>
-            <Column field="response_text" header="Response" />
-            <Column header="Created At" style="width: 12rem">
-              <template #body="slotProps">
-                {{ new Date(slotProps.data.created_at).toLocaleString() }}
-              </template>
-            </Column>
-          </DataTable>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+              
+              <DataTable
+                v-else
+                :value="responses"
+                :loading="respLoading"
+                dataKey="id"
+                stripedRows
+                paginator
+                :rows="10"
+                :rowsPerPageOptions="[10, 20, 50]"
+                responsiveLayout="scroll"
+                class="w-full"
+              >
+                <Column header="Guest ID" style="width: 6rem">
+                  <template #body="slotProps">
+                    {{ slotProps.data.guest_id || 'Anonymous' }}
+                  </template>
+                </Column>
+                
+                <Column header="Guest Name" style="width: 12rem">
+                  <template #body="slotProps">
+                    {{ slotProps.data.guest_name || 'Anonymous' }}
+                  </template>
+                </Column>
+                
+                <Column header="Response" style="min-width: 200px">
+                  <template #body="slotProps">
+                    <div class="response-display">
+                      <!-- Handle different response types -->
+                      <div v-if="isJsonResponse(slotProps.data.response_text)">
+                        <!-- For checkbox/array responses -->
+                        <div v-for="(item, index) in parseJsonResponse(slotProps.data.response_text)" :key="index" class="mb-1">
+                          <Tag :value="item" severity="info" />
+                        </div>
+                      </div>
+                      <div v-else>
+                        <!-- For text/radio responses -->
+                        <span class="text-sm">{{ slotProps.data.response_text || 'No response' }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </Column>
+                
+                <Column header="Submitted" style="width: 12rem">
+                  <template #body="slotProps">
+                    {{ new Date(slotProps.data.created_at).toLocaleDateString() }}
+                  </template>
+                </Column>
+              </DataTable>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </template>
     </Card>
-    
-  </div>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
-import { reactive } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
 import Banner from '@/components/ui/Banner.vue';
-import {
-  createSurvey,
-  updateSurvey,
-  fetchSurvey,
-  fetchAllSurveys,
-  fetchSurveyResponses,
-  fetchPages,
-} from '@/api/pages';
-
-function parseOptions(raw) {
-  if (Array.isArray(raw)) return raw;
-  if (typeof raw === 'string') {
-    try { return JSON.parse(raw); } catch { }
-  }
-  return [];
-}
-
-function toBool(v) {
-  return v === true || v === 'true' || v === 1 || v === '1';
-}
+import { fetchSurvey, createSurvey, updateSurvey, fetchSurveyResponses } from '@/api/pages';
+import { fetchPages } from '@/api/pages';
 
 const route = useRoute();
 const router = useRouter();
-
 const surveyId = route.params.id ? Number(route.params.id) : null;
 const isEditMode = computed(() => surveyId !== null);
 
 const survey = ref({
   question: '',
-  type: 'radio',
-  options: ['Option A', 'Option B'],
+  locale: 'en',
+  page_id: null,
+  type: 'text',
   is_required: false,
   is_anonymous: false,
-  locale: 'en',
-  page_id: null
+  options: []
 });
-const responses = ref([]);
-const saving = ref(false);
-const respLoading = ref(false);
 
+const responses = ref([]);
+const respLoading = ref(false);
+const saving = ref(false);
 const errorMsg = ref('');
-const fieldErrors = reactive({
-  question: false,
-  locale: false,
-  page_id: false,
-  type: false,
-  options: false
-});
+const activeIndex = ref(0);
+const fieldErrors = ref({});
 
 const locales = [
   { label: 'English', value: 'en' },
   { label: 'Lithuanian', value: 'lt' }
 ];
+
 const typeOptions = [
+  { label: 'Text', value: 'text' },
+  { label: 'Select', value: 'select' },
   { label: 'Radio', value: 'radio' },
-  { label: 'Checkbox', value: 'checkbox' },
-  { label: 'Text', value: 'text' }
+  { label: 'Checkbox', value: 'checkbox' }
 ];
+
 const pageOptions = ref([]);
 
-const activeIndex = ref(0);
-
-onMounted(async () => {
-  // If creating a new translation, prefill from query params
-  if (!isEditMode.value) {
-    const qLocale = route.query.locale;
-    const qPage = route.query.page;
-    if (qLocale) survey.value.locale = qLocale;
-    if (qPage) survey.value.page_id = Number(qPage);
+// Helper functions for response display
+const isJsonResponse = (responseText) => {
+  if (!responseText) return false;
+  try {
+    const parsed = JSON.parse(responseText);
+    return Array.isArray(parsed);
+  } catch {
+    return false;
   }
-  // Load pages for assignment
-  // fetchPages returns an array of page objects directly
-  pageOptions.value = await fetchPages({ includeDeleted: false });
+};
 
+const parseJsonResponse = (responseText) => {
+  try {
+    return JSON.parse(responseText);
+  } catch {
+    return [];
+  }
+};
+
+const loadSurvey = async () => {
   if (isEditMode.value) {
-    // Fetch existing survey details and prefill form fields
-    const data = await fetchSurvey(surveyId);
-    survey.value = {
-      question: data.question || '',
-      type: data.type || 'radio',
-      // parse options array or JSON string
-      options: parseOptions(data.options),
-      // ensure booleans
-      is_required: toBool(data.is_required),
-      is_anonymous: toBool(data.is_anonymous),
-      locale: data.locale || 'en',
-      page_id: data.page_id ?? null
-    };
-
-    // Load responses
-    respLoading.value = true;
-    responses.value = await fetchSurveyResponses(surveyId);
-    respLoading.value = false;
-  }
-});
-
-// When locale changes in edit mode, switch to the matching survey record (or creation)
-watch(
-  () => survey.value.locale,
-  async (newLocale, oldLocale) => {
-    if (!isEditMode.value || newLocale === oldLocale) return;
-    const pageId = survey.value.page_id;
-    if (!pageId) return;
-    // Find existing survey translation
-    const allSurveys = await fetchAllSurveys({ includeDeleted: false });
-    const match = allSurveys.find(s => s.page_id === pageId && s.locale === newLocale);
-    if (match) {
-      // edit existing translation
-      router.push({ name: 'admin-survey-detail', params: { id: match.id } });
-    } else {
-      // create new translation
-      router.push({ name: 'admin-survey-create', query: { page: String(pageId), locale: newLocale } });
+    try {
+      const surveyData = await fetchSurvey(surveyId);
+      survey.value = { ...surveyData };
+    } catch (err) {
+      console.error('Failed to load survey', err);
+      errorMsg.value = 'Failed to load survey';
     }
   }
-);
+};
 
-function addOption() {
+const loadPages = async () => {
+  try {
+    const pages = await fetchPages({ includeDeleted: false });
+    pageOptions.value = pages;
+  } catch (err) {
+    console.error('Failed to load pages', err);
+  }
+};
+
+const loadResponses = async () => {
+  if (isEditMode.value) {
+    respLoading.value = true;
+    try {
+      const responseData = await fetchSurveyResponses(surveyId);
+      responses.value = responseData.data || responseData; // Handle both paginated and direct data
+    } catch (err) {
+      console.error('Failed to load responses', err);
+    } finally {
+      respLoading.value = false;
+    }
+  }
+};
+
+const addOption = () => {
   survey.value.options.push('');
-}
-function removeOption(idx) {
-  survey.value.options.splice(idx, 1);
-}
+};
 
-async function saveSurvey() {
-  // Clear previous errors
-  errorMsg.value = '';
-  Object.keys(fieldErrors).forEach(key => fieldErrors[key] = false);
-  // Validate fields
-  const errors = [];
+const removeOption = (index) => {
+  survey.value.options.splice(index, 1);
+};
+
+const validateForm = () => {
+  fieldErrors.value = {};
+  
   if (!survey.value.question.trim()) {
-    errors.push('Question is required');
-    fieldErrors.question = true;
+    fieldErrors.value.question = 'Question is required';
   }
+  
   if (!survey.value.locale) {
-    errors.push('Locale must be selected');
-    fieldErrors.locale = true;
+    fieldErrors.value.locale = 'Locale is required';
   }
+  
   if (!survey.value.page_id) {
-    errors.push('Page must be selected');
-    fieldErrors.page_id = true;
+    fieldErrors.value.page_id = 'Page is required';
   }
+  
   if (!survey.value.type) {
-    errors.push('Input type is required');
-    fieldErrors.type = true;
+    fieldErrors.value.type = 'Type is required';
   }
-  if (['radio','checkbox'].includes(survey.value.type) && survey.value.options.length === 0) {
-    errors.push('At least one option is required');
-    fieldErrors.options = true;
+  
+  if (['select', 'radio', 'checkbox'].includes(survey.value.type) && survey.value.options.length === 0) {
+    fieldErrors.value.options = 'At least one option is required for this type';
   }
-  if (survey.value.type === 'text' && survey.value.options.length > 0) {
-    errors.push('Options must be empty for text surveys');
-    fieldErrors.options = true;
-  }
-  if (errors.length) {
-    errorMsg.value = errors.join('; ');
-    return;
-  }
+  
+  return Object.keys(fieldErrors.value).length === 0;
+};
+
+const saveSurvey = async () => {
+  if (!validateForm()) return;
+  
   saving.value = true;
+  errorMsg.value = '';
+  
   try {
     if (isEditMode.value) {
       await updateSurvey(surveyId, survey.value);
@@ -295,18 +372,27 @@ async function saveSurvey() {
     }
     router.push({ name: 'admin-surveys' });
   } catch (err) {
-    console.error('Error saving survey', err);
-    errorMsg.value = 'Failed to save survey: ' + (err.response?.data?.message || err.message);
+    console.error('Failed to save survey', err);
+    errorMsg.value = 'Failed to save survey';
   } finally {
     saving.value = false;
   }
-}
+};
 
-function cancel() {
+const cancel = () => {
   router.push({ name: 'admin-surveys' });
-}
+};
+
+onMounted(async () => {
+  await loadPages();
+  await loadSurvey();
+  await loadResponses();
+});
 </script>
 
 <style scoped>
-/* Add any survey-detail-specific styles here */
+.response-display {
+  max-width: 300px;
+  word-wrap: break-word;
+}
 </style>

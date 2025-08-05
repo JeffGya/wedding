@@ -1,101 +1,150 @@
 <template>
-  <section>
-    <h1 class="text-2xl font-semibold mb-4">Template Manager</h1>
- 
-    <div v-if="loading" class="text-gray-500">Loading templates...</div>
-    <div v-else-if="templates.length === 0" class="text-gray-500">No templates found.</div>
- 
+  <AdminPageWrapper 
+    title="Template Manager" 
+    description="Create and manage email templates for your guest communications"
+  >
+    <template #headerActions>
+      <Button 
+        label="New Template" 
+        icon="pi pi-plus" 
+        severity="primary" 
+        @click="$router.push('/admin/templates/new')"
+      />
+    </template>
+
+    <div v-if="loading" class="flex justify-center items-center py-8">
+      <ProgressSpinner />
+    </div>
+
+    <div v-else-if="templates.length === 0" class="text-center py-8">
+      <div class="text-gray-500 mb-4">
+        <i class="pi pi-file-edit text-4xl mb-2"></i>
+        <p class="text-lg">No templates found</p>
+        <p class="text-sm">Create your first template to get started</p>
+      </div>
+      <Button 
+        label="Create Template" 
+        icon="pi pi-plus" 
+        severity="primary" 
+        @click="$router.push('/admin/templates/new')"
+      />
+    </div>
+
     <div v-else class="space-y-4">
-      <Panel
+      <Card
         v-for="template in templates"
         :key="template.id"
-        :header="template.name"
-        toggleable
-        :collapsed="true"
-      > 
-        <p class="font-semibold">Subject:</p>
-        <p class="text-base mb-2">{{ template.subject }}</p>
-        <div class="mt-2 space-y-4">
-          <div>
-            <p class="font-semibold">Body (EN):</p>
-            <div class="whitespace-pre-line text-sm text-gray-800 border p-2 rounded bg-gray-50">
-              {{ template.body_en }}
+        class="template-card"
+      >
+        <template #title>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-semibold">{{ template.name }}</h3>
+              <p class="text-sm text-gray-600">{{ template.subject }}</p>
             </div>
-          </div>
-          <div>
-            <p class="font-semibold">Body (LT):</p>
-            <div class="whitespace-pre-line text-sm text-gray-800 border p-2 rounded bg-gray-50">
-              {{ template.body_lt }}
-            </div>
-          </div>
-        </div>
-        <template #footer>
-          <div class="flex justify-end gap-2">
-            <ButtonGroup>
-              <Button
-                label="Delete"
-                icon="i-solar:trash-bin-minimalistic-bold-duotone"
-                severity="danger"
+            <div class="flex gap-2">
+              <Button 
+                icon="pi pi-pencil" 
+                severity="secondary" 
+                text
+                @click="$router.push(`/admin/templates/${template.id}/edit`)"
+                v-tooltip.top="'Edit Template'"
+              />
+              <Button 
+                icon="pi pi-trash" 
+                severity="danger" 
+                text
                 @click="deleteTemplate(template.id)"
+                v-tooltip.top="'Delete Template'"
               />
-              <Button
-                label="Edit"
-                icon="i-solar:pen-new-square-bold-duotone"
-                @click="router.push(`/admin/templates/${template.id}/edit`)"
-              />
-            </ButtonGroup>
+            </div>
           </div>
         </template>
-      </Panel>
+        
+        <template #content>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-semibold text-sm text-gray-700 mb-2">English Content</h4>
+              <div class="bg-gray-50 border rounded p-3 text-sm">
+                <div v-html="template.body_en" class="prose prose-sm max-w-none"></div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-sm text-gray-700 mb-2">Lithuanian Content</h4>
+              <div class="bg-gray-50 border rounded p-3 text-sm">
+                <div v-html="template.body_lt" class="prose prose-sm max-w-none"></div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Card>
     </div>
-  </section>
+
+    <!-- Confirmation Dialog -->
+    <ConfirmDialog />
+  </AdminPageWrapper>
 </template>
- 
+
 <script setup>
 import { ref, onMounted } from 'vue'
-import api from '@/api';
-import { useToast as usePrimeToast } from 'primevue/usetoast'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
+import { fetchTemplates, deleteTemplate as deleteTemplateApi } from '@/api/templates'
 
-const router = useRouter();
+const router = useRouter()
+const toast = useToast()
+const confirm = useConfirm()
 
-const primeToast = usePrimeToast()
 const templates = ref([])
 const loading = ref(true)
 
 onMounted(async () => {
+  await loadTemplates()
+})
+
+async function loadTemplates() {
   try {
-    const res = await api.get('/templates')
-    templates.value = res.data.templates
-  } catch (err) {
-    primeToast.add({ 
+    loading.value = true
+    const response = await fetchTemplates()
+    templates.value = response.templates
+  } catch (error) {
+    toast.add({ 
       severity: 'error', 
       summary: 'Error', 
       detail: 'Failed to load templates.',
-      life: '5000'
-    });
+      life: 5000
+    })
   } finally {
     loading.value = false
   }
-})
+}
 
 async function deleteTemplate(id) {
-  try {
-    await api.delete(`/templates/${id}`)
-    templates.value = templates.value.filter(t => t.id !== id)
-    primeToast.add({ 
-      severity: 'success', 
-      summary: 'Success', 
-      detail: 'Template deleted',
-      life: '5000'
-    });
-  } catch (err) {
-    primeToast.add({ 
-      severity: 'error', 
-      summary: 'Error', 
-      detail: 'Failed to delete template.',
-      life: '5000' 
-    });
-  }
+  confirm.require({
+    message: 'Are you sure you want to delete this template?',
+    header: 'Delete Template',
+    icon: 'pi pi-exclamation-triangle',
+    accept: async () => {
+      try {
+        await deleteTemplateApi(id)
+        templates.value = templates.value.filter(t => t.id !== id)
+        toast.add({ 
+          severity: 'success', 
+          summary: 'Success', 
+          detail: 'Template deleted successfully.',
+          life: 5000
+        })
+      } catch (error) {
+        toast.add({ 
+          severity: 'error', 
+          summary: 'Error', 
+          detail: 'Failed to delete template.',
+          life: 5000
+        })
+      }
+    }
+  })
 }
 </script>

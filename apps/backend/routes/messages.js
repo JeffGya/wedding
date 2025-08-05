@@ -750,12 +750,25 @@ router.post('/:id/send', async (req, res, next) => {
               status: response.status,
               data: response.data,
             });
-            const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status) VALUES (?, ?, 'sent', ?, 'sent')`;
-            // Format timestamp for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
-            const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
-            console.log('🧰 [messages.js] Formatted sentAt for MySQL:', sentAt);
-            await dbRun(logSql, [messageId, guest.id, sentAt]);
-            results.push({ guest_id: guest.id, status: 'sent' });
+            
+            // Check if Resend accepted the email for delivery
+            if (response.status === 200 && response.data && response.data.id) {
+              // Resend accepted the email - mark as sent
+              console.log('✅ Email accepted by Resend for delivery:', response.data.id);
+              const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status, resend_message_id) VALUES (?, ?, 'sent', ?, 'sent', ?)`;
+              // Format timestamp for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
+              const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
+              console.log('🧰 [messages.js] Formatted sentAt for MySQL:', sentAt);
+              await dbRun(logSql, [messageId, guest.id, sentAt, response.data.id]);
+              results.push({ guest_id: guest.id, status: 'sent', resendId: response.data.id });
+            } else {
+              // Resend didn't accept the email - mark as failed
+              console.error('❌ Resend didn\'t accept email for delivery:', response.data);
+              const errorMsg = 'Resend API did not accept email for delivery';
+              const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
+              await dbRun(logSql, [messageId, guest.id, errorMsg]);
+              results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
+            }
             break;
           } catch (err) {
             if (err.response?.status === 429 && retries < maxRetries) {
@@ -779,10 +792,20 @@ router.post('/:id/send', async (req, res, next) => {
         await delay(BATCH_DELAY);
       }
     }
-    // Mark message as sent
-    await dbRun(`UPDATE messages SET status = 'sent', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [messageId]);
+    
+    // Calculate results before updating message status
     const sentCount = results.filter(r => r.status === 'sent').length;
     const failedCount = results.filter(r => r.status === 'failed').length;
+    
+    // Only mark message as sent if at least some emails were sent successfully
+    if (sentCount > 0) {
+      console.log('✅ Marking message as sent -', sentCount, 'emails sent successfully');
+      await dbRun(`UPDATE messages SET status = 'sent', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [messageId]);
+    } else {
+      console.log('❌ Keeping message as draft - all emails failed');
+      await dbRun(`UPDATE messages SET status = 'draft', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [messageId]);
+    }
+    
     res.json({ success: true, results, sentCount, failedCount });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });

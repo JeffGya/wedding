@@ -1,13 +1,17 @@
 <template>
-  <div v-if="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Save as Template</h2>
-        <button @click="$emit('close')" class="text-gray-500 hover:text-gray-700">✕</button>
-      </div>
-
-      <div class="mb-4">
-        <label class="block font-medium mb-1">Save Mode</label>
+  <Dialog 
+    v-model:visible="isVisible" 
+    modal 
+    class="w-96"
+    :closable="false"
+  >
+    <template #header>
+      <h3 class="text-xl font-semibold">Save as Template</h3>
+    </template>
+    
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-form-placeholder-text mb-2">Save Mode</label>
         <div class="flex gap-4">
           <div class="flex items-center">
             <RadioButton inputId="modeNew" value="new" v-model="mode" class="mr-2" />
@@ -20,76 +24,68 @@
         </div>
       </div>
 
-      <div class="mb-4">
-        <label class="block font-medium mb-1">
+      <div>
+        <label class="block text-sm font-semibold text-form-placeholder-text mb-2">
           {{ mode === 'overwrite' ? 'Select Template to Overwrite' : 'Template Name' }}
         </label>
         <div v-if="mode === 'overwrite'">
-          <FloatLabel variant="in">
-            <Select
-              id="selected_template"
-              v-model="selectedId"
-              :options="templates"
-              optionLabel="name"
-              optionValue="id"
-              class="w-full"
-            />
-            <label for="selected_template">Select Template</label>
-          </FloatLabel>
+          <Select
+            v-model="selectedId"
+            :options="templates"
+            optionLabel="name"
+            optionValue="id"
+            class="w-full"
+            placeholder="Select Template"
+          />
         </div>
         <div v-else>
-          <FloatLabel variant="in">
-            <InputText
-              id="templateName"
-              v-model="templateName"
-              type="text"
-              class="w-full"
-            />
-            <label for="templateName">Template Name</label>
-          </FloatLabel>
+          <InputText
+            v-model="templateName"
+            type="text"
+            class="w-full"
+            placeholder="Enter template name"
+          />
         </div>
       </div>
 
-      <div class="mb-4">
-        <label class="block font-medium mb-1">Subject Preview</label>
-        <div class="border p-3 bg-gray-50 rounded">{{ subject }}</div>
+      <div>
+        <label class="block text-sm font-semibold text-form-placeholder-text mb-2">Subject Preview</label>
+        <div class="p-3 bg-card-bg border border-form-border rounded text-sm">{{ subject }}</div>
       </div>
 
-      <div class="mb-4">
-        <label class="block font-medium mb-1">Body (EN) Preview</label>
-        <div class="border p-3 bg-gray-50 rounded text-sm" v-html="bodyEn"></div>
+      <div>
+        <label class="block text-sm font-semibold text-form-placeholder-text mb-2">Body (EN) Preview</label>
+        <div class="p-3 bg-card-bg border border-form-border rounded text-sm max-h-32 overflow-y-auto" v-html="bodyEn"></div>
       </div>
 
-      <div class="mb-4">
-        <label class="block font-medium mb-1">Body (LT) Preview</label>
-        <div class="border p-3 bg-gray-50 rounded text-sm" v-html="bodyLt"></div>
+      <div>
+        <label class="block text-sm font-semibold text-form-placeholder-text mb-2">Body (LT) Preview</label>
+        <div class="p-3 bg-card-bg border border-form-border rounded text-sm max-h-32 overflow-y-auto" v-html="bodyLt"></div>
       </div>
-
-      <div class="flex justify-end gap-2 mt-6">
+    </div>
+    
+    <template #footer>
+      <div class="flex justify-end gap-2">
         <Button
           label="Cancel"
           severity="secondary"
-          icon="i-solar:close-square-bold"
-          iconPos="right"
-          size="large"
-          @click="$emit('close')"
+          @click="handleClose"
         />
         <Button
           label="Save"
-          icon="i-solar:check-square-bold"
-          iconPos="right"
-          size="large"
+          severity="primary"
           @click="handleSave"
+          :loading="saving"
         />
       </div>
-    </div>
-  </div>
+    </template>
+  </Dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import api from '@/api'
-import { useToast as usePrimeToast } from 'primevue/usetoast';
+import { ref, computed, watch } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import * as templatesApi from '@/api/templates.js'
 
 const props = defineProps({
   subject: String,
@@ -100,20 +96,51 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
-const primeToast = usePrimeToast()
+const toast = useToast()
 
 const mode = ref('new')
 const templateName = ref('')
 const selectedId = ref('')
+const saving = ref(false)
+
+// Computed property for Dialog visibility
+const isVisible = computed({
+  get: () => props.show,
+  set: (value) => {
+    if (!value) {
+      emit('close')
+    }
+  }
+})
+
+// Reset form when modal opens
+watch(() => props.show, (newValue) => {
+  if (newValue) {
+    mode.value = 'new'
+    templateName.value = ''
+    selectedId.value = ''
+  }
+})
+
+const handleClose = () => {
+  emit('close')
+}
 
 async function handleSave() {
+  saving.value = true
+  
   try {
     if (mode.value === 'new') {
       if (!templateName.value) {
-        primeToast.add({ severity: 'error', summary: 'Error', detail: 'Template name is required' });
+        toast.add({ 
+          severity: 'error', 
+          summary: 'Error', 
+          detail: 'Template name is required',
+          life: 3000
+        })
         return
       }
-      await api.post('/templates', {
+      await templatesApi.createTemplate({
         name: templateName.value,
         subject: props.subject,
         body_en: props.bodyEn,
@@ -121,10 +148,15 @@ async function handleSave() {
       })
     } else {
       if (!selectedId.value) {
-        primeToast.add({ severity: 'error', summary: 'Error', detail: 'Select a template to overwrite' });
+        toast.add({ 
+          severity: 'error', 
+          summary: 'Error', 
+          detail: 'Select a template to overwrite',
+          life: 3000
+        })
         return
       }
-      await api.put(`/templates/${selectedId.value}`, {
+      await templatesApi.updateTemplate(selectedId.value, {
         name: props.templates.find(t => t.id === selectedId.value)?.name || '',
         subject: props.subject,
         body_en: props.bodyEn,
@@ -132,21 +164,24 @@ async function handleSave() {
       })
     }
 
-    primeToast.add({ 
+    toast.add({ 
       severity: 'success', 
-      ummary: 'Success', 
+      summary: 'Success', 
       detail: 'Template saved successfully',
-      life: '5000' 
-    });
+      life: 3000
+    })
     emit('saved')
     emit('close')
-  } catch (err) {
-    primeToast.add({ 
+  } catch (error) {
+    console.error('Failed to save template:', error)
+    toast.add({ 
       severity: 'error', 
       summary: 'Error', 
-      detail: 'Failed to save template',
-      life: '5000' 
-    });
+      detail: error.response?.data?.error || 'Failed to save template',
+      life: 3000
+    })
+  } finally {
+    saving.value = false
   }
 }
 </script>

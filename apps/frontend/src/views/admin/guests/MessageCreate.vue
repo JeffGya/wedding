@@ -1,50 +1,201 @@
 <template>
-  <Card>
-    <template #content> 
-      <h1 class="text-3xl font-semibold font-serif mb-6">{{ isEditMode ? 'Edit Message' : 'New Message' }}</h1>
-      <div class="grid gap-6 w-full box-border grid-cols-1 md:grid-cols-3">
-        <!-- Left (Message Composer) -->
-        <div class="md:col-span-2 w-full">
-          <MessageComposer
-            ref="composerRef"
-            :templates="templates"
-            @save="() => handleComposerAction('draft')"
-            @schedule="() => handleComposerAction('scheduled')"
-            @send-now="() => handleComposerAction('sent')"
-          />
-          <div v-show="true" class="mt-4">
-            <FloatLabel variant="in">
-              <label for="schedule-time">Schedule time - YYYY-MM-DD HH:mm</label>
-              <DatePicker
-                v-model="scheduledAt"
-                showTime
-                dateFormat="yy-mm-dd"
-                timeFormat="HH:mm"
-                hourFormat="24"
-                mask="9999-99-99 99:99"
-                class="w-full max-w-full"
-              />
-            </FloatLabel>
-          </div>
+  <AdminPageWrapper 
+    :title="isEditMode ? 'Edit Message' : 'New Message'"
+    description="Create and send messages to your wedding guests"
+  >
+    <template #headerActions>
+      <Button 
+        icon="pi pi-arrow-left" 
+        severity="secondary" 
+        text
+        @click="$router.push('/admin/guests/messages')"
+        v-tooltip.top="'Back to Messages'"
+      />
+    </template>
+
+    <div class="grid gap-6 w-full box-border grid-cols-1 lg:grid-cols-3">
+      <!-- Left (Message Composer & Schedule) -->
+      <div class="lg:col-span-2 w-full">
+        <Card>
+          <template #title>
+            <div class="flex items-center gap-2">
+              <i class="pi pi-edit text-acc-base"></i>
+              <span>Message Composer</span>
+            </div>
+          </template>
+          <template #content>
+            <MessageComposer 
+              ref="composerRef"
+              :templates="templates"
+            />
+          </template>
+        </Card>
+
+        <!-- Schedule Section -->
+        <Card class="mt-6">
+          <template #title>
+            <div class="flex items-center gap-2">
+              <i class="pi pi-calendar text-acc-base"></i>
+              <span>Schedule</span>
+            </div>
+          </template>
+          <template #content>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2">Send Date & Time</label>
+                <DatePicker
+                  v-model="scheduledAt"
+                  showTime
+                  dateFormat="yy-mm-dd"
+                  hourFormat="24"
+                  class="w-full"
+                  placeholder="Select date and time"
+                  :minDate="new Date()"
+                />
+                <p class="text-sm text-gray-600 mt-1">
+                  Leave empty to send immediately
+                </p>
+              </div>
+            </div>
+          </template>
+        </Card>
+      </div>
+
+      <!-- Right (Recipients) -->
+      <div class="w-full">
+        <Card>
+          <template #title>
+            <div class="flex items-center gap-2">
+              <i class="pi pi-users text-acc-base"></i>
+              <span>Recipients</span>
+            </div>
+          </template>
+          <template #content>
+            <RecipientPicker ref="recipientsRef" />
+          </template>
+        </Card>
+      </div>
+    </div>
+
+    <!-- Sticky Action Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+          <span>{{ selectedRecipientsCount }} recipient(s) selected</span>
         </div>
-        <!-- Right (Recipient Picker) -->
-        <div class="md:col-span-1 w-full">
-          <h2 class="text-xl font-semibold mb-2">Recipients</h2>
-          <RecipientPicker ref="recipientsRef" />
+        
+        <div class="flex flex-wrap gap-2">
+          <Button
+            label="Save Draft"
+            icon="pi pi-save"
+            severity="secondary"
+            :loading="actionTypeBeingHandled === 'draft'"
+            @click="handleComposerAction('draft')"
+          />
+          
+          <Button
+            label="Schedule"
+            icon="pi pi-calendar"
+            severity="info"
+            :loading="actionTypeBeingHandled === 'scheduled'"
+            @click="handleComposerAction('scheduled')"
+          />
+          
+          <Button
+            label="Send Now"
+            icon="pi pi-send"
+            severity="success"
+            :loading="actionTypeBeingHandled === 'sent'"
+            @click="handleComposerAction('sent')"
+          />
         </div>
       </div>
-    </template>
-  </Card>
-
-    <div class="fixed bottom-0 left-0 right-0 z-10 bg-white px-6 py-4 flex justify-end gap-4 border-t shadow">
-        <MessageActionBar
-          :templates="templates"
-          @save="() => handleComposerAction('draft')"
-          @schedule="() => handleComposerAction('scheduled')"
-          @send-now="() => handleComposerAction('sent')"
-          @open-template-modal="isTemplateModalOpen = true"
-        />
     </div>
+
+    <!-- Sending Progress Overlay -->
+    <Dialog 
+      v-model:visible="showSendingProgress" 
+      modal 
+      :closable="false"
+      class="w-96"
+    >
+      <template #header>
+        <h3 class="text-xl font-semibold">Sending Messages</h3>
+      </template>
+      
+      <div class="space-y-6">
+        <div class="text-center">
+          <ProgressSpinner size="large" />
+        </div>
+        
+        <div class="text-center">
+          <p class="text-lg font-medium mb-2">{{ sendingStatusMessage }}</p>
+          <p class="text-sm text-gray-600">
+            Please wait while we send your message to all recipients...
+          </p>
+        </div>
+        
+        <div class="bg-gray-50 rounded-lg p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium">Progress</span>
+            <span class="text-sm text-gray-600">{{ sendingProgress.current }} / {{ sendingProgress.total }}</span>
+          </div>
+          <ProgressBar 
+            :value="sendingProgress.percentage" 
+            class="w-full"
+          />
+        </div>
+      </div>
+    </Dialog>
+
+    <!-- Summary Modal -->
+    <Dialog 
+      v-model:visible="showSummaryModal" 
+      modal 
+      :closable="false"
+      class="w-96"
+    >
+      <template #header>
+        <h3 class="text-xl font-semibold">Sending Summary</h3>
+      </template>
+      
+      <div class="space-y-4">
+        <div v-if="sendingSummary.error" class="p-4 bg-red-50 rounded-lg">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-exclamation-triangle text-red-600"></i>
+            <span class="text-red-800 font-medium">Error</span>
+          </div>
+          <p class="text-red-700 mt-1">{{ sendingSummary.error }}</p>
+        </div>
+        
+        <div class="p-4 bg-blue-50 rounded-lg">
+          <div class="flex items-center gap-2 mb-2">
+            <i class="pi pi-check-circle text-blue-600"></i>
+            <span class="text-blue-800 font-medium">Results</span>
+          </div>
+          <div class="space-y-1 text-sm">
+            <div class="flex justify-between">
+              <span>Successfully sent:</span>
+              <span class="font-medium text-green-600">{{ sendingSummary.sentCount }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Failed to send:</span>
+              <span class="font-medium text-red-600">{{ sendingSummary.failedCount }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <Button 
+          label="Done" 
+          @click="handleSummaryDismiss"
+          class="w-full"
+        />
+      </template>
+    </Dialog>
+
+    <!-- Template Modal -->
     <SaveTemplateModal
       v-if="isTemplateModalOpen"
       :show="isTemplateModalOpen"
@@ -55,38 +206,22 @@
       @close="isTemplateModalOpen = false"
       @saved="handleTemplateSaved"
     />
-  <!-- Full screen loading overlay -->
-  <div v-if="sendingState === 'sending'" class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80">
-    <div class="text-center">
-      <div class="text-2xl font-semibold mb-4">{{ sendingStatusMessage }}</div>
-      <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-    </div>
-  </div>
-
-  <!-- Summary after sending -->
-  <div v-if="sendingState === 'summary'" class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80">
-    <div class="bg-white p-8 rounded shadow text-center">
-      <h2 class="text-2xl font-bold mb-4">Sending Complete</h2>
-      <p v-if="sendingSummary.error" class="text-red-500 mb-4">{{ sendingSummary.error }}</p>
-      <p class="mb-2">✅ Sent: {{ sendingSummary.sentCount }}</p>
-      <p class="mb-6">❌ Failed: {{ sendingSummary.failedCount }}</p>
-      <button @click="handleSummaryDismiss" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Continue</button>
-    </div>
-  </div>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import api from '@/api'
+import { ref, computed, nextTick, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
+import { createMessage, updateMessage, sendMessage, fetchMessage } from '@/api/messages'
+import { fetchTemplates } from '@/api/templates'
 import MessageComposer from '@/components/messaging/MessageComposer.vue'
 import RecipientPicker from '@/components/messaging/RecipientPicker.vue'
-import { useToast as usePrimeToast } from 'primevue/usetoast';
-import MessageActionBar from '@/components/messaging/MessageActionBar.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 
+const route = useRoute()
 const router = useRouter()
-const primeToast = usePrimeToast();
+const toast = useToast()
 
 const composerRef = ref(null)
 const recipientsRef = ref(null)
@@ -97,262 +232,300 @@ const isTemplateModalOpen = ref(false)
 
 const sendingState = ref('idle') // idle | sending | summary
 const sendingSummary = ref({ sentCount: 0, failedCount: 0 })
-const sendingStatusMessage = ref('Saving your message...')
+const sendingStatusMessage = ref('Preparing to send messages...')
+const sendingProgress = ref({ current: 0, total: 0, percentage: 0 })
 
-const route = useRoute()
-const isEditMode = ref(false)
-const messageId = ref(null)
+// Computed property for showing summary modal
+const showSummaryModal = computed(() => sendingState.value === 'summary')
 
-const onDateChange = (newValue) => {
-  if (!newValue) return
-  const previous = scheduledAt.value ? new Date(scheduledAt.value) : null
-  const updated = new Date(newValue)
+// Computed property for showing sending progress dialog
+const showSendingProgress = computed(() => sendingState.value === 'sending')
 
-  // If previous exists, try to preserve the missing part
-  if (previous) {
-    if (
-      previous.toDateString() !== updated.toDateString() &&
-      previous.getHours() !== 0 &&
-      previous.getMinutes() !== 0
-    ) {
-      // Preserve previous time
-      updated.setHours(previous.getHours())
-      updated.setMinutes(previous.getMinutes())
-    } else if (
-      previous.toTimeString() !== updated.toTimeString() &&
-      previous.getFullYear() !== 1970
-    ) {
-      // Preserve previous date
-      updated.setFullYear(previous.getFullYear())
-      updated.setMonth(previous.getMonth())
-      updated.setDate(previous.getDate())
-    }
-  }
+// Computed property for selected recipients count
+const selectedRecipientsCount = computed(() => {
+  return recipientsRef.value?.getSelectedRecipients()?.length || 0
+})
 
-  scheduledAt.value = updated
-}
-
-const onManualDateInput = (event) => {
-  const input = event.target?.value
-  if (!input) return
-
-  const parsed = new Date(input)
-  if (!isNaN(parsed)) {
-    scheduledAt.value = parsed
-  } else {
-    primeToast.add({ severity: 'error', summary: 'Error', detail: 'Invalid date format. Use yyyy-MM-dd HH:mm' });
-  }
-}
+const isEditMode = computed(() => route.params.id && route.path.includes('/edit'))
 
 const handleComposerAction = async (actionType) => {
   actionTypeBeingHandled.value = actionType
-  const composerData = composerRef.value?.getData()
-  // Convert Proxy array to regular array if necessary
-  const selectedRecipients = recipientsRef.value?.getSelectedGuestIds()
-    ? Array.from(recipientsRef.value.getSelectedGuestIds())
-    : []
-
-  console.log('🎯 Composer Data:', composerData)
-  console.log('🎯 Selected Recipients:', selectedRecipients)
-
-  if (!composerData?.subject || !composerData?.body_en || !selectedRecipients?.length) {
-    primeToast.add({ severity: 'error', summary: 'Error', detail: 'Please fill out the message and select at least one recipient.' });
-    return
-  }
-
-  if (actionType === 'scheduled') {
-    if (!scheduledAt.value || isNaN(new Date(scheduledAt.value).getTime())) {
-      primeToast.add({ severity: 'error', summary: 'Error', detail: 'Please select a valid date and time before scheduling.' });
+  
+  try {
+    const composerData = composerRef.value?.getData()
+    if (!composerData) {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill in the message content',
+        life: 3000
+      })
       return
     }
-  }
 
-  const payload = {
-    subject: composerData.subject,
-    body_en: composerData.body_en,
-    body_lt: composerData.body_lt,
-    status: 'draft', // always create as draft first
-    recipients: Array.isArray(selectedRecipients) ? selectedRecipients : Array.from(selectedRecipients),
-  }
-
-  if (actionType === 'scheduled') {
-    payload.status = 'scheduled'
-    if (scheduledAt.value instanceof Date && !isNaN(scheduledAt.value.getTime())) {
-      const dt = scheduledAt.value
-      const pad = num => String(num).padStart(2, '0')
-      payload.scheduledAt = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`
-    } else {
-      payload.scheduledAt = null
+    const recipients = recipientsRef.value?.getSelectedRecipients() || []
+    
+    if (actionType === 'scheduled' && !scheduledAt.value) {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please select a schedule time',
+        life: 3000
+      })
+      return
     }
-  } else {
-    payload.scheduledAt = null
-  }
 
-  console.log('🎯 Payload for sending:', payload);
+    // Always create as draft first, regardless of action type
+    const messageData = {
+      subject: composerData.subject,
+      body_en: composerData.body_en,
+      body_lt: composerData.body_lt,
+      status: actionType === 'scheduled' ? 'scheduled' : 'draft', // Always draft for immediate sending
+      scheduledAt: actionType === 'scheduled' ? scheduledAt.value?.toISOString() : null,
+      recipients: recipients
+    }
 
-  console.log('🔵 Preparing to create new message with payload:', payload)
+    let messageId
 
-  try {
     if (isEditMode.value) {
-      await api.put(`/messages/${messageId.value}`, payload)
-      primeToast.add({ 
-        severity: 'success', 
-        summary: 'Success', 
-        detail: 'Message updated successfully!',
-        life: '5000'  
-      });
+      // Update existing message
+      const response = await updateMessage(route.params.id, messageData)
+      messageId = route.params.id
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Message updated successfully',
+        life: 3000
+      })
+    } else {
+      // Create new message
+      const response = await createMessage(messageData)
+      messageId = response.messageId
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Message created successfully',
+        life: 3000
+      })
+    }
+
+    // Handle different action types
+    if (actionType === 'sent') {
+      // For "Send Now" - send the draft immediately
+      await handleSendMessage(messageId)
+    } else if (actionType === 'scheduled') {
+      toast.add({
+        severity: 'success',
+        summary: 'Scheduled',
+        detail: 'Message scheduled successfully',
+        life: 3000
+      })
       router.push('/admin/guests/messages')
     } else {
-      const res = await api.post('/messages', payload)
-      const newMessageId = res?.data?.messageId
-      console.log('🟢 Message created. New message ID:', newMessageId)
-
-      if (actionType === 'sent' && newMessageId) {
-        sendingState.value = 'sending'
-        sendingStatusMessage.value = 'Saving your message...'
-        messageId.value = newMessageId
-
-        sendingStatusMessage.value = 'Preparing message for sending...'
-
-        console.log('🟠 Starting to poll for readiness of message ID:', newMessageId)
-
-        const startTime = Date.now()
-        const pollInterval = 1000
-        let ready = false
-
-        while (Date.now() - startTime < 10000) { // 10 second timeout
-          try {
-            const statusRes = await api.get(`/messages/${newMessageId}`)
-            const msg = statusRes.data.message
-
-            if (
-              msg.subject &&
-              msg.body_en &&
-              Array.isArray(msg.recipients) &&
-              msg.recipients.length > 0 &&
-              (msg.status === 'draft' || msg.status === 'scheduled')
-            ) {
-              ready = true
-              break
-            }
-          } catch (e) {
-            console.warn('Polling error, retrying...', e)
-          }
-
-          await new Promise(r => setTimeout(r, pollInterval))
-        }
-
-        if (!ready) {
-          sendingState.value = 'summary'
-          sendingSummary.value.sentCount = 0
-          sendingSummary.value.failedCount = 0
-          sendingSummary.value.error = 'Sending cancelled — message not ready within 10 seconds.'
-          return
-        }
-
-        sendingStatusMessage.value = 'Sending emails...'
-
-        try {
-          const sendRes = await api.post(
-            `/messages/${newMessageId}/send`,
-            { guestIds: selectedRecipients }
-          )
-          console.log('Send result:', sendRes.data)
-
-          sendingSummary.value.sentCount = sendRes.data.sentCount || 0
-          sendingSummary.value.failedCount = sendRes.data.failedCount || 0
-          sendingState.value = 'summary'
-        } catch (sendErr) {
-          console.error('🔴 Sending failed with error:', sendErr)
-          sendingSummary.value.sentCount = 0
-          sendingSummary.value.failedCount = 0
-          sendingSummary.value.error = 'Sending failed unexpectedly.'
-          sendingState.value = 'summary'
-        }
-      } else {
-        primeToast.add({ 
-          severity: 'success', 
-          summary: 'Success', 
-          detail: `Message ${actionType} successfully!`,
-          life: '5000' 
-        });
-        router.push('/admin/guests/messages')
-      }
+      // Draft - just redirect
+      router.push('/admin/guests/messages')
     }
-  } catch (err) {
-    console.error('🔴 Failed to save message:', err)
-    primeToast.add({ 
-      severity: 'error', 
-      summary: 'Error', 
-      detail: 'Failed to save message. Please try again.',
-      life: '5000' 
-    });
+  } catch (error) {
+    console.error('Error handling composer action:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.response?.data?.error || 'Failed to save message',
+      life: 3000
+    })
+  } finally {
+    actionTypeBeingHandled.value = null
   }
 }
 
-const handleTemplateSaved = () => {
-  primeToast.add({ 
-    severity: 'success', 
-    summary: 'Success', 
-    detail: 'Template saved!',
-    life: '5000' 
-   });
+const handleSendMessage = async (messageId) => {
+  sendingState.value = 'sending'
+  sendingStatusMessage.value = 'Preparing to send messages...'
+  
+  // Initialize progress
+  const recipients = recipientsRef.value?.getSelectedRecipients() || []
+  sendingProgress.value = {
+    current: 0,
+    total: recipients.length,
+    percentage: 0
+  }
+  
+  try {
+    // Simulate progress updates (since the backend doesn't provide real-time progress)
+    const progressInterval = setInterval(() => {
+      if (sendingProgress.value.current < sendingProgress.value.total) {
+        sendingProgress.value.current += 1
+        sendingProgress.value.percentage = Math.round((sendingProgress.value.current / sendingProgress.value.total) * 100)
+        
+        if (sendingProgress.value.current === 1) {
+          sendingStatusMessage.value = 'Sending messages to recipients...'
+        }
+      }
+    }, 500) // Update every 500ms
+    
+    const response = await sendMessage(messageId, recipients)
+    
+    // Clear the progress interval
+    clearInterval(progressInterval)
+    
+    // Set final progress
+    sendingProgress.value.current = sendingProgress.value.total
+    sendingProgress.value.percentage = 100
+    sendingStatusMessage.value = 'Sending complete!'
+    
+    // Wait a moment to show completion
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    sendingSummary.value = {
+      sentCount: response.sentCount,
+      failedCount: response.failedCount
+    }
+    
+    // Show appropriate message based on results
+    if (response.sentCount > 0 && response.failedCount === 0) {
+      // All messages sent successfully
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `Message sent to ${response.sentCount} recipients`,
+        life: 3000
+      })
+      sendingState.value = 'summary'
+    } else if (response.sentCount > 0 && response.failedCount > 0) {
+      // Mixed results - some sent, some failed
+      toast.add({
+        severity: 'warn',
+        summary: 'Partial Success',
+        detail: `${response.sentCount} sent, ${response.failedCount} failed`,
+        life: 5000
+      })
+      sendingState.value = 'summary'
+    } else if (response.sentCount === 0 && response.failedCount > 0) {
+      // All messages failed
+      sendingSummary.value = {
+        error: 'All messages failed to send. Please check your settings and try again.',
+        sentCount: 0,
+        failedCount: response.failedCount
+      }
+      sendingState.value = 'summary'
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'All messages failed to send. Message remains as draft.',
+        life: 5000
+      })
+    } else {
+      // No recipients or other edge case
+      sendingSummary.value = {
+        error: 'No messages were sent. Please check your settings and try again.',
+        sentCount: 0,
+        failedCount: response.failedCount
+      }
+      sendingState.value = 'summary'
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No messages were sent. Message remains as draft.',
+        life: 5000
+      })
+    }
+  } catch (error) {
+    console.error('Error sending message:', error)
+    sendingSummary.value = {
+      error: error.response?.data?.error || 'Failed to send messages',
+      sentCount: 0,
+      failedCount: 0
+    }
+    sendingState.value = 'summary'
+    
+    // Show error toast - message remains as draft
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to send messages. Message saved as draft.',
+      life: 5000
+    })
+  }
 }
 
 const handleSummaryDismiss = () => {
-  router.push(`/admin/guests/messages/${messageId.value}`)
+  sendingState.value = 'idle'
+  router.push('/admin/guests/messages')
+}
+
+const handleTemplateSaved = () => {
+  isTemplateModalOpen.value = false
+  toast.add({
+    severity: 'success',
+    summary: 'Success',
+    detail: 'Template saved successfully',
+    life: 3000
+  })
+  // Reload templates
+  loadTemplates()
+}
+
+const loadTemplates = async () => {
+  try {
+    const response = await fetchTemplates()
+    templates.value = response.templates || []
+  } catch (error) {
+    console.error('Failed to load templates:', error)
+  }
+}
+
+const loadMessageForEdit = async () => {
+  if (!isEditMode.value) return
+  
+  try {
+    const response = await fetchMessage(route.params.id)
+    const messageData = response.message
+    
+    // Set composer data
+    nextTick(() => {
+      if (composerRef.value) {
+        composerRef.value.setData({
+          subject: messageData.subject,
+          body_en: messageData.body_en,
+          body_lt: messageData.body_lt
+        })
+      }
+      
+      // Set recipients
+      if (recipientsRef.value && messageData.recipients) {
+        recipientsRef.value.setSelectedRecipients(messageData.recipients)
+      }
+      
+      // Set scheduled time
+      if (messageData.status === 'scheduled' && messageData.scheduled_for) {
+        scheduledAt.value = new Date(messageData.scheduled_for)
+      }
+    })
+  } catch (error) {
+    console.error('Failed to load message for edit:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to load message for editing',
+      life: 3000
+    })
+  }
 }
 
 onMounted(async () => {
-  const id = route.params.id
-
-  try {
-    const templateRes = await api.get('/templates')
-    templates.value = templateRes.data.templates || []
-  } catch (err) {
-    primeToast.add({ 
-      severity: 'error', 
-      summary: 'Error', 
-      detail: 'Failed to load templates.',
-      life: '5000' 
-    });
-  }
-
-  if (id) {
-    isEditMode.value = true
-    messageId.value = id
-
-    try {
-      const res = await api.get(`/messages/${id}`)
-      const msg = res.data.message
-
-      await nextTick()
-
-      if (composerRef.value?.setData) {
-        composerRef.value.setData({
-          subject: msg.subject,
-          body_en: msg.body_en,
-          body_lt: msg.body_lt
-        })
-      }
-
-      if (recipientsRef.value?.setSelectedGuestIds) {
-        recipientsRef.value.setSelectedGuestIds(msg.recipients || [])
-      }
-
-      if (msg.status === 'scheduled' && msg.scheduled_for) {
-        const parsedDate = new Date(msg.scheduled_for)
-        if (!isNaN(parsedDate)) {
-          scheduledAt.value = new Date(parsedDate)
-        }
-      }
-    } catch (err) {
-      toast.error('Failed to load message for editing.')
-    }
+  await loadTemplates()
+  if (isEditMode.value) {
+    await loadMessageForEdit()
   }
 })
 </script>
 
 <style scoped>
-/* Optional scoped styles can be added here later */
+/* Custom CSS to handle the bottom bar positioning */
+@media (min-width: 768px) {
+  .fixed.bottom-0 {
+    left: 256px !important;
+    right: 0 !important;
+  }
+}
 </style>

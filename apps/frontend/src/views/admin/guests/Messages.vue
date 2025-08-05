@@ -1,95 +1,163 @@
 <template>
-  <div class="min-h-screen">
-    <h1 class="text-4xl font-bold text-gray-800 text-center mb-6">Guest Messages</h1>
-    <p class="text-gray-600 text-center mb-6">View sent and scheduled emails to guests.</p>
+  <AdminPageWrapper 
+    title="Guest Messages" 
+    description="View sent and scheduled emails to guests"
+  >
+    <template #headerActions>
+      <Button 
+        label="New Message" 
+        icon="pi pi-plus" 
+        severity="primary" 
+        @click="$router.push('/admin/guests/messages/new')"
+      />
+    </template>
 
-    <div class="flex justify-between items-center mb-4">
-      <RouterLink
-        to="/admin/templates"
-        class="text-blue-600 hover:underline text-sm"
-      >
-        Manage Templates
-      </RouterLink>
-      <RouterLink
-        to="/admin/guests/messages/new"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        + New Message
-      </RouterLink>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <StatCard
+        title="Total Messages"
+        :value="messages.length"
+      />
+      <StatCard
+        title="Drafts"
+        :value="draftCount"
+      />
+      <StatCard
+        title="Scheduled"
+        :value="scheduledCount"
+      />
+      <StatCard
+        title="Sent"
+        :value="sentCount"
+      />
     </div>
 
-    <div v-if="messages.length > 0">
-      <Timeline :value="events" class="w-full">
-        <template #opposite="{ item }">
-          <div class="text-sm text-gray-600">
-            <div>Created: {{ formatDate(item.created) }}</div>
-            <div v-if="item.updated && item.updated !== item.created">Updated: {{ formatDate(item.updated) }}</div>
-            <div v-if="item.scheduled">Scheduled: {{ formatDate(item.scheduled) }}</div>
-          </div>
-        </template>
-        <template #content="{ item }">
-          <Panel
-            :header="item.msg.subject"
-            class="mb-4 cursor-pointer"
-            @click="goToDetail(item.msg.id)"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <Tag
-                :value="item.msg.status.charAt(0).toUpperCase() + item.msg.status.slice(1)"
-                :severity="{
-                  draft: 'info',
-                  scheduled: 'warning',
-                  sent: 'success'
-                }[item.msg.status]"
-              />
-            </div>
-            <div>
-              <p class="text-sm">
-                {{ item.msg.status === 'scheduled'
-                    ? `Scheduled for: ${formatDate(item.scheduled)}`
-                    : item.msg.status === 'sent'
-                      ? 'Sent'
-                      : `Updated: ${formatDate(item.msg.updated_at)}` }}
-              </p>
-            </div>
-            <template #footer>
-              <div class="flex space-x-2">
-                <Button
-                  v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
-                  label="Delete"
-                  icon="i-solar:trash-bin-minimalistic-bold-duotone"
-                  severity="danger"
-                  @click.stop="deleteMessage(item.msg.id)"
-                />
-                <Button
-                  v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
-                  label="Edit"
-                  icon="i-solar:pen-new-square-bold-duotone"
-                  severity="secondary"
-                  @click.stop="goToDetail(item.msg.id, true)"
-                />
+    <!-- Messages Timeline -->
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-envelope text-acc-base"></i>
+          <span>Message Timeline</span>
+        </div>
+      </template>
+      <template #content>
+        <div v-if="messages.length > 0">
+          <Timeline :value="events" class="w-full">
+            <template #opposite="{ item }">
+              <div class="text-sm text-form-placeholder-text">
+                <div>Created: {{ formatDate(item.created) }}</div>
+                <div v-if="item.updated && item.updated !== item.created">
+                  Updated: {{ formatDate(item.updated) }}
+                </div>
+                <div v-if="item.scheduled">
+                  Scheduled: {{ formatDate(item.scheduled) }}
+                </div>
               </div>
             </template>
-          </Panel>
-        </template>
-      </Timeline>
-    </div>
+            <template #content="{ item }">
+              <Panel
+                :header="item.msg.subject"
+                class="mb-4 cursor-pointer hover:shadow-md transition-shadow"
+                @click="goToDetail(item.msg.id)"
+              >
+                <template #header>
+                  <div class="flex items-center justify-between w-full">
+                    <span class="font-semibold text-text">{{ item.msg.subject }}</span>
+                    <Tag
+                      :value="getStatusLabel(item.msg.status)"
+                      :severity="getStatusSeverity(item.msg.status)"
+                    />
+                  </div>
+                </template>
+                
+                <div class="space-y-2">
+                  <p class="text-sm text-form-placeholder-text">
+                    {{ getStatusDescription(item.msg) }}
+                  </p>
+                  
+                  <div v-if="item.msg.status === 'sent'" class="text-xs text-form-placeholder-text">
+                    <span v-if="item.msg.sentCount > 0" class="text-success">✅ {{ item.msg.sentCount }} sent</span>
+                    <span v-if="item.msg.failedCount > 0" class="text-danger ml-2">❌ {{ item.msg.failedCount }} failed</span>
+                  </div>
+                </div>
+                
+                <template #footer>
+                  <div class="flex gap-2">
+                    <Button
+                      v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
+                      label="Edit"
+                      icon="pi pi-pencil"
+                      severity="secondary"
+                      size="small"
+                      @click.stop="goToDetail(item.msg.id, true)"
+                    />
+                    <Button
+                      v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
+                      label="Delete"
+                      icon="pi pi-trash"
+                      severity="danger"
+                      size="small"
+                      @click.stop="deleteMessage(item.msg.id)"
+                    />
+                    <Button
+                      v-if="item.msg.status === 'sent' && item.msg.failedCount > 0"
+                      label="Resend Failed"
+                      icon="pi pi-redo"
+                      severity="warning"
+                      size="small"
+                      @click.stop="resendFailed(item.msg.id)"
+                    />
+                  </div>
+                </template>
+              </Panel>
+            </template>
+          </Timeline>
+        </div>
+        
+        <div v-else class="text-center py-12">
+          <i class="pi pi-envelope text-6xl text-form-placeholder-text mb-4"></i>
+          <h3 class="text-xl font-semibold text-text mb-2">No Messages Yet</h3>
+          <p class="text-form-placeholder-text mb-4">Start by creating your first message to guests</p>
+          <Button 
+            label="Create Message" 
+            icon="pi pi-plus" 
+            severity="primary"
+            @click="$router.push('/admin/guests/messages/new')"
+          />
+        </div>
+      </template>
+    </Card>
 
-    <div v-else class="text-center text-gray-500 mt-10">No messages found.</div>
-  </div>
+    <!-- Template Management Link -->
+    <div class="mt-6 text-center">
+      <RouterLink
+        to="/admin/templates"
+        class="text-acc-base hover:text-acc-dark underline"
+      >
+        <i class="pi pi-file-edit mr-2"></i>
+        Manage Message Templates
+      </RouterLink>
+    </div>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
 import api from '@/api'
-import Timeline from 'primevue/timeline';
-import Panel from 'primevue/panel';
-import Button from 'primevue/button';
-import Tag from 'primevue/tag';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
+import StatCard from '@/components/ui/StatCard.vue'
 
 const router = useRouter()
+const toast = useToast()
 const messages = ref([])
+const loading = ref(false)
+
+// Stats computation
+const draftCount = computed(() => messages.value.filter(m => m.status === 'draft').length)
+const scheduledCount = computed(() => messages.value.filter(m => m.status === 'scheduled').length)
+const sentCount = computed(() => messages.value.filter(m => m.status === 'sent').length)
 
 const events = computed(() =>
   messages.value
@@ -101,27 +169,54 @@ const events = computed(() =>
       msg
     }))
     .sort((a, b) => new Date(b.created) - new Date(a.created))
-);
+)
+
+const getStatusLabel = (status) => {
+  const labels = {
+    draft: 'Draft',
+    scheduled: 'Scheduled',
+    sent: 'Sent'
+  }
+  return labels[status] || status
+}
+
+const getStatusSeverity = (status) => {
+  const severities = {
+    draft: 'info',
+    scheduled: 'warning',
+    sent: 'success'
+  }
+  return severities[status] || 'info'
+}
+
+const getStatusDescription = (msg) => {
+  if (msg.status === 'scheduled') {
+    return `Scheduled for: ${formatDate(msg.scheduled_for)}`
+  } else if (msg.status === 'sent') {
+    return 'Message sent to recipients'
+  } else {
+    return `Last updated: ${formatDate(msg.updated_at)}`
+  }
+}
 
 const goToDetail = (id, edit = false) => {
-  router.push(edit ? `/admin/guests/messages/${id}/edit` : `/admin/guests/messages/${id}`);
+  router.push(edit ? `/admin/guests/messages/${id}/edit` : `/admin/guests/messages/${id}`)
 }
 
 const formatDate = (dateValue) => {
-  if (!dateValue) return '';
-  let dateObj;
+  if (!dateValue) return ''
+  let dateObj
   if (typeof dateValue === 'string') {
-    let iso = dateValue;
+    let iso = dateValue
     // Normalize "YYYY-MM-DD HH:mm:ss" to "YYYY-MM-DDTHH:mm:ssZ"
     if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
-      iso = iso.replace(' ', 'T') + 'Z';
+      iso = iso.replace(' ', 'T') + 'Z'
     }
-    dateObj = new Date(iso);
+    dateObj = new Date(iso)
   } else if (dateValue instanceof Date) {
-    dateObj = dateValue;
+    dateObj = dateValue
   } else {
-    // Fallback for other types (e.g., timestamps)
-    dateObj = new Date(dateValue);
+    dateObj = new Date(dateValue)
   }
   return new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
@@ -131,26 +226,85 @@ const formatDate = (dateValue) => {
     minute: '2-digit',
     hour12: false,
     timeZone: 'Europe/Amsterdam'
-  }).format(dateObj);
+  }).format(dateObj)
 }
 
 const fetchMessages = async () => {
+  loading.value = true
   try {
     const response = await api.get('/messages')
-    messages.value = response.data.messages
+    console.log('Messages API response:', response.data) // Debug log
+    
+    // Check if response has the expected structure
+    if (response.data && response.data.success && response.data.messages) {
+      messages.value = response.data.messages
+    } else if (Array.isArray(response.data)) {
+      // Fallback: if response.data is directly an array
+      messages.value = response.data
+    } else {
+      console.error('Unexpected API response structure:', response.data)
+      messages.value = []
+    }
   } catch (error) {
     console.error('Failed to load messages:', error)
+    console.error('Error response:', error.response?.data)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to load messages',
+      life: 3000
+    })
+    messages.value = []
+  } finally {
+    loading.value = false
   }
 }
 
-async function deleteMessage(id) {
-  if (!confirm('Are you sure you want to delete this message?')) return;
+const deleteMessage = async (id) => {
+  if (!confirm('Are you sure you want to delete this message?')) return
+  
   try {
-    await api.delete(`/messages/${id}`);
-    // Remove the deleted message from the local list
-    messages.value = messages.value.filter(m => m.id !== id);
+    await api.delete(`/messages/${id}`)
+    messages.value = messages.value.filter(m => m.id !== id)
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Message deleted successfully',
+      life: 3000
+    })
   } catch (error) {
-    console.error('Failed to delete message:', error);
+    console.error('Failed to delete message:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to delete message',
+      life: 3000
+    })
+  }
+}
+
+const resendFailed = async (id) => {
+  try {
+    const response = await api.post(`/messages/${id}/resend`)
+    const { sentCount, failedCount } = response.data
+    
+    toast.add({
+      severity: 'success',
+      summary: 'Resend Complete',
+      detail: `✅ ${sentCount} sent, ❌ ${failedCount} failed`,
+      life: 5000
+    })
+    
+    // Refresh messages to update stats
+    await fetchMessages()
+  } catch (error) {
+    console.error('Failed to resend failed messages:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to resend failed messages',
+      life: 3000
+    })
   }
 }
 

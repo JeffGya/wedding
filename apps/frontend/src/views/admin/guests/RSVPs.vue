@@ -1,85 +1,134 @@
 <template>
-  <div class="text-center mt-16">
-    <h1 class="text-4xl font-bold text-gray-800 mb-4">RSVPs</h1>
-    <p class="text-gray-600 mb-4">View RSVP submissions and attendance details from your guests.</p>
-
-    <!-- Export to CSV Button at top -->
-    <div class="mb-4 text-right">
-      <button @click="exportToCSV" class="px-4 py-2 bg-blue-500 text-white rounded">Export to CSV</button>
-    </div>
+  <AdminPageWrapper 
+    title="RSVPs" 
+    description="View RSVP submissions and attendance details from your guests"
+  >
+    <template #headerActions>
+      <Button 
+        label="Export to CSV" 
+        icon="pi pi-download" 
+        severity="secondary" 
+        @click="exportToCSV" 
+      />
+    </template>
 
     <!-- Filters -->
-    <div class="flex flex-row gap-8 center">
-      <FloatLabel variant="in" class="w-full md:w-56">
-        <Select
-          v-model="filters.attending"
-          :options="attendanceOptions"
-          optionLabel="label"
-          optionValue="value"
-          class="w-full"
-          inputId="in_label"
-        />
-        <label for="in_label">Filter by attendance</label>
-      </FloatLabel>
-      <FloatLabel variant="in" class="w-full md:w-56">
-        <Select
-          v-model="filters.rsvp_status"
-          :options="statusOptions"
-          optionLabel="label"
-          optionValue="value"
-          class="w-full"
-          inputId="in_label"
-        />
-        <label for="in_label">Filter by Status:</label>
-      </FloatLabel>
-    
-    <!-- Clear Filters Button -->
-      <Button severity="danger" @click="clearFilters">Clear Filters</Button>
-    </div>
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-filter text-acc-base"></i>
+          <span>Filters</span>
+        </div>
+      </template>
+      <template #content>
+        <div class="flex flex-col sm:flex-row gap-4 items-end">
+          <div class="flex-1">
+            <FloatLabel variant="in">
+              <Select
+                v-model="filters.attending"
+                :options="attendanceOptions"
+                optionLabel="label"
+                optionValue="value"
+                class="w-full"
+                inputId="attendance_filter"
+              />
+              <label for="attendance_filter">Filter by attendance</label>
+            </FloatLabel>
+          </div>
+          
+          <div class="flex-1">
+            <FloatLabel variant="in">
+              <Select
+                v-model="filters.rsvp_status"
+                :options="statusOptions"
+                optionLabel="label"
+                optionValue="value"
+                class="w-full"
+                inputId="status_filter"
+              />
+              <label for="status_filter">Filter by Status</label>
+            </FloatLabel>
+          </div>
+          
+          <Button 
+            severity="danger" 
+            icon="pi pi-times" 
+            @click="clearFilters"
+            text
+          >
+            Clear Filters
+          </Button>
+        </div>
+      </template>
+    </Card>
 
     <!-- Data Table -->
-    <DataTable
-      :value="guests"
-      :paginator="true"
-      :rows="guestsPerPage"
-      :totalRecords="totalGuests"
-      size="small"
-      stripedRows
-      lazy
-      :sortField="sortField"
-      :sortOrder="sortOrder"
-      sortMode="single"
-      @page="onPage"
-      @sort="onSort"
-      class="p-datatable-sm"
-    >
-      <Column field="name" header="Guest Name" sortable />
-      <Column field="group_label" header="Group" sortable />
-      <Column field="code" header="Code" sortable />
-      <Column header="Attending">
-        <template #body="slotProps">
-          {{ slotProps.data.attending ? 'Yes' : 'No' }}
-        </template>
-      </Column>
-      <Column field="dietary" header="Dietary" />
-      <Column field="notes" header="Notes" />
-      <Column field="updated_at" header="Submission Date" sortable />
-      <Column header="Actions">
-        <template #body="slotProps">
-          <Button rounded severity="secondary" icon="i-solar:pen-2-bold" @click="openEditModal(slotProps.data)" />
-        </template>
-      </Column>
-    </DataTable>
+    <Card>
+      <template #content>
+        <DataTable
+          :value="guests"
+          :paginator="true"
+          :rows="guestsPerPage"
+          :totalRecords="totalGuests"
+          size="small"
+          stripedRows
+          lazy
+          :sortField="sortField"
+          :sortOrder="sortOrder"
+          sortMode="single"
+          @page="onPage"
+          @sort="onSort"
+          responsiveLayout="scroll"
+          class="w-full"
+        >
+          <Column field="name" header="Guest Name" sortable />
+          <Column field="group_label" header="Group" sortable />
+          <Column field="code" header="Code" sortable style="width: 8rem">
+            <template #body="slotProps">
+              <span class="font-mono text-sm">{{ slotProps.data.code || '—' }}</span>
+            </template>
+          </Column>
+          
+          <Column header="Attending" style="width: 8rem">
+            <template #body="slotProps">
+              <Tag 
+                :value="slotProps.data.attending ? 'Yes' : 'No'"
+                :severity="slotProps.data.attending ? 'success' : 'danger'"
+              />
+            </template>
+          </Column>
+          
+          <Column field="dietary" header="Dietary" />
+          <Column field="notes" header="Notes" />
+          <Column field="updated_at" header="Submission Date" sortable />
+          
+          <Column header="Actions" style="width: 8rem">
+            <template #body="slotProps">
+              <Button 
+                icon="pi pi-pencil" 
+                severity="secondary" 
+                text 
+                size="small"
+                @click="openEditModal(slotProps.data)"
+                v-tooltip.top="'Edit RSVP'"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </template>
+    </Card>
 
     <!-- Edit RSVP Modal -->
-    <div v-if="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full relative">
-        <button @click="closeEditModal" class="absolute top-2 right-2 text-gray-600 text-xl">&times;</button>
-        <RSVPForm :guest="currentGuest" mode="admin" @submit="onRSVPFormSubmit" />
-      </div>
-    </div>
-
-  </div>
+    <Dialog 
+      v-model:visible="showEditModal" 
+      modal 
+      header="Edit RSVP"
+      :style="{ width: '50rem' }"
+      :breakpoints="{ '960px': '75vw', '641px': '90vw' }"
+    >
+      <RSVPForm :guest="currentGuest" mode="admin" @submit="onRSVPFormSubmit" />
+    </Dialog>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
@@ -87,6 +136,15 @@ import RSVPForm from '@/components/forms/RSVPForm.vue';
 import { ref, reactive, computed, watch, onMounted } from 'vue';
 import api from '@/api';
 import { submitGuestRSVP } from '@/api/rsvp';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
+import Card from 'primevue/card';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Button from 'primevue/button';
+import Tag from 'primevue/tag';
+import Dialog from 'primevue/dialog';
+import Select from 'primevue/select';
+import FloatLabel from 'primevue/floatlabel';
 
 const guests = ref([]);
 const totalGuests = ref(0);
@@ -148,13 +206,13 @@ const fetchGuests = async () => {
   }
 
   try {
-    console.log("Fetching guests with params:", params); // Log the params being sent to the API
+    console.log("Fetching guests with params:", params);
     const response = await api.get('/guests', { params });
     console.log('Full URL:', api.defaults.baseURL + '/guests');
-    console.log("API Response:", response.data); // Log the API response
+    console.log("API Response:", response.data);
     guests.value = response.data.guests || [];
     totalGuests.value = response.data.total || 0;
-    console.log("Guests data updated:", guests.value); // Log updated guests data
+    console.log("Guests data updated:", guests.value);
   } catch (error) {
     console.error('Error fetching guest data:', error);
   }
@@ -163,21 +221,21 @@ const fetchGuests = async () => {
 const totalPages = computed(() => Math.max(1, Math.ceil(totalGuests.value / guestsPerPage)));
 
 const filteredGuests = computed(() => {
-  console.log('Filtered Guests:', guests.value); // Log guests data being filtered
+  console.log('Filtered Guests:', guests.value);
   return guests.value;
 });
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
-    fetchGuests(); // Refetch data with updated page number
+    fetchGuests();
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    fetchGuests(); // Refetch data with updated page number
+    fetchGuests();
   }
 };
 

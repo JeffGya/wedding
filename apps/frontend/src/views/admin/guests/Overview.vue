@@ -1,11 +1,19 @@
 <template>
-  <div class="text-center">
-    <h1 class="text-4xl font-bold mb-8">Guest Overview</h1>
-    <p class="mb-16">Manage the full list of guests invited to the wedding.</p>
-    <div class="mb-8">
-      <Button label="Add Guest" severity="primary" class="mr-8" @click="openCreateModal" />
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+  <AdminPageWrapper 
+    title="Guest Overview" 
+    description="Manage the full list of guests invited to the wedding"
+  >
+    <template #headerActions>
+      <Button 
+        label="Add Guest" 
+        icon="pi pi-user-plus" 
+        severity="primary" 
+        @click="openCreateModal" 
+      />
+    </template>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
       <!-- RSVP Status -->
       <StatCard
         title="RSVP Status"
@@ -16,102 +24,132 @@
           { label: 'Pending', value: stats.pending }
         ]"
       />
-      <!-- Email delivery -->
+      
+      <!-- Response Rate -->
       <StatCard
-        title="Email Delivery"
-        :items="[
-          { label: 'Emails Sent', value: deliveryStats.sent },
-          { label: 'Emails Failed', value: deliveryStats.failed }
-        ]"
+        title="Response Rate"
+        :value="`${responseRatePercentage}%`"
       />
-      <!-- Overall Response Rate -->
+      
+      <!-- Dietary Requirements -->
       <StatCard
-        title="Overall Response Rate"
-        chartType="doughnut"
-        :items="[
-          { label: 'Replied', value: stats.attending + stats.not_attending },
-          { label: 'Pending', value: stats.pending }
-        ]"
+        v-if="dietaryItems.length > 0"
+        title="Dietary Requirements"
+        chartType="bar"
+        :items="dietaryItems"
       />
-      <!-- No-Shows vs Late Responses -->
       <StatCard
-        title="No-Shows vs Late Responses"
-        chartType="doughnut"
-        :items="[
-          { label: 'No-Shows', value: stats.no_shows },
-          { label: 'Late Responses', value: stats.late_responses }
-        ]"
+        v-else
+        title="Dietary Requirements"
+        :value="0"
       />
-      <!-- Average Time to RSVP -->
+      
+      <!-- Plus One Invitations -->
       <StatCard
-        title="Avg. RSVP Time (days)"
-        :value="stats.avg_response_time.toFixed(1)"
+        title="Plus One Invitations"
+        chartType="bar-horizontal"
+        :items="plusOneItems"
       />
-      <!-- Dietary Requirements Breakdown -->
-      <template v-if="dietaryItems.length > 1">
-        <StatCard
-          title="Dietary Requirements Breakdown"
-          chartType="bar"
-          :items="dietaryItems"
-        />
-      </template>
-      <template v-else-if="dietaryItems.length === 1">
-        <StatCard :title="dietaryItems[0].label" :value="dietaryItems[0].value" />
-      </template>
-      <template v-else>
-        <StatCard title="Dietary Requirements" :value="0" />
-      </template>
     </div>
-    <div v-if="loading">Loading guests...</div>
-    <div v-else>
-      <Card >
-        <template #content>
-          <div>
-            <DataTable
-              :value="sortedGuests"
-              :sortField="sortKey"
-              :sortOrder="sortAsc ? 1 : -1"
-              stripedRows
-              paginator :rows="80" 
-              @sort="onSort"
-              tableStyle="min-width: 50rem"
-              responsiveLayout="scroll"
-            >
-              <Column header="#">
-                <template #body="slotProps">{{ slotProps.index + 1 }}</template>
-              </Column>
-              <Column field="is_primary" header="Primary" sortable>
-                <template #body="slotProps">{{ slotProps.data.is_primary ? 'Yes' : 'No' }}</template>
-              </Column>
-              <Column field="group_label" header="Group" sortable />
-              <Column field="name" header="Name" sortable />
-              <Column field="email" header="Email" sortable />
-              <Column field="preferred_language" header="Language" sortable />
-              <Column header="RSVP" sortField="attending" sortable>
-                <template #body="slotProps">{{ slotProps.data.attending === true ? 'Yes' : slotProps.data.attending === false ? 'No' : 'Pending' }}</template>
-              </Column>
-              <Column header="Code" field="code" sortable>
-                <template #body="slotProps">{{ slotProps.data.code || '—' }}</template>
-              </Column>
-              <Column field="can_bring_plus_one" header="Can Bring +1" sortable>
-                <template #body="slotProps">{{ slotProps.data.can_bring_plus_one ? 'Yes' : 'No' }}</template>
-              </Column>
-              <Column header="Actions">
-                <template #body="slotProps">
-                  <div class="flex justify-center">
-                  <ButtonGroup>
-                    <Button severity="secondary" icon="i-solar:pen-new-square-bold-duotone" @click="openEditForGuest(slotProps.data)" />
-                    <Button severity="danger" icon="i-solar:trash-bin-minimalistic-bold-duotone" @click="deleteGuest(slotProps.data.id)" />
-                  </ButtonGroup>
+
+    <!-- Guests Table -->
+    <Card>
+      <template #title>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-users text-acc-base"></i>
+          <span>Guest List</span>
+        </div>
+      </template>
+      <template #content>
+        <div v-if="loading" class="flex justify-center p-8">
+          <i class="pi pi-spin pi-spinner text-2xl text-acc-base"></i>
+        </div>
+        <div v-else>
+          <DataTable
+            :value="sortedGuests"
+            :sortField="sortKey"
+            :sortOrder="sortAsc ? 1 : -1"
+            stripedRows
+            paginator 
+            :rows="20"
+            :rowsPerPageOptions="[10, 20, 50, 100]"
+            @sort="onSort"
+            responsiveLayout="scroll"
+            class="w-full"
+          >
+            <Column header="#" style="width: 3rem">
+              <template #body="slotProps">{{ slotProps.index + 1 }}</template>
+            </Column>
+            
+            <Column field="is_primary" header="Primary" sortable style="width: 6rem">
+              <template #body="slotProps">
+                <Tag 
+                  :value="slotProps.data.is_primary ? 'Yes' : 'No'"
+                  :severity="slotProps.data.is_primary ? 'success' : 'secondary'"
+                />
+              </template>
+            </Column>
+            
+            <Column field="group_label" header="Group" sortable />
+            <Column field="name" header="Name" sortable />
+            <Column field="email" header="Email" sortable />
+            <Column field="preferred_language" header="Language" sortable />
+            
+            <Column header="RSVP" sortField="attending" sortable style="width: 8rem">
+              <template #body="slotProps">
+                <Tag 
+                  :value="getRSVPStatus(slotProps.data.attending)"
+                  :severity="getRSVPSeverity(slotProps.data.attending)"
+                />
+              </template>
+            </Column>
+            
+            <Column header="Code" field="code" sortable style="width: 8rem">
+              <template #body="slotProps">
+                <span class="font-mono text-sm">{{ slotProps.data.code || '—' }}</span>
+              </template>
+            </Column>
+            
+            <Column field="can_bring_plus_one" header="Can Bring +1" sortable style="width: 8rem">
+              <template #body="slotProps">
+                <span v-if="slotProps.data.is_primary">
+                  <Tag 
+                    :value="slotProps.data.can_bring_plus_one ? 'Yes' : 'No'"
+                    :severity="slotProps.data.can_bring_plus_one ? 'success' : 'warning'"
+                  />
+                </span>
+                <span v-else class="text-muted">—</span>
+              </template>
+            </Column>
+            
+            <Column header="Actions" style="width: 10rem">
+              <template #body="slotProps">
+                <div class="flex gap-2">
+                  <Button
+                    icon="pi pi-pencil"
+                    severity="secondary"
+                    text
+                    size="small"
+                    @click="openEditForGuest(slotProps.data)"
+                    v-tooltip.top="'Edit Guest'"
+                  />
+                  <Button
+                    icon="pi pi-trash"
+                    severity="danger"
+                    text
+                    size="small"
+                    @click="deleteGuest(slotProps.data.id)"
+                    v-tooltip.top="'Delete Guest'"
+                  />
                 </div>
-                </template>
-              </Column>
-            </DataTable>
-          </div>
-        </template>
-      </Card>
-    </div>
-  </div>
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </template>
+    </Card>
+  </AdminPageWrapper>
+
   <GuestModal
     v-if="showModal"
     :guest="selectedGuest"
@@ -127,8 +165,12 @@ import api from '@/api'
 import GuestModal from '@/components/GuestModal.vue'
 import { fetchGuestAnalytics } from '@/api/analytics';
 import StatCard from '@/components/ui/StatCard.vue';
-import { ref as vueRef } from 'vue';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
+import Card from 'primevue/card';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import Button from 'primevue/button';
+import Tag from 'primevue/tag';
 
 const guests = ref([])
 const loading = ref(true)
@@ -140,13 +182,16 @@ const deliveryStats = ref({ sent: 0, failed: 0 })
 const sortKey = ref('');
 const sortAsc = ref(true);
 
-const setSort = (key) => {
-  if (sortKey.value === key) {
-    sortAsc.value = !sortAsc.value;
-  } else {
-    sortKey.value = key;
-    sortAsc.value = true;
-  }
+const getRSVPStatus = (attending) => {
+  if (attending === true || attending === 1) return 'Yes';
+  if (attending === false || attending === 0) return 'No';
+  return 'Pending';
+};
+
+const getRSVPSeverity = (attending) => {
+  if (attending === true || attending === 1) return 'success';
+  if (attending === false || attending === 0) return 'danger';
+  return 'warning';
 };
 
 const sortedGuests = computed(() => {
@@ -155,10 +200,8 @@ const sortedGuests = computed(() => {
     list.sort((a, b) => {
       let va = a[sortKey.value];
       let vb = b[sortKey.value];
-      // Normalize booleans to numbers
       if (typeof va === 'boolean') va = va ? 1 : 0;
       if (typeof vb === 'boolean') vb = vb ? 1 : 0;
-      // Normalize null/undefined
       va = va ?? '';
       vb = vb ?? '';
       let cmp = 0;
@@ -170,7 +213,6 @@ const sortedGuests = computed(() => {
       return sortAsc.value ? cmp : -cmp;
     });
   } else {
-    // default grouping: by group_label, then primary, then name
     list.sort((a, b) => {
       if (a.group_label < b.group_label) return -1;
       if (a.group_label > b.group_label) return 1;
@@ -191,16 +233,74 @@ const stats = ref({
   attending: 0,
   not_attending: 0,
   pending: 0,
-  no_shows: 0,
-  late_responses: 0,
-  avg_response_time: 0,
   dietary_counts: []
 });
 
-// Compute a simple items array for dietary chart
-const dietaryItems = computed(() =>
-  (stats.value.dietary_counts || []).map(dc => ({ label: dc.label, value: dc.count }))
-)
+// Calculate response rate percentage
+const responseRatePercentage = computed(() => {
+  if (stats.value.total === 0) return 0;
+  const responded = stats.value.attending + stats.value.not_attending;
+  return Math.round((responded / stats.value.total) * 100);
+});
+
+// Format dietary items for chart display
+const dietaryItems = computed(() => {
+  return stats.value.dietary_counts
+    .filter(item => item.count > 0) // Only show dietary requirements that have guests
+    .map(item => ({
+      label: item.label,
+      value: item.count
+    }))
+    .sort((a, b) => b.value - a.value); // Sort by count descending
+});
+
+// Calculate plus one statistics
+const plusOneItems = computed(() => {
+  // Get all primary guests
+  const primaryGuests = guests.value.filter(g => g.is_primary);
+  
+  // Count primary guests who can bring plus ones
+  const canBringPlusOne = primaryGuests.filter(g => g.can_bring_plus_one).length;
+  
+  // Count primary guests who actually have plus ones (have a non-primary guest in same group)
+  const groupIdsWithPlusOnes = new Set();
+  guests.value.forEach(guest => {
+    if (!guest.is_primary) {
+      groupIdsWithPlusOnes.add(guest.group_id);
+    }
+  });
+  
+  const havePlusOne = primaryGuests.filter(g => 
+    g.can_bring_plus_one && groupIdsWithPlusOnes.has(g.group_id)
+  ).length;
+  
+  // Count primary guests who can bring plus ones but don't have any
+  const noPlusOne = canBringPlusOne - havePlusOne;
+  
+  return [
+    { label: 'Can Bring +1', value: canBringPlusOne },
+    { label: 'Have +1', value: havePlusOne },
+    { label: 'No +1', value: noPlusOne }
+  ];
+});
+
+const horizontalBarOptions = computed(() => ({
+  indexAxis: 'y',
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { display: false } },
+  scales: {
+    x: {
+      beginAtZero: true,
+      grid: { color: 'var(--form-border)', drawBorder: false },
+      ticks: { color: 'var(--form-placeholder-text)' }
+    },
+    y: {
+      grid: { color: 'var(--form-border)', drawBorder: false },
+      ticks: { color: 'var(--form-placeholder-text)' }
+    }
+  }
+}));
 
 const fetchStats = async () => {
   try {
@@ -210,9 +310,6 @@ const fetchStats = async () => {
       attending: res.stats.attending,
       not_attending: res.stats.not_attending,
       pending: res.stats.pending,
-      no_shows: res.no_shows,
-      late_responses: res.late_responses,
-      avg_response_time: res.avg_response_time_days,
       dietary_counts: Object.entries(res.dietary).map(([label, count]) => ({ label, count }))
     };
   } catch (e) {
@@ -224,7 +321,6 @@ const fetchGuests = async () => {
   try {
     const res = await api.get('/guests')
     guests.value = res.data.guests || []
-    // Fetch delivery stats for overview (placeholder: update with actual API later)
     try {
       const statRes = await api.get('/message-stats/latest-delivery')
       deliveryStats.value = {
@@ -246,6 +342,7 @@ const deleteGuest = async (id) => {
   try {
     await api.delete(`/guests/${id}`)
     guests.value = guests.value.filter(g => g.id !== id)
+    await fetchStats()
   } catch (err) {
     console.error('Failed to delete guest:', err)
   }
@@ -254,11 +351,6 @@ const deleteGuest = async (id) => {
 const openCreateModal = () => {
   selectedGuest.value = null
   isEdit.value = false
-  showModal.value = true
-}
-
-const openEditModal = () => {
-  isEdit.value = true
   showModal.value = true
 }
 

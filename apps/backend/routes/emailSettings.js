@@ -42,6 +42,23 @@ const router = express.Router();
 router.get('/', requireAuth, async (req, res) => {
   try {
     const row = await dbGet('SELECT * FROM email_settings WHERE id = ?', [1]);
+    
+    // If no settings exist, return default values
+    if (!row) {
+      return res.json({
+        id: null,
+        provider: 'resend',
+        api_key: '',
+        from_name: '',
+        from_email: '',
+        sender_name: '',
+        sender_email: '',
+        enabled: false,
+        created_at: null,
+        updated_at: null
+      });
+    }
+    
     res.json(row);
   } catch (err) {
     console.error('Error retrieving email settings:', err);
@@ -89,25 +106,46 @@ router.post('/', requireAuth, async (req, res) => {
     enabled,
   } = req.body;
 
-  const query = `
-    UPDATE email_settings
-    SET provider = ?, api_key = ?, from_name = ?, from_email = ?, sender_name = ?, sender_email = ?, enabled = ?, updated_at = CURRENT_TIMESTAMP
-    WHERE id = 1
-  `;
-
-  const values = [
-    provider,
-    api_key,
-    from_name,
-    from_email,
-    sender_name,
-    sender_email,
-    enabled ? 1 : 0,
-  ];
-
   try {
-    const result = await dbRun(query, values);
-    res.json({ success: true, updated: result.affectedRows || result.changes || 0 });
+    // Check if settings exist
+    const existing = await dbGet('SELECT id FROM email_settings WHERE id = ?', [1]);
+    
+    if (existing) {
+      // Update existing settings
+      const query = `
+        UPDATE email_settings
+        SET provider = ?, api_key = ?, from_name = ?, from_email = ?, sender_name = ?, sender_email = ?, enabled = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = 1
+      `;
+      const values = [
+        provider,
+        api_key,
+        from_name,
+        from_email,
+        sender_name,
+        sender_email,
+        enabled ? 1 : 0,
+      ];
+      const result = await dbRun(query, values);
+      res.json({ success: true, updated: result.affectedRows || result.changes || 0 });
+    } else {
+      // Create new settings
+      const query = `
+        INSERT INTO email_settings (id, provider, api_key, from_name, from_email, sender_name, sender_email, enabled, created_at, updated_at)
+        VALUES (1, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      `;
+      const values = [
+        provider,
+        api_key,
+        from_name,
+        from_email,
+        sender_name,
+        sender_email,
+        enabled ? 1 : 0,
+      ];
+      const result = await dbRun(query, values);
+      res.json({ success: true, created: result.insertId || result.lastID || 1 });
+    }
   } catch (err) {
     console.error('Error updating email settings:', err);
     return res.status(500).json({ error: 'Failed to update email settings' });

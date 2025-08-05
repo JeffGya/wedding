@@ -1,59 +1,137 @@
 <template>
-  <Card class="aspect-square relative overflow-hidden">
+  <Card class="stat-card h-full transition-all duration-200 hover:shadow-lg">
     <template #content>
-      <template v-if="chartType === 'doughnut' && items.length">
-        <p class="text-lg/7 font-serif text-center">{{ title }}</p>
-        <div class="absolute inset-x-0 top-[5rem] bottom-[5rem] flex flex-col items-center justify-center">
-          <Chart type="doughnut" :data="chartData" :options="chartOptions"
-            class="w-full h-full max-w-full max-h-full" />
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <span class="text-5xl font-semibold font-serif">{{ centerText }}</span>
-          </div>
-        </div>
-        <div class="absolute inset-x-0 bottom-0 px-2 pb-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 justify-items-center w-full">
-          <div
-            v-for="(item, index) in items"
-            :key="item.label"
-            class="flex items-center space-x-1"
-          >
-            <span
-              class="w-4 h-4 rounded-full"
-              :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
-            ></span>
-            <span class="text-sm font-serif">{{ item.label }}</span>
+      <!-- Single Value Display -->
+      <template v-if="!chartType && !items.length && value !== undefined">
+        <div class="flex flex-col items-center justify-center h-full p-4">
+          <h3 class="text-lg font-semibold text-text mb-4 text-center">{{ title }}</h3>
+          <div class="flex-1 flex items-center justify-center">
+            <span class="text-4xl md:text-5xl font-bold text-acc-base">{{ value }}</span>
           </div>
         </div>
       </template>
+
+      <!-- Items List Display -->
+      <template v-else-if="items.length && !chartType">
+        <div class="flex flex-col h-full p-4">
+          <h3 class="text-lg font-semibold text-text mb-4 text-center">{{ title }}</h3>
+          <div class="flex-1 flex items-center justify-center">
+            <span class="text-4xl md:text-5xl font-bold text-acc-base">{{ items[0].value }}</span>
+          </div>
+        </div>
+      </template>
+
+      <!-- Doughnut Chart -->
+      <template v-else-if="chartType === 'doughnut' && items.length">
+        <div class="flex flex-col h-full p-4">
+          <h3 class="text-lg font-semibold text-text mb-4 text-center">{{ title }}</h3>
+          
+          <!-- Chart Container -->
+          <div class="flex-1 relative min-h-[200px]">
+            <Chart 
+              type="doughnut" 
+              :data="chartData" 
+              :options="chartOptions"
+              class="w-full h-full" 
+            />
+            
+            <!-- Center Text Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span class="text-2xl md:text-3xl font-bold text-text">{{ centerText }}</span>
+            </div>
+          </div>
+          
+          <!-- Legend -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div
+              v-for="(item, index) in items"
+              :key="item.label"
+              class="flex items-center gap-2 text-sm"
+            >
+              <span
+                class="w-3 h-3 rounded-full flex-shrink-0"
+                :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
+              ></span>
+              <span class="text-text truncate">{{ item.label }}</span>
+              <span class="text-form-placeholder-text ml-auto">{{ item.value }}</span>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Bar Chart -->
       <template v-else-if="chartType === 'bar' && items.length">
-        <p class="text-lg/7 font-serif font-semibold mb-2 text-center">{{ title }}</p>
-        <div class="absolute inset-x-0 top-[2.5rem] bottom-[4.5rem] flex flex-col items-center justify-center">
-          <Chart type="bar" :data="chartData" :options="chartOptions"
-            class="w-full h-full max-w-full max-h-full" />
-        </div>
-        <div class="absolute inset-x-0 bottom-0 px-2 pb-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 justify-items-center w-full">
-          <div
-            v-for="(item, index) in items"
-            :key="item.label"
-            class="flex items-center space-x-1"
-          >
-            <span
-              class="w-4 h-4 rounded-full"
-              :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
-            ></span>
-            <span class="text-sm font-serif">{{ item.label }}</span>
+        <div class="flex flex-col h-full p-4">
+          <h3 class="text-lg font-semibold text-text mb-4 text-center">{{ title }}</h3>
+          
+          <!-- Chart Container -->
+          <div class="flex-1 relative min-h-[200px]">
+            <Chart 
+              type="bar" 
+              :data="chartData" 
+              :options="chartOptions"
+              class="w-full h-full" 
+            />
+          </div>
+          
+          <!-- Legend -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div
+              v-for="(item, index) in items"
+              :key="item.label"
+              class="flex items-center gap-2 text-sm"
+            >
+              <span
+                class="w-3 h-3 rounded-full flex-shrink-0"
+                :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
+              ></span>
+              <span class="text-text truncate">{{ item.label }}</span>
+              <span class="text-form-placeholder-text ml-auto">{{ item.value }}</span>
+            </div>
           </div>
         </div>
       </template>
-      <template v-else-if="items.length">
-        <p class="text-lg mb-2 text-center">{{ title }}</p>
-        <div class="absolute inset-x-0 flex flex-col items-center justify-center">
-          <p class="text-5xl font-serif font-semibold">{{ items[0].value }}</p>
+
+      <!-- Horizontal Bar Chart -->
+      <template v-else-if="chartType === 'bar-horizontal' && items.length">
+        <div class="flex flex-col h-full p-4">
+          <h3 class="text-lg font-semibold text-text mb-4 text-center">{{ title }}</h3>
+          
+          <!-- Chart Container -->
+          <div class="flex-1 relative min-h-[200px]">
+            <Chart 
+              type="bar" 
+              :data="chartData" 
+              :options="horizontalBarOptions"
+              class="w-full h-full" 
+            />
+          </div>
+          
+          <!-- Legend -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div
+              v-for="(item, index) in items"
+              :key="item.label"
+              class="flex items-center gap-2 text-sm"
+            >
+              <span
+                class="w-3 h-3 rounded-full flex-shrink-0"
+                :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"
+              ></span>
+              <span class="text-text truncate">{{ item.label }}</span>
+              <span class="text-form-placeholder-text ml-auto">{{ item.value }}</span>
+            </div>
+          </div>
         </div>
       </template>
+
+      <!-- Fallback -->
       <template v-else>
-        <p class="text-xl mb-2 text-center">{{ title }}</p>
-        <div class="absolute inset-x-0 top-[5rem] bottom-[4.5rem] flex flex-col items-center justify-center">
-          <p class="text-[8rem] font-serif font-bold">{{ value }}</p>
+        <div class="flex flex-col items-center justify-center h-full p-4">
+          <h3 class="text-lg font-semibold text-text mb-4 text-center">{{ title }}</h3>
+          <div class="flex-1 flex items-center justify-center">
+            <span class="text-4xl md:text-5xl font-bold text-acc-base">{{ value || 0 }}</span>
+          </div>
         </div>
       </template>
     </template>
@@ -67,7 +145,6 @@ const props = defineProps({
   title: { type: String, required: false },
   value: { type: [String, Number], required: false },
   items: { type: Array, required: false, default: () => [] },
-  // chartType: 'single' | 'doughnut' | 'bar'
   chartType: { type: String, required: false, default: 'single' },
 });
 
@@ -77,12 +154,14 @@ const chartData = computed(() => {
   const rootStyles = getComputedStyle(document.documentElement);
   const cssVars = ['--int-base', '--acc-base', '--acc2-base'];
   const bgColors = cssVars.map(varName => rootStyles.getPropertyValue(varName).trim());
+  
   return {
     labels: props.items.map(i => i.label),
     datasets: [{
       data: props.items.map(i => Number(i.value)),
       backgroundColor: bgColors,
-      hoverOffset: 4
+      hoverOffset: 4,
+      borderWidth: 0
     }]
   };
 });
@@ -103,7 +182,16 @@ const chartOptions = computed(() => {
       responsive: true,
       maintainAspectRatio: false,
       cutout: '70%',
-      plugins: { legend: { display: false } },
+      plugins: { 
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'var(--card-bg)',
+          titleColor: 'var(--text)',
+          bodyColor: 'var(--text)',
+          borderColor: 'var(--form-border)',
+          borderWidth: 1
+        }
+      },
       onHover: (event, elements) => {
         hoveredIndex.value = elements.length ? elements[0].index : null;
       }
@@ -112,10 +200,100 @@ const chartOptions = computed(() => {
     return {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { x: { beginAtZero: true } }
+      plugins: { 
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'var(--card-bg)',
+          titleColor: 'var(--text)',
+          bodyColor: 'var(--text)',
+          borderColor: 'var(--form-border)',
+          borderWidth: 1
+        }
+      },
+      scales: { 
+        x: { 
+          beginAtZero: true,
+          grid: {
+            color: 'var(--form-border)',
+            drawBorder: false
+          },
+          ticks: {
+            color: 'var(--form-placeholder-text)'
+          }
+        },
+        y: {
+          grid: {
+            color: 'var(--form-border)',
+            drawBorder: false
+          },
+          ticks: {
+            color: 'var(--form-placeholder-text)'
+          }
+        }
+      }
     };
   }
   return {};
 });
+
+const horizontalBarOptions = computed(() => ({
+  indexAxis: 'y',
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { 
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: 'var(--card-bg)',
+      titleColor: 'var(--text)',
+      bodyColor: 'var(--text)',
+      borderColor: 'var(--form-border)',
+      borderWidth: 1
+    }
+  },
+  scales: {
+    x: {
+      beginAtZero: true,
+      grid: { 
+        color: 'var(--form-border)', 
+        drawBorder: false 
+      },
+      ticks: { 
+        color: 'var(--form-placeholder-text)',
+        stepSize: 1
+      }
+    },
+    y: {
+      grid: { 
+        color: 'var(--form-border)', 
+        drawBorder: false 
+      },
+      ticks: { 
+        color: 'var(--form-placeholder-text)'
+      }
+    }
+  }
+}));
 </script>
+
+<style scoped>
+.stat-card {
+  @apply transition-all duration-200 hover:shadow-lg;
+}
+
+.stat-card:hover {
+  @apply transform scale-105;
+}
+
+/* Ensure charts are responsive */
+:deep(.chart-container) {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+/* Improve chart responsiveness */
+:deep(canvas) {
+  max-width: 100% !important;
+  height: auto !important;
+}
+</style>

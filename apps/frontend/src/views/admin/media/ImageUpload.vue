@@ -1,18 +1,28 @@
 <template>
-    <section class="image-upload flex items-center space-x-4">
-        <p>Upload Image</p>
-        <Button>
-            <label>
-                <input
-                    type="file"
-                    accept=".jpg,.png,.gif,.webm"
-                    hidden
-                    @change="onFileSelect"
-                />
-                Choose & Upload
-            </label>
+  <Card>
+    <template #title>
+      <div class="flex items-center gap-2">
+        <i class="pi pi-upload text-acc-base"></i>
+        <span>Upload Image</span>
+      </div>
+    </template>
+    <template #content>
+      <div class="flex items-center gap-4">
+        <p class="text-text">Upload Image</p>
+        <Button severity="primary" icon="pi pi-upload">
+          <label class="cursor-pointer">
+            <input
+              type="file"
+              accept=".jpg,.png,.gif,.webm"
+              hidden
+              @change="onFileSelect"
+            />
+            Choose & Upload
+          </label>
         </Button>
-    </section>
+      </div>
+    </template>
+  </Card>
 </template>
 
 <script setup>
@@ -34,14 +44,3 @@ async function onFileSelect(event) {
   }
 }
 </script>
-
-<style scoped>
-.image-upload {
-  margin-bottom: 2rem;
-}
-/* Optional: adjust label spacing */
-.image-upload .p-button {
-  display: inline-flex;
-  align-items: center;
-}
-</style>

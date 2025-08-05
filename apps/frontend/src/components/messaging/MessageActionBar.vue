@@ -1,33 +1,35 @@
 
 
 <template>
+  <div class="flex flex-wrap gap-2">
     <Button
       label="Save Draft"
-      icon="i-solar:inbox-in-bold-duotone"
+      icon="pi pi-save"
       severity="secondary"
       @click="$emit('save')"
     />
 
     <Button
       label="Schedule"
-      icon="i-solar:mailbox-bold-duotone"
+      icon="pi pi-calendar"
       severity="info"
       @click="$emit('schedule')"
     />
 
     <Button
       label="Save as Template"
-      icon="i-solar:letter-bold-duotone"
-      severity="Help"
+      icon="pi pi-file-edit"
+      severity="help"
       @click="$emit('openTemplateModal')"
     />
 
     <Button
       label="Send Now"
-      icon="i-solar:plain-2-bold-duotone"
+      icon="pi pi-send"
+      severity="success"
       @click="$emit('sendNow')"
     />
-
+  </div>
 </template>
 
 <script setup>

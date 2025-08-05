@@ -1,47 +1,66 @@
 <template>
-  <div class>
-    <h1 class="text-4xl font-semibold mb-8 text-center">Settings</h1>
-    <p class="text-center mb-8">Manage site-wide settings such as email templates, contact info, and visibility options.</p>
-
+  <AdminPageWrapper 
+    title="Settings" 
+    description="Manage site-wide settings such as email templates, contact info, and visibility options"
+  >
     <!-- Tab Navigation -->
-    <div class="flex justify-center mb-8 m-auto">
-      <SelectButton
-        v-model="activeTab"
-        :options="tabOptions"
-        optionLabel="label"
-        optionValue="value"
-        class="w-full max-w-xs"
-      />
-    </div>
+    <Card>
+      <template #content>
+        <div class="flex justify-center mb-6">
+          <SelectButton
+            v-model="activeTab"
+            :options="tabOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full max-w-md"
+          />
+        </div>
 
-    <!-- Tab Content -->
-    <div>
-      <div v-if="activeTab === 'main'">
-        <MainSettings />
-      </div>
-      <EmailSettings v-if="activeTab === 'email'" />
-      <GuestSettings v-if="activeTab === 'guests'" />
-    </div>
-  </div>
+        <!-- Tab Content -->
+        <div class="mt-6">
+          <Transition name="fade" mode="out-in">
+            <div v-if="activeTab === 'main'" key="main">
+              <MainSettings />
+            </div>
+            <div v-else-if="activeTab === 'email'" key="email">
+              <EmailSettings />
+            </div>
+            <div v-else-if="activeTab === 'guests'" key="guests">
+              <GuestSettings />
+            </div>
+          </Transition>
+        </div>
+      </template>
+    </Card>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import EmailSettings from './settings/EmailSettings.vue'
 import GuestSettings from './settings/GuestSettings.vue'
 import MainSettings from './settings/MainSettings.vue'
-import SelectButton from 'primevue/selectbutton';
+import SelectButton from 'primevue/selectbutton'
+import Card from 'primevue/card'
 
 const activeTab = ref('main')
 
 const tabOptions = [
-  { label: 'Main', value: 'main' },
-  { label: 'Email', value: 'email' },
-  { label: 'Guests', value: 'guests' }
+  { label: 'Main Settings', value: 'main' },
+  { label: 'Email Settings', value: 'email' },
+  { label: 'Guest Settings', value: 'guests' }
 ]
-
-// Navigate to current tab route when switching tabs
-function activateTab(tab) {
-  activeTab.value = tab
-}
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

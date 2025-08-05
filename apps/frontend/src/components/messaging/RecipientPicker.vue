@@ -43,8 +43,6 @@
       </FloatLabel>
     </div>
 
-
- 
     <!-- Guest List -->
     <div class="mb-4">
       <div class="mb-4 flex items-center">
@@ -57,7 +55,7 @@
         />
         <label> Select All </label>
       </div>
-          <!-- Summary -->
+      <!-- Summary -->
       <p class="text-sm">
         {{ selectedGuests.length }} recipient(s) selected.
       </p>
@@ -93,7 +91,7 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import api from '@/api'
 import Fuse from 'fuse.js'
-import Listbox from 'primevue/listbox';
+import Listbox from 'primevue/listbox'
 
 const guests = ref([])
 const selectedGuests = ref([])
@@ -106,21 +104,21 @@ const fetchGuests = async () => {
   try {
     const res = await api.get(`/guests`, {
       withCredentials: true
-    });
+    })
 
-    guests.value = Array.isArray(res.data.guests) ? res.data.guests : [];
+    guests.value = Array.isArray(res.data.guests) ? res.data.guests : []
 
-    fuse = new Fuse(guests.value, { keys: ['name'], threshold: 0.4 });
+    fuse = new Fuse(guests.value, { keys: ['name'], threshold: 0.4 })
 
-    await nextTick();
+    await nextTick()
   } catch (err) {
-    console.error("Failed to fetch guests:", err);
+    console.error("Failed to fetch guests:", err)
   }
-};
+}
 
 onMounted(() => {
-  fetchGuests();
-});
+  fetchGuests()
+})
 
 // Filters
 const filteredGuests = computed(() => {
@@ -150,12 +148,12 @@ const filteredGuests = computed(() => {
 
 const toggleGuest = (id) => {
   if (selectedGuests.value.includes(id)) {
-    selectedGuests.value = selectedGuests.value.filter(g => g !== id);
+    selectedGuests.value = selectedGuests.value.filter(g => g !== id)
   } else {
-    selectedGuests.value.push(id);
+    selectedGuests.value.push(id)
   }
-  console.log('Selected guests:', selectedGuests.value); // Logs the array correctly
-};
+  console.log('Selected guests:', selectedGuests.value)
+}
 
 const toggleAll = () => {
   if (allSelected.value) {
@@ -170,27 +168,24 @@ const allSelected = computed(() => {
          filteredGuests.value.every(g => selectedGuests.value.includes(g.id))
 })
 
-const setSelectedGuestIds = (ids) => {
+// Exposed methods for parent components
+const getSelectedRecipients = () => {
+  return selectedGuests.value
+}
+
+const setSelectedRecipients = (ids) => {
   selectedGuests.value = Array.isArray(ids) ? ids : []
 }
 
-// Example of sending selected recipients to backend
-const sendMessage = async () => {
-  try {
-    // Send the actual selected guest IDs (spread into array)
-    await api.post(`/messages`, {
-      recipients: [...selectedGuests.value]
-    })
-  } catch (error) {
-    console.error('Error sending message:', error)
-  }
+const clearSelection = () => {
+  selectedGuests.value = []
 }
 
 defineExpose({
-  selectedGuests,
-  getSelectedGuestIds: () => selectedGuests.value,
-  setSelectedGuestIds,
-  sendMessage
+  getSelectedRecipients,
+  setSelectedRecipients,
+  clearSelection,
+  selectedGuests
 })
 </script>
 

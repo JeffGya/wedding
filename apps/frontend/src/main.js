@@ -41,11 +41,19 @@ import Divider from 'primevue/divider';
 import Checkbox from 'primevue/checkbox';
 import InputNumber from 'primevue/inputnumber';
 import Skeleton from 'primevue/skeleton';
+import Tag from 'primevue/tag';
+import Tooltip from 'primevue/tooltip';
+import Timeline from 'primevue/timeline';
+import Calendar from 'primevue/calendar';
+import SelectButton from 'primevue/selectbutton';
+import ProgressSpinner from 'primevue/progressspinner';
+import Toast from 'primevue/toast';
 
 import RichTextEditor from '@/components/forms/RichTextEditor.vue';
 import ImagePicker from '@/components/ui/ImagePicker.vue';
 import EmbedEditor from '@/components/EmbedEditor.vue';
 import SurveySelector from '@/components/SurveySelector.vue';
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
 import { useLoaderStore } from '@/store/loader';
 import './style.css';
 
@@ -59,8 +67,6 @@ import { localize } from '@vee-validate/i18n';
 import validationEn from '@vee-validate/i18n/dist/locale/en.json';
 import i18n from '@/i18n';
 import * as rules from '@vee-validate/rules';
-
-
 
 // Register all built-in rules, skipping any non-function exports (e.g., the 'all' JSON object)
 Object.keys(rules).forEach(name => {
@@ -159,11 +165,19 @@ app.component('Divider', Divider);
 app.component('Checkbox', Checkbox);
 app.component('InputNumber', InputNumber);
 app.component('Skeleton', Skeleton);
+app.component('Tag', Tag);
+app.component('Timeline', Timeline);
+app.component('Calendar', Calendar);
+app.component('SelectButton', SelectButton);
+app.component('ProgressSpinner', ProgressSpinner);
+app.component('Toast', Toast);
+app.directive('tooltip', Tooltip);
 
 app.component('RichTextEditor', RichTextEditor);
 app.component('ImagePicker', ImagePicker);
 app.component('EmbedEditor', EmbedEditor);
 app.component('SurveySelector', SurveySelector);
+app.component('AdminPageWrapper', AdminPageWrapper);
 app.use(ConfirmationService);
 
 app.mount('#app')

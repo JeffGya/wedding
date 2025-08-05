@@ -1,97 +1,191 @@
 <template>
-  <Card>
-    <template #content>
-      <Banner
-          v-if="message"
-          :message="message"
-          :type="success ? 'success' : 'error'"
-          class="mt-4"
-        />
-      <Form @submit="saveSettings" class="space-y-4">
-        <div class="flex items-center">
-          <ToggleSwitch
-            id="enable_global_countdown"
-            v-model="settings.enable_global_countdown"
-            :on-label="'Yes'"
-            :off-label="'No'"
-            class="mr-2"
-          />
-          <label for="enable_global_countdown" class="font-medium">
-            Enable wedding countdown on home page
-          </label>
-        </div>
-        <div>
-          <FloatLabel variant="in">
-            <DatePicker
-              v-model="settings.wedding_date"
-              dateFormat="yy-mm-dd"
-              class="w-full"
+  <AdminPageWrapper 
+    title="Main Settings" 
+    description="Configure global site settings and wedding information"
+  >
+    <Card>
+      <template #content>
+        <form @submit.prevent="saveSettings" class="space-y-6">
+          <!-- Global Countdown Toggle -->
+          <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+            <ToggleSwitch
+              id="enable_global_countdown"
+              v-model="form.enable_global_countdown"
             />
-            <label>Wedding Date - YYYY-MM-DD</label>
-          </FloatLabel>
-        </div>
-        <Button
-          label="Save Countdown Setting"
-          type="submit"
-          class="p-button-primary"
-        />
-      </Form>
-    </template>
-  </Card>
+            <div>
+              <label for="enable_global_countdown" class="block text-sm font-medium">
+                Enable Wedding Countdown
+              </label>
+              <p class="text-sm text-gray-600">
+                Show a countdown timer on the main wedding page
+              </p>
+            </div>
+          </div>
+
+          <!-- Wedding Date -->
+          <div>
+            <FloatLabel variant="in">
+              <DatePicker
+                id="wedding_date"
+                v-model="dateValue"
+                dateFormat="yy-mm-dd"
+                class="w-full"
+                placeholder="Select wedding date"
+                :minDate="new Date()"
+              />
+              <label for="wedding_date">Wedding Date</label>
+            </FloatLabel>
+            <p class="text-sm text-gray-600 mt-1">
+              The date of your wedding (required if countdown is enabled)
+            </p>
+          </div>
+
+          <!-- Current Settings Display -->
+          <div class="p-4 bg-blue-50 rounded-lg">
+            <h4 class="font-medium text-blue-900 mb-2">Current Settings</h4>
+            <div class="space-y-1 text-sm">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-calendar text-blue-600"></i>
+                <span class="text-blue-800">
+                  Countdown: 
+                  <span :class="form.enable_global_countdown ? 'text-green-600 font-medium' : 'text-red-600 font-medium'">
+                    {{ form.enable_global_countdown ? 'Enabled' : 'Disabled' }}
+                  </span>
+                </span>
+              </div>
+              <div v-if="form.wedding_date" class="flex items-center gap-2">
+                <i class="pi pi-heart text-blue-600"></i>
+                <span class="text-blue-800">
+                  Wedding Date: {{ formatWeddingDate(form.wedding_date) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-3 pt-4 border-t">
+            <Button
+              label="Save Settings"
+              icon="pi pi-save"
+              type="submit"
+              :loading="saving"
+            />
+            <Button
+              label="Reset"
+              icon="pi pi-refresh"
+              severity="secondary"
+              outlined
+              @click="resetSettings"
+            />
+          </div>
+        </form>
+      </template>
+    </Card>
+  </AdminPageWrapper>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import api from '@/api';
-import Banner from '@/components/ui/Banner.vue';
+import { ref, onMounted, watch } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { fetchMainSettings, updateMainSettings, validateMainSettings } from '@/api/settings'
 
-const settings = ref({
+const toast = useToast()
+
+const form = ref({
   enable_global_countdown: false,
-  wedding_date: null
-});
-const message = ref('');
-const success = ref(false);
+  wedding_date: ''
+})
 
-const localIsoDate = computed(() => {
-  const dt = settings.value.wedding_date;
-  if (!dt) return null;
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth() + 1).padStart(2, '0');
-  const d = String(dt.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-});
+const dateValue = ref(null)
+const saving = ref(false)
 
 onMounted(async () => {
-  try {
-    const { data } = await api.get('/settings/main');
-    settings.value.enable_global_countdown = data.enableGlobalCountdown;
-    if (data.weddingDate) {
-      const [year, month, day] = data.weddingDate.split('-');
-      settings.value.wedding_date = new Date(year, month - 1, day);
-    } else {
-      settings.value.wedding_date = null;
-    }
-    console.log('Loaded settings:', settings.value);
-  } catch (err) {
-    console.error('Failed to load main settings', err);
-  }
-});
+  await loadSettings()
+})
 
-const saveSettings = async () => {
-  console.log('Saving settings:', settings.value);
-  const payload = {
-    enable_global_countdown: settings.value.enable_global_countdown,
-    wedding_date: localIsoDate.value
-  };
+async function loadSettings() {
   try {
-    await api.put('/settings/main', payload);
-    message.value = 'Settings saved successfully';
-    success.value = true;
-  } catch (err) {
-    message.value = 'Failed to save settings';
-    success.value = false;
+    const settings = await fetchMainSettings()
+    form.value = {
+      enable_global_countdown: settings.enableGlobalCountdown || false,
+      wedding_date: settings.weddingDate || ''
+    }
+    
+    if (settings.weddingDate) {
+      dateValue.value = new Date(settings.weddingDate)
+    } else {
+      dateValue.value = null
+    }
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to load main settings',
+      life: 5000
+    })
   }
-};
+}
+
+async function saveSettings() {
+  // Validate settings
+  const validation = validateMainSettings(form.value)
+  if (!validation.isValid) {
+    toast.add({
+      severity: 'error',
+      summary: 'Validation Error',
+      detail: validation.errors.join(', '),
+      life: 5000
+    })
+    return
+  }
+
+  try {
+    saving.value = true
+    await updateMainSettings(form.value)
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Main settings saved successfully',
+      life: 5000
+    })
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to save main settings',
+      life: 5000
+    })
+  } finally {
+    saving.value = false
+  }
+}
+
+function resetSettings() {
+  loadSettings()
+}
+
+function formatWeddingDate(dateString) {
+  if (!dateString) return 'Not set'
+  const date = new Date(dateString)
+  return date.toLocaleDateString()
+}
+
+// Watch for date picker changes
+watch(dateValue, (newValue) => {
+  if (newValue) {
+    // Format date as YYYY-MM-DD HH:MM:SS for MySQL DATETIME
+    const year = newValue.getFullYear()
+    const month = String(newValue.getMonth() + 1).padStart(2, '0')
+    const day = String(newValue.getDate()).padStart(2, '0')
+    const hours = String(newValue.getHours()).padStart(2, '0')
+    const minutes = String(newValue.getMinutes()).padStart(2, '0')
+    const seconds = String(newValue.getSeconds()).padStart(2, '0')
+    
+    form.value.wedding_date = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+  } else {
+    form.value.wedding_date = ''
+  }
+})
 </script>
 
 <style scoped>
