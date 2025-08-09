@@ -1,235 +1,25 @@
-[2025-08-09T14:20:23.054Z] [NAV] Navigation endpoint hit with locale: en
-[2025-08-09T14:20:23.054Z] [NAV][DEBUG] typeof Page: object
-[2025-08-09T14:20:23.054Z] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2025-08-09T14:20:23.054Z] [NAV][DEBUG] About to call Page.findAll
-[2025-08-09T14:20:23.054Z] [NAV][DEBUG] Page.findAll: function
-[2025-08-09T14:20:23.086Z] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
-[2025-08-09T14:20:23.103Z] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-09T14:20:23.113Z] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-09T14:20:23.113Z] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
-[2025-08-09T14:21:13.849Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
-[2025-08-09T14:21:13.856Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2025-08-09T14:21:14.761Z] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
-[2025-08-09T14:21:14.779Z] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
-[2025-08-09T14:21:27.980Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
-[2025-08-09T14:21:27.983Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2025-08-09T14:21:31.926Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
-[2025-08-09T14:21:31.929Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2025-08-09T14:21:33.911Z] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
-[2025-08-09T14:21:33.926Z] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
-[2025-08-09T14:21:38.899Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
-[2025-08-09T14:21:38.902Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2025-08-09T14:21:56.966Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
-[2025-08-09T14:21:56.969Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2025-08-09T14:21:57.730Z] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
-[2025-08-09T14:21:57.736Z] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
-[2025-08-09T14:21:58.625Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
-[2025-08-09T14:21:58.627Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2025-08-09T14:25:49.366Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:25:49.370Z] Server is running on port 5001
-[2025-08-09T14:25:49.387Z] ✅ Connected to MySQL database.
-[2025-08-09T14:26:28.903Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:26:28.908Z] Server is running on port 5001
-[2025-08-09T14:26:28.922Z] ✅ Connected to MySQL database.
-[2025-08-09T14:28:27.947Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:28:27.951Z] Server is running on port 5001
-[2025-08-09T14:28:27.965Z] ✅ Connected to MySQL database.
-[2025-08-09T14:28:54.052Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:28:54.056Z] Server is running on port 5001
-[2025-08-09T14:28:54.071Z] ✅ Connected to MySQL database.
-[2025-08-09T14:30:00.139Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-08-09T14:30:00.140Z] [DEBUG] 📨 Starting scheduled message check...
-[2025-08-09T14:30:00.143Z] [DEBUG] ✅ Scheduled message check completed.
-[2025-08-09T14:30:00.143Z] [DEBUG] ✅ No scheduled messages ready to send.
-[2025-08-09T14:30:22.585Z] [NAV] Navigation endpoint hit with locale: en
-[2025-08-09T14:30:22.585Z] [NAV][DEBUG] Page.findAll: function
-[2025-08-09T14:30:22.585Z] [NAV][DEBUG] typeof Page: object
-[2025-08-09T14:30:22.586Z] [NAV][DEBUG] About to call Page.findAll
-[2025-08-09T14:30:22.585Z] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2025-08-09T14:30:22.592Z] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
-[2025-08-09T14:30:22.596Z] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-09T14:30:22.615Z] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-09T14:30:22.615Z] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
-[2025-08-09T14:30:28.052Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-08-09T14:30:28.054Z] [GET /api/pages] Returning 2 of 2
-[2025-08-09T14:31:43.397Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-08-09T14:31:43.398Z] [GET /api/pages] Returning 2 of 2
-[2025-08-09T14:31:44.054Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-08-09T14:31:44.055Z] [GET /api/pages] Returning 2 of 2
-[2025-08-09T14:32:11.995Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:32:11.998Z] Server is running on port 5001
-[2025-08-09T14:32:12.012Z] ✅ Connected to MySQL database.
-[2025-08-09T14:32:13.769Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:32:13.773Z] Server is running on port 5001
-[2025-08-09T14:32:13.784Z] ✅ Connected to MySQL database.
-[2025-08-09T14:32:26.140Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:32:26.143Z] Server is running on port 5001
-[2025-08-09T14:32:26.153Z] ✅ Connected to MySQL database.
-[2025-08-09T14:32:33.542Z] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/messages.js:1151
-  }
-  ^
-
-SyntaxError: missing ) after argument list
-    at internalCompileFunction (node:internal/vm:73:18)
-    at wrapSafe (node:internal/modules/cjs/loader:1153:20)
-    at Module._compile (node:internal/modules/cjs/loader:1205:27)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
-    at Module.load (node:internal/modules/cjs/loader:1091:32)
-    at Module._load (node:internal/modules/cjs/loader:938:12)
-    at Module.require (node:internal/modules/cjs/loader:1115:19)
-    at require (node:internal/modules/helpers:130:18)
-    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:177:23)
-    at Module._compile (node:internal/modules/cjs/loader:1241:14)
-[2025-08-09T14:32:33.557Z] ✅ Connected to MySQL database.
-[2025-08-09T14:32:49.679Z] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/messages.js:1151
-  }
-  ^
-
-SyntaxError: missing ) after argument list
-    at internalCompileFunction (node:internal/vm:73:18)
-    at wrapSafe (node:internal/modules/cjs/loader:1153:20)
-    at Module._compile (node:internal/modules/cjs/loader:1205:27)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
-    at Module.load (node:internal/modules/cjs/loader:1091:32)
-    at Module._load (node:internal/modules/cjs/loader:938:12)
-    at Module.require (node:internal/modules/cjs/loader:1115:19)
-    at require (node:internal/modules/helpers:130:18)
-    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:177:23)
-    at Module._compile (node:internal/modules/cjs/loader:1241:14)
-[2025-08-09T14:32:49.691Z] ✅ Connected to MySQL database.
-[2025-08-09T14:45:56.926Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:45:56.929Z] Server is running on port 5001
-[2025-08-09T14:45:56.941Z] ✅ Connected to MySQL database.
-[2025-08-09T14:46:01.695Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:46:01.699Z] Server is running on port 5001
-[2025-08-09T14:46:01.713Z] ✅ Connected to MySQL database.
-[2025-08-09T14:46:17.471Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:46:17.474Z] Server is running on port 5001
-[2025-08-09T14:46:17.484Z] ✅ Connected to MySQL database.
-[2025-08-09T14:46:25.415Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:46:25.419Z] Server is running on port 5001
-[2025-08-09T14:46:25.432Z] ✅ Connected to MySQL database.
-[2025-08-09T14:49:27.852Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:49:27.856Z] Server is running on port 5001
-[2025-08-09T14:49:27.872Z] ✅ Connected to MySQL database.
-[2025-08-09T14:55:47.243Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:55:47.246Z] Server is running on port 5001
-[2025-08-09T14:55:47.259Z] ✅ Connected to MySQL database.
-[2025-08-09T14:55:52.070Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:55:52.073Z] [INFO] Server is running on port 5001
-[2025-08-09T14:55:52.084Z] ✅ Connected to MySQL database.
-[2025-08-09T14:56:26.952Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:56:26.956Z] [INFO] Server is running on port 5001
-[2025-08-09T14:56:26.973Z] ✅ Connected to MySQL database.
-[2025-08-09T14:56:31.453Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:56:31.456Z] [INFO] Server is running on port 5001
-[2025-08-09T14:56:31.466Z] ✅ Connected to MySQL database.
-[2025-08-09T14:56:39.899Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:56:39.902Z] [INFO] Server is running on port 5001
-[2025-08-09T14:56:39.916Z] ✅ Connected to MySQL database.
-[2025-08-09T14:56:46.673Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:56:46.676Z] [INFO] Server is running on port 5001
-[2025-08-09T14:56:46.687Z] ✅ Connected to MySQL database.
-[2025-08-09T14:56:55.242Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:56:55.244Z] [INFO] Server is running on port 5001
-[2025-08-09T14:56:55.255Z] ✅ Connected to MySQL database.
-[2025-08-09T14:59:47.206Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:59:47.212Z] [INFO] Server is running on port 5001
-[2025-08-09T14:59:47.235Z] ✅ Connected to MySQL database.
-[2025-08-09T14:59:56.904Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T14:59:56.907Z] [INFO] Server is running on port 5001
-[2025-08-09T14:59:56.919Z] ✅ Connected to MySQL database.
-[2025-08-09T15:00:00.911Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-08-09T15:00:00.912Z] [DEBUG] 📨 Starting scheduled message check...
-[2025-08-09T15:00:00.919Z] [DEBUG] ✅ No scheduled messages ready to send.
-[2025-08-09T15:00:00.919Z] [DEBUG] ✅ Scheduled message check completed.
-[2025-08-09T15:00:14.974Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:00:14.978Z] [INFO] Server is running on port 5001
-[2025-08-09T15:00:14.999Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:00:24.027Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:00:24.030Z] [INFO] Server is running on port 5001
-[2025-08-09T15:00:24.040Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:00:37.879Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:00:37.882Z] [INFO] Server is running on port 5001
-[2025-08-09T15:00:37.894Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:01:17.035Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:01:17.038Z] [INFO] Server is running on port 5001
-[2025-08-09T15:01:17.047Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:01:41.574Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:01:41.576Z] [INFO] Server is running on port 5001
-[2025-08-09T15:01:41.586Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:01:56.656Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:01:56.659Z] [INFO] Server is running on port 5001
-[2025-08-09T15:01:56.669Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:02:17.073Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:02:17.076Z] [INFO] Server is running on port 5001
-[2025-08-09T15:02:17.086Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:02:29.097Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:02:29.102Z] [INFO] Server is running on port 5001
-[2025-08-09T15:02:29.120Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:02:52.036Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:02:52.041Z] [INFO] Server is running on port 5001
-[2025-08-09T15:02:52.059Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:03:02.763Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:03:02.766Z] [INFO] Server is running on port 5001
-[2025-08-09T15:03:02.777Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:03:17.697Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:03:17.701Z] [INFO] Server is running on port 5001
-[2025-08-09T15:03:17.713Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:03:48.558Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:03:48.562Z] [INFO] Server is running on port 5001
-[2025-08-09T15:03:48.585Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:03:59.519Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:03:59.522Z] [INFO] Server is running on port 5001
-[2025-08-09T15:03:59.532Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:04:06.444Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:04:06.449Z] [INFO] Server is running on port 5001
-[2025-08-09T15:04:06.467Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:04:23.605Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:04:23.609Z] [INFO] Server is running on port 5001
-[2025-08-09T15:04:23.626Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:04:45.653Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:04:45.656Z] [INFO] Server is running on port 5001
-[2025-08-09T15:04:45.666Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:05:02.584Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:05:02.587Z] [INFO] Server is running on port 5001
-[2025-08-09T15:05:02.597Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:05:21.030Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:05:21.033Z] [INFO] Server is running on port 5001
-[2025-08-09T15:05:21.044Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:05:30.883Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:05:30.886Z] [INFO] Server is running on port 5001
-[2025-08-09T15:05:30.896Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:05:58.588Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:05:58.593Z] [INFO] Server is running on port 5001
-[2025-08-09T15:05:58.612Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:06:35.081Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:06:35.087Z] [INFO] Server is running on port 5001
-[2025-08-09T15:06:35.108Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:07:25.549Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:07:25.552Z] [INFO] Server is running on port 5001
-[2025-08-09T15:07:25.564Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:08:02.653Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:08:02.656Z] [INFO] Server is running on port 5001
-[2025-08-09T15:08:02.667Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:10:19.944Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:10:19.950Z] [INFO] Server is running on port 5001
-[2025-08-09T15:10:19.966Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:10:43.563Z] [DEBUG] Login request received:
-[2025-08-09T15:10:55.564Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-08-09T15:10:55.567Z] [DEBUG] [GET /api/pages] Returning 2 of 2
-[2025-08-09T15:11:13.312Z] [DEBUG] 🧭 Route hit: GET /api/messages
-[2025-08-09T15:17:46.331Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-09T15:17:46.333Z] [INFO] Server is running on port 5001
-[2025-08-09T15:17:46.341Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-09T15:20:08.337Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-08-09T15:20:08.352Z] [DEBUG] [GET /api/pages] Returning 2 of 2
-[2025-08-09T15:20:40.588Z] [DEBUG] 🧭 Route hit: GET /api/messages
-[2025-08-09T15:20:42.772Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
-[2025-08-09T15:20:42.773Z] [DEBUG] ✅ Response sent successfully
-[2025-08-09T15:20:42.772Z] [DEBUG] 🔍 Fetching template styles...
-[2025-08-09T15:20:42.773Z] [DEBUG] 📤 Sending response
-[2025-08-09T15:20:42.772Z] [DEBUG] 📋 Available styles: [
+[2025-08-09T15:53:47.798Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:53:47.801Z] [INFO] Server is running on port 5001
+[2025-08-09T15:53:47.813Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:55:15.754Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:55:15.757Z] [INFO] Server is running on port 5001
+[2025-08-09T15:55:15.770Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:57:18.427Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:57:18.430Z] [INFO] Server is running on port 5001
+[2025-08-09T15:57:18.442Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:57:38.668Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:57:38.671Z] [INFO] Server is running on port 5001
+[2025-08-09T15:57:38.684Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:00:00.856Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-09T16:00:00.857Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-09T16:00:00.865Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-09T16:00:00.865Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-09T16:06:17.109Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:06:17.112Z] [INFO] Server is running on port 5001
+[2025-08-09T16:06:17.130Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:06:24.044Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:06:24.045Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:06:24.045Z] [DEBUG] 📋 Available styles: [
   {
     "key": "elegant",
     "name": "Elegant",
@@ -339,26 +129,14 @@ SyntaxError: missing ) after argument list
     }
   }
 ]
-[2025-08-09T15:20:42.775Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
-[2025-08-09T15:21:00.069Z] [DEBUG] 🧭 Route hit: GET /api/messages
-[2025-08-09T15:21:01.502Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
-[2025-08-09T15:21:04.422Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/6/preview
-[2025-08-09T15:21:04.423Z] [DEBUG] Preview request: {"id":"6"}
-[2025-08-09T15:21:04.425Z] [DEBUG] Template found: Wedding Update
-[2025-08-09T15:21:04.426Z] [DEBUG] Sample guests found: 5
-[2025-08-09T15:21:04.426Z] [DEBUG] Getting variables for first sample guest
-[2025-08-09T15:21:04.430Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
-[2025-08-09T15:21:04.430Z] [DEBUG] Selected guest for preview: Alice
-[2025-08-09T15:21:04.431Z] [DEBUG] Replaced subject: Important wedding update, Alice
-[2025-08-09T15:21:04.431Z] [DEBUG] Original body_en length: 263
-[2025-08-09T15:21:04.431Z] [DEBUG] Replaced body_en length: 226
-[2025-08-09T15:21:04.432Z] [DEBUG] Preview response prepared with style: elegant
-[2025-08-09T15:21:04.431Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
-[2025-08-09T15:21:04.431Z] [DEBUG] Original subject: Important wedding update, {{guestName}}
-[2025-08-09T15:21:04.431Z] [DEBUG] Variable replacement results:
-[2025-08-09T15:22:06.657Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
-[2025-08-09T15:22:06.658Z] [DEBUG] 🔍 Fetching template styles...
-[2025-08-09T15:22:06.658Z] [DEBUG] 📋 Available styles: [
+[2025-08-09T16:06:24.045Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:06:24.045Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:06:24.048Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:06:29.072Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:06:34.508Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:06:59.579Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:06:59.580Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:06:59.580Z] [DEBUG] 📋 Available styles: [
   {
     "key": "elegant",
     "name": "Elegant",
@@ -468,37 +246,536 @@ SyntaxError: missing ) after argument list
     }
   }
 ]
-[2025-08-09T15:22:06.658Z] [DEBUG] 📤 Sending response
-[2025-08-09T15:22:06.660Z] [DEBUG] ✅ Response sent successfully
-[2025-08-09T15:22:06.663Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
-[2025-08-09T15:22:34.528Z] [DEBUG] 🧭 Route hit: POST /api/messages
-[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with headers: {"host":"localhost:5001","connection":"keep-alive","content-length":"738","sec-ch-ua-platform":"\"macOS\"","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36","accept":"application/json, text/plain, */*","sec-ch-ua":"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\"","content-type":"application/json","dnt":"1","sec-ch-ua-mobile":"?0","origin":"http://localhost:5173","sec-fetch-site":"same-site","sec-fetch-mode":"cors","sec-fetch-dest":"empty","referer":"http://localhost:5173/","accept-encoding":"gzip, deflate, br, zstd","accept-language":"en-US,en;q=0.9","cookie":"session_id=s%3A5.84tR7u6yeO1YnIy76a%2BdCNpAPdIJXYiw6plq6DnBjkM"}
-[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] Inserting message with params: ["Welcome to our wedding celebration, {{guestName}}!","<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","draft",null,"elegant"]
-[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] POST /messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31]}
-[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] Extracted fields: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31],"style":"elegant"}
-[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31]}
-[2025-08-09T15:22:34.534Z] [DEBUG] 🧰 [messages.js] Inserted messageId: 2
-[2025-08-09T15:22:34.534Z] [DEBUG] 🧰 [messages.js] Recipients provided: [27,31]
-[2025-08-09T15:22:34.535Z] [DEBUG] 🧰 [messages.js] Guests fetched for recipients: [{"id":27,"email":"Jeffogya@gmail.com","preferred_language":"lt"},{"id":31,"email":"test-9soytm94s@srv1.mail-tester.com","preferred_language":"en"}]
-[2025-08-09T15:22:34.535Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":27,"email":"Jeffogya@gmail.com","preferred_language":"lt"}
-[2025-08-09T15:22:34.536Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":31,"email":"test-9soytm94s@srv1.mail-tester.com","preferred_language":"en"}
-[2025-08-09T15:22:34.554Z] [DEBUG] 🧭 Route hit: POST /api/messages/2/send
-[2025-08-09T15:22:34.555Z] [DEBUG] ✅ Route hit: POST /:id/send — messageId: 2
-[2025-08-09T15:22:34.555Z] [DEBUG] ➡️ Preparing to send messageId: 2 with guestIds: [27,31]
-[2025-08-09T15:22:34.557Z] [DEBUG] 📫 Sender info: Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>
-[2025-08-09T15:22:34.558Z] [DEBUG] 📦 Loaded message: {"id":2,"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduled_for":null,"style":"elegant","created_at":"2025-08-09T15:22:34.000Z","updated_at":"2025-08-09T15:22:34.000Z"}
-[2025-08-09T15:22:34.871Z] [DEBUG] 📤 Email data to send: {"from":"Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>","to":"Jeffogya@gmail.com","subject":"Welcome to our wedding celebration, Jeffrey!","html":"\n            <!DOCTYPE html>\n            <html>\n            <head>\n              <meta charset=\"utf-8\">\n              <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n              <link href=\"https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap\" rel=\"stylesheet\">\n              \n            <style>\n              .email-container {\n                font-family: Lora, Georgia, serif; color: #333333; line-height: 1.6; padding: 20px; background-color: #F5F5DC; border: 2px solid #D2B48C; text-align: left; font-size: 16px; border-radius: 8px; max-width: 600px; margin: 0 auto\n              }\n              .email-container h1, .email-container h2, .email-container h3 {\n                margin: 0 0 15px 0;\n                font-weight: 600;\n                color: #333333;\n              }\n              .email-container h1 {\n                font-size: 24px;\n                border-bottom: 2px solid #D2B48C;\n                padding-bottom: 8px;\n              }\n              .email-container h2 {\n                font-size: 20px;\n              }\n              .email-container h3 {\n                font-size: 18px;\n              }\n              .email-container p {\n                margin: 0 0 15px 0;\n                color: #333333;\n              }\n              .email-container .signature {\n                margin-top: 20px;\n                padding-top: 15px;\n                border-top: 1px solid #cccccc;\n                font-style: italic;\n                color: #333333;\n              }\n              @media screen and (max-width: 600px) {\n                .email-container {\n                  padding: 15px !important;\n                  margin: 10px !important;\n                }\n              }\n            </style>\n          \n            </head>\n            <body style=\"margin: 0; padding: 0; background-color: #f4f4f4;\">\n              <div class=\"email-container\">\n                <p>Dear Jeffrey,\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** August 1, 2025\n- **Venue:** Geert Grootestraat\n- **Time:** \n\nWe can't wait to celebrate with you!\n\nBest regards,\nBrigita &amp; Jeffrey</p>\n              </div>\n            </body>\n            </html>\n          "}
-[2025-08-09T15:22:35.988Z] [INFO] ✅ Email accepted by Resend for delivery: 9ac831d3-aa2f-4365-a4f5-68f38aef81c4
-[2025-08-09T15:22:35.988Z] [DEBUG] ✅ Resend response: {"status":200,"data":{"id":"9ac831d3-aa2f-4365-a4f5-68f38aef81c4"}}
-[2025-08-09T15:22:35.991Z] [DEBUG] 🧰 [messages.js] Formatted sentAt for MySQL: 2025-08-09 15:22:35
-[2025-08-09T15:22:38.303Z] [DEBUG] 📤 Email data to send: {"from":"Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>","to":"test-9soytm94s@srv1.mail-tester.com","subject":"Welcome to our wedding celebration, Alice!","html":"\n            <!DOCTYPE html>\n            <html>\n            <head>\n              <meta charset=\"utf-8\">\n              <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n              <link href=\"https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap\" rel=\"stylesheet\">\n              \n            <style>\n              .email-container {\n                font-family: Lora, Georgia, serif; color: #333333; line-height: 1.6; padding: 20px; background-color: #F5F5DC; border: 2px solid #D2B48C; text-align: left; font-size: 16px; border-radius: 8px; max-width: 600px; margin: 0 auto\n              }\n              .email-container h1, .email-container h2, .email-container h3 {\n                margin: 0 0 15px 0;\n                font-weight: 600;\n                color: #333333;\n              }\n              .email-container h1 {\n                font-size: 24px;\n                border-bottom: 2px solid #D2B48C;\n                padding-bottom: 8px;\n              }\n              .email-container h2 {\n                font-size: 20px;\n              }\n              .email-container h3 {\n                font-size: 18px;\n              }\n              .email-container p {\n                margin: 0 0 15px 0;\n                color: #333333;\n              }\n              .email-container .signature {\n                margin-top: 20px;\n                padding-top: 15px;\n                border-top: 1px solid #cccccc;\n                font-style: italic;\n                color: #333333;\n              }\n              @media screen and (max-width: 600px) {\n                .email-container {\n                  padding: 15px !important;\n                  margin: 10px !important;\n                }\n              }\n            </style>\n          \n            </head>\n            <body style=\"margin: 0; padding: 0; background-color: #f4f4f4;\">\n              <div class=\"email-container\">\n                <p>Dear Alice,\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** August 1, 2025\n- **Venue:** Geert Grootestraat\n- **Time:** \n\nWe can't wait to celebrate with you!\n\nBest regards,\nBrigita &amp; Jeffrey</p>\n              </div>\n            </body>\n            </html>\n          "}
-[2025-08-09T15:22:38.853Z] [INFO] ✅ Email accepted by Resend for delivery: c16f484c-400e-46e6-a5eb-fa034355a294
-[2025-08-09T15:22:38.853Z] [DEBUG] ✅ Resend response: {"status":200,"data":{"id":"c16f484c-400e-46e6-a5eb-fa034355a294"}}
-[2025-08-09T15:22:38.853Z] [DEBUG] 🧰 [messages.js] Formatted sentAt for MySQL: 2025-08-09 15:22:38
-[2025-08-09T15:22:38.856Z] [INFO] ✅ Marking message as sent - 2 emails sent successfully
-[2025-08-09T15:24:55.361Z] [DEBUG] 🧭 Route hit: GET /api/messages
-[2025-08-09T15:24:57.910Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2025-08-09T15:24:57.912Z] [DEBUG] [GET /api/pages] Returning 2 of 2
-[2025-08-09T15:24:59.637Z] [DEBUG] 🧭 Route hit: GET /api/messages
-[2025-08-09T15:25:05.330Z] [INFO] File deleted successfully: uploads/Save_the_date.png
-[2025-08-09T15:25:05.332Z] [INFO] Image record deleted from database: 3
+[2025-08-09T16:06:59.580Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:06:59.580Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:06:59.583Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:07:11.060Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:07:39.927Z] [DEBUG] 🧭 Route hit: POST /api/messages
+[2025-08-09T16:07:39.928Z] [DEBUG] 🧰 [messages.js] Inserting message with params: ["Welcome to our wedding celebration, {{guestName}}!","<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","draft",null,"friendly"]
+[2025-08-09T16:07:39.928Z] [DEBUG] 🧰 [messages.js] Extracted fields: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31],"style":"friendly"}
+[2025-08-09T16:07:39.928Z] [DEBUG] 🧰 [messages.js] POST /messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","style":"friendly","status":"draft","scheduledAt":null,"recipients":[27,31]}
+[2025-08-09T16:07:39.927Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with headers: {"host":"localhost:5001","connection":"keep-alive","content-length":"757","sec-ch-ua-platform":"\"macOS\"","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36","accept":"application/json, text/plain, */*","sec-ch-ua":"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\"","content-type":"application/json","dnt":"1","sec-ch-ua-mobile":"?0","origin":"http://localhost:5173","sec-fetch-site":"same-site","sec-fetch-mode":"cors","sec-fetch-dest":"empty","referer":"http://localhost:5173/","accept-encoding":"gzip, deflate, br, zstd","accept-language":"en-US,en;q=0.9","cookie":"session_id=s%3A5.84tR7u6yeO1YnIy76a%2BdCNpAPdIJXYiw6plq6DnBjkM"}
+[2025-08-09T16:07:39.928Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","style":"friendly","status":"draft","scheduledAt":null,"recipients":[27,31]}
+[2025-08-09T16:07:39.933Z] [DEBUG] 🧰 [messages.js] Inserted messageId: 3
+[2025-08-09T16:07:39.933Z] [DEBUG] 🧰 [messages.js] Recipients provided: [27,31]
+[2025-08-09T16:07:39.934Z] [DEBUG] 🧰 [messages.js] Guests fetched for recipients: [{"id":27,"email":"Jeffogya@gmail.com","preferred_language":"lt"},{"id":31,"email":"test-9soytm94s@srv1.mail-tester.com","preferred_language":"en"}]
+[2025-08-09T16:07:39.934Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":27,"email":"Jeffogya@gmail.com","preferred_language":"lt"}
+[2025-08-09T16:07:39.936Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":31,"email":"test-9soytm94s@srv1.mail-tester.com","preferred_language":"en"}
+[2025-08-09T16:07:39.957Z] [DEBUG] 🧭 Route hit: POST /api/messages/3/send
+[2025-08-09T16:07:39.958Z] [DEBUG] ✅ Route hit: POST /:id/send — messageId: 3
+[2025-08-09T16:07:39.958Z] [DEBUG] ➡️ Preparing to send messageId: 3 with guestIds: [27,31]
+[2025-08-09T16:07:39.959Z] [DEBUG] 📫 Sender info: Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>
+[2025-08-09T16:07:39.960Z] [DEBUG] 📦 Loaded message: {"id":3,"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduled_for":null,"style":"friendly","created_at":"2025-08-09T16:07:39.000Z","updated_at":"2025-08-09T16:07:39.000Z"}
+[2025-08-09T16:07:40.267Z] [DEBUG] 📤 Email data to send: {"from":"Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>","to":"Jeffogya@gmail.com","subject":"Welcome to our wedding celebration, Jeffrey!","html":"<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Wedding Invitation</title>\n  <style>\n    @media screen and (max-width: 600px) {\n      .email-container { width: 100% !important; max-width: 100% !important; }\n      .mobile-padding { padding: 15px !important; }\n      .mobile-text { font-size: 14px !important; }\n      .mobile-button { padding: 10px 20px !important; }\n      .mobile-header { padding: 20px 15px !important; }\n      .mobile-content { padding: 30px 20px !important; }\n      .mobile-footer { padding: 20px 15px !important; }\n      .mobile-title { font-size: 28px !important; }\n      .mobile-logo { width: 80px !important; height: 77px !important; }\n    }\n  </style>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #F1EFE8; font-family: Arial, Helvetica, sans-serif;\">\n  \n  <!-- Main Container Table -->\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color: #F1EFE8;\">\n    <tr>\n      <td align=\"center\" style=\"padding: 20px;\">\n        \n        <!-- Email Content Table -->\n        <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"email-container\" style=\"max-width: 600px; background-color: #F1EFE8;\">\n          \n          <!-- Header -->\n          <tr>\n            <td class=\"mobile-header\" style=\"padding: 30px 25px; background: linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%); border: 1px solid #E3B13F20; border-radius: 12px 12px 0 0; text-align: center;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                <tr>\n                  <td style=\"text-align: center;\">\n                    <div style=\"margin-bottom: 20px;\">\n                      <svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 928.06 899.01\" width=\"120\" height=\"116\" style=\"max-width: 120px; max-height: 116px;\">\n    <path class=\"cls-1\" d=\"M774.13,590.82c-10.31-5.88-21.25-10.84-30.81-17.94-17.37,17.03-56.54,13.16-56.09-16.06.16-10.35,13.41-22.18,22.47-15.14,7.65,5.94.08,16.02,1.06,18.95,2.72,8.08,18.03-4.22,18.73-13.5,2.39-31.76-40.81-35.8-58.11-11.05-20.07,28.7,3.04,57.64,31.16,67.34,2.26.78,5.41-.67,4.93,2.35-9.78,5.35-19.8,13.66-27.74,21.49-3.49,3.44-22.78,24.47-19.13,28.66,1.16.02,2.45.77,3.55.62,3.31-.45,30.78-23.21,36.63-27.27,22.16-15.39,48.27-30.88,74.84-36.34.35-2.43-.56-1.58-1.49-2.11Z\"/>\n    <path class=\"cls-1\" d=\"M869.52,544.43c-4.1-10.58-7.62-23.13-9.53-33.65,0,0-9.73-33.55-12.22-68.59-3.11-33.52-2.56-70.63-13.21-102.8-2.64-7.97-7.3-15.34-9.08-23.47-.17-.73-.45-1.54-.81-2.42.45.08,1.06.1,1.7-.13,1.27-.45,1.54-1.35,1.75-2.01,12.11-37.32,24.34-75.88,41.88-104.94.14-.23.28-.46.41-.69,2.19-3.59,4.45-7.03,6.81-10.3,0,0-4.02-.33-7.9.33-.85.15-2.13.4-3.67.79-.22.05-.45.12-.67.18-6.26,1.66-16.04,5.41-18.97,12.85-3.56,9.05-3.64,14.27-3.06,21.99-1.1-1.77-2.64-2.65-4.69-3.91-5.63-3.45-13.3-2.55-17.57,2.78-3.65,4.56-3.62,10.71-.18,15.33,3.81,5.12,8.07,4.95,9.59,4.13,1.8-1.28-.39-.49-2.27-2-2.43-1.95-2.55-5.03-.76-7.26,1.78-2.22,4.96-2.86,7.42-1.43,2.56,1.48,3.17,3.8,2.67,7.84-.22,2.12-1.91,10.5-11.25,12.37,0,0-5.14,1.68-11.91-.35-6.78-2.04-8.84-6-8.84-6-.26-.6-1.25-3.21-.15-6.87.67-2.22,2.46-4.59,3.2-5.49.15-.16.29-.32.43-.49.4-.52.72-1.12.92-1.79.77-2.56-.39-5.24-2.65-6.46-.32-.17-.67-.32-1.03-.43-.36-.11-.73-.18-1.09-.21-2.55-.23-5,1.37-5.77,3.93-.2.67-.27,1.34-.22,2,.02.22.04.43.09.65.11,1.16.3,4.13-.36,6.35-1.1,3.67-3.4,5.38-3.95,5.74,0,0-3.24,2.17-7.95.86-6.82-1.9-10.13-6.27-10.13-6.27-6.77-6.7-3.55-14.63-2.57-16.52,1.82-3.65,3.6-5.25,6.55-5.07,2.83.17,5.13,2.45,5.4,5.28.26,2.84-1.54,5.34-4.64,5.63-2.4.23-3.79-1.64-3,.42.81,1.52,4.27,4.01,10.27,1.84,5.41-1.96,8.83-7.08,8.3-12.89-.63-6.8-6.53-11.78-13.13-12.01-2.41-.08-4.17-.19-6.07.68,4.74-6.11,10.69-9.04,13.49-18.36,2.37-7.88-5.45-25-7.61-25.65-2.16-.65-18.12,9.33-20.49,17.21-2.8,9.32.55,15.04,1.14,22.75-1.1-1.77-2.64-2.65-4.69-3.91-5.63-3.45-13.3-2.55-17.57,2.78-3.65,4.56-3.62,10.71-.18,15.33,3.81,5.12,8.07,4.95,9.59,4.13,1.8-1.28-.39-.49-2.27-2-2.43-1.95-2.55-5.03-.76-7.26,1.78-2.22,4.96-2.86,7.42-1.43,2.56,1.48,3.17,3.8,2.67,7.84-.22,2.12-1.91,10.5-11.25,12.37,0,0-5.14,1.68-11.91-.35-6.78-2.04-10.13-6.27-10.13-6.27,0,0-.02-.04-.06-.13-.26-.6-1.25-3.21-.15-6.87.67-2.22,2.46-4.59,3.2-5.49.15-.16.29-.32.43-.49.4-.52.72-1.12.92-1.79.77-2.56-.39-5.24-2.65-6.46-.32-.17-.67-.32-1.03-.43-.36-.11-.73-.18-1.09-.21-2.55-.23-5,1.37-5.77,3.93-.2.67-.27,1.34-.22,2,.02.22.04.43.09.65.11,1.16.3,4.13-.36,6.35-1.1,3.67-3.37,5.3-3.92,5.65-.08.05-.12.07-.12.07,0,0-5.14,1.68-11.91-.35-6.78-2.04-10.13-6.27-10.13-6.27-6.77-6.7-3.55-14.63-2.57-16.52,1.82-3.65,3.6-5.25,6.55-5.07,2.83.17,5.13,2.45,5.4,5.28.26,2.84-1.54,5.34-4.64,5.63-2.4.23-3.79-1.64-3,.42.81,1.52,4.27,4.01,10.27,1.84,5.41-1.96,8.83-7.08,8.3-12.89-.63-6.8-6.53-11.78-13.13-12.01-2.41-.08-4.17-.19-6.07.68,4.74-6.11,10.69-9.04,13.49-18.36,2.37-7.88-5.45-25-7.61-25.65-2.16-.65-18.12,9.33-20.49,17.21-2.8,9.32.55,15.04,1.14,22.75-1.1-1.77-2.64-2.65-4.69-3.91-5.63-3.45-13.3-2.55-17.57,2.78-3.65,4.56-3.62,10.71-.18,15.33,3.81,5.12,8.07,4.95,9.59,4.13,1.8-1.28-.39-.49-2.27-2-2.43-1.95-2.55-5.03-.76-7.26,1.78-2.22,4.96-2.86,7.42-1.43,2.56,1.48,3.17,3.8,2.67,7.84-.22,2.12-1.91,10.5-11.25,12.37,0,0-5.18,1.82-11.91-.35-4.65-1.5-6.16-5.09-6.16-5.09-.26-.6-1.23-3.29-.13-6.96.67-2.22,2.46-4.59,3.2-5.49.15-.16.29-.32.43-.49.4-.52.72-1.12.92-1.79.77-2.56-.39-5.24-2.65-6.46-.32-.17-.67-.32-1.03-.43-.36-.11-.73-.18-1.09-.21-2.55-.23-5,1.37-5.77,3.93-.2.67-.27,1.34-.22,2,.02.22.04.43.09.65.11,1.16.3,4.13-.36,6.35-1.1,3.67-3.37,5.3-3.92,5.65,0,0-3.91,2.16-10.68.13-6.78-2.04-10.13-6.27-10.13-6.27-6.77-6.7-3.55-14.63-2.57-16.52,1.82-3.65,3.6-5.25,6.55-5.07,2.83.17,5.13,2.45,5.4,5.28.26,2.84-1.54,5.34-4.64,5.63-2.4.23-3.79-1.64-3,.42.81,1.52,4.27,4.01,10.27,1.84,5.41-1.96,8.83-7.08,8.3-12.89-.63-6.8-6.53-11.78-13.13-12.01-2.41-.08-4.17-.19-6.07.68,4.74-6.11,7.55-10.52,9.57-20.03,2.15-10.1-8.66-21.4-11.83-24.38-2.87-2.7-6.41-4.63-6.41-4.63,1.52,36.63-11.08,81-22.89,123.65-.23.84-.54,1.83-.08,2.77.12.25.36.45.62.61l-2.05.94c-7.43,4.55-12.42,9.03-18.09,13.91-16.84,14.51-31.43,35.93-29.07,58.9,1.31,12.77,12.99,24.41,10.75,37.78-2.61,15.58-21.29,30.06-27.14,42.85-7.92,17.29,4.41,20.59,16.45,28.57-.34,7.8-7.29,14.67-2.52,22.27,1.09,1.73,5.04,4.28,5.31,5.69.23,1.25-1.6,3.12-1.8,4.9-1.46,12.97,7.69,15.04,8.01,21.96.21,4.61-3.17,10.69-2.99,15.84.82,23.83,29.16,26.86,47.47,25.69,6.02-.38,25.38-7.03,25.52,1.43.07,3.86-5.54,17.32-7.3,21.8-16,40.92-50.52,64.59-62.03,106.97-.35,1.3-.67,2.6-.95,3.9,0,0,0,.01,0,.02-19.44,80.45.97,151.28,20.71,195.5,114.25-25.18,212.27-93.62,276-187.27,1.84-2.71,3.65-5.43,5.44-8.18.03-.05.07-.11.1-.16,1.78-2.75,3.54-5.52,5.26-8.31.14-.23.28-.45.42-.68,1.05-1.71,2.09-3.42,3.12-5.14.1-.16.19-.32.29-.49,1.68-2.83,3.34-5.67,4.96-8.54.03-.05.06-.1.09-.15,1.62-2.87,3.22-5.76,4.78-8.67.12-.22.23-.44.35-.66.96-1.79,1.91-3.59,2.84-5.4.08-.15.16-.3.24-.45,1.52-2.94,3-5.89,4.45-8.86.03-.05.05-.11.08-.16,1.45-2.98,2.88-5.97,4.26-8.98.11-.23.21-.46.32-.69.85-1.86,1.69-3.72,2.52-5.59.06-.13.11-.26.17-.38,1.96-4.44,3.85-8.92,5.67-13.44-5.78-11.38-11.48-22.52-15.62-33.2ZM713.55,637.96c-27.69,19.21-63.47,52.93-99.77,49.21-39.85-4.08-8.19-59.29,5.52-75.46,2.68-3.16,20.5-20.92,23.97-17.53.82,12.66-2.08,25.06-5.99,37,1.92.42,2.39-.98,3.4-2.09,12.72-13.98,11.88-30.49,9.28-48.09-3.13-21.15-11.08-41.35-18.6-61.16,10.38-8.31,20.24-17.26,27.73-28.34,4.54-6.72,9.87-15.12,10.18-23.31-25.96,24.6-67.02,43.65-103.48,39.99-12.07-1.21-16.63-7.61-15.5-19.48.85-8.95,6.42-10.39-.19-19.84-2.99-4.27-7.03-5.32-5.62-11.94,1.52-7.14,10.99-2.02,16.3-2.73,1.37-.18,2.91-.54,1.49-1.99-4.65-2.33-19.41-6.76-21.88-10.63-4.17-6.52,9.6-16.53-1.2-25.81-10.89-9.35-20.41-3.59-8.14-22.3,9.54-14.55,25.97-28.74,24.21-47.77-.42-4.52-2.56-9.34-2.97-14.02-1.46-16.5,3.9-24.67,11.99-38.88-.04-1.12-.04-2.54.13-.23,1.83,25.15,17.99,40,39.87,49.62-18.72-18.15-18.84-34.49-19.52-60.2l5.05,17.17c6.02,13.65,14.81,26.08,25.99,36.01,7.85,6.96,21.04,13.24,27.37,19.63,10.32,10.42,14.3,24.86,32.69,27.31,30.13,4.01,35.38-34.88,61.65-31.66,21.98,2.69,22.52,29.08,15.95,45.43-3.94,9.8-24.64,35.67-36.46,32.13-4.85-1.45-4.17-9.1-14.61-4.21-22.95,10.77-27.01,53.41-8.75,71.04,8.53,8.23,20.07,10.18,31.55,9.46,7.2,36.81,26.44,66.06,62.56,78.93,6.1,2.17,14.44,3.32,20.07,5.93.99.46,2.35.58,2.47,2.02-35.21,6.03-67.78,26.71-96.72,46.79ZM713.03,479.92c19.72,7.93,26.58-23.65,17.46-37.46-1.71-2.59-4.93-2.71-4.22-6.26,9.32-4.99,13.98,8.43,15.94,15.54,4.17,15.14.42,38.29-17.89,42-35.37,7.17-41.77-42.81-18.52-60.54,1.54-.33,2.01,1.61,2.87,2.61.31.36,1.03.39,1.53.44l.02,1.38c-10.98,9.14-11.34,36.6,2.8,42.29Z\"/>\n    <path class=\"cls-1\" d=\"M514.28,707.63c.62-4.01-3.36-17.61-4.75-22.21-18.33-60.78-51.68-84.5-106.59-110.41-5.23-2.47-31.89-12.65-33.75-15.25-3.28-4.56.9-14.26,3.65-18.62,28.43,13.11,91.97,31.9,106.92-7.97,5.47-14.58,2.29-26.95-3.3-40.67-2.4-5.9-5.45-6.95-5.25-14.83.22-8.68,4.04-6.35,7.52-11.54,5.09-7.6,2.81-19.26-5.45-23.45,8.92-9.52,13.99-19.52,5.43-31.44-3.68-5.12-11.01-5.86-8.38-13.01,11.13.32,20.29-6.68,18.87-18.46-1.45-11.92-22.45-31.81-29.9-42.11-1.15-1.59-4.38-5.75-4.78-7.22-2.07-7.67,5.79-18.58,6.64-26.87,1.45-14.1-5.22-18.98-9.65-30.14-3.18-8.01-4.57-16.53-8.06-24.94-1.55-3.73-9.86-18.2-9.99-20-.09-1.24,1.78-2.66,1.92-4.82.35-5.23-3.1-31.67-3.92-40.08-.74-10.54-4.32-39.75-4.32-39.75h-.03c-2.86-20.24-5.71-46.01-1.7-105.15-5.69,2.42-20.82,32.75-20.56,39.99.64,17.39,8.98,11.69,11.95,24.1.71,2.65-3.01,5.03-7.14,3.16-4.99-2.25-9.07-8.17-12.61-8.95h0c-.99-.29-2.02-.43-3.08-.38-6.37.28-11.29,7-10.99,15.01.29,8.01,5.69,14.28,12.06,14,1.06-.05,2.08-.27,3.04-.65h0s6.9-3.97,14.31-4.3c2.9-.17,4.07,1.51,3.69,3.13-1.12,4.79-3.26,8.15-5.31,10.61-6.74,7.93-17.16,14.19-26.31,16.72-8.6,2.38-20.58,3.14-27.63-1.71-1.97-1.65-3.71-4.02-4.06-7.37-.39-3.73,1.41-10.99,2.26-14.12.16-.48.3-.98.42-1.49,0,0,0,0,0,0h0c.53-2.37.54-5-.08-7.67-1.81-7.81-8.31-12.96-14.52-11.53-6.21,1.44-9.78,8.93-7.97,16.74.62,2.67,1.79,5.03,3.3,6.92h0s0,0,0,0c.33.41.67.79,1.03,1.16,2.14,2.44,6.95,8.16,8.24,11.68,1.16,3.16.64,6.06-.4,8.41-4.2,7.46-15.29,12.05-24.06,13.69-9.35,1.75-20.6,2.41-30.24-3.45-2.87-1.82-6.37-4.61-9.05-9.58-.79-1.46-.1-3.4,2.74-4.01,7.23-1.68,14.92.31,14.92.31h0c1.03.1,2.07.05,3.1-.19,6.21-1.44,9.78-8.93,7.97-16.74-1.81-7.81-8.31-12.97-14.52-11.53-1.03.24-1.99.65-2.87,1.2h0c-3.21,1.71-5.6,8.51-9.82,12.02-3.5,2.91-7.7,1.61-7.71-1.13-.38-12.76,9.15-9.51,5.23-26.45-1.7-7.32-25.9-34.19-30.9-33.03h0c-5,1.16-14.92,35.93-13.22,43.26,3.93,16.94,11.06,9.82,16.33,21.45,1.2,2.47-2,5.48-6.43,4.41-5.33-1.29-10.47-6.35-14.11-6.47h0c-1.03-.1-2.07-.05-3.1.19-6.21,1.44-9.78,8.93-7.97,16.74,1.81,7.8,8.31,12.96,14.52,11.53,1.03-.24,1.99-.65,2.87-1.2h0s6.03-5.16,13.26-6.84c2.82-.7,4.29.74,4.22,2.4-.22,5.64-2.14,9.68-3.91,12.58-6.07,9.5-16.47,13.87-25.63,16.4-8.6,2.38-20.58,3.14-27.63-1.71-1.97-1.65-3.71-4.02-4.06-7.37-.39-3.73,1.41-10.99,2.26-14.11.16-.48.3-.98.42-1.49,0,0,0,0,0,0h0c.53-2.37.54-5-.08-7.67-1.81-7.81-8.31-12.96-14.52-11.53-6.21,1.44-9.78,8.93-7.97,16.74.62,2.67,1.79,5.03,3.3,6.92h0s0,0,0,0c.33.41.67.79,1.03,1.16,2.14,2.44,6.95,8.16,8.24,11.68,1.16,3.16.64,6.06-.4,8.41-4.2,7.46-15.29,12.05-24.06,13.69-9.33,1.75-21.44.71-30.99-3.44-2.92-1.31-6.32-3.39-9.43-7.19-1.06-1.29-.75-3.31,1.93-4.44,6.8-2.97,14.74-2.43,14.74-2.43h0c1.03-.09,2.05-.33,3.02-.75,5.84-2.55,7.93-10.56,4.67-17.88-3.26-7.32-10.64-11.2-16.48-8.64-.97.42-1.84,1-2.59,1.7h0c-2.84,2.26-3.9,9.37-7.39,13.59-2.89,3.5-7.27,2.99-7.8.31-2.8-12.45,7.2-11,.13-26.9-.86-1.93-3.78-5.06-7.62-8.51-.11-.1-.23-.21-.35-.31-9.32-8.29-23.77-18.28-28.09-18.05,3.42,6.23,9.31,20.06,15.52,35.61.07.18.15.37.22.55,9.06,22.69,18.76,48.86,22.5,60.34l6.46,18.7s4.03,10.16,11.47,35.5l1.57,32.13c1.27,5.68.05,10.92.64,16.36,4.9,45.09,31.81,81.11,24.98,127.01l-3.98,22.5s-5.39,27.58-28.72,36.8c-10.29,4.07-20.29,10.51-29.97,16.03-6.78,3.87-38.23,22.23-57.63,35.57,61.26,176.78,229.23,303.71,426.85,303.71,13.69,0,27.24-.61,40.62-1.8,0-.02,16.69-85.84,6.84-150.86ZM380.84,620.25c-11.95,7.28-10.42-20.38-4.86-21.93,9.14-2.55,11.02,18.18,4.86,21.93ZM361.98,649.36c13.33-3.97,3.53,23.99-7.75,20.41-8.43-2.68,3.18-19.05,7.75-20.41ZM348.78,683.18c-3.46-.71-.52-7.1,2.01-7.98,5.08.07.75,8.55-2.01,7.98ZM366.94,648.06c-5.09-1.71-.41-20.46,6.06-21.72,10.13-1.98,5.33,25.17-6.06,21.72ZM371.91,573.26c6.22,1.23,12.44,18.91,5.65,20.79-6.87,1.89-15.27-17.07-5.65-20.79ZM473.26,430.19c2.85,2.4-12.13,9.69-13.31,10.17-7.96,3.26-17.26,5.04-25.69,6.83-.25,2.68-.01,1.61,1.5,1.97,11.08,2.68,20.36-2.42,28.77-.75,7.88,1.57,11.25,13.24,2.17,14.7-6.36,1.02-12.37-1.69-18.43-2.93l7.43,8.05c3.69,5.66-.81,5.08-2,8.89-1.63,5.17.85,11.42-6.07,14.93-9.83,4.99-21.84-4.54-24.86-13.88-3.16-9.77-.86-23.29,5.66-31.32,4.79-5.89,8.08-4.37,14.36-6.64,4.2-1.52,28.58-11.61,30.46-10.03ZM165.98,471.4c5.64-21.65,6.85-51.42,1.79-73.22-3.91-16.85-12.18-32.58-16.77-49.23-5.08-18.45-7.21-37.92-6.53-57.06,21.64-18.76,52.39-30.42,79.58-39.42,53.93-17.84,131.09-31.7,187.75-27.32,10.44.81,10.42,3.43,15.26,11.74,8.63,14.82,9.31,25.64,14.72,40.28,3.25,8.78,9.27,11.33,9.2,23.25-.09,17.16-13.27,22.26-1.54,40.09,5.55,8.44,30.56,34.09,30.4,42.19-.02.82-1.27,3.64-1.86,4.22-4.05,3.96-12.93,1.34-18.01,2.48l1.29,10.8-.11,3.89c-16.02,3.49-34.16,13.12-44.86,25.64-2.19,2.56-8.31,13.56-9.02,14-3.49,2.16-18.55-4.49-22.69-6.35-21.88-9.8-45-26.26-60.3-44.7-13.55-16.33-22.99-35.46-31.64-54.38l-3.4.91c.75,1.4,1.01,2.84,1.06,4.43.97,31.08-2.83,61.23-4.04,92.07-1.57,39.8,17.06,66.63,50.68,86.29,4.14,2.42,19.37,8.5,21.32,10.68,3.95,4.42-3.01,26.64-5.84,32.19-15.03,29.49-45.9,25.69-73.17,17.82-48.59-14.02-91.42-47.79-120.85-88.21,1.6-7.97,5.51-15.22,7.56-23.07ZM147.99,502.33c7.12-1.96,13.06,19.89,2.68,20.85-9.52.88-10.79-18.62-2.68-20.85ZM152.53,527.43c.52-.56,4.35-2.23,5.1-2.09,5.45,4.06,12.98,12.38,9.88,19.58-4.76,11.06-21.94-10.03-14.98-17.49ZM170.02,549.33c5.8-1.08,16.77,13,13.77,18.87-5.59,10.93-28.27-16.17-13.77-18.87ZM201.65,591.08c-8.41,5.53-26.98-17.74-13.65-19.74,5.27-.79,21.56,14.54,13.65,19.74ZM222.23,610.65c-8.96,7.51-26.62-15.25-15.23-18.31,5.21-1.4,21.77,12.82,15.23,18.31ZM245.82,627.17c-4.39,9.18-27.63-4.54-18.91-13.84,5.96-3.5,21.43,8.59,18.91,13.84ZM252.01,629.34c4.76-.9,18.1,8.1,17.82,13.82-6.49,12.86-32.64-11.01-17.82-13.82ZM293.75,658.16c-3.7,8.21-21.14-2.98-22.35-7.69-.42-1.63.91-4.57,2.52-5.12,5.98-2.06,23.12,5.49,19.82,12.81ZM321.16,668.51c-1.97,6.28-27.21,1.24-22.9-10.33,6.01-2.28,25.78,1.15,22.9,10.33ZM325.2,667.71c.21-2.13,3.93-3.92,5.8-4.29,6.46-1.28,18.21-1.63,15.81,7.78-3.87,4.95-22.33,3.97-21.61-3.49ZM388.05,748.98c-.19.33-3.17,1.7-4.62,3.87-3.85,5.73-8.96,26.05-20.12,16.79-4.41-3.67-2.2-6.5-3.26-10.74-.62-2.48-2.86-4.29-2.85-7.22.02-3.47,2.87-5.54,2.01-10.93-.55-3.41-2.96-4.13-3.71-6.3-1.99-5.76.38-10.47-9.21-11.86-5.14-.75-6.46,5.62-14.97-.95-3.87-2.99-6.52-8.95-5.99-13.84.23-2.08,3.26-11,4.45-12.59,1.23-1.64,3.31-2.13,4.51-3.49,2.26-2.57,2.74-6.76,7.55-7.51,2.23-.35,10.43,2.27,12.38,3.53,2.02,1.31,2.5,4.59,4.73,5.27,2.6.79,6.01-.27,8.75.25,1.21.23,9.92,2.82,10.33,3.16.86.72,1.43,5.33,2.34,7.17,3.73,7.57,7.59,14.86,16.89,10.61,2.05,7.6-9.38,15.52-10.57,19.95-.9,3.36,3.13,11.81,1.35,14.84Z\"/>\n</svg>\n                    </div>\n                    <h1 class=\"mobile-title\" style=\"margin: 0; font-family: 'Great Vibes', cursive; font-size: 42px; color: #DAA520; font-weight: normal;\">\n                      Brigtia & Jeffrey\n                    </h1>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          \n          <!-- Content -->\n          <tr>\n            <td class=\"mobile-content\" style=\"padding: 40px 30px; background: linear-gradient(to right bottom, #E9E7D980, #D2C6B260); border: 1px solid #E9E7D910; border-radius: 24px; box-shadow: none;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                <tr>\n                  <td class=\"mobile-text\" style=\"font-family: 'Open Sans', sans-serif; font-size: 16px; line-height: 1.6; color: #442727;\">\n                    <p>Dear Jeffrey,\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** August 1, 2025\n- **Venue:** Geert Grootestraat\n- **Time:** \n\nWe can't wait to celebrate with you!\n\nBest regards,\nBrigita &amp; Jeffrey</p>\n                  </td>\n                </tr>\n                \n                <tr>\n                  <td style=\"text-align: center; padding-top: 30px;\">\n                    <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin: 0 auto;\">\n                      <tr>\n                        <td class=\"mobile-button\" style=\"background: #442727; border-radius: 8px; padding: 12px 24px; text-align: center;\">\n                          <a href=\"https://your-wedding-site.com\" style=\"font-family: 'Open Sans', sans-serif; font-size: 16px; font-weight: 600; color: #DAA520; text-decoration: none; display: inline-block;\">\n                            Visit Our Website\n                          </a>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n                \n              </table>\n            </td>\n          </tr>\n          \n          <!-- Footer -->\n          <tr>\n            <td class=\"mobile-footer\" style=\"padding: 25px; background: linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%); border: 1px solid #E3B13F20; border-radius: 0 0 12px 12px; text-align: center;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                <tr>\n                  <td class=\"mobile-text\" style=\"font-family: 'Open Sans', sans-serif; font-size: 16px; color: #442727; line-height: 1.6;\">\n                    <p style=\"margin: 0 0 10px 0;\">\n                      With love and joy,\n                    </p>\n                    <p style=\"margin: 0 0 15px 0; font-weight: bold;\">\n                      Brigtia & Jeffrey\n                    </p>\n                    <p style=\"margin: 0; font-size: 14px;\">\n                      <a href=\"https://your-wedding-site.com\" style=\"color: #DAA520; text-decoration: none;\">\n                        https://your-wedding-site.com\n                      </a>\n                    </p>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          \n        </table>\n        \n      </td>\n    </tr>\n  </table>\n  \n</body>\n</html>"}
+[2025-08-09T16:07:41.219Z] [DEBUG] ✅ Resend response: {"status":200,"data":{"id":"08bb00fa-36b8-4c74-b878-e78c6d60d9d8"}}
+[2025-08-09T16:07:41.220Z] [INFO] ✅ Email accepted by Resend for delivery: 08bb00fa-36b8-4c74-b878-e78c6d60d9d8
+[2025-08-09T16:07:41.222Z] [DEBUG] 🧰 [messages.js] Formatted sentAt for MySQL: 2025-08-09 16:07:41
+[2025-08-09T16:07:43.528Z] [DEBUG] 📤 Email data to send: {"from":"Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>","to":"test-9soytm94s@srv1.mail-tester.com","subject":"Welcome to our wedding celebration, Alice!","html":"<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Wedding Invitation</title>\n  <style>\n    @media screen and (max-width: 600px) {\n      .email-container { width: 100% !important; max-width: 100% !important; }\n      .mobile-padding { padding: 15px !important; }\n      .mobile-text { font-size: 14px !important; }\n      .mobile-button { padding: 10px 20px !important; }\n      .mobile-header { padding: 20px 15px !important; }\n      .mobile-content { padding: 30px 20px !important; }\n      .mobile-footer { padding: 20px 15px !important; }\n      .mobile-title { font-size: 28px !important; }\n      .mobile-logo { width: 80px !important; height: 77px !important; }\n    }\n  </style>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #F1EFE8; font-family: Arial, Helvetica, sans-serif;\">\n  \n  <!-- Main Container Table -->\n  <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color: #F1EFE8;\">\n    <tr>\n      <td align=\"center\" style=\"padding: 20px;\">\n        \n        <!-- Email Content Table -->\n        <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"email-container\" style=\"max-width: 600px; background-color: #F1EFE8;\">\n          \n          <!-- Header -->\n          <tr>\n            <td class=\"mobile-header\" style=\"padding: 30px 25px; background: linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%); border: 1px solid #E3B13F20; border-radius: 12px 12px 0 0; text-align: center;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                <tr>\n                  <td style=\"text-align: center;\">\n                    <div style=\"margin-bottom: 20px;\">\n                      <svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 928.06 899.01\" width=\"120\" height=\"116\" style=\"max-width: 120px; max-height: 116px;\">\n    <path class=\"cls-1\" d=\"M774.13,590.82c-10.31-5.88-21.25-10.84-30.81-17.94-17.37,17.03-56.54,13.16-56.09-16.06.16-10.35,13.41-22.18,22.47-15.14,7.65,5.94.08,16.02,1.06,18.95,2.72,8.08,18.03-4.22,18.73-13.5,2.39-31.76-40.81-35.8-58.11-11.05-20.07,28.7,3.04,57.64,31.16,67.34,2.26.78,5.41-.67,4.93,2.35-9.78,5.35-19.8,13.66-27.74,21.49-3.49,3.44-22.78,24.47-19.13,28.66,1.16.02,2.45.77,3.55.62,3.31-.45,30.78-23.21,36.63-27.27,22.16-15.39,48.27-30.88,74.84-36.34.35-2.43-.56-1.58-1.49-2.11Z\"/>\n    <path class=\"cls-1\" d=\"M869.52,544.43c-4.1-10.58-7.62-23.13-9.53-33.65,0,0-9.73-33.55-12.22-68.59-3.11-33.52-2.56-70.63-13.21-102.8-2.64-7.97-7.3-15.34-9.08-23.47-.17-.73-.45-1.54-.81-2.42.45.08,1.06.1,1.7-.13,1.27-.45,1.54-1.35,1.75-2.01,12.11-37.32,24.34-75.88,41.88-104.94.14-.23.28-.46.41-.69,2.19-3.59,4.45-7.03,6.81-10.3,0,0-4.02-.33-7.9.33-.85.15-2.13.4-3.67.79-.22.05-.45.12-.67.18-6.26,1.66-16.04,5.41-18.97,12.85-3.56,9.05-3.64,14.27-3.06,21.99-1.1-1.77-2.64-2.65-4.69-3.91-5.63-3.45-13.3-2.55-17.57,2.78-3.65,4.56-3.62,10.71-.18,15.33,3.81,5.12,8.07,4.95,9.59,4.13,1.8-1.28-.39-.49-2.27-2-2.43-1.95-2.55-5.03-.76-7.26,1.78-2.22,4.96-2.86,7.42-1.43,2.56,1.48,3.17,3.8,2.67,7.84-.22,2.12-1.91,10.5-11.25,12.37,0,0-5.14,1.68-11.91-.35-6.78-2.04-8.84-6-8.84-6-.26-.6-1.25-3.21-.15-6.87.67-2.22,2.46-4.59,3.2-5.49.15-.16.29-.32.43-.49.4-.52.72-1.12.92-1.79.77-2.56-.39-5.24-2.65-6.46-.32-.17-.67-.32-1.03-.43-.36-.11-.73-.18-1.09-.21-2.55-.23-5,1.37-5.77,3.93-.2.67-.27,1.34-.22,2,.02.22.04.43.09.65.11,1.16.3,4.13-.36,6.35-1.1,3.67-3.4,5.38-3.95,5.74,0,0-3.24,2.17-7.95.86-6.82-1.9-10.13-6.27-10.13-6.27-6.77-6.7-3.55-14.63-2.57-16.52,1.82-3.65,3.6-5.25,6.55-5.07,2.83.17,5.13,2.45,5.4,5.28.26,2.84-1.54,5.34-4.64,5.63-2.4.23-3.79-1.64-3,.42.81,1.52,4.27,4.01,10.27,1.84,5.41-1.96,8.83-7.08,8.3-12.89-.63-6.8-6.53-11.78-13.13-12.01-2.41-.08-4.17-.19-6.07.68,4.74-6.11,10.69-9.04,13.49-18.36,2.37-7.88-5.45-25-7.61-25.65-2.16-.65-18.12,9.33-20.49,17.21-2.8,9.32.55,15.04,1.14,22.75-1.1-1.77-2.64-2.65-4.69-3.91-5.63-3.45-13.3-2.55-17.57,2.78-3.65,4.56-3.62,10.71-.18,15.33,3.81,5.12,8.07,4.95,9.59,4.13,1.8-1.28-.39-.49-2.27-2-2.43-1.95-2.55-5.03-.76-7.26,1.78-2.22,4.96-2.86,7.42-1.43,2.56,1.48,3.17,3.8,2.67,7.84-.22,2.12-1.91,10.5-11.25,12.37,0,0-5.14,1.68-11.91-.35-6.78-2.04-10.13-6.27-10.13-6.27,0,0-.02-.04-.06-.13-.26-.6-1.25-3.21-.15-6.87.67-2.22,2.46-4.59,3.2-5.49.15-.16.29-.32.43-.49.4-.52.72-1.12.92-1.79.77-2.56-.39-5.24-2.65-6.46-.32-.17-.67-.32-1.03-.43-.36-.11-.73-.18-1.09-.21-2.55-.23-5,1.37-5.77,3.93-.2.67-.27,1.34-.22,2,.02.22.04.43.09.65.11,1.16.3,4.13-.36,6.35-1.1,3.67-3.37,5.3-3.92,5.65-.08.05-.12.07-.12.07,0,0-5.14,1.68-11.91-.35-6.78-2.04-10.13-6.27-10.13-6.27-6.77-6.7-3.55-14.63-2.57-16.52,1.82-3.65,3.6-5.25,6.55-5.07,2.83.17,5.13,2.45,5.4,5.28.26,2.84-1.54,5.34-4.64,5.63-2.4.23-3.79-1.64-3,.42.81,1.52,4.27,4.01,10.27,1.84,5.41-1.96,8.83-7.08,8.3-12.89-.63-6.8-6.53-11.78-13.13-12.01-2.41-.08-4.17-.19-6.07.68,4.74-6.11,10.69-9.04,13.49-18.36,2.37-7.88-5.45-25-7.61-25.65-2.16-.65-18.12,9.33-20.49,17.21-2.8,9.32.55,15.04,1.14,22.75-1.1-1.77-2.64-2.65-4.69-3.91-5.63-3.45-13.3-2.55-17.57,2.78-3.65,4.56-3.62,10.71-.18,15.33,3.81,5.12,8.07,4.95,9.59,4.13,1.8-1.28-.39-.49-2.27-2-2.43-1.95-2.55-5.03-.76-7.26,1.78-2.22,4.96-2.86,7.42-1.43,2.56,1.48,3.17,3.8,2.67,7.84-.22,2.12-1.91,10.5-11.25,12.37,0,0-5.18,1.82-11.91-.35-4.65-1.5-6.16-5.09-6.16-5.09-.26-.6-1.23-3.29-.13-6.96.67-2.22,2.46-4.59,3.2-5.49.15-.16.29-.32.43-.49.4-.52.72-1.12.92-1.79.77-2.56-.39-5.24-2.65-6.46-.32-.17-.67-.32-1.03-.43-.36-.11-.73-.18-1.09-.21-2.55-.23-5,1.37-5.77,3.93-.2.67-.27,1.34-.22,2,.02.22.04.43.09.65.11,1.16.3,4.13-.36,6.35-1.1,3.67-3.37,5.3-3.92,5.65,0,0-3.91,2.16-10.68.13-6.78-2.04-10.13-6.27-10.13-6.27-6.77-6.7-3.55-14.63-2.57-16.52,1.82-3.65,3.6-5.25,6.55-5.07,2.83.17,5.13,2.45,5.4,5.28.26,2.84-1.54,5.34-4.64,5.63-2.4.23-3.79-1.64-3,.42.81,1.52,4.27,4.01,10.27,1.84,5.41-1.96,8.83-7.08,8.3-12.89-.63-6.8-6.53-11.78-13.13-12.01-2.41-.08-4.17-.19-6.07.68,4.74-6.11,7.55-10.52,9.57-20.03,2.15-10.1-8.66-21.4-11.83-24.38-2.87-2.7-6.41-4.63-6.41-4.63,1.52,36.63-11.08,81-22.89,123.65-.23.84-.54,1.83-.08,2.77.12.25.36.45.62.61l-2.05.94c-7.43,4.55-12.42,9.03-18.09,13.91-16.84,14.51-31.43,35.93-29.07,58.9,1.31,12.77,12.99,24.41,10.75,37.78-2.61,15.58-21.29,30.06-27.14,42.85-7.92,17.29,4.41,20.59,16.45,28.57-.34,7.8-7.29,14.67-2.52,22.27,1.09,1.73,5.04,4.28,5.31,5.69.23,1.25-1.6,3.12-1.8,4.9-1.46,12.97,7.69,15.04,8.01,21.96.21,4.61-3.17,10.69-2.99,15.84.82,23.83,29.16,26.86,47.47,25.69,6.02-.38,25.38-7.03,25.52,1.43.07,3.86-5.54,17.32-7.3,21.8-16,40.92-50.52,64.59-62.03,106.97-.35,1.3-.67,2.6-.95,3.9,0,0,0,.01,0,.02-19.44,80.45.97,151.28,20.71,195.5,114.25-25.18,212.27-93.62,276-187.27,1.84-2.71,3.65-5.43,5.44-8.18.03-.05.07-.11.1-.16,1.78-2.75,3.54-5.52,5.26-8.31.14-.23.28-.45.42-.68,1.05-1.71,2.09-3.42,3.12-5.14.1-.16.19-.32.29-.49,1.68-2.83,3.34-5.67,4.96-8.54.03-.05.06-.1.09-.15,1.62-2.87,3.22-5.76,4.78-8.67.12-.22.23-.44.35-.66.96-1.79,1.91-3.59,2.84-5.4.08-.15.16-.3.24-.45,1.52-2.94,3-5.89,4.45-8.86.03-.05.05-.11.08-.16,1.45-2.98,2.88-5.97,4.26-8.98.11-.23.21-.46.32-.69.85-1.86,1.69-3.72,2.52-5.59.06-.13.11-.26.17-.38,1.96-4.44,3.85-8.92,5.67-13.44-5.78-11.38-11.48-22.52-15.62-33.2ZM713.55,637.96c-27.69,19.21-63.47,52.93-99.77,49.21-39.85-4.08-8.19-59.29,5.52-75.46,2.68-3.16,20.5-20.92,23.97-17.53.82,12.66-2.08,25.06-5.99,37,1.92.42,2.39-.98,3.4-2.09,12.72-13.98,11.88-30.49,9.28-48.09-3.13-21.15-11.08-41.35-18.6-61.16,10.38-8.31,20.24-17.26,27.73-28.34,4.54-6.72,9.87-15.12,10.18-23.31-25.96,24.6-67.02,43.65-103.48,39.99-12.07-1.21-16.63-7.61-15.5-19.48.85-8.95,6.42-10.39-.19-19.84-2.99-4.27-7.03-5.32-5.62-11.94,1.52-7.14,10.99-2.02,16.3-2.73,1.37-.18,2.91-.54,1.49-1.99-4.65-2.33-19.41-6.76-21.88-10.63-4.17-6.52,9.6-16.53-1.2-25.81-10.89-9.35-20.41-3.59-8.14-22.3,9.54-14.55,25.97-28.74,24.21-47.77-.42-4.52-2.56-9.34-2.97-14.02-1.46-16.5,3.9-24.67,11.99-38.88-.04-1.12-.04-2.54.13-.23,1.83,25.15,17.99,40,39.87,49.62-18.72-18.15-18.84-34.49-19.52-60.2l5.05,17.17c6.02,13.65,14.81,26.08,25.99,36.01,7.85,6.96,21.04,13.24,27.37,19.63,10.32,10.42,14.3,24.86,32.69,27.31,30.13,4.01,35.38-34.88,61.65-31.66,21.98,2.69,22.52,29.08,15.95,45.43-3.94,9.8-24.64,35.67-36.46,32.13-4.85-1.45-4.17-9.1-14.61-4.21-22.95,10.77-27.01,53.41-8.75,71.04,8.53,8.23,20.07,10.18,31.55,9.46,7.2,36.81,26.44,66.06,62.56,78.93,6.1,2.17,14.44,3.32,20.07,5.93.99.46,2.35.58,2.47,2.02-35.21,6.03-67.78,26.71-96.72,46.79ZM713.03,479.92c19.72,7.93,26.58-23.65,17.46-37.46-1.71-2.59-4.93-2.71-4.22-6.26,9.32-4.99,13.98,8.43,15.94,15.54,4.17,15.14.42,38.29-17.89,42-35.37,7.17-41.77-42.81-18.52-60.54,1.54-.33,2.01,1.61,2.87,2.61.31.36,1.03.39,1.53.44l.02,1.38c-10.98,9.14-11.34,36.6,2.8,42.29Z\"/>\n    <path class=\"cls-1\" d=\"M514.28,707.63c.62-4.01-3.36-17.61-4.75-22.21-18.33-60.78-51.68-84.5-106.59-110.41-5.23-2.47-31.89-12.65-33.75-15.25-3.28-4.56.9-14.26,3.65-18.62,28.43,13.11,91.97,31.9,106.92-7.97,5.47-14.58,2.29-26.95-3.3-40.67-2.4-5.9-5.45-6.95-5.25-14.83.22-8.68,4.04-6.35,7.52-11.54,5.09-7.6,2.81-19.26-5.45-23.45,8.92-9.52,13.99-19.52,5.43-31.44-3.68-5.12-11.01-5.86-8.38-13.01,11.13.32,20.29-6.68,18.87-18.46-1.45-11.92-22.45-31.81-29.9-42.11-1.15-1.59-4.38-5.75-4.78-7.22-2.07-7.67,5.79-18.58,6.64-26.87,1.45-14.1-5.22-18.98-9.65-30.14-3.18-8.01-4.57-16.53-8.06-24.94-1.55-3.73-9.86-18.2-9.99-20-.09-1.24,1.78-2.66,1.92-4.82.35-5.23-3.1-31.67-3.92-40.08-.74-10.54-4.32-39.75-4.32-39.75h-.03c-2.86-20.24-5.71-46.01-1.7-105.15-5.69,2.42-20.82,32.75-20.56,39.99.64,17.39,8.98,11.69,11.95,24.1.71,2.65-3.01,5.03-7.14,3.16-4.99-2.25-9.07-8.17-12.61-8.95h0c-.99-.29-2.02-.43-3.08-.38-6.37.28-11.29,7-10.99,15.01.29,8.01,5.69,14.28,12.06,14,1.06-.05,2.08-.27,3.04-.65h0s6.9-3.97,14.31-4.3c2.9-.17,4.07,1.51,3.69,3.13-1.12,4.79-3.26,8.15-5.31,10.61-6.74,7.93-17.16,14.19-26.31,16.72-8.6,2.38-20.58,3.14-27.63-1.71-1.97-1.65-3.71-4.02-4.06-7.37-.39-3.73,1.41-10.99,2.26-14.12.16-.48.3-.98.42-1.49,0,0,0,0,0,0h0c.53-2.37.54-5-.08-7.67-1.81-7.81-8.31-12.96-14.52-11.53-6.21,1.44-9.78,8.93-7.97,16.74.62,2.67,1.79,5.03,3.3,6.92h0s0,0,0,0c.33.41.67.79,1.03,1.16,2.14,2.44,6.95,8.16,8.24,11.68,1.16,3.16.64,6.06-.4,8.41-4.2,7.46-15.29,12.05-24.06,13.69-9.35,1.75-20.6,2.41-30.24-3.45-2.87-1.82-6.37-4.61-9.05-9.58-.79-1.46-.1-3.4,2.74-4.01,7.23-1.68,14.92.31,14.92.31h0c1.03.1,2.07.05,3.1-.19,6.21-1.44,9.78-8.93,7.97-16.74-1.81-7.81-8.31-12.97-14.52-11.53-1.03.24-1.99.65-2.87,1.2h0c-3.21,1.71-5.6,8.51-9.82,12.02-3.5,2.91-7.7,1.61-7.71-1.13-.38-12.76,9.15-9.51,5.23-26.45-1.7-7.32-25.9-34.19-30.9-33.03h0c-5,1.16-14.92,35.93-13.22,43.26,3.93,16.94,11.06,9.82,16.33,21.45,1.2,2.47-2,5.48-6.43,4.41-5.33-1.29-10.47-6.35-14.11-6.47h0c-1.03-.1-2.07-.05-3.1.19-6.21,1.44-9.78,8.93-7.97,16.74,1.81,7.8,8.31,12.96,14.52,11.53,1.03-.24,1.99-.65,2.87-1.2h0s6.03-5.16,13.26-6.84c2.82-.7,4.29.74,4.22,2.4-.22,5.64-2.14,9.68-3.91,12.58-6.07,9.5-16.47,13.87-25.63,16.4-8.6,2.38-20.58,3.14-27.63-1.71-1.97-1.65-3.71-4.02-4.06-7.37-.39-3.73,1.41-10.99,2.26-14.11.16-.48.3-.98.42-1.49,0,0,0,0,0,0h0c.53-2.37.54-5-.08-7.67-1.81-7.81-8.31-12.96-14.52-11.53-6.21,1.44-9.78,8.93-7.97,16.74.62,2.67,1.79,5.03,3.3,6.92h0s0,0,0,0c.33.41.67.79,1.03,1.16,2.14,2.44,6.95,8.16,8.24,11.68,1.16,3.16.64,6.06-.4,8.41-4.2,7.46-15.29,12.05-24.06,13.69-9.33,1.75-21.44.71-30.99-3.44-2.92-1.31-6.32-3.39-9.43-7.19-1.06-1.29-.75-3.31,1.93-4.44,6.8-2.97,14.74-2.43,14.74-2.43h0c1.03-.09,2.05-.33,3.02-.75,5.84-2.55,7.93-10.56,4.67-17.88-3.26-7.32-10.64-11.2-16.48-8.64-.97.42-1.84,1-2.59,1.7h0c-2.84,2.26-3.9,9.37-7.39,13.59-2.89,3.5-7.27,2.99-7.8.31-2.8-12.45,7.2-11,.13-26.9-.86-1.93-3.78-5.06-7.62-8.51-.11-.1-.23-.21-.35-.31-9.32-8.29-23.77-18.28-28.09-18.05,3.42,6.23,9.31,20.06,15.52,35.61.07.18.15.37.22.55,9.06,22.69,18.76,48.86,22.5,60.34l6.46,18.7s4.03,10.16,11.47,35.5l1.57,32.13c1.27,5.68.05,10.92.64,16.36,4.9,45.09,31.81,81.11,24.98,127.01l-3.98,22.5s-5.39,27.58-28.72,36.8c-10.29,4.07-20.29,10.51-29.97,16.03-6.78,3.87-38.23,22.23-57.63,35.57,61.26,176.78,229.23,303.71,426.85,303.71,13.69,0,27.24-.61,40.62-1.8,0-.02,16.69-85.84,6.84-150.86ZM380.84,620.25c-11.95,7.28-10.42-20.38-4.86-21.93,9.14-2.55,11.02,18.18,4.86,21.93ZM361.98,649.36c13.33-3.97,3.53,23.99-7.75,20.41-8.43-2.68,3.18-19.05,7.75-20.41ZM348.78,683.18c-3.46-.71-.52-7.1,2.01-7.98,5.08.07.75,8.55-2.01,7.98ZM366.94,648.06c-5.09-1.71-.41-20.46,6.06-21.72,10.13-1.98,5.33,25.17-6.06,21.72ZM371.91,573.26c6.22,1.23,12.44,18.91,5.65,20.79-6.87,1.89-15.27-17.07-5.65-20.79ZM473.26,430.19c2.85,2.4-12.13,9.69-13.31,10.17-7.96,3.26-17.26,5.04-25.69,6.83-.25,2.68-.01,1.61,1.5,1.97,11.08,2.68,20.36-2.42,28.77-.75,7.88,1.57,11.25,13.24,2.17,14.7-6.36,1.02-12.37-1.69-18.43-2.93l7.43,8.05c3.69,5.66-.81,5.08-2,8.89-1.63,5.17.85,11.42-6.07,14.93-9.83,4.99-21.84-4.54-24.86-13.88-3.16-9.77-.86-23.29,5.66-31.32,4.79-5.89,8.08-4.37,14.36-6.64,4.2-1.52,28.58-11.61,30.46-10.03ZM165.98,471.4c5.64-21.65,6.85-51.42,1.79-73.22-3.91-16.85-12.18-32.58-16.77-49.23-5.08-18.45-7.21-37.92-6.53-57.06,21.64-18.76,52.39-30.42,79.58-39.42,53.93-17.84,131.09-31.7,187.75-27.32,10.44.81,10.42,3.43,15.26,11.74,8.63,14.82,9.31,25.64,14.72,40.28,3.25,8.78,9.27,11.33,9.2,23.25-.09,17.16-13.27,22.26-1.54,40.09,5.55,8.44,30.56,34.09,30.4,42.19-.02.82-1.27,3.64-1.86,4.22-4.05,3.96-12.93,1.34-18.01,2.48l1.29,10.8-.11,3.89c-16.02,3.49-34.16,13.12-44.86,25.64-2.19,2.56-8.31,13.56-9.02,14-3.49,2.16-18.55-4.49-22.69-6.35-21.88-9.8-45-26.26-60.3-44.7-13.55-16.33-22.99-35.46-31.64-54.38l-3.4.91c.75,1.4,1.01,2.84,1.06,4.43.97,31.08-2.83,61.23-4.04,92.07-1.57,39.8,17.06,66.63,50.68,86.29,4.14,2.42,19.37,8.5,21.32,10.68,3.95,4.42-3.01,26.64-5.84,32.19-15.03,29.49-45.9,25.69-73.17,17.82-48.59-14.02-91.42-47.79-120.85-88.21,1.6-7.97,5.51-15.22,7.56-23.07ZM147.99,502.33c7.12-1.96,13.06,19.89,2.68,20.85-9.52.88-10.79-18.62-2.68-20.85ZM152.53,527.43c.52-.56,4.35-2.23,5.1-2.09,5.45,4.06,12.98,12.38,9.88,19.58-4.76,11.06-21.94-10.03-14.98-17.49ZM170.02,549.33c5.8-1.08,16.77,13,13.77,18.87-5.59,10.93-28.27-16.17-13.77-18.87ZM201.65,591.08c-8.41,5.53-26.98-17.74-13.65-19.74,5.27-.79,21.56,14.54,13.65,19.74ZM222.23,610.65c-8.96,7.51-26.62-15.25-15.23-18.31,5.21-1.4,21.77,12.82,15.23,18.31ZM245.82,627.17c-4.39,9.18-27.63-4.54-18.91-13.84,5.96-3.5,21.43,8.59,18.91,13.84ZM252.01,629.34c4.76-.9,18.1,8.1,17.82,13.82-6.49,12.86-32.64-11.01-17.82-13.82ZM293.75,658.16c-3.7,8.21-21.14-2.98-22.35-7.69-.42-1.63.91-4.57,2.52-5.12,5.98-2.06,23.12,5.49,19.82,12.81ZM321.16,668.51c-1.97,6.28-27.21,1.24-22.9-10.33,6.01-2.28,25.78,1.15,22.9,10.33ZM325.2,667.71c.21-2.13,3.93-3.92,5.8-4.29,6.46-1.28,18.21-1.63,15.81,7.78-3.87,4.95-22.33,3.97-21.61-3.49ZM388.05,748.98c-.19.33-3.17,1.7-4.62,3.87-3.85,5.73-8.96,26.05-20.12,16.79-4.41-3.67-2.2-6.5-3.26-10.74-.62-2.48-2.86-4.29-2.85-7.22.02-3.47,2.87-5.54,2.01-10.93-.55-3.41-2.96-4.13-3.71-6.3-1.99-5.76.38-10.47-9.21-11.86-5.14-.75-6.46,5.62-14.97-.95-3.87-2.99-6.52-8.95-5.99-13.84.23-2.08,3.26-11,4.45-12.59,1.23-1.64,3.31-2.13,4.51-3.49,2.26-2.57,2.74-6.76,7.55-7.51,2.23-.35,10.43,2.27,12.38,3.53,2.02,1.31,2.5,4.59,4.73,5.27,2.6.79,6.01-.27,8.75.25,1.21.23,9.92,2.82,10.33,3.16.86.72,1.43,5.33,2.34,7.17,3.73,7.57,7.59,14.86,16.89,10.61,2.05,7.6-9.38,15.52-10.57,19.95-.9,3.36,3.13,11.81,1.35,14.84Z\"/>\n</svg>\n                    </div>\n                    <h1 class=\"mobile-title\" style=\"margin: 0; font-family: 'Great Vibes', cursive; font-size: 42px; color: #DAA520; font-weight: normal;\">\n                      Brigtia & Jeffrey\n                    </h1>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          \n          <!-- Content -->\n          <tr>\n            <td class=\"mobile-content\" style=\"padding: 40px 30px; background: linear-gradient(to right bottom, #E9E7D980, #D2C6B260); border: 1px solid #E9E7D910; border-radius: 24px; box-shadow: none;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                <tr>\n                  <td class=\"mobile-text\" style=\"font-family: 'Open Sans', sans-serif; font-size: 16px; line-height: 1.6; color: #442727;\">\n                    <p>Dear Alice,\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** August 1, 2025\n- **Venue:** Geert Grootestraat\n- **Time:** \n\nWe can't wait to celebrate with you!\n\nBest regards,\nBrigita &amp; Jeffrey</p>\n                  </td>\n                </tr>\n                \n                <tr>\n                  <td style=\"text-align: center; padding-top: 30px;\">\n                    <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin: 0 auto;\">\n                      <tr>\n                        <td class=\"mobile-button\" style=\"background: #442727; border-radius: 8px; padding: 12px 24px; text-align: center;\">\n                          <a href=\"https://your-wedding-site.com\" style=\"font-family: 'Open Sans', sans-serif; font-size: 16px; font-weight: 600; color: #DAA520; text-decoration: none; display: inline-block;\">\n                            Visit Our Website\n                          </a>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n                \n              </table>\n            </td>\n          </tr>\n          \n          <!-- Footer -->\n          <tr>\n            <td class=\"mobile-footer\" style=\"padding: 25px; background: linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%); border: 1px solid #E3B13F20; border-radius: 0 0 12px 12px; text-align: center;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                <tr>\n                  <td class=\"mobile-text\" style=\"font-family: 'Open Sans', sans-serif; font-size: 16px; color: #442727; line-height: 1.6;\">\n                    <p style=\"margin: 0 0 10px 0;\">\n                      With love and joy,\n                    </p>\n                    <p style=\"margin: 0 0 15px 0; font-weight: bold;\">\n                      Brigtia & Jeffrey\n                    </p>\n                    <p style=\"margin: 0; font-size: 14px;\">\n                      <a href=\"https://your-wedding-site.com\" style=\"color: #DAA520; text-decoration: none;\">\n                        https://your-wedding-site.com\n                      </a>\n                    </p>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n          \n        </table>\n        \n      </td>\n    </tr>\n  </table>\n  \n</body>\n</html>"}
+[2025-08-09T16:07:44.033Z] [DEBUG] ✅ Resend response: {"status":200,"data":{"id":"0aa1a4d8-cddb-4635-b8d0-4bc0a83a19d8"}}
+[2025-08-09T16:07:44.033Z] [INFO] ✅ Email accepted by Resend for delivery: 0aa1a4d8-cddb-4635-b8d0-4bc0a83a19d8
+[2025-08-09T16:07:44.033Z] [DEBUG] 🧰 [messages.js] Formatted sentAt for MySQL: 2025-08-09 16:07:44
+[2025-08-09T16:07:44.035Z] [INFO] ✅ Marking message as sent - 2 emails sent successfully
+[2025-08-09T16:07:47.509Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T16:10:19.100Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:10:19.105Z] [INFO] Server is running on port 5001
+[2025-08-09T16:10:19.128Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:10:29.081Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:10:29.084Z] [INFO] Server is running on port 5001
+[2025-08-09T16:10:29.094Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:10:35.100Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:10:35.103Z] [INFO] Server is running on port 5001
+[2025-08-09T16:10:35.116Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:10:41.903Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:10:41.906Z] [INFO] Server is running on port 5001
+[2025-08-09T16:10:41.916Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:10:57.262Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:10:57.265Z] [INFO] Server is running on port 5001
+[2025-08-09T16:10:57.276Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:11:09.338Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:11:09.341Z] [INFO] Server is running on port 5001
+[2025-08-09T16:11:09.354Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:11:15.103Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:11:15.104Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:11:15.104Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "24px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:11:15.104Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:11:15.108Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:11:15.128Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:11:17.154Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:11:57.690Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:12:34.653Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:12:36.894Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:12:36.894Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:12:36.894Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "24px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:12:36.895Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:12:36.895Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:12:36.898Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:13:56.464Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:14:30.247Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:15:50.965Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:30:00.311Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-09T16:30:00.312Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-09T16:30:00.315Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-09T16:30:00.315Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-09T16:34:50.446Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:34:50.446Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:34:50.446Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "24px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:34:50.447Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:34:50.446Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:34:54.981Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:34:54.981Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:34:54.981Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "24px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:34:54.981Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:34:54.981Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:34:54.984Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:34:55.889Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:34:55.890Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:04.757Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:04.759Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:07.025Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:07.026Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:07.993Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:07.995Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:08.692Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:08.693Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:09.122Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:09.123Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:14.455Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:14.456Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:21.312Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:21.313Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview

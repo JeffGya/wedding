@@ -85,6 +85,7 @@ function styleObjectToInline(styleObj) {
     .join('; ');
 }
 const { replaceTemplateVars, getTemplateVariables } = require('../utils/templateVariables');
+const { generateEmailHTML } = require('../utils/emailTemplates');
 
 
 function formatRsvpDeadline(dateStr) {
@@ -782,103 +783,17 @@ router.post('/:id/send', async (req, res, next) => {
         const body_lt = replaceTemplateVars(message.body_lt, variables);
         const subject = replaceTemplateVars(message.subject, variables);
         
-        // Apply template styling if available
-        let styledBodyEn = body_en;
-        let styledBodyLt = body_lt;
-        
-        // Check if style is available from the message
-        if (message.style) {
-          const styleObj = getInlineStyles(message.style);
-          const inlineStyles = styleObjectToInline(styleObj);
-          
-          // Google Fonts import
-          const googleFonts = message.style === 'elegant' 
-            ? '<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">'
-            : '<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">';
-          
-          // CSS styles using Gmail-supported properties
-          const cssStyles = `
-            <style>
-              .email-container {
-                ${inlineStyles}
-              }
-              .email-container h1, .email-container h2, .email-container h3 {
-                margin: 0 0 15px 0;
-                font-weight: 600;
-                color: #333333;
-              }
-              .email-container h1 {
-                font-size: 24px;
-                border-bottom: 2px solid #D2B48C;
-                padding-bottom: 8px;
-              }
-              .email-container h2 {
-                font-size: 20px;
-              }
-              .email-container h3 {
-                font-size: 18px;
-              }
-              .email-container p {
-                margin: 0 0 15px 0;
-                color: #333333;
-              }
-              .email-container .signature {
-                margin-top: 20px;
-                padding-top: 15px;
-                border-top: 1px solid #cccccc;
-                font-style: italic;
-                color: #333333;
-              }
-              @media screen and (max-width: 600px) {
-                .email-container {
-                  padding: 15px !important;
-                  margin: 10px !important;
-                }
-              }
-            </style>
-          `;
-          
-          styledBodyEn = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              ${googleFonts}
-              ${cssStyles}
-            </head>
-            <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
-              <div class="email-container">
-                ${body_en}
-              </div>
-            </body>
-            </html>
-          `;
-          
-          styledBodyLt = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              ${googleFonts}
-              ${cssStyles}
-            </head>
-            <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
-              <div class="email-container">
-                ${body_lt}
-              </div>
-            </body>
-            </html>
-          `;
-        }
+        // Apply shared email template system for consistent, inline-styled HTML
+        const styleKey = message.style || 'elegant';
+        const emailHtmlEn = generateEmailHTML(body_en, styleKey, {});
+        const emailHtmlLt = generateEmailHTML(body_lt, styleKey, {});
         
         // Send email using Resend
         const emailData = {
           from: senderInfo,
           to: guest.email,
           subject: subject,
-          html: guest.language === 'lt' ? styledBodyLt : styledBodyEn
+          html: guest.language === 'lt' ? emailHtmlLt : emailHtmlEn
         };
         let retries = 0;
         const maxRetries = 3;
@@ -1112,44 +1027,70 @@ router.get('/:id/logs', async (req, res) => {
  *                   type: string
  */
 // Preview a message with guest substitutions
-router.post('/preview', (req, res) => {
+router.post('/preview', async (req, res) => {
   try {
-    const { template, guest } = req.body;
-
-    if (!template || !guest) {
-      return res.status(400).json({ success: false, error: 'Template and guest info are required' });
-    }
-
-    const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-
-    const replacements = {
-      guestName: guest.name,
-      groupLabel: guest.group_label,
-      rsvpLink: `${SITE_URL}/${lang}/rsvp/${guest.code}`,
-      plusOneName: guest.plus_one_name || '',
-      rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+    const { template, guest, guestId } = req.body;
+    const subjectRaw = template?.subject ?? req.body.subject ?? '';
+    const style = template?.style ?? req.body.style ?? 'elegant';
+    const tpl = {
+      subject: subjectRaw,
+      body_en: template?.body_en ?? req.body.bodyEn ?? '',
+      body_lt: template?.body_lt ?? req.body.bodyLt ?? '',
+      style,
     };
 
-    const body_en = replaceTemplateVars(template.body_en, {
-      guestName: guest.name,
-      groupLabel: guest.group_label,
-      rsvpLink: `${SITE_URL}/en/rsvp/${guest.code}`,
-      plusOneName: guest.plus_one_name || '',
-      rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+    // Resolve selected guest and sample guests
+    let selectedGuest = guest || null;
+    if (!selectedGuest && guestId) {
+      selectedGuest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
+    }
+    let sampleGuests = [];
+    if (!selectedGuest) {
+      sampleGuests = await dbAll(
+        `SELECT id, name, email, group_label, preferred_language, rsvp_status, can_bring_plus_one, code
+         FROM guests WHERE email IS NOT NULL ORDER BY name LIMIT 5`,
+        []
+      );
+      selectedGuest = sampleGuests[0] || {
+        id: null,
+        name: 'Guest',
+        group_label: 'Friends',
+        code: 'ABC123',
+        preferred_language: 'en',
+        rsvp_status: 'pending',
+        can_bring_plus_one: 0,
+      };
+    }
+
+    // Compute variables and replace
+    const variables = await getTemplateVariables(selectedGuest, tpl);
+    const body_en = replaceTemplateVars(tpl.body_en, variables);
+    const body_lt = replaceTemplateVars(tpl.body_lt, variables);
+    const subject = replaceTemplateVars(tpl.subject, variables);
+
+    // Generate email HTML for both languages without action button
+    const email_html_en = generateEmailHTML(body_en, style, { buttonText: null, buttonUrl: null });
+    const email_html_lt = generateEmailHTML(body_lt, style, { buttonText: null, buttonUrl: null });
+
+    return res.json({
+      success: true,
+      subject,
+      body_en,
+      body_lt,
+      email_html_en,
+      email_html_lt,
+      style,
+      sampleGuests,
+      selectedGuest: selectedGuest && selectedGuest.id ? {
+        id: selectedGuest.id,
+        name: selectedGuest.name,
+        email: selectedGuest.email,
+        group_label: selectedGuest.group_label,
+        preferred_language: selectedGuest.preferred_language,
+        rsvp_status: selectedGuest.rsvp_status,
+        can_bring_plus_one: !!selectedGuest.can_bring_plus_one,
+      } : null,
     });
-
-    const body_lt = replaceTemplateVars(template.body_lt, {
-      guestName: guest.name,
-      groupLabel: guest.group_label,
-      rsvpLink: `${SITE_URL}/lt/rsvp/${guest.code}`,
-      plusOneName: guest.plus_one_name || '',
-      rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
-    });
-
-    const body = lang === 'lt' ? body_lt : body_en;
-    const subject = replaceTemplateVars(template.subject, replacements);
-
-    return res.json({ success: true, subject, body });
   } catch (error) {
     logger.error('Failed to preview message:', error);
     return res.status(500).json({ success: false, error: 'Failed to preview message: ' + error.message });

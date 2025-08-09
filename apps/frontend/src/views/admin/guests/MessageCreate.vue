@@ -280,7 +280,8 @@ const handleComposerAction = async (actionType) => {
       subject: composerData.subject,
       body_en: composerData.body_en,
       body_lt: composerData.body_lt,
-      status: actionType === 'scheduled' ? 'scheduled' : 'draft', // Always draft for immediate sending
+      style: composerData.style, // ensure style is persisted with the message
+      status: actionType === 'scheduled' ? 'scheduled' : 'draft',
       scheduledAt: actionType === 'scheduled' ? scheduledAt.value?.toISOString() : null,
       recipients: recipients
     }

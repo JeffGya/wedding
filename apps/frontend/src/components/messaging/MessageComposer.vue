@@ -31,6 +31,9 @@
         />
         <label for="style">Email Style</label>
       </FloatLabel>
+      <div class="mt-3 flex justify-end">
+        <Button label="Preview" icon="pi pi-eye" @click="openPreview" />
+      </div>
     </div>
 
     <!-- Subject -->
@@ -81,6 +84,13 @@
       @saved="handleTemplateSaved"
     />
   </div>
+
+  <!-- Message Preview Dialog -->
+  <MessagePreview
+    v-model:visible="previewVisible"
+    :message="previewMessage"
+    title="Email Preview"
+  />
 </template>
 
 <script setup>
@@ -88,6 +98,7 @@ import { computed, reactive, ref, watch, onMounted } from 'vue'
 import { getTemplateStyles } from '@/api/templates'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
+import MessagePreview from '@/components/messaging/MessagePreview.vue'
 
 const languageOptions = [
   { label: 'English', value: 'en' },
@@ -115,6 +126,7 @@ const emit = defineEmits([
 const selectedTemplateId = ref('')
 const tab = ref('en')
 const showSaveTemplate = ref(false)
+const previewVisible = ref(false)
 
 const form = reactive({
   subject: '',
@@ -124,6 +136,14 @@ const form = reactive({
 })
 
 const styleOptions = ref([])
+
+// Computed property for the preview message
+const previewMessage = computed(() => ({
+  subject: form.subject,
+  bodyEn: form.bodyEn,
+  bodyLt: form.bodyLt,
+  style: form.style,
+}))
 
 // Load available styles
 onMounted(async () => {
@@ -184,6 +204,10 @@ const setData = ({ subject, body_en, body_lt, style }) => {
 function handleTemplateSaved() {
   emit('templateSaved')
   showSaveTemplate.value = false
+}
+
+function openPreview() {
+  previewVisible.value = true
 }
 
 defineExpose({

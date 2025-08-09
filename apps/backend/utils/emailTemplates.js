@@ -139,11 +139,14 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
   const config = EMAIL_TEMPLATES[style] || EMAIL_TEMPLATES.elegant;
   const {
     title = 'Brigtia & Jeffrey',
-    buttonText = 'Visit Our Website',
-    buttonUrl = 'https://your-wedding-site.com',
+    buttonText,
+    buttonUrl,
     footerText = 'With love and joy,',
     siteUrl = 'https://your-wedding-site.com'
   } = options;
+
+  // Check if buttonText or buttonUrl are explicitly set to null/undefined/false
+  const shouldShowButton = buttonText && buttonUrl && buttonText !== null && buttonUrl !== null;
 
   return `<!DOCTYPE html>
 <html>
@@ -202,7 +205,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
                     ${content}
                   </td>
                 </tr>
-                ${buttonText && buttonUrl ? `
+                ${shouldShowButton ? `
                 <tr>
                   <td style="text-align: center; padding-top: 30px;">
                     <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
