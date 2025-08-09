@@ -290,16 +290,10 @@ function isCustomTemplate(templateName) {
 }
 
 function useTemplate(template) {
-  // Navigate to message creation with this template
+  // Navigate to template edit form with this template
   router.push({
-    name: 'admin-guests-messages-new',
-    query: { 
-      useTemplate: template.id,
-      templateName: template.name,
-      templateSubject: template.subject,
-      templateBodyEn: template.body_en,
-      templateBodyLt: template.body_lt
-    }
+    name: 'admin-template-edit',
+    params: { id: template.id }
   })
 }
 
@@ -390,16 +384,10 @@ function previewTemplate(template) {
 }
 
 function useTemplateFromPreview(template) {
-  // Navigate to message creation with this template
+  // Navigate to template edit form with this template
   router.push({
-    name: 'admin-guests-messages-new',
-    query: { 
-      useTemplate: template.id,
-      templateName: template.name,
-      templateSubject: template.subject,
-      templateBodyEn: template.body_en,
-      templateBodyLt: template.body_lt
-    }
+    name: 'admin-template-edit',
+    params: { id: template.id }
   })
 }
 </script>

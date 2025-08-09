@@ -37,8 +37,6 @@ const EMAIL_TEMPLATES = {
     },
     content: {
       background: '#E9E7D9',
-      border: '3px solid #DED4C4',
-      borderRadius: '12px',
       boxShadow: '0 6px 20px rgba(68, 39, 39, 0.2)',
       bodyFont: "'Lora', serif",
       bodySize: '16px',
@@ -72,8 +70,6 @@ const EMAIL_TEMPLATES = {
     },
     content: {
       background: '#F1EFE8',
-      border: 'none',
-      borderRadius: '16px',
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
       bodyFont: "'Open Sans', sans-serif",
       bodySize: '16px',
@@ -107,8 +103,6 @@ const EMAIL_TEMPLATES = {
     },
     content: {
       background: 'linear-gradient(to right bottom, #E9E7D980, #D2C6B260)',
-      border: '1px solid #E9E7D910',
-      borderRadius: '24px',
       boxShadow: 'none',
       bodyFont: "'Open Sans', sans-serif",
       bodySize: '16px',
@@ -198,7 +192,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
           
           <!-- Content -->
           <tr>
-            <td class="mobile-content" style="padding: 40px 30px; background: ${config.content.background}; border: ${config.content.border}; border-radius: ${config.content.borderRadius}; box-shadow: ${config.content.boxShadow};">
+            <td class="mobile-content" style="padding: 40px 30px; background: ${config.content.background}; box-shadow: ${config.content.boxShadow};">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td class="mobile-text" style="font-family: ${config.content.bodyFont}; font-size: ${config.content.bodySize}; line-height: ${config.content.lineHeight}; color: #442727;">

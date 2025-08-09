@@ -323,9 +323,15 @@ async function saveTemplate() {
 
 onMounted(async () => {
   try {
+    // Load template styles first
     const response = await getTemplateStyles();
     availableStyles.value = response.styles;
     styleOptions.value = response.styles; // Initialize styleOptions
+    
+    // Load template data if in edit mode
+    if (isEditMode.value) {
+      await loadTemplate();
+    }
   } catch (error) {
     console.error('Error loading template styles:', error);
   }

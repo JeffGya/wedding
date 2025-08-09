@@ -779,3 +779,1795 @@
 [2025-08-09T16:35:14.456Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
 [2025-08-09T16:35:21.312Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
 [2025-08-09T16:35:21.313Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:35:45.427Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:35:45.430Z] [INFO] Server is running on port 5001
+[2025-08-09T16:35:45.445Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:36:51.604Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:36:51.606Z] [INFO] Server is running on port 5001
+[2025-08-09T16:36:51.616Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:36:55.049Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:36:55.049Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:36:55.049Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "0px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:36:55.049Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:36:55.050Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:36:55.054Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:36:56.478Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:36:56.480Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:37:07.299Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:37:07.302Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:37:24.714Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:37:24.717Z] [INFO] Server is running on port 5001
+[2025-08-09T16:37:24.729Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:37:33.903Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:37:33.906Z] [INFO] Server is running on port 5001
+[2025-08-09T16:37:33.916Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:37:40.364Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:37:40.367Z] [INFO] Server is running on port 5001
+[2025-08-09T16:37:40.377Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:37:56.871Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T16:37:56.874Z] [INFO] Server is running on port 5001
+[2025-08-09T16:37:56.885Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T16:37:59.603Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:37:59.606Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:37:59.604Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:37:59.604Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:37:59.604Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:37:59.641Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:38:01.342Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:01.344Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:12.550Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:12.552Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:21.335Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:21.337Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:28.725Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:28.726Z] [DEBUG] 🧭 Route hit: POST /api/messages/preview
+[2025-08-09T16:38:34.137Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T16:38:36.090Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:38:38.004Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/5/preview
+[2025-08-09T16:38:38.005Z] [DEBUG] Preview request: {"id":"5"}
+[2025-08-09T16:38:38.006Z] [DEBUG] Template found: RSVP Reminder
+[2025-08-09T16:38:38.008Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:38:38.008Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:38:38.012Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:38:38.012Z] [DEBUG] Replaced subject: Please RSVP for our wedding, Alice
+[2025-08-09T16:38:38.012Z] [DEBUG] Original subject: Please RSVP for our wedding, {{guestName}}
+[2025-08-09T16:38:38.012Z] [DEBUG] Original body_en length: 267
+[2025-08-09T16:38:38.012Z] [DEBUG] Replaced body_en length: 231
+[2025-08-09T16:38:38.012Z] [DEBUG] Preview response prepared with style: modern
+[2025-08-09T16:38:38.012Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:38:38.012Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:38:38.012Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:38:41.992Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/9/preview
+[2025-08-09T16:38:41.993Z] [DEBUG] Preview request: {"id":"9"}
+[2025-08-09T16:38:41.994Z] [DEBUG] Template found: Group-Specific Welcome
+[2025-08-09T16:38:41.995Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:38:41.995Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:38:41.997Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:38:41.997Z] [DEBUG] Original subject: Special welcome for {{groupLabel}}, {{guestName}}!
+[2025-08-09T16:38:41.997Z] [DEBUG] Replaced subject: Special welcome for Alice, Alice!
+[2025-08-09T16:38:41.997Z] [DEBUG] Original body_en length: 828
+[2025-08-09T16:38:41.997Z] [DEBUG] Replaced body_en length: 247
+[2025-08-09T16:38:41.997Z] [DEBUG] Preview response prepared with style: friendly
+[2025-08-09T16:38:41.997Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:38:41.997Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:38:41.997Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:39:02.846Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:39:02.847Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:39:02.846Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:39:02.846Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:39:02.846Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:39:02.849Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:39:05.527Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:39:07.629Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:39:07.630Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:39:07.629Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:39:07.629Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:39:07.629Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:39:07.637Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:39:08.472Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:39:14.555Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/10/preview
+[2025-08-09T16:39:14.555Z] [DEBUG] Preview request: {"id":"10"}
+[2025-08-09T16:39:14.556Z] [DEBUG] Template found: Travel Information
+[2025-08-09T16:39:14.557Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:39:14.557Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:39:14.560Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:39:14.560Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:39:14.560Z] [DEBUG] Replaced subject: Travel information for our wedding, Alice
+[2025-08-09T16:39:14.560Z] [DEBUG] Replaced body_en length: 265
+[2025-08-09T16:39:14.560Z] [DEBUG] Original body_en length: 511
+[2025-08-09T16:39:14.560Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:39:14.560Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:39:14.560Z] [DEBUG] Original subject: Travel information for our wedding, {{guestName}}
+[2025-08-09T16:39:14.560Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:39:34.940Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:39:34.940Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:39:34.941Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:39:34.940Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:39:34.941Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:39:36.867Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:39:40.152Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:39:40.153Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:39:40.152Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:39:40.152Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:39:40.152Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:39:40.176Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:39:41.212Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:41:11.098Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:41:21.540Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:41:21.540Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:41:21.540Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:41:21.540Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:41:21.539Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:41:26.262Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:41:28.688Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:41:28.688Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:41:28.688Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:41:28.688Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:41:28.688Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:42:44.655Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:42:44.656Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:42:44.656Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:42:44.656Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:42:44.655Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:42:44.671Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/4
+[2025-08-09T16:42:50.569Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:42:51.793Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:42:51.794Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:42:51.793Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:42:51.793Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:42:51.793Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:42:51.825Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/6
+[2025-08-09T16:42:56.313Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:42:58.784Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:42:58.785Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:42:58.784Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:42:58.784Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:42:58.784Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:42:58.792Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7
+[2025-08-09T16:44:30.339Z] [DEBUG] ✅ Auth passed, hitting template route: PUT /api/templates/7
+[2025-08-09T16:44:30.409Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:44:32.412Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview
+[2025-08-09T16:44:32.412Z] [DEBUG] Preview request: {"id":"7"}
+[2025-08-09T16:44:32.414Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:44:32.414Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:44:32.414Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:44:32.417Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:44:32.417Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:44:32.417Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:44:32.417Z] [DEBUG] Original body_en length: 395
+[2025-08-09T16:44:32.417Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:44:32.417Z] [DEBUG] Preview response prepared with style: friendly
+[2025-08-09T16:44:32.417Z] [DEBUG] Replaced body_en length: 388
+[2025-08-09T16:44:32.417Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:44:32.417Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:44:38.616Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:44:38.617Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:44:38.616Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:44:38.616Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:44:38.616Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:44:38.633Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7
+[2025-08-09T16:44:47.536Z] [DEBUG] ✅ Auth passed, hitting template route: PUT /api/templates/7
+[2025-08-09T16:44:47.589Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:44:49.263Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview
+[2025-08-09T16:44:49.264Z] [DEBUG] Preview request: {"id":"7"}
+[2025-08-09T16:44:49.264Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:44:49.265Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:44:49.265Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:44:49.267Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:44:49.267Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:44:49.268Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:44:49.268Z] [DEBUG] Replaced body_en length: 355
+[2025-08-09T16:44:49.268Z] [DEBUG] Original body_en length: 362
+[2025-08-09T16:44:49.268Z] [DEBUG] Preview response prepared with style: friendly
+[2025-08-09T16:44:49.267Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:44:49.267Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:44:49.267Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:44:54.203Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:44:54.204Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:44:54.204Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:44:54.204Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:44:54.204Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:44:54.210Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7
+[2025-08-09T16:45:26.531Z] [DEBUG] ✅ Auth passed, hitting template route: PUT /api/templates/7
+[2025-08-09T16:45:26.586Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:45:28.424Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview
+[2025-08-09T16:45:28.425Z] [DEBUG] Preview request: {"id":"7"}
+[2025-08-09T16:45:28.426Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:45:28.427Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:45:28.427Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:45:28.430Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:45:28.430Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:45:28.431Z] [DEBUG] Replaced body_en length: 319
+[2025-08-09T16:45:28.430Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:45:28.431Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:45:28.431Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:45:28.431Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:45:28.431Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:45:28.431Z] [DEBUG] Preview response prepared with style: friendly
+[2025-08-09T16:46:04.736Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview
+[2025-08-09T16:46:04.736Z] [DEBUG] Preview request: {"id":"7"}
+[2025-08-09T16:46:04.737Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:46:04.738Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:46:04.738Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:46:04.740Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:46:04.740Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:46:04.740Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:46:04.740Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:46:04.740Z] [DEBUG] Replaced body_en length: 319
+[2025-08-09T16:46:04.740Z] [DEBUG] Preview response prepared with style: friendly
+[2025-08-09T16:46:04.740Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:46:04.740Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:46:04.740Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:46:19.332Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T16:46:19.332Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T16:46:19.332Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T16:46:19.332Z] [DEBUG] 📤 Sending response
+[2025-08-09T16:46:19.333Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T16:46:19.339Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7
+[2025-08-09T16:46:23.928Z] [DEBUG] ✅ Auth passed, hitting template route: PUT /api/templates/7
+[2025-08-09T16:46:23.979Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T16:46:31.841Z] [DEBUG] Preview request: {"id":"7"}
+[2025-08-09T16:46:31.841Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview
+[2025-08-09T16:46:31.843Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:46:31.846Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:46:31.846Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:46:31.862Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:46:31.862Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:46:31.863Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:46:31.863Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:46:31.864Z] [DEBUG] Replaced body_en length: 319
+[2025-08-09T16:46:31.865Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:46:31.863Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:46:31.863Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:46:31.862Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:46:37.946Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/6/preview
+[2025-08-09T16:46:37.946Z] [DEBUG] Preview request: {"id":"6"}
+[2025-08-09T16:46:37.947Z] [DEBUG] Template found: Wedding Update
+[2025-08-09T16:46:37.948Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:46:37.948Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:46:37.950Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:46:37.951Z] [DEBUG] Replaced subject: Important wedding update, Alice
+[2025-08-09T16:46:37.951Z] [DEBUG] Original body_en length: 263
+[2025-08-09T16:46:37.951Z] [DEBUG] Replaced body_en length: 226
+[2025-08-09T16:46:37.951Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:46:37.951Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:46:37.950Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:46:37.950Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:46:37.951Z] [DEBUG] Original subject: Important wedding update, {{guestName}}
+[2025-08-09T16:46:55.481Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview
+[2025-08-09T16:46:55.481Z] [DEBUG] Preview request: {"id":"7"}
+[2025-08-09T16:46:55.482Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:46:55.483Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:46:55.483Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T16:46:55.485Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:46:55.485Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:46:55.485Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:46:55.485Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:46:55.485Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:46:55.485Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:46:55.485Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:46:55.485Z] [DEBUG] Replaced body_en length: 319
+[2025-08-09T16:46:55.485Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:47:04.116Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview?guestId=27
+[2025-08-09T16:47:04.116Z] [DEBUG] Preview request: {"id":"7","guestId":"27"}
+[2025-08-09T16:47:04.118Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:47:04.119Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:47:04.119Z] [DEBUG] Getting variables for specific guest: 27
+[2025-08-09T16:47:04.121Z] [DEBUG] Found specific guest: Jeffrey
+[2025-08-09T16:47:04.124Z] [DEBUG] Selected guest for preview: Jeffrey
+[2025-08-09T16:47:04.124Z] [DEBUG] Replaced subject: Thank you for your RSVP, Jeffrey!
+[2025-08-09T16:47:04.124Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:47:04.124Z] [DEBUG] Replaced body_en length: 321
+[2025-08-09T16:47:04.124Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:47:04.124Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:47:04.124Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:47:04.124Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:47:04.124Z] [DEBUG] Sample variables: {"guestName":"Jeffrey","groupLabel":"Jeffrey & Brigita","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":0,"isAttending":false}
+[2025-08-09T16:47:08.296Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview?guestId=31
+[2025-08-09T16:47:08.296Z] [DEBUG] Preview request: {"id":"7","guestId":"31"}
+[2025-08-09T16:47:08.297Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:47:08.299Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:47:08.299Z] [DEBUG] Getting variables for specific guest: 31
+[2025-08-09T16:47:08.300Z] [DEBUG] Found specific guest: Alice
+[2025-08-09T16:47:08.302Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T16:47:08.303Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:47:08.303Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice!
+[2025-08-09T16:47:08.303Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:47:08.303Z] [DEBUG] Replaced body_en length: 319
+[2025-08-09T16:47:08.303Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:47:08.303Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:47:08.303Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:47:08.303Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T16:47:10.035Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview?guestId=32
+[2025-08-09T16:47:10.035Z] [DEBUG] Preview request: {"id":"7","guestId":"32"}
+[2025-08-09T16:47:10.037Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:47:10.038Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:47:10.038Z] [DEBUG] Getting variables for specific guest: 32
+[2025-08-09T16:47:10.039Z] [DEBUG] Found specific guest: Anna Smith
+[2025-08-09T16:47:10.042Z] [DEBUG] Selected guest for preview: Anna Smith
+[2025-08-09T16:47:10.042Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:47:10.042Z] [DEBUG] Replaced subject: Thank you for your RSVP, Anna Smith!
+[2025-08-09T16:47:10.042Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:47:10.042Z] [DEBUG] Replaced body_en length: 324
+[2025-08-09T16:47:10.042Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:47:10.042Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:47:10.042Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:47:10.042Z] [DEBUG] Sample variables: {"guestName":"Anna Smith","groupLabel":"The Smiths","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":0,"isAttending":false}
+[2025-08-09T16:47:12.932Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview?guestId=27
+[2025-08-09T16:47:12.933Z] [DEBUG] Preview request: {"id":"7","guestId":"27"}
+[2025-08-09T16:47:12.935Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:47:12.936Z] [DEBUG] Getting variables for specific guest: 27
+[2025-08-09T16:47:12.936Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:47:12.936Z] [DEBUG] Found specific guest: Jeffrey
+[2025-08-09T16:47:12.939Z] [DEBUG] Selected guest for preview: Jeffrey
+[2025-08-09T16:47:12.939Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:47:12.939Z] [DEBUG] Replaced subject: Thank you for your RSVP, Jeffrey!
+[2025-08-09T16:47:12.939Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:47:12.939Z] [DEBUG] Replaced body_en length: 321
+[2025-08-09T16:47:12.939Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:47:12.939Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:47:12.939Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:47:12.939Z] [DEBUG] Sample variables: {"guestName":"Jeffrey","groupLabel":"Jeffrey & Brigita","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":0,"isAttending":false}
+[2025-08-09T16:47:14.679Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/7/preview?guestId=29
+[2025-08-09T16:47:14.680Z] [DEBUG] Preview request: {"id":"7","guestId":"29"}
+[2025-08-09T16:47:14.681Z] [DEBUG] Template found: Thank You - Attending
+[2025-08-09T16:47:14.682Z] [DEBUG] Sample guests found: 5
+[2025-08-09T16:47:14.682Z] [DEBUG] Getting variables for specific guest: 29
+[2025-08-09T16:47:14.683Z] [DEBUG] Found specific guest: John Doe
+[2025-08-09T16:47:14.685Z] [DEBUG] Selected guest for preview: John Doe
+[2025-08-09T16:47:14.685Z] [DEBUG] Sample variables: {"guestName":"John Doe","groupLabel":"The Doe Family","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":0,"isAttending":false}
+[2025-08-09T16:47:14.685Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T16:47:14.686Z] [DEBUG] Original body_en length: 326
+[2025-08-09T16:47:14.686Z] [DEBUG] Original subject: Thank you for your RSVP, {{guestName}}!
+[2025-08-09T16:47:14.686Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T16:47:14.686Z] [DEBUG] Variable replacement results:
+[2025-08-09T16:47:14.686Z] [DEBUG] Replaced body_en length: 322
+[2025-08-09T16:47:14.686Z] [DEBUG] Replaced subject: Thank you for your RSVP, John Doe!
