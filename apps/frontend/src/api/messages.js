@@ -147,17 +147,16 @@ export async function getMessageLogs(messageId) {
 }
 
 /**
- * Preview a message with guest substitutions
- * @param {Object} template 
- * @param {Object} guest 
- * @returns {Promise<{success: boolean, subject: string, body: string}>}
+ * Preview a message with email template styling
+ * @param {Object} messageData - Message data including subject, bodyEn, bodyLt, style
+ * @returns {Promise<Object>} Preview response
  */
-export async function previewMessage(template, guest) {
+export async function previewMessage(messageData) {
   try {
-    const response = await api.post('/messages/preview', { template, guest })
-    return response.data
+    const response = await api.post('/messages/preview', messageData);
+    return response.data;
   } catch (error) {
-    console.error('Failed to preview message:', error)
-    throw error
+    console.error('Failed to preview message:', error);
+    throw error;
   }
 } 

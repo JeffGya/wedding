@@ -1,14 +1,21 @@
 // apps/backend/helpers/resendClient.js
 
 const { Resend } = require('resend');
+const logger = require('./logger');
 
-// Check if API key is available
-if (!process.env.RESEND_API_KEY) {
-  console.error('❌ RESEND_API_KEY is missing. Please set it in your environment variables.');
-  process.exit(1); // Exit immediately to prevent undefined behavior
+const apiKey = process.env.RESEND_API_KEY;
+
+// In development or when the key is missing, export a safe stub so the app can start.
+if (!apiKey) {
+  logger.warn('⚠️ RESEND_API_KEY is missing. Email sending will be disabled.');
+  module.exports = {
+    emails: {
+      async send() {
+        throw new Error('RESEND_API_KEY is missing. Email sending is disabled.');
+      },
+    },
+  };
+} else {
+  // Initialize the Resend client with the API key
+  module.exports = new Resend(apiKey);
 }
-
-// Initialize the Resend client with your API key
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-module.exports = resend;

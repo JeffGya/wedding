@@ -52,5 +52,16 @@
   "rsvp.successTitle": "Ačiū!",
   "rsvp.successMessage": "Jūsų atsakymas sėkmingai užregistruotas.",
   "rsvp.backHome": "Grįžti į pradžią",
-  "rsvp.closed": "RSVP dar nėra atidaryti. Laukite naujienų."
+  "rsvp.closed": "RSVP dar nėra atidaryti. Laukite naujienų.",
+
+  "rsvpGate.pageRequiresAttending": "Šis puslapis prieinamas tik svečiams, kurie patvirtino dalyvavimą.",
+  "rsvpGate.enterCodePrompt": "Prašome įvesti savo RSVP kodą, kad galėtumėte tęsti:",
+  "rsvpGate.verifyButton": "Patvirtinti",
+  "rsvpGate.notAttending": "Jūs nurodėte, kad nedalyvausite, todėl šis puslapis jums neprieinamas.",
+  "rsvpGate.updateRSVP": "Atnaujinti mano RSVP",
+  "rsvpGate.updateClosed": "RSVP atnaujinimai šiuo metu uždaryti.",
+  "rsvpGate.pendingRSVP": "Jūs dar neužpildėte savo RSVP. Prašome jį užpildyti, kad galėtumėte pasiekti šį puslapį.",
+  "rsvpGate.completeRSVP": "Užpildyti mano RSVP",
+  "rsvpGate.accessDenied": "Prieiga uždrausta",
+  "rsvpGate.accessDeniedMessage": "Šis puslapis reikalauja, kad būtumėte patvirtinę dalyvavimą. Prašome užpildyti savo RSVP, kad galėtumėte tęsti."
 }

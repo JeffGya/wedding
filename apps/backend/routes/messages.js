@@ -28,6 +28,63 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
 // Use Luxon for robust timezone handling
 const { DateTime } = require('luxon');
+const logger = require('../helpers/logger');
+
+// Function to get inline styles for email templates (Gmail-compatible)
+function getInlineStyles(style) {
+  const styles = {
+    elegant: {
+      fontFamily: 'Lora, Georgia, serif',
+      color: '#333333',
+      lineHeight: '1.6',
+      padding: '20px',
+      backgroundColor: '#F5F5DC',
+      border: '2px solid #D2B48C',
+      textAlign: 'left',
+      fontSize: '16px',
+      borderRadius: '8px',
+      maxWidth: '600px',
+      margin: '0 auto'
+    },
+    modern: {
+      fontFamily: 'Open Sans, Arial, sans-serif',
+      color: '#333333',
+      lineHeight: '1.5',
+      padding: '20px',
+      backgroundColor: '#F8F8F8',
+      border: '1px solid #CCCCCC',
+      textAlign: 'left',
+      fontSize: '16px',
+      borderRadius: '12px',
+      maxWidth: '600px',
+      margin: '0 auto',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    },
+    friendly: {
+      fontFamily: 'Open Sans, Arial, sans-serif',
+      color: '#333333',
+      lineHeight: '1.6',
+      padding: '20px',
+      backgroundColor: '#FFF8DC',
+      border: '2px solid #DEB887',
+      textAlign: 'left',
+      fontSize: '16px',
+      borderRadius: '16px',
+      maxWidth: '600px',
+      margin: '0 auto'
+    }
+  };
+  
+  return styles[style] || styles.elegant;
+}
+
+// Function to convert style object to inline CSS string
+function styleObjectToInline(styleObj) {
+  return Object.entries(styleObj)
+    .map(([key, value]) => `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value}`)
+    .join('; ');
+}
+const { replaceTemplateVars, getTemplateVariables } = require('../utils/templateVariables');
 
 
 function formatRsvpDeadline(dateStr) {
@@ -39,17 +96,14 @@ function formatRsvpDeadline(dateStr) {
   });
 }
 
-function replaceTemplateVars(template, vars) {
-  if (!template) return '';
-  return template.replace(/{{\s*(\w+)\s*}}/g, (_, key) => {
-    return vars[key] !== undefined ? vars[key] : '';
-  });
-}
+// Remove the old replaceTemplateVars function (lines 41-45)
+// Remove the old formatRsvpDeadline function (lines 33-39)
 
 // Protect all routes
 router.use(requireAuth);
+// Replace the existing console-based route hit middleware:
 router.use((req, res, next) => {
-  console.log('🧭 Route hit:', req.method, req.originalUrl);
+  logger.debug('🧭 Route hit:', req.method, req.originalUrl);
   next();
 });
 
@@ -107,11 +161,11 @@ router.use((req, res, next) => {
  */
 // Create a new draft message
 router.post('/', async (req, res) => {
-  console.log('🧰 [messages.js] POST /api/messages hit with headers:', req.headers);
-  console.log('🧰 [messages.js] POST /api/messages hit with body:', req.body);
-  console.log('🧰 [messages.js] POST /messages hit with body:', req.body);
-  const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
-  console.log('🧰 [messages.js] Extracted fields:', { subject, body_en, body_lt, status, scheduledAt, recipients });
+  logger.debug('🧰 [messages.js] POST /api/messages hit with headers:', req.headers);
+  logger.debug('🧰 [messages.js] POST /api/messages hit with body:', req.body);
+  logger.debug('🧰 [messages.js] POST /messages hit with body:', req.body);
+  const { subject, body_en, body_lt, status, scheduledAt, recipients, style = 'elegant' } = req.body;
+  logger.debug('🧰 [messages.js] Extracted fields:', { subject, body_en, body_lt, status, scheduledAt, recipients, style });
   // Validate required fields
   if (!subject || !body_en || !body_lt || !status) {
     return res.status(400).json({ success: false, error: 'Subject, body_en, body_lt, and status are required.' });
@@ -119,7 +173,7 @@ router.post('/', async (req, res) => {
   // Special validation for scheduled messages
   let scheduledForFinal = null;
   if (status === 'scheduled') {
-    console.log('🧰 [messages.js] Status is scheduled; scheduledAt:', scheduledAt);
+    logger.debug('🧰 [messages.js] Status is scheduled; scheduledAt:', scheduledAt);
     if (!scheduledAt) {
       return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages.' });
     }
@@ -133,35 +187,35 @@ router.post('/', async (req, res) => {
     }
     // Format scheduledForFinal for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
     scheduledForFinal = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
-    console.log('🧰 [messages.js] Formatted scheduledForFinal for MySQL:', scheduledForFinal);
+    logger.debug('🧰 [messages.js] Formatted scheduledForFinal for MySQL:', scheduledForFinal);
   }
   try {
-    console.log('🧰 [messages.js] Inserting message with params:', [subject, body_en, body_lt, status, scheduledForFinal]);
+    logger.debug('🧰 [messages.js] Inserting message with params:', [subject, body_en, body_lt, status, scheduledForFinal, style]);
     const insertResult = await dbRun(
-      `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`,
-      [subject, body_en, body_lt, status, scheduledForFinal]
+      `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for, style) VALUES (?, ?, ?, ?, ?, ?)`,
+      [subject, body_en, body_lt, status, scheduledForFinal, style]
     );
     const messageId = insertResult.insertId || insertResult.lastID;
-    console.log('🧰 [messages.js] Inserted messageId:', messageId);
+    logger.debug('🧰 [messages.js] Inserted messageId:', messageId);
     if (recipients && recipients.length) {
-      console.log('🧰 [messages.js] Recipients provided:', recipients);
+      logger.debug('🧰 [messages.js] Recipients provided:', recipients);
       const guestSql = `SELECT id, email, preferred_language FROM guests WHERE id IN (${recipients.map(() => '?').join(',')})`;
       const guests = await dbAll(guestSql, recipients);
-      console.log('🧰 [messages.js] Guests fetched for recipients:', guests);
+      logger.debug('🧰 [messages.js] Guests fetched for recipients:', guests);
       const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, email, language, delivery_status) VALUES (?, ?, ?, ?, 'pending')`;
       for (const guest of guests) {
-        console.log('🧰 [messages.js] Inserting recipient for guest:', guest);
+        logger.debug('🧰 [messages.js] Inserting recipient for guest:', guest);
         try {
           await dbRun(insertRecipientSql, [messageId, guest.id, guest.email, guest.preferred_language || 'en']);
         } catch (e) {
-          console.error('❌ Failed to insert recipient:', guest.id, e.message);
+          logger.error('❌ Failed to insert recipient:', guest.id, e.message);
         }
       }
     }
     res.json({ success: true, messageId });
   } catch (err) {
-    console.error('❌ [messages.js] Error creating message:', err);
-    console.error(err.stack);
+    logger.error('❌ [messages.js] Error creating message:', err);
+    logger.error(err.stack);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -556,7 +610,7 @@ router.put('/:id', async (req, res) => {
         try {
           await dbRun(insertSql, [req.params.id, guestId]);
         } catch (err) {
-          console.error('❌ Failed to insert recipient:', guestId, err.message);
+          logger.error('❌ Failed to insert recipient:', guestId, err.message);
         }
       }
     }
@@ -660,32 +714,32 @@ router.delete('/:id', async (req, res) => {
  */
 // Send message to selected guests (filtered by guestIds if provided)
 router.post('/:id/send', async (req, res, next) => {
-  console.log('✅ Route hit: POST /:id/send — messageId:', req.params.id);
+  logger.debug('✅ Route hit: POST /:id/send — messageId:', req.params.id);
   const messageId = req.params.id;
   const guestIds = req.body?.guestIds && Array.isArray(req.body.guestIds) && req.body.guestIds.length > 0
     ? req.body.guestIds
     : null;
   // Debug: preparing to send message
-  console.log('➡️ Preparing to send messageId:', messageId, 'with guestIds:', guestIds);
+  logger.debug('➡️ Preparing to send messageId:', messageId, 'with guestIds:', guestIds);
   // Get sender info from settings
   let senderInfo;
   try {
     senderInfo = await getSenderInfo(db);
-    console.log('📫 Sender info:', senderInfo);
+    logger.debug('📫 Sender info:', senderInfo);
   } catch (err) {
-    console.error('❌ Failed to fetch sender info:', err);
+    logger.error('❌ Failed to fetch sender info:', err);
     return res.status(500).json({ success: false, error: 'Failed to fetch sender settings' });
   }
   try {
     // Load the message
     const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
     if (!message) {
-      console.error('❌ No message found for ID:', messageId);
+      logger.error('❌ No message found for ID:', messageId);
       return res.status(404).json({ success: false, error: 'Message not found' });
     }
-    console.log('📦 Loaded message:', message);
+    logger.debug('📦 Loaded message:', message);
     if ((!message.body_en || message.body_en.trim() === '') && (!message.body_lt || message.body_lt.trim() === '')) {
-      console.error('❌ Cannot send email: message body is empty.');
+      logger.error('❌ Cannot send email: message body is empty.');
       return res.status(400).json({ success: false, error: 'Cannot send email: message body is empty.' });
     }
     if (message.status !== 'draft') {
@@ -713,22 +767,118 @@ router.post('/:id/send', async (req, res, next) => {
         await delay(300);
         // Check for missing email before sending
         if (!guest.email) {
-          console.warn('⚠️ Guest missing email, skipping:', guest.id);
+          logger.warn('⚠️ Guest missing email, skipping:', guest.id);
           results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
           return;
         }
         const name = guest.group_label || guest.name;
         const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-        const body = (lang === 'lt' ? message.body_lt : message.body_en)
-          .replace(/{{\s*name\s*}}/g, name)
-          .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
-          .replace(/{{\s*code\s*}}/g, guest.code)
-          .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code}`);
+        
+        // Get enhanced variables for this guest
+        const variables = await getTemplateVariables(guest, message);
+        
+        // Replace variables in message content
+        const body_en = replaceTemplateVars(message.body_en, variables);
+        const body_lt = replaceTemplateVars(message.body_lt, variables);
+        const subject = replaceTemplateVars(message.subject, variables);
+        
+        // Apply template styling if available
+        let styledBodyEn = body_en;
+        let styledBodyLt = body_lt;
+        
+        // Check if style is available from the message
+        if (message.style) {
+          const styleObj = getInlineStyles(message.style);
+          const inlineStyles = styleObjectToInline(styleObj);
+          
+          // Google Fonts import
+          const googleFonts = message.style === 'elegant' 
+            ? '<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">'
+            : '<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">';
+          
+          // CSS styles using Gmail-supported properties
+          const cssStyles = `
+            <style>
+              .email-container {
+                ${inlineStyles}
+              }
+              .email-container h1, .email-container h2, .email-container h3 {
+                margin: 0 0 15px 0;
+                font-weight: 600;
+                color: #333333;
+              }
+              .email-container h1 {
+                font-size: 24px;
+                border-bottom: 2px solid #D2B48C;
+                padding-bottom: 8px;
+              }
+              .email-container h2 {
+                font-size: 20px;
+              }
+              .email-container h3 {
+                font-size: 18px;
+              }
+              .email-container p {
+                margin: 0 0 15px 0;
+                color: #333333;
+              }
+              .email-container .signature {
+                margin-top: 20px;
+                padding-top: 15px;
+                border-top: 1px solid #cccccc;
+                font-style: italic;
+                color: #333333;
+              }
+              @media screen and (max-width: 600px) {
+                .email-container {
+                  padding: 15px !important;
+                  margin: 10px !important;
+                }
+              }
+            </style>
+          `;
+          
+          styledBodyEn = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              ${googleFonts}
+              ${cssStyles}
+            </head>
+            <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+              <div class="email-container">
+                ${body_en}
+              </div>
+            </body>
+            </html>
+          `;
+          
+          styledBodyLt = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              ${googleFonts}
+              ${cssStyles}
+            </head>
+            <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+              <div class="email-container">
+                ${body_lt}
+              </div>
+            </body>
+            </html>
+          `;
+        }
+        
+        // Send email using Resend
         const emailData = {
           from: senderInfo,
           to: guest.email,
-          subject: message.subject,
-          html: body,
+          subject: subject,
+          html: guest.language === 'lt' ? styledBodyLt : styledBodyEn
         };
         let retries = 0;
         const maxRetries = 3;
@@ -738,7 +888,7 @@ router.post('/:id/send', async (req, res, next) => {
             const axios = require('axios');
             const { RESEND_API_KEY } = process.env;
             // Log email data before sending
-            console.log('📤 Email data to send:', emailData);
+            logger.debug('📤 Email data to send:', emailData);
             const response = await axios.post('https://api.resend.com/emails', emailData, {
               headers: {
                 Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -746,7 +896,7 @@ router.post('/:id/send', async (req, res, next) => {
               },
             });
             // Log the full response from Resend
-            console.log('✅ Resend response:', {
+            logger.debug('✅ Resend response:', {
               status: response.status,
               data: response.data,
             });
@@ -754,16 +904,16 @@ router.post('/:id/send', async (req, res, next) => {
             // Check if Resend accepted the email for delivery
             if (response.status === 200 && response.data && response.data.id) {
               // Resend accepted the email - mark as sent
-              console.log('✅ Email accepted by Resend for delivery:', response.data.id);
+              logger.info('✅ Email accepted by Resend for delivery:', response.data.id);
               const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status, resend_message_id) VALUES (?, ?, 'sent', ?, 'sent', ?)`;
               // Format timestamp for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
               const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
-              console.log('🧰 [messages.js] Formatted sentAt for MySQL:', sentAt);
+              logger.debug('🧰 [messages.js] Formatted sentAt for MySQL:', sentAt);
               await dbRun(logSql, [messageId, guest.id, sentAt, response.data.id]);
               results.push({ guest_id: guest.id, status: 'sent', resendId: response.data.id });
             } else {
               // Resend didn't accept the email - mark as failed
-              console.error('❌ Resend didn\'t accept email for delivery:', response.data);
+              logger.error('❌ Resend didn\'t accept email for delivery:', response.data);
               const errorMsg = 'Resend API did not accept email for delivery';
               const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
               await dbRun(logSql, [messageId, guest.id, errorMsg]);
@@ -778,7 +928,7 @@ router.post('/:id/send', async (req, res, next) => {
               const errorMsg = err.response?.data
                 ? JSON.stringify(err.response.data)
                 : err.message;
-              console.error('❌ Resend error:', errorMsg);
+              logger.error('❌ Resend error:', errorMsg);
               const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
               await dbRun(logSql, [messageId, guest.id, errorMsg]);
               results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
@@ -799,10 +949,10 @@ router.post('/:id/send', async (req, res, next) => {
     
     // Only mark message as sent if at least some emails were sent successfully
     if (sentCount > 0) {
-      console.log('✅ Marking message as sent -', sentCount, 'emails sent successfully');
+      logger.info('✅ Marking message as sent -', sentCount, 'emails sent successfully');
       await dbRun(`UPDATE messages SET status = 'sent', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [messageId]);
     } else {
-      console.log('❌ Keeping message as draft - all emails failed');
+      logger.info('❌ Keeping message as draft - all emails failed');
       await dbRun(`UPDATE messages SET status = 'draft', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [messageId]);
     }
     
@@ -963,41 +1113,47 @@ router.get('/:id/logs', async (req, res) => {
  */
 // Preview a message with guest substitutions
 router.post('/preview', (req, res) => {
-  const { template, guest } = req.body;
+  try {
+    const { template, guest } = req.body;
 
-  if (!template || !guest) {
-    return res.status(400).json({ success: false, error: 'Template and guest info are required' });
+    if (!template || !guest) {
+      return res.status(400).json({ success: false, error: 'Template and guest info are required' });
+    }
+
+    const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
+
+    const replacements = {
+      guestName: guest.name,
+      groupLabel: guest.group_label,
+      rsvpLink: `${SITE_URL}/${lang}/rsvp/${guest.code}`,
+      plusOneName: guest.plus_one_name || '',
+      rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+    };
+
+    const body_en = replaceTemplateVars(template.body_en, {
+      guestName: guest.name,
+      groupLabel: guest.group_label,
+      rsvpLink: `${SITE_URL}/en/rsvp/${guest.code}`,
+      plusOneName: guest.plus_one_name || '',
+      rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+    });
+
+    const body_lt = replaceTemplateVars(template.body_lt, {
+      guestName: guest.name,
+      groupLabel: guest.group_label,
+      rsvpLink: `${SITE_URL}/lt/rsvp/${guest.code}`,
+      plusOneName: guest.plus_one_name || '',
+      rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
+    });
+
+    const body = lang === 'lt' ? body_lt : body_en;
+    const subject = replaceTemplateVars(template.subject, replacements);
+
+    return res.json({ success: true, subject, body });
+  } catch (error) {
+    logger.error('Failed to preview message:', error);
+    return res.status(500).json({ success: false, error: 'Failed to preview message: ' + error.message });
   }
-
-  const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-
-  const replacements = {
-    guestName: guest.name,
-    groupLabel: guest.group_label,
-    rsvpLink: `${SITE_URL}/${lang}/rsvp/${guest.code}`,
-    plusOneName: guest.plus_one_name || '',
-    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
-  };
-
-  const body_en = replaceTemplateVars(template.body_en, {
-    guestName: guest.name,
-    groupLabel: guest.group_label,
-    rsvpLink: `${SITE_URL}/en/rsvp/${guest.code}`,
-    plusOneName: guest.plus_one_name || '',
-    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
-  });
-  const body_lt = replaceTemplateVars(template.body_lt, {
-    guestName: guest.name,
-    groupLabel: guest.group_label,
-    rsvpLink: `${SITE_URL}/lt/rsvp/${guest.code}`,
-    plusOneName: guest.plus_one_name || '',
-    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline)
-  });
-
-  const body = lang === 'lt' ? body_lt : body_en;
-  const subject = replaceTemplateVars(template.subject, replacements);
-
-  res.json({ success: true, subject, body });
 });
 
 /**
@@ -1051,10 +1207,9 @@ router.post('/:id/resend', async (req, res, next) => {
     for (let i = 0; i < guests.length; i += BATCH_SIZE) {
       const batch = guests.slice(i, i + BATCH_SIZE);
       const batchPromises = batch.map(async (guest) => {
-        await delay(300);
         // Check for missing email before sending
         if (!guest.email) {
-          console.warn('⚠️ Guest missing email, skipping:', guest.id);
+          logger.warn('⚠️ Guest missing email, skipping:', guest.id);
           results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
           return;
         }
@@ -1084,15 +1239,19 @@ router.post('/:id/resend', async (req, res, next) => {
                 'Content-Type': 'application/json',
               },
             });
-            // Log the full response from Resend
-            console.log('✅ Resend response:', {
+
+            logger.debug('✅ Resend response:', {
               status: response.status,
               data: response.data,
             });
+
             // Format sentAt for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
             const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
-            console.log('🧰 [messages.js] Resend formatted sentAt:', sentAt);
-            const logSql = `UPDATE message_recipients SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL WHERE message_id = ? AND guest_id = ?`;
+            logger.debug('🧰 [messages.js] Resend formatted sentAt:', sentAt);
+
+            const logSql = `UPDATE message_recipients
+              SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL
+              WHERE message_id = ? AND guest_id = ?`;
             await dbRun(logSql, [sentAt, messageId, guest.id]);
             results.push({ guest_id: guest.id, status: 'sent' });
             break;
@@ -1101,11 +1260,11 @@ router.post('/:id/resend', async (req, res, next) => {
               retries++;
               await delay(backoff[retries]);
             } else {
-              const errorMsg = err.response?.data
-                ? JSON.stringify(err.response.data)
-                : err.message;
-              console.error('❌ Resend error:', errorMsg);
-              const logSql = `UPDATE message_recipients SET delivery_status = 'failed', error_message = ? WHERE message_id = ? AND guest_id = ?`;
+              const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : err.message;
+              logger.error('❌ Resend error:', errorMsg);
+              const logSql = `UPDATE message_recipients
+                SET delivery_status = 'failed', error_message = ?
+                WHERE message_id = ? AND guest_id = ?`;
               await dbRun(logSql, [errorMsg, messageId, guest.id]);
               results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
               break;
@@ -1122,6 +1281,131 @@ router.post('/:id/resend', async (req, res, next) => {
     const failedCount = results.filter(r => r.status === 'failed').length;
     res.json({ success: true, results, sentCount, failedCount });
   } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * @openapi
+ * /messages/preview-template/:templateId:
+ *   post:
+ *     summary: Preview a message template with guest substitutions
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: templateId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - guestId
+ *             properties:
+ *               guestId:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Rendered subject and body
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 subject:
+ *                   type: string
+ *                 body:
+ *                   type: string
+ *                 variables:
+ *                   type: object
+ *                 lang:
+ *                   type: string
+ */
+// Preview a message with guest substitutions
+router.post('/preview-template/:templateId', async (req, res) => {
+  const templateId = req.params.templateId;
+  const guestId = req.body.guestId;
+
+  try {
+    // Get template
+    const template = await dbGet('SELECT * FROM templates WHERE id = ?', [templateId]);
+    if (!template) {
+      return res.status(404).json({ success: false, error: 'Template not found' });
+    }
+
+    // Get guest
+    const guest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
+    if (!guest) {
+      return res.status(404).json({ success: false, error: 'Guest not found' });
+    }
+
+    // Get enhanced variables
+    const variables = await getTemplateVariables(guest, template);
+    const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
+
+    // Replace variables in template
+    const body_en = replaceTemplateVars(template.body_en, variables);
+    const body_lt = replaceTemplateVars(template.body_lt, variables);
+    const subject = replaceTemplateVars(template.subject, variables);
+
+    const body = lang === 'lt' ? body_lt : body_en;
+
+    return res.json({
+      success: true,
+      subject,
+      body,
+      variables,
+    });
+  } catch (err) {
+    logger.error('Error previewing template:', err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * @openapi
+ * /messages/template-variables:
+ *   get:
+ *     summary: Get available template variables
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: Available template variables
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 variables:
+ *                   type: object
+ */
+router.get('/template-variables', async (req, res) => {
+  try {
+    const { getAvailableVariables } = require('../utils/templateVariables');
+    const variables = getAvailableVariables();
+    
+    return res.json({ 
+      success: true, 
+      variables,
+      conditionalExamples: {
+        "{{#if can_bring_plus_one}}...{{/if}}": "Show content only if guest can bring plus one",
+        "{{#if plus_one_name}}...{{else}}...{{/if}}": "Show different content based on plus one status",
+        "{{#if rsvp_status === 'attending'}}...{{else}}...{{/if}}": "Show content based on RSVP status",
+        "{{#if group_label === 'Bride\\'s Family'}}...{{/if}}": "Show content for specific groups"
+      }
+    });
+  } catch (err) {
+    logger.error('Error getting template variables:', err);
     return res.status(500).json({ success: false, error: err.message });
   }
 });

@@ -10,9 +10,14 @@ if (!fs.existsSync(logDir)) {
 // Simple file logger that appends timestamped messages
 const logFile = path.join(logDir, 'server.log');
 function fileLog(...args) {
-  const line = `[${new Date().toISOString()}] ` +
-    args.map(a => typeof a === 'string' ? a : JSON.stringify(a)).join(' ') +
-    '\n';
+  const serialize = (a) => {
+    if (a instanceof Error) return a.stack || a.message || String(a);
+    if (typeof a === 'object') {
+      try { return JSON.stringify(a); } catch { return String(a); }
+    }
+    return String(a);
+  };
+  const line = `[${new Date().toISOString()}] ` + args.map(serialize).join(' ') + '\n';
   fs.appendFile(logFile, line, err => {
     if (err) process.stderr.write('Log write failed: ' + err + '\n');
   });
@@ -33,6 +38,7 @@ const cors = require('cors');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const startScheduler = require('./jobs/scheduler');
+const logger = require('./helpers/logger');
 
 const requireAuth = require('./middleware/auth');
 
@@ -60,10 +66,10 @@ adminRouter.use('/surveys/:id/responses', adminSurveyResponsesRoutes);
 
 // ---- Global process-level error handlers ----
 process.on('unhandledRejection', (err) => {
-  console.error('UnhandledRejection:', err);
+  logger.error('UnhandledRejection:', err instanceof Error ? err.stack : err);
 });
 process.on('uncaughtException', (err) => {
-  console.error('UncaughtException:', err);
+  logger.error('UncaughtException:', err instanceof Error ? err.stack : err);
 });
 
 // Initialize Express app
@@ -196,7 +202,7 @@ app.use((err, req, res, next) => {
   const code = err.code || err.errorCode;
 
   // Log full error & stack
-  console.error('🔥 Error handler caught:', err.stack || err);
+  logger.error('🔥 Error handler caught:', err.stack || err);
 
   const payload = {
     error: { message },
@@ -219,5 +225,5 @@ startScheduler();
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on port ${PORT}`);
 });

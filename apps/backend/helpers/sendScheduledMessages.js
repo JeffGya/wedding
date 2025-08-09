@@ -33,7 +33,7 @@ async function sendScheduledMessages() {
   let globalSent = 0;
   let globalFailed = 0;
   try {
-    logger.info('📨 Starting scheduled message check...');
+    logger.debug('📨 Starting scheduled message check...');
     
     // Get all scheduled messages that are due
     const scheduledMessages = await dbAll(
@@ -50,14 +50,14 @@ async function sendScheduledMessages() {
     });
 
     if (dueMessages.length === 0) {
-      logger.info('✅ No scheduled messages ready to send.');
+      logger.debug('✅ No scheduled messages ready to send.');
       return;
     }
 
-    logger.info(`📬 Found ${dueMessages.length} scheduled message(s) to send.`);
+    logger.debug(`📬 Found ${dueMessages.length} scheduled message(s) to send.`);
 
     for (const message of dueMessages) {
-      logger.info(`➡️ Attempting to send message ID: ${message.id}`);
+      logger.debug(`➡️ Attempting to send message ID: ${message.id}`);
 
       // Retrieve recipients for the scheduled message
       const recipients = await dbAll(
@@ -66,11 +66,11 @@ async function sendScheduledMessages() {
       );
 
       if (recipients.length === 0) {
-        logger.info(`⚠️ No recipients found for message ID: ${message.id}. Skipping.`);
+        logger.debug(`⚠️ No recipients found for message ID: ${message.id}. Skipping.`);
         continue;
       }
 
-      logger.info('📬 Attempting to get sender info...');
+      logger.debug('📬 Attempting to get sender info...');
       let senderInfo;
       try {
         senderInfo = await getSenderInfo(db);
@@ -78,7 +78,7 @@ async function sendScheduledMessages() {
         logger.error('⚠️ Could not retrieve sender info. Skipping sending.', error);
         continue;
       }
-      logger.info('Sender info:', senderInfo);
+      logger.debug('Sender info:', senderInfo);
       if (!senderInfo) {
         logger.error('⚠️ Could not retrieve sender info. Skipping sending.');
         continue;
@@ -141,9 +141,9 @@ async function sendScheduledMessages() {
         ['sent', message.id]
       );
 
-      logger.info(`✅ Finished sending message ID: ${message.id}. Results:`, sendResults);
+      logger.debug(`✅ Finished sending message ID: ${message.id}. Results:`, sendResults);
     }
-    logger.info(`📝 Scheduler summary: processed ${globalSent + globalFailed} deliveries — ${globalSent} sent, ${globalFailed} failed.`);
+    logger.debug(`📝 Scheduler summary: processed ${globalSent + globalFailed} deliveries — ${globalSent} sent, ${globalFailed} failed.`);
   } catch (err) {
     logger.error('❌ Error in sendScheduledMessages:', err);
   }

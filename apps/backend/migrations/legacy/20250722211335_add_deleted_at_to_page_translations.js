@@ -33,6 +33,7 @@ exports.up = async function up(knex) {
         table.dropColumn('deleted_at');
       });
     } catch (err) {
-      console.warn('Could not drop deleted_at (likely SQLite). Skipping.', err.message);
+      const logger = require('../../helpers/logger');
+      logger.warn('Could not drop deleted_at (likely SQLite). Skipping.', err.message);
     }
   };

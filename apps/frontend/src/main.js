@@ -1,3 +1,4 @@
+import './loggingGuard'
 import 'virtual:uno.css'
 import 'uno.css'
 import PrimeVue from 'primevue/config';
@@ -67,6 +68,11 @@ import { localize } from '@vee-validate/i18n';
 import validationEn from '@vee-validate/i18n/dist/locale/en.json';
 import i18n from '@/i18n';
 import * as rules from '@vee-validate/rules';
+
+// Silence console logs in production unless explicitly enabled
+if (import.meta.env.PROD && !import.meta.env.VITE_ENABLE_LOGS) {
+  ['log','debug','info','table'].forEach(m => (console[m] = () => {}));
+}
 
 // Register all built-in rules, skipping any non-function exports (e.g., the 'all' JSON object)
 Object.keys(rules).forEach(name => {

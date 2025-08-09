@@ -7,91 +7,85 @@
     :initial-values="initialValues"
     v-slot="{ errors, values }"
   >
-
     <CountdownTimer v-if="props.guest.rsvp_deadline" :deadline="props.guest.rsvp_deadline" @expired="onExpired" />
 
     <Banner v-if="formError" :message="formError" type="error" />
 
-    <div>
-      <p
-        class="mb-4"
-        for="attending"
-      >
+    <div class="space-y-8">
+      <p class="text-txt font-medium">
         {{ t('rsvp.attendingLabel') }}
-    </p>
-      <div class="space-y-8 mt-4">
-        <div class="flex items-center gap-4">
+      </p>
+      <div class="space-y-8">
+        <div class="flex items-center gap-16">
           <RadioButton 
-          v-model="form.attending" 
-          inputId="attending-yes" 
-          name="attending" 
-          :value="true"
+            v-model="form.attending" 
+            inputId="attending-yes" 
+            name="attending" 
+            :value="true"
+            class="text-btn-primary-base"
           />
-          <label for="attending-yes">{{ t('rsvp.attendingYes') }}</label>
+          <label for="attending-yes" class="text-txt font-medium">{{ t('rsvp.attendingYes') }}</label>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-16">
           <RadioButton 
             v-model="form.attending" 
             inputId="attending-no" 
             name="attending" 
             :value="false" 
-            />
-          <label for="attending-no">{{ t('rsvp.attendingNo') }}</label>
+            class="text-btn-primary-base"
+          />
+          <label for="attending-no" class="text-txt font-medium">{{ t('rsvp.attendingNo') }}</label>
         </div>
       </div>
-      <Banner v-if="errors.attending" type="error" :closable="false" class="text-sm mt-4">
+      <Banner v-if="errors.attending" type="error" :closable="false" class="text-sm">
         {{ errors.attending }}
       </Banner>
     </div>
 
-    <div>
+    <div class="space-y-8">
       <Field name="dietary">
-        <label
-          for="dietary"
-        >
-        {{ t('rsvp.dietaryLabel') }}
-      </label>
-          <InputText 
-            id="dietary" 
-            type="text"
-            class="mt-4"
-            v-model="form.dietary" 
-          />
+        <label for="dietary" class="text-txt font-medium block mb-8">
+          {{ t('rsvp.dietaryLabel') }}
+        </label>
+        <InputText 
+          id="dietary" 
+          type="text"
+          class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+          v-model="form.dietary" 
+        />
       </Field>
-      <Banner v-if="errors.dietary" type="error" :closable="false" class="text-sm mt-4">
+      <Banner v-if="errors.dietary" type="error" :closable="false" class="text-sm">
         {{ errors.dietary }}
       </Banner>
     </div>
 
-    <div>
+    <div class="space-y-8">
       <Field name="notes">
-        <label 
-          for="notes" 
-        >
+        <label for="notes" class="text-txt font-medium block mb-8">
           {{ t('rsvp.notesLabel') }}
         </label>
         <Textarea
           id="notes" 
-          class="mt-4"
+          class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus min-h-48"
           v-model="form.notes" 
         />
       </Field>
-      <Banner v-if="errors.notes" type="error" :closable="false" class="text-sm mt-4">
+      <Banner v-if="errors.notes" type="error" :closable="false" class="text-sm">
         {{ errors.notes }}
       </Banner>
     </div>
 
-    <div 
-      v-if="props.guest.can_bring_plus_one"
-    >
-      <p class="mb-4">
+    <div v-if="props.guest.can_bring_plus_one" class="space-y-8">
+      <p class="text-txt font-medium">
         {{ t('rsvp.plusOneLabel') }}
       </p>
-        <div class="flex items-center mt-4 space-x-4">
-          <ToggleSwitch inputId="add-plus-one" v-model="form.add_plus_one" class="mr-2" />
-        <label 
-          for="add-plus-one"
-        >
+      <div class="flex items-center gap-16">
+        <ToggleSwitch 
+          inputId="add-plus-one" 
+          v-model="form.add_plus_one" 
+          class="text-btn-primary-base"
+        />
+        <label for="add-plus-one" class="text-txt font-medium">
           {{ form.add_plus_one ? t('rsvp.yes') : t('rsvp.no') }}
         </label>
       </div>
@@ -99,53 +93,49 @@
 
     <div 
       v-if="props.guest.can_bring_plus_one && form.add_plus_one"
-      class="plus-one p-16 rounded-sm space-y-16"
-      >
-      <div class="mb-4">
+      class="plus-one p-16 rounded-md space-y-16 border border-bg-glass-border"
+    >
+      <div class="space-y-8">
         <Field name="plus_one_name">
-          <label 
-            for="plus_one_name"
-            class="font-500"
-          >
+          <label for="plus_one_name" class="text-txt font-medium block mb-8">
             {{ t('rsvp.plusOneNameLabel') }}
           </label>
           <InputText
             id="plus_one_name"
-            class="mt-4"
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
             v-model="form.plus_one_name"
           />
         </Field>
+        <Banner v-if="errors.plus_one_name" type="error" :closable="false" class="text-sm">
+          {{ errors.plus_one_name }}
+        </Banner>
       </div>
-      <Banner v-if="errors.plus_one_name" type="error" :closable="false" class="text-sm mt-4">
-        {{ errors.plus_one_name }}
-      </Banner>
-      <div class="mb-4">
+      
+      <div class="space-y-8">
         <Field name="plus_one_dietary">
-          <label 
-            for="plus_one_dietary" 
-            class="font-500"
-          >
+          <label for="plus_one_dietary" class="text-txt font-medium block mb-8">
             {{ t('rsvp.plusOneDietaryLabel') }}
           </label>
           <InputText 
             id="plus_one_dietary" 
-            class="mt-4"
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
             v-model="form.plus_one_dietary" 
           />
         </Field>
-        <Banner v-if="errors.plus_one_dietary" type="error" :closable="false" class="text-sm mt-4">
+        <Banner v-if="errors.plus_one_dietary" type="error" :closable="false" class="text-sm">
           {{ errors.plus_one_dietary }}
         </Banner>
       </div>
     </div>
 
-      <Button
-        type="submit"
-        size="large"
-        :disabled="isDisabled"
-      >
-        {{ t('rsvp.submitButton') }}
-      </Button>
+    <Button
+      type="submit"
+      size="large"
+      :disabled="isDisabled"
+      class="w-full bg-btn-primary-base hover:bg-btn-primary-hover active:bg-btn-primary-active text-btn-primary-text font-semibold rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {{ t('rsvp.submitButton') }}
+    </Button>
   </Form>
 </template>
 
@@ -243,5 +233,30 @@ async function onSubmit(values) {
 .plus-one {
   background-image: var(--bg-glass);
   border: 1px solid var(--bg-glass-border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .space-y-16 {
+    gap: 1rem;
+  }
+  
+  .space-y-8 {
+    gap: 0.5rem;
+  }
+  
+  .p-16 {
+    padding: 1rem;
+  }
+  
+  .gap-16 {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .plus-one {
+    padding: 0.75rem;
+  }
 }
 </style>

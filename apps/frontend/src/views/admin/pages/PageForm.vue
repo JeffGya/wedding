@@ -5,7 +5,7 @@
   >
     <template #headerActions>
       <Button 
-        icon="pi pi-arrow-left" 
+        icon="i-solar:arrow-left-bold" 
         severity="secondary" 
         text
         @click="goBack"
@@ -27,7 +27,7 @@
     <Card>
       <template #title>
         <div class="flex items-center gap-2">
-          <i class="pi pi-cog text-acc-base"></i>
+          <i class="i-solar:settings-bold text-acc-base"></i>
           <span>Page Settings</span>
         </div>
       </template>
@@ -81,7 +81,7 @@
     <Card>
       <template #title>
         <div class="flex items-center gap-2">
-          <i class="pi pi-globe text-acc-base"></i>
+          <i class="i-solar:globe-bold text-acc-base"></i>
           <span>Content</span>
         </div>
       </template>
@@ -116,7 +116,7 @@
     <Card>
       <template #title>
         <div class="flex items-center gap-2">
-          <i class="pi pi-palette text-acc-base"></i>
+          <i class="i-solar:layers-minimalistic-bold text-acc-base"></i>
           <span>Content Blocks</span>
         </div>
       </template>
@@ -140,14 +140,24 @@
     <Card>
       <template #title>
         <div class="flex items-center gap-2">
-          <i class="pi pi-eye text-acc-base"></i>
+          <i class="i-solar:eye-bold text-acc-base"></i>
           <span>Preview & Validation</span>
         </div>
       </template>
       <template #content>
         <div class="flex gap-2">
-          <Button label="Preview" icon="pi pi-eye" severity="info" @click="previewPage" />
-          <Button label="Validate" icon="pi pi-check-circle" severity="warning" @click="validateContent" />
+          <Button 
+            label="Preview" 
+            icon="i-solar:eye-bold" 
+            severity="info" 
+            @click="previewPage" 
+          />
+          <Button 
+            label="Validate" 
+            icon="i-solar:check-circle-bold" 
+            severity="warning" 
+            @click="validateContent" 
+          />
         </div>
       </template>
     </Card>
@@ -156,7 +166,7 @@
     <div class="flex gap-2">
       <Button
         label="Save"
-        icon="pi pi-save"
+        icon="i-solar:disk-bold"
         severity="primary"
         @click="savePage"
         :loading="saving"
@@ -164,7 +174,7 @@
       />
       <Button 
         label="Cancel" 
-        icon="pi pi-times"
+        icon="i-solar:close-circle-bold"
         severity="secondary" 
         text
         @click="cancel" 
@@ -478,3 +488,61 @@ const toast = {
   }
 };
 </script>
+
+<style scoped>
+/* Enhanced styling for better visual hierarchy */
+.card {
+  margin-bottom: 1.5rem;
+}
+
+/* Icon styling for card headers */
+.card .p-card-title i {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Form field spacing */
+.form-field {
+  margin-bottom: 1rem;
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Enhanced grid responsiveness */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card content padding */
+.p-card-content {
+  padding: 1.5rem;
+}
+
+/* Form validation styling */
+.error-text {
+  color: var(--p-danger-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Loading state styling */
+.loading-overlay {
+  position: relative;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Preview modal styling */
+.preview-modal .p-dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+</style>

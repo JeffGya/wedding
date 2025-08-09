@@ -73,7 +73,6 @@ CREATE TABLE `knex_migrations_lock` (
   PRIMARY KEY (`index`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
   `id` int NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
@@ -81,10 +80,11 @@ CREATE TABLE `messages` (
   `body_lt` text,
   `status` varchar(50) NOT NULL DEFAULT 'draft',
   `scheduled_for` timestamp NULL DEFAULT NULL,
+  `style` enum('elegant','modern','friendly') DEFAULT 'elegant',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DROP TABLE IF EXISTS `message_recipients`;
 CREATE TABLE `message_recipients` (
@@ -140,11 +140,29 @@ CREATE TABLE `page_translations` (
   CONSTRAINT `page_translations_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `id` int NOT NULL AUTO_INCREMENT,
   `enable_global_countdown` tinyint(1) NOT NULL DEFAULT '0',
   `wedding_date` timestamp NULL DEFAULT NULL,
+
+  `venue_name` varchar(255) DEFAULT NULL,
+  `venue_address` text DEFAULT NULL,
+  `event_start_date` varchar(255) DEFAULT NULL,
+  `event_end_date` varchar(255) DEFAULT NULL,
+  `event_time` varchar(255) DEFAULT NULL,
+
+  `bride_name` varchar(255) DEFAULT NULL,
+  `groom_name` varchar(255) DEFAULT NULL,
+  `contact_email` varchar(255) DEFAULT NULL,
+  `contact_phone` varchar(255) DEFAULT NULL,
+
+  `event_type` varchar(255) DEFAULT NULL,
+  `dress_code` varchar(255) DEFAULT NULL,
+  `special_instructions` text DEFAULT NULL,
+
+  `website_url` varchar(255) DEFAULT NULL,
+  `app_title` varchar(255) DEFAULT NULL,
+
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -196,6 +214,7 @@ CREATE TABLE `templates` (
   `body_en` text NOT NULL,
   `body_lt` text,
   `html` text,
+  `style` enum('elegant','modern','friendly') DEFAULT 'elegant',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)

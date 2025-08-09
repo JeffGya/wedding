@@ -7,6 +7,7 @@
  */
 
 const express = require('express');
+const logger = require('../helpers/logger');
 const SurveyBlock = require('../db/models/surveyBlock');
 const SurveyResponse = require('../db/models/surveyResponse');
 
@@ -159,7 +160,7 @@ router.get('/', async (req, res) => {
 
     res.json({ data: paged, meta });
   } catch (err) {
-    console.error('[GET /api/admin/surveys] Error:', err && err.message, err && err.stack || err);
+    logger.error('[GET /api/admin/surveys] Error:', err && err.message, err && err.stack || err);
     res.status(500).json({
       error: { message: 'Failed to fetch surveys' },
       message: 'Failed to fetch surveys'
@@ -221,7 +222,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const payload = req.body;
-    console.log('[POST /api/admin/surveys] body:', payload);
+    logger.debug('[POST /api/admin/surveys] body:', payload);
 
     const errors = validateSurveyPayload(payload, false);
     if (errors.length) {
@@ -255,7 +256,7 @@ router.post('/', async (req, res) => {
 
     res.status(201).json(created);
   } catch (err) {
-    console.error('[POST /api/admin/surveys] Error:', err);
+    logger.error('[POST /api/admin/surveys] Error:', err);
     res.status(500).json({
       error: { message: 'Failed to create survey' },
       message: 'Failed to create survey'
@@ -309,7 +310,7 @@ router.get('/:id', async (req, res) => {
     }
     res.json(survey);
   } catch (err) {
-    console.error(`[GET /api/admin/surveys/${id}] Error:`, err);
+    logger.error(`[GET /api/admin/surveys/${id}] Error:`, err);
     res.status(500).json({
       error: { message: 'Failed to fetch survey' },
       message: 'Failed to fetch survey'
@@ -413,7 +414,7 @@ router.put('/:id', async (req, res) => {
     const updated = await SurveyBlock.getById(id, { includeDeleted: true });
     res.json(updated);
   } catch (err) {
-    console.error(`[PUT /api/admin/surveys/${id}] Error:`, err);
+    logger.error(`[PUT /api/admin/surveys/${id}] Error:`, err);
     res.status(500).json({
       error: { message: 'Failed to update survey' },
       message: 'Failed to update survey'
@@ -465,7 +466,7 @@ router.delete('/:id', async (req, res) => {
     await SurveyBlock.softDelete(id);
     res.json({ success: true });
   } catch (err) {
-    console.error(`[DELETE /api/admin/surveys/${id}] Error:`, err);
+    logger.error(`[DELETE /api/admin/surveys/${id}] Error:`, err);
     res.status(500).json({
       error: { message: 'Failed to delete survey' },
       message: 'Failed to delete survey'
@@ -515,7 +516,7 @@ router.put('/:id/restore', async (req, res) => {
     const restored = await SurveyBlock.getById(id, { includeDeleted: true });
     res.json(restored);
   } catch (err) {
-    console.error(`[PUT /api/admin/surveys/${id}/restore] Error:`, err);
+    logger.error(`[PUT /api/admin/surveys/${id}/restore] Error:`, err);
     res.status(500).json({
       error: { message: 'Failed to restore survey' },
       message: 'Failed to restore survey'
@@ -571,7 +572,7 @@ router.delete('/:id/destroy', async (req, res) => {
     await SurveyBlock.destroy(id);
     res.json({ success: true });
   } catch (err) {
-    console.error(`[DELETE /api/admin/surveys/${id}/destroy] Error:`, err);
+    logger.error(`[DELETE /api/admin/surveys/${id}/destroy] Error:`, err);
     res.status(500).json({
       error: { message: 'Failed to destroy survey' },
       message: 'Failed to destroy survey'

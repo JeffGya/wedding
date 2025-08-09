@@ -1,0 +1,221 @@
+[2025-08-09T14:20:23.054Z] [NAV] Navigation endpoint hit with locale: en
+[2025-08-09T14:20:23.054Z] [NAV][DEBUG] typeof Page: object
+[2025-08-09T14:20:23.054Z] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-09T14:20:23.054Z] [NAV][DEBUG] About to call Page.findAll
+[2025-08-09T14:20:23.054Z] [NAV][DEBUG] Page.findAll: function
+[2025-08-09T14:20:23.086Z] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-09T14:20:23.103Z] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-09T14:20:23.113Z] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-09T14:20:23.113Z] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-09T14:21:13.849Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-09T14:21:13.856Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-09T14:21:14.761Z] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-09T14:21:14.779Z] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-09T14:21:27.980Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-09T14:21:27.983Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-09T14:21:31.926Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-09T14:21:31.929Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-09T14:21:33.911Z] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-09T14:21:33.926Z] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-09T14:21:38.899Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-09T14:21:38.902Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-09T14:21:56.966Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-09T14:21:56.969Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-09T14:21:57.730Z] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-09T14:21:57.736Z] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-09T14:21:58.625Z] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-09T14:21:58.627Z] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-09T14:25:49.366Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:25:49.370Z] Server is running on port 5001
+[2025-08-09T14:25:49.387Z] ✅ Connected to MySQL database.
+[2025-08-09T14:26:28.903Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:26:28.908Z] Server is running on port 5001
+[2025-08-09T14:26:28.922Z] ✅ Connected to MySQL database.
+[2025-08-09T14:28:27.947Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:28:27.951Z] Server is running on port 5001
+[2025-08-09T14:28:27.965Z] ✅ Connected to MySQL database.
+[2025-08-09T14:28:54.052Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:28:54.056Z] Server is running on port 5001
+[2025-08-09T14:28:54.071Z] ✅ Connected to MySQL database.
+[2025-08-09T14:30:00.139Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-09T14:30:00.140Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-09T14:30:00.143Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-09T14:30:00.143Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-09T14:30:22.585Z] [NAV] Navigation endpoint hit with locale: en
+[2025-08-09T14:30:22.585Z] [NAV][DEBUG] Page.findAll: function
+[2025-08-09T14:30:22.585Z] [NAV][DEBUG] typeof Page: object
+[2025-08-09T14:30:22.586Z] [NAV][DEBUG] About to call Page.findAll
+[2025-08-09T14:30:22.585Z] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-09T14:30:22.592Z] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-09T14:30:22.596Z] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-09T14:30:22.615Z] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-09T14:30:22.615Z] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-09T14:30:28.052Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-09T14:30:28.054Z] [GET /api/pages] Returning 2 of 2
+[2025-08-09T14:31:43.397Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-09T14:31:43.398Z] [GET /api/pages] Returning 2 of 2
+[2025-08-09T14:31:44.054Z] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-09T14:31:44.055Z] [GET /api/pages] Returning 2 of 2
+[2025-08-09T14:32:11.995Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:32:11.998Z] Server is running on port 5001
+[2025-08-09T14:32:12.012Z] ✅ Connected to MySQL database.
+[2025-08-09T14:32:13.769Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:32:13.773Z] Server is running on port 5001
+[2025-08-09T14:32:13.784Z] ✅ Connected to MySQL database.
+[2025-08-09T14:32:26.140Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:32:26.143Z] Server is running on port 5001
+[2025-08-09T14:32:26.153Z] ✅ Connected to MySQL database.
+[2025-08-09T14:32:33.542Z] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/messages.js:1151
+  }
+  ^
+
+SyntaxError: missing ) after argument list
+    at internalCompileFunction (node:internal/vm:73:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1153:20)
+    at Module._compile (node:internal/modules/cjs/loader:1205:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
+    at Module.load (node:internal/modules/cjs/loader:1091:32)
+    at Module._load (node:internal/modules/cjs/loader:938:12)
+    at Module.require (node:internal/modules/cjs/loader:1115:19)
+    at require (node:internal/modules/helpers:130:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:177:23)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+[2025-08-09T14:32:33.557Z] ✅ Connected to MySQL database.
+[2025-08-09T14:32:49.679Z] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/messages.js:1151
+  }
+  ^
+
+SyntaxError: missing ) after argument list
+    at internalCompileFunction (node:internal/vm:73:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1153:20)
+    at Module._compile (node:internal/modules/cjs/loader:1205:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
+    at Module.load (node:internal/modules/cjs/loader:1091:32)
+    at Module._load (node:internal/modules/cjs/loader:938:12)
+    at Module.require (node:internal/modules/cjs/loader:1115:19)
+    at require (node:internal/modules/helpers:130:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:177:23)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+[2025-08-09T14:32:49.691Z] ✅ Connected to MySQL database.
+[2025-08-09T14:45:56.926Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:45:56.929Z] Server is running on port 5001
+[2025-08-09T14:45:56.941Z] ✅ Connected to MySQL database.
+[2025-08-09T14:46:01.695Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:46:01.699Z] Server is running on port 5001
+[2025-08-09T14:46:01.713Z] ✅ Connected to MySQL database.
+[2025-08-09T14:46:17.471Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:46:17.474Z] Server is running on port 5001
+[2025-08-09T14:46:17.484Z] ✅ Connected to MySQL database.
+[2025-08-09T14:46:25.415Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:46:25.419Z] Server is running on port 5001
+[2025-08-09T14:46:25.432Z] ✅ Connected to MySQL database.
+[2025-08-09T14:49:27.852Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:49:27.856Z] Server is running on port 5001
+[2025-08-09T14:49:27.872Z] ✅ Connected to MySQL database.
+[2025-08-09T14:55:47.243Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:55:47.246Z] Server is running on port 5001
+[2025-08-09T14:55:47.259Z] ✅ Connected to MySQL database.
+[2025-08-09T14:55:52.070Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:55:52.073Z] [INFO] Server is running on port 5001
+[2025-08-09T14:55:52.084Z] ✅ Connected to MySQL database.
+[2025-08-09T14:56:26.952Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:56:26.956Z] [INFO] Server is running on port 5001
+[2025-08-09T14:56:26.973Z] ✅ Connected to MySQL database.
+[2025-08-09T14:56:31.453Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:56:31.456Z] [INFO] Server is running on port 5001
+[2025-08-09T14:56:31.466Z] ✅ Connected to MySQL database.
+[2025-08-09T14:56:39.899Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:56:39.902Z] [INFO] Server is running on port 5001
+[2025-08-09T14:56:39.916Z] ✅ Connected to MySQL database.
+[2025-08-09T14:56:46.673Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:56:46.676Z] [INFO] Server is running on port 5001
+[2025-08-09T14:56:46.687Z] ✅ Connected to MySQL database.
+[2025-08-09T14:56:55.242Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:56:55.244Z] [INFO] Server is running on port 5001
+[2025-08-09T14:56:55.255Z] ✅ Connected to MySQL database.
+[2025-08-09T14:59:47.206Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:59:47.212Z] [INFO] Server is running on port 5001
+[2025-08-09T14:59:47.235Z] ✅ Connected to MySQL database.
+[2025-08-09T14:59:56.904Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T14:59:56.907Z] [INFO] Server is running on port 5001
+[2025-08-09T14:59:56.919Z] ✅ Connected to MySQL database.
+[2025-08-09T15:00:00.911Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-09T15:00:00.912Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-09T15:00:00.919Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-09T15:00:00.919Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-09T15:00:14.974Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:00:14.978Z] [INFO] Server is running on port 5001
+[2025-08-09T15:00:14.999Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:00:24.027Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:00:24.030Z] [INFO] Server is running on port 5001
+[2025-08-09T15:00:24.040Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:00:37.879Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:00:37.882Z] [INFO] Server is running on port 5001
+[2025-08-09T15:00:37.894Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:01:17.035Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:01:17.038Z] [INFO] Server is running on port 5001
+[2025-08-09T15:01:17.047Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:01:41.574Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:01:41.576Z] [INFO] Server is running on port 5001
+[2025-08-09T15:01:41.586Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:01:56.656Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:01:56.659Z] [INFO] Server is running on port 5001
+[2025-08-09T15:01:56.669Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:02:17.073Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:02:17.076Z] [INFO] Server is running on port 5001
+[2025-08-09T15:02:17.086Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:02:29.097Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:02:29.102Z] [INFO] Server is running on port 5001
+[2025-08-09T15:02:29.120Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:02:52.036Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:02:52.041Z] [INFO] Server is running on port 5001
+[2025-08-09T15:02:52.059Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:03:02.763Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:03:02.766Z] [INFO] Server is running on port 5001
+[2025-08-09T15:03:02.777Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:03:17.697Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:03:17.701Z] [INFO] Server is running on port 5001
+[2025-08-09T15:03:17.713Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:03:48.558Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:03:48.562Z] [INFO] Server is running on port 5001
+[2025-08-09T15:03:48.585Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:03:59.519Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:03:59.522Z] [INFO] Server is running on port 5001
+[2025-08-09T15:03:59.532Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:04:06.444Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:04:06.449Z] [INFO] Server is running on port 5001
+[2025-08-09T15:04:06.467Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:04:23.605Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:04:23.609Z] [INFO] Server is running on port 5001
+[2025-08-09T15:04:23.626Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:04:45.653Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:04:45.656Z] [INFO] Server is running on port 5001
+[2025-08-09T15:04:45.666Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:05:02.584Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:05:02.587Z] [INFO] Server is running on port 5001
+[2025-08-09T15:05:02.597Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:05:21.030Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:05:21.033Z] [INFO] Server is running on port 5001
+[2025-08-09T15:05:21.044Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:05:30.883Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:05:30.886Z] [INFO] Server is running on port 5001
+[2025-08-09T15:05:30.896Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:05:58.588Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:05:58.593Z] [INFO] Server is running on port 5001
+[2025-08-09T15:05:58.612Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:06:35.081Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:06:35.087Z] [INFO] Server is running on port 5001
+[2025-08-09T15:06:35.108Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:07:25.549Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:07:25.552Z] [INFO] Server is running on port 5001
+[2025-08-09T15:07:25.564Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:08:02.653Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:08:02.656Z] [INFO] Server is running on port 5001
+[2025-08-09T15:08:02.667Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:10:19.944Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:10:19.950Z] [INFO] Server is running on port 5001
+[2025-08-09T15:10:19.966Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:10:43.563Z] [DEBUG] Login request received:
+[2025-08-09T15:10:55.564Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-09T15:10:55.567Z] [DEBUG] [GET /api/pages] Returning 2 of 2
+[2025-08-09T15:11:13.312Z] [DEBUG] 🧭 Route hit: GET /api/messages

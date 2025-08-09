@@ -1,5 +1,5 @@
 {
-  "home.hero.subtitle": "It’s happening, in Vilnius. Don’t miss it.",
+  "home.hero.subtitle": "It's happening, in Vilnius. Don't miss it.",
   "home.hero.cta": "RSVP",
   "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
   "home.story.title": "Our Story",
@@ -51,7 +51,7 @@
   "rsvp.success.message": "Your RSVP was received.",
   "rsvp.back.home": "Return to Home",
   "rsvp.closed": "RSVP's are closed. We will inform you when it is to RSVP.",
-  "rsvp.noCodeChars": "Please avoid using characters like <, >, {, }, or $ in your response.",
+  "rsvp.noCodeChars": "Please avoid using characters like &lt;, &gt;, &#123;, &#125;, or $ in your response.",
   "rsvp.yes": "Yes, I am bringing a plus one",
   "rsvp.no": "No, I am not bringing a plus one",
   "rsvp.successTitleSolo": "Thank you, {name}",
@@ -66,5 +66,16 @@
   "rsvp.labelPlusOne": "Plus One",
   "rsvp.labelPlusOneDietary": "Plus One Dietary Restrictions",
 
-  "rsvp.confirmDeletePlusOne": "Are you sure you want to remove your earlier added plus one?"
+  "rsvp.confirmDeletePlusOne": "Are you sure you want to remove your earlier added plus one?",
+
+  "rsvpGate.pageRequiresAttending": "This page is only available to guests who have RSVP'd as attending.",
+  "rsvpGate.enterCodePrompt": "Please enter your RSVP code to continue:",
+  "rsvpGate.verifyButton": "Verify",
+  "rsvpGate.notAttending": "You have RSVP'd as not attending, so this page is not available to you.",
+  "rsvpGate.updateRSVP": "Update My RSVP",
+  "rsvpGate.updateClosed": "RSVP updates are currently closed.",
+  "rsvpGate.pendingRSVP": "You haven't completed your RSVP yet. Please complete it to access this page.",
+  "rsvpGate.completeRSVP": "Complete My RSVP",
+  "rsvpGate.accessDenied": "Access Denied",
+  "rsvpGate.accessDeniedMessage": "This page requires you to have RSVP'd as attending. Please complete your RSVP to continue."
 }

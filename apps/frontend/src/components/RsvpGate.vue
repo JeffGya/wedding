@@ -1,21 +1,25 @@
 <template>
   <div class="rsvp-gate">
+    <!-- Access Denied Banner -->
+    <Banner
+      type="warn"
+      :message="$t('rsvpGate.accessDeniedMessage')"
+      class="mb-6"
+    />
+
     <!-- No session: prompt for code lookup inline -->
     <div v-if="reason === 'no_session'" class="mt-6">
-      <!-- Informational banner for no-session (requires code) -->
-      <Banner
-        type="info"
-        :message="$t('rsvp.pageRequiresAttending')"
-      />
-      <p>{{ $t('rsvp.enterCodePrompt') }}</p>
+      <p class="text-lg font-medium mb-4">{{ $t('rsvpGate.pageRequiresAttending') }}</p>
+      <p class="mb-4">{{ $t('rsvpGate.enterCodePrompt') }}</p>
       <div class="flex items-center mt-4 space-x-2">
         <InputText
           v-model="code"
           :placeholder="$t('rsvp.lookupLabel')"
           @keyup.enter="submitCode"
+          class="flex-1"
         />
         <Button
-          :label="$t('rsvp.verifyButton')"
+          :label="$t('rsvpGate.verifyButton')"
           icon="i-solar:magnifer-linear"
           @click="submitCode"
           :disabled="!code.trim()"
@@ -29,26 +33,59 @@
       />
     </div>
 
-    <!-- Not attending: show warning and RSVP link if open -->
-    <div v-else-if="reason === 'not_attending'" class="mt-6 space-y-4">
-      <Banner
-        type="warn"
-        :message="$t('rsvp.notAttending')"
-      />
-
+    <!-- Pending RSVP: show message and link to complete RSVP -->
+    <div v-else-if="reason === 'pending'" class="mt-6 space-y-4">
+      <p class="text-lg font-medium">{{ $t('rsvpGate.pendingRSVP') }}</p>
+      
       <div v-if="!isClosed()">
         <Button
-          :label="$t('rsvp.updateRSVP')"
-          icon="i-solar:refresh-cw-bold"
+          :label="$t('rsvpGate.completeRSVP')"
+          icon="i-solar:user-check-bold"
           @click="goToFullRsvp"
+          class="w-full md:w-auto"
         />
       </div>
 
       <Banner
         v-else
         type="info"
-        :message="$t('rsvp.updateClosed')"
+        :message="$t('rsvp.closed')"
       />
+    </div>
+
+    <!-- Not attending: show warning and RSVP link if open -->
+    <div v-else-if="reason === 'not_attending'" class="mt-6 space-y-4">
+      <p class="text-lg font-medium">{{ $t('rsvpGate.notAttending') }}</p>
+
+      <div v-if="!isClosed()">
+        <Button
+          :label="$t('rsvpGate.updateRSVP')"
+          icon="i-solar:refresh-cw-bold"
+          @click="goToFullRsvp"
+          class="w-full md:w-auto"
+        />
+      </div>
+
+      <Banner
+        v-else
+        type="info"
+        :message="$t('rsvpGate.updateClosed')"
+      />
+    </div>
+
+    <!-- Unknown reason: fallback -->
+    <div v-else class="mt-6 space-y-4">
+      <p class="text-lg font-medium">{{ $t('rsvpGate.accessDenied') }}</p>
+      <p>{{ $t('rsvpGate.accessDeniedMessage') }}</p>
+      
+      <div v-if="!isClosed()">
+        <Button
+          :label="$t('rsvpGate.completeRSVP')"
+          icon="i-solar:user-check-bold"
+          @click="goToFullRsvp"
+          class="w-full md:w-auto"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -113,5 +150,6 @@ function goToFullRsvp() {
 .rsvp-gate {
   max-width: 480px;
   margin: 2rem auto;
+  padding: 0 1rem;
 }
 </style>

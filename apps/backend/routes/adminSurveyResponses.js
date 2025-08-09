@@ -148,7 +148,8 @@ router.get('/', async (req, res) => {
       meta: { filter, page: pageNum, limit, total, total_pages: totalPages }
     });
   } catch (err) {
-    console.error(`[GET /api/admin/surveys/${surveyId}/responses] Error:`, err.message || err);
+    const logger = require('../helpers/logger');
+    logger.error(`[GET /api/admin/surveys/${surveyId}/responses] Error:`, err.message || err);
     res.status(500).json({
       error: { message: 'Failed to fetch responses' },
       message: 'Failed to fetch responses'
@@ -204,7 +205,8 @@ router.delete('/', async (req, res) => {
     const deleted = await SurveyResponse.deleteBySurveyId(surveyId);
     res.json({ success: true, deleted });
   } catch (err) {
-    console.error(`[DELETE /api/admin/surveys/${surveyId}/responses] Error:`, err.message || err);
+    const logger = require('../helpers/logger');
+    logger.error(`[DELETE /api/admin/surveys/${surveyId}/responses] Error:`, err.message || err);
     res.status(500).json({
       error: { message: 'Failed to delete responses' },
       message: 'Failed to delete responses'

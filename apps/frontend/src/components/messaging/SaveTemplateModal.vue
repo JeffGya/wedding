@@ -86,11 +86,13 @@
 import { ref, computed, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import * as templatesApi from '@/api/templates.js'
+import { getTemplateStyles } from '@/api/templates'
 
 const props = defineProps({
   subject: String,
   bodyEn: String,
   bodyLt: String,
+  style: String, // Add style prop
   templates: Array,
   show: Boolean
 })
@@ -100,88 +102,100 @@ const toast = useToast()
 
 const mode = ref('new')
 const templateName = ref('')
-const selectedId = ref('')
+const selectedId = ref(null)
 const saving = ref(false)
+const styleOptions = ref([])
 
-// Computed property for Dialog visibility
-const isVisible = computed({
-  get: () => props.show,
-  set: (value) => {
-    if (!value) {
-      emit('close')
-    }
+// Load available styles
+onMounted(async () => {
+  try {
+    const response = await getTemplateStyles()
+    styleOptions.value = response.styles
+  } catch (error) {
+    console.error('Failed to load template styles:', error)
   }
 })
 
-// Reset form when modal opens
+const isVisible = computed({
+  get: () => props.show,
+  set: (value) => {
+    if (!value) emit('close')
+  }
+})
+
 watch(() => props.show, (newValue) => {
   if (newValue) {
     mode.value = 'new'
     templateName.value = ''
-    selectedId.value = ''
+    selectedId.value = null
   }
 })
 
-const handleClose = () => {
-  emit('close')
-}
-
 async function handleSave() {
+  if (mode.value === 'new' && !templateName.value.trim()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please enter a template name',
+      life: 3000
+    })
+    return
+  }
+
+  if (mode.value === 'overwrite' && !selectedId.value) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please select a template to overwrite',
+      life: 3000
+    })
+    return
+  }
+
   saving.value = true
-  
+
   try {
+    const templateData = {
+      name: mode.value === 'new' ? templateName.value : props.templates.find(t => t.id === selectedId.value)?.name,
+      subject: props.subject,
+      body_en: props.bodyEn,
+      body_lt: props.bodyLt,
+      style: props.style || 'elegant' // Include style
+    }
+
     if (mode.value === 'new') {
-      if (!templateName.value) {
-        toast.add({ 
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'Template name is required',
-          life: 3000
-        })
-        return
-      }
-      await templatesApi.createTemplate({
-        name: templateName.value,
-        subject: props.subject,
-        body_en: props.bodyEn,
-        body_lt: props.bodyLt
+      await templatesApi.createTemplate(templateData)
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Template created successfully',
+        life: 3000
       })
     } else {
-      if (!selectedId.value) {
-        toast.add({ 
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'Select a template to overwrite',
-          life: 3000
-        })
-        return
-      }
-      await templatesApi.updateTemplate(selectedId.value, {
-        name: props.templates.find(t => t.id === selectedId.value)?.name || '',
-        subject: props.subject,
-        body_en: props.bodyEn,
-        body_lt: props.bodyLt
+      await templatesApi.updateTemplate(selectedId.value, templateData)
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Template updated successfully',
+        life: 3000
       })
     }
 
-    toast.add({ 
-      severity: 'success', 
-      summary: 'Success', 
-      detail: 'Template saved successfully',
-      life: 3000
-    })
     emit('saved')
-    emit('close')
   } catch (error) {
-    console.error('Failed to save template:', error)
-    toast.add({ 
-      severity: 'error', 
-      summary: 'Error', 
-      detail: error.response?.data?.error || 'Failed to save template',
+    console.error('Error saving template:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to save template',
       life: 3000
     })
   } finally {
     saving.value = false
   }
+}
+
+function handleClose() {
+  emit('close')
 }
 </script>

@@ -192,3 +192,187 @@ input, textarea {
 .video-container {
   overscroll-behavior: contain;
 }
+
+/* Template Email Styling */
+.template-elegant {
+  font-family: 'Lora', serif;
+  color: var(--text);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--form-border);
+  border-radius: 0.5rem;
+}
+
+.template-elegant h1,
+.template-elegant h2,
+.template-elegant h3 {
+  font-family: 'Lora', serif;
+  color: var(--int-base);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.template-elegant h1 {
+  font-size: 1.875rem;
+  border-bottom: 2px solid var(--acc-base);
+  padding-bottom: 0.5rem;
+}
+
+.template-elegant h2 {
+  font-size: 1.5rem;
+}
+
+.template-elegant h3 {
+  font-size: 1.25rem;
+}
+
+.template-elegant p {
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.template-elegant .signature {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--form-border);
+  font-style: italic;
+  color: var(--int-base);
+}
+
+.template-modern {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--form-background);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.template-modern h1,
+.template-modern h2,
+.template-modern h3 {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--int-base);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.template-modern h1 {
+  font-size: 1.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.template-modern h2 {
+  font-size: 1.5rem;
+}
+
+.template-modern h3 {
+  font-size: 1.25rem;
+}
+
+.template-modern p {
+  margin-bottom: 1rem;
+}
+
+.template-modern .signature {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--acc-base);
+  font-weight: 600;
+  color: var(--int-base);
+}
+
+.template-friendly {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--bg-glass-border);
+  border-radius: 1.5rem;
+}
+
+.template-friendly h1,
+.template-friendly h2,
+.template-friendly h3 {
+  font-family: 'Great Vibes', cursive;
+  color: var(--acc-base);
+  margin-bottom: 1rem;
+}
+
+.template-friendly h1 {
+  font-size: 2.25rem;
+  text-align: center;
+}
+
+.template-friendly h2 {
+  font-size: 1.875rem;
+}
+
+.template-friendly h3 {
+  font-size: 1.5rem;
+}
+
+.template-friendly p {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.template-friendly .signature {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  text-align: center;
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.25rem;
+  color: var(--acc-base);
+}
+
+/* Common template elements */
+.template-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  border: 1px solid var(--form-border);
+}
+
+.template-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--int-base);
+  color: var(--acc2-base);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  margin: 1rem 0;
+  transition: all 0.2s ease;
+}
+
+.template-button:hover {
+  background: var(--int-hover);
+  color: var(--acc2-hover);
+}
+
+.template-elegant .template-button {
+  border: 1px solid var(--acc-base);
+}
+
+.template-modern .template-button {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.template-friendly .template-button {
+  border-radius: 1rem;
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.125rem;
+}

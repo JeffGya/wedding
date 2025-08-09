@@ -1,300 +1,139 @@
 const bcrypt = require('bcryptjs');
 const path = require('path');
-const fs = require('fs');
-
-// Load environment variables from the backend .env file
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-console.log('🧰 [seed.js] Using DB_TYPE:', process.env.DB_TYPE);
-
-// Add support for MySQL
-let db, execSql, runQuery, closeDb;
 
 (async () => {
-  if (process.env.DB_TYPE === 'mysql') {
-    const mysql = require('mysql2/promise');
-    const dbConfig = {
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT || 3306,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      multipleStatements: true
-    };
-    db = await mysql.createConnection(dbConfig);
-    execSql = async (sql) => {
-      await db.query(sql);
-    };
-    runQuery = async (sql, params = []) => {
-      // Convert undefined parameters to null for MySQL binding
-      const safeParams = params.map(p => p === undefined ? null : p);
-      const [result] = await db.execute(sql, safeParams);
-      return result;
-    };
-    closeDb = async () => {
-      await db.end();
-    };
-  } else {
-    const sqlite3 = require('sqlite3').verbose();
-    const { promisify } = require('util');
-    const dbPath = path.resolve(__dirname, '../database.sqlite');
-    const sqliteDb = new sqlite3.Database(dbPath);
-    db = sqliteDb;
-    execSql = async (sql) => {
-      await promisify(db.exec.bind(db))(sql);
-    };
-    runQuery = async (sql, params) => {
-      return new Promise((resolve, reject) => {
-        db.run(sql, params, function(err) {
-          if (err) return reject(err);
-          resolve({ lastID: this.lastID, changes: this.changes });
-        });
-      });
-    };
-    closeDb = async () => {
-      db.close();
-    };
-  }
+  const mysql = require('mysql2/promise');
+  const db = await mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    multipleStatements: true
+  });
 
-  // Run schema for SQLite or MySQL
-  const initSqlPath = path.resolve(__dirname, process.env.DB_TYPE === 'mysql' ? '../migrations/mysql_baseline_schema.sql' : '../migrations/mysql_baseline_schema.sql');
-  const initSql = fs.readFileSync(initSqlPath, 'utf-8');
-  try {
-    await execSql(initSql);
-    console.log('✅ Schema applied successfully.');
-  } catch (err) {
-    if (err.message.includes('already exists')) {
-      console.warn('⚠️ [seed.js] Schema already exists, continuing to seeding.');
-    } else {
-      console.error('Failed to apply schema:', err.message);
-      process.exit(1);
-    }
-  }
-  await seedDatabase();
-})();
+  const runQuery = async (sql, params = []) => {
+    const [rows] = await db.execute(sql, params);
+    return rows;
+  };
 
-
-// Seed function for both SQLite and MySQL
-async function seedDatabase() {
-  // Seed users
+  // Users
   const users = [
     { name: 'Jeffrey', email: 'jeffrey@example.com', password: 'password123' },
     { name: 'Brigita', email: 'brigita@example.com', password: 'wedding2024' }
   ];
   for (const user of users) {
     const hash = await bcrypt.hash(user.password, 10);
-    const insertUserSql = process.env.DB_TYPE === 'mysql'
-      ? 'INSERT IGNORE INTO users (name, email, passwordHash) VALUES (?, ?, ?)'
-      : 'INSERT OR IGNORE INTO users (name, email, passwordHash) VALUES (?, ?, ?)';
-    await runQuery(insertUserSql, [user.name, user.email, hash]);
+    await runQuery(
+      'INSERT IGNORE INTO users (name, email, passwordHash) VALUES (?, ?, ?)',
+      [user.name, user.email, hash]
+    );
   }
-  console.log('Users seeded successfully.');
 
-  // Guest groups and guests
+  // Guests
   const guestGroupsData = [
-    {
-      groupId: 1,
-      groupLabel: 'Jeffrey & Brigita',
-      guests: [
-        { name: 'Jeffrey', email: 'jeffrey@example.com' },
-        { name: 'Brigita' }
-      ]
-    },
-    {
-      groupId: 2,
-      groupLabel: 'The Doe Family',
-      guests: [
-        { name: 'John Doe', email: 'john@example.com' },
-        { name: 'Jane Doe' }
-      ]
-    },
-    {
-      groupId: 3,
-      groupLabel: 'Alice',
-      guests: [
-        { name: 'Alice', email: 'alice@example.com', can_bring_plus_one: true }
-      ]
-    },
-    {
-      groupId: 4,
-      groupLabel: 'The Smiths',
-      guests: [
-        { name: 'Anna Smith', email: 'anna.smith@example.com' },
-        { name: 'Mark Smith' }
-      ]
-    },
-    {
-      groupId: 5,
-      groupLabel: 'Emma & Liam',
-      guests: [
-        { name: 'Emma', email: 'emma@example.com' },
-        { name: 'Liam' }
-      ]
-    },
-    {
-      groupId: 6,
-      groupLabel: 'Robert',
-      guests: [
-        { name: 'Robert', email: 'robert@example.com' }
-      ]
-    },
-    {
-      groupId: 7,
-      groupLabel: 'Sofia & Mateo',
-      guests: [
-        { name: 'Sofia', email: 'sofia@example.com' },
-        { name: 'Mateo' }
-      ]
-    },
-    {
-      groupId: 8,
-      groupLabel: 'Olivia',
-      guests: [
-        { name: 'Olivia', email: 'olivia@example.com', can_bring_plus_one: true }
-      ]
-    }
+    { groupId: 1, groupLabel: 'Jeffrey & Brigita', guests: [{ name: 'Jeffrey', email: 'jeffrey@example.com' }, { name: 'Brigita' }] },
+    { groupId: 2, groupLabel: 'The Doe Family', guests: [{ name: 'John Doe', email: 'john@example.com' }, { name: 'Jane Doe' }] },
+    { groupId: 3, groupLabel: 'Alice', guests: [{ name: 'Alice', email: 'alice@example.com', can_bring_plus_one: true }] },
+    { groupId: 4, groupLabel: 'The Smiths', guests: [{ name: 'Anna Smith', email: 'anna.smith@example.com' }, { name: 'Mark Smith' }] },
+    { groupId: 5, groupLabel: 'Emma & Liam', guests: [{ name: 'Emma', email: 'emma@example.com' }, { name: 'Liam' }] },
+    { groupId: 6, groupLabel: 'Robert', guests: [{ name: 'Robert', email: 'robert@example.com' }] },
+    { groupId: 7, groupLabel: 'Sofia & Mateo', guests: [{ name: 'Sofia', email: 'sofia@example.com' }, { name: 'Mateo' }] },
+    { groupId: 8, groupLabel: 'Olivia', guests: [{ name: 'Olivia', email: 'olivia@example.com', can_bring_plus_one: true }] }
   ];
 
-  // Generate codes and insert guests
-  for (const groupData of guestGroupsData) {
-    const code = await new Promise((resolve, reject) => {
-      const tryCode = async () => {
-        const checkSql = process.env.DB_TYPE === 'mysql'
-          ? 'SELECT 1 FROM guests WHERE code = ?'
-          : 'SELECT 1 FROM guests WHERE code = ?';
-        // Generate a code, check if it exists, retry if so
-        const newCode = Math.random().toString(36).substring(2, 10);
-        const existRow = await runQuery(checkSql, [newCode]);
-        if (existRow && (existRow.length > 0 || existRow.changes === 0)) {
-          return tryCode(); // Ensure proper recursion flow
-        } else {
-          resolve(newCode);
-        }
-      };
-      tryCode().catch(reject);
-    });
+  const genCode = async () => {
+    while (true) {
+      const code = Math.random().toString(36).substring(2, 10);
+      const rows = await runQuery('SELECT 1 FROM guests WHERE code = ?', [code]);
+      if (rows.length === 0) return code;
+    }
+  };
 
-    for (let i = 0; i < groupData.guests.length; i++) {
-      const guest = groupData.guests[i];
-      const preferredLanguage = guest.preferred_language || (Math.random() < 0.5 ? 'en' : 'lt');
+  for (const group of guestGroupsData) {
+    const groupCode = await genCode();
+    for (let i = 0; i < group.guests.length; i++) {
+      const g = group.guests[i];
       const isPrimary = i === 0 ? 1 : 0;
-      const sql = process.env.DB_TYPE === 'mysql'
-        ? `INSERT INTO guests (
-             group_id, group_label, name, email, code,
-             can_bring_plus_one, is_primary, preferred_language,
-             attending, rsvp_deadline, dietary, notes, rsvp_status
-           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        : `INSERT OR IGNORE INTO guests (
-             group_id, group_label, name, email, code,
-             can_bring_plus_one, is_primary, preferred_language,
-             attending, rsvp_deadline, dietary, notes, rsvp_status
-           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-      const params = [
-        groupData.groupId,
-        groupData.groupLabel,
-        guest.name,
-        guest.email || null,
-        isPrimary ? code : null,
-        guest.can_bring_plus_one || 0,
-        isPrimary,
-        preferredLanguage,
-        isPrimary ? 0 : null,
-        null,
-        null,
-        null,
-        isPrimary ? 'not_attending' : 'pending'
-      ];
-      await runQuery(sql, params);
+      const preferred = g.preferred_language || (Math.random() < 0.5 ? 'en' : 'lt');
+      await runQuery(
+        `INSERT INTO guests (
+          group_id, group_label, name, email, code,
+          can_bring_plus_one, is_primary, preferred_language,
+          attending, rsvp_deadline, dietary, notes, rsvp_status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          group.groupId,
+          group.groupLabel,
+          g.name,
+          g.email || null,
+          isPrimary ? groupCode : null,
+          g.can_bring_plus_one || 0,
+          isPrimary,
+          preferred,
+          isPrimary ? 0 : null,
+          null,
+          null,
+          null,
+          isPrimary ? 'not_attending' : 'pending'
+        ]
+      );
     }
   }
-  console.log('Guests seeded successfully.');
 
-  // Email settings
-  const emailInsertSql = process.env.DB_TYPE === 'mysql'
-    ? `INSERT IGNORE INTO email_settings (
-         provider, api_key, sender_name, sender_email, enabled
-       ) VALUES (?, ?, ?, ?, ?)`
-    : `INSERT OR IGNORE INTO email_settings (
-         provider, api_key, sender_name, sender_email, enabled
-       ) VALUES (?, ?, ?, ?, ?)`;
-  await runQuery(emailInsertSql, [
-    'resend',
-    'your-api-key-here',
-    'Wedding Admin',
-    'admin@example.com',
-    1
-  ]);
-  console.log('Email settings seeded successfully.');
-
-  // Templates
-  const templateSql = process.env.DB_TYPE === 'mysql'
-    ? `INSERT INTO templates (name, subject, body_en, body_lt) VALUES (?, ?, ?, ?)`
-    : `INSERT INTO templates (name, subject, body_en, body_lt) VALUES (?, ?, ?, ?)`;
-  await runQuery(templateSql, [
-    'Default Bilingual Template',
-    'Default Template Subject',
-    '<html><body><p>Hello {{ name }} from {{ groupLabel }}!</p><p>Please RSVP using this link: {{ rsvpLink }}</p></body></html>',
-    '<html><body><p>Sveiki {{ name }} iš {{ groupLabel }}!</p><p>Prašome atsakyti į kvietimą naudodamiesi šia nuoroda: {{ rsvpLink }}</p></body></html>'
-  ]);
-  console.log('Templates seeded successfully.');
-
-  // Messages and recipients
-  const msgSql = process.env.DB_TYPE === 'mysql'
-    ? `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`
-    : `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for) VALUES (?, ?, ?, ?, ?)`;
-  const result = await runQuery(msgSql, [
-    'Save the Date – Scheduled',
-    '<p>Hello {{ name }}, save the date! 🎉</p>',
-    '<p>Sveiki {{ name }}, išsisaugok datą! 🎉</p>',
-    'scheduled',
-    '2025-05-01 12:00:00'
-  ]);
-  const messageId = result.insertId || result.lastID || 1;
-  const draftResult = await runQuery(msgSql, [
-    'Save the Date – Draft Only',
-    '<p>Just a draft for now.</p>',
-    '<p>Kol kas tik juodraštis.</p>',
-    'draft',
-    null
-  ]);
-
-  console.log('Messages seeded successfully.');
-  // Fetch first three guest IDs to avoid FK constraint errors
-  const [guestRows] = await db.execute(
-    'SELECT id FROM guests ORDER BY id LIMIT 3'
+  // Email settings (default row)
+  await runQuery(
+    `INSERT IGNORE INTO email_settings (id, provider, api_key, from_name, from_email, sender_name, sender_email, enabled, created_at, updated_at)
+     VALUES (1, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+    ['resend', 'your-api-key-here', 'Wedding Admin', 'admin@example.com', 'Wedding Admin', 'admin@example.com', 1]
   );
-  const guestIds = guestRows.map(r => r.id);
-  const recSql = process.env.DB_TYPE === 'mysql'
-    ? `INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at) VALUES (?, ?, ?, ?, ?, UTC_TIMESTAMP())`
-    : `INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))`;
-  await runQuery(recSql, [
-    messageId,
-    guestIds[0],
-    'sent',
-    'jeffrey@example.com',
-    'en'
-  ]);
-  await runQuery(recSql, [
-    messageId,
-    guestIds[1],
-    'failed',
-    'john@example.com',
-    'en'
-  ]);
-  await runQuery(recSql, [
-    messageId,
-    guestIds[2],
-    'pending',
-    'alice@example.com',
-    'lt'
-  ]);
-  console.log('Recipients seeded successfully.');
 
-  // Insert example page and translations
-  const pageInsertSql = process.env.DB_TYPE === 'mysql'
-    ? 'INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)'
-    : 'INSERT OR IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)';
-  const pageResult = await runQuery(pageInsertSql, ['our-story', 1, 0, 1, 1]);
-  const pageId = pageResult.insertId || pageResult.lastID;
+  // Templates (include style)
+  await runQuery(
+    `INSERT INTO templates (name, subject, body_en, body_lt, style) VALUES (?, ?, ?, ?, ?)`,
+    [
+      'Default Bilingual Template',
+      'Default Template Subject',
+      '<html><body><p>Hello {{ name }} from {{ groupLabel }}!</p><p>Please RSVP using this link: {{ rsvpLink }}</p></body></html>',
+      '<html><body><p>Sveiki {{ name }} iš {{ groupLabel }}!</p><p>Prašome atsakyti į kvietimą naudodamiesi šia nuoroda: {{ rsvpLink }}</p></body></html>',
+      'elegant'
+    ]
+  );
+
+  // Messages and recipients (include style)
+  const result = await runQuery(
+    `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for, style) VALUES (?, ?, ?, ?, ?, ?)`,
+    [
+      'Save the Date – Scheduled',
+      '<p>Hello {{ name }}, save the date! 🎉</p>',
+      '<p>Sveiki {{ name }}, išsisaugok datą! 🎉</p>',
+      'scheduled',
+      '2025-05-01 12:00:00',
+      'elegant'
+    ]
+  );
+  const messageId = result.insertId;
+
+  const [[g1], [g2], [g3]] = await Promise.all([
+    runQuery('SELECT id FROM guests ORDER BY id LIMIT 1'),
+    runQuery('SELECT id FROM guests ORDER BY id LIMIT 1 OFFSET 1'),
+    runQuery('SELECT id FROM guests ORDER BY id LIMIT 1 OFFSET 2')
+  ]);
+
+  const insRec = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, email, language, created_at)
+                  VALUES (?, ?, ?, ?, ?, UTC_TIMESTAMP())`;
+  await runQuery(insRec, [messageId, g1.id, 'sent', 'jeffrey@example.com', 'en']);
+  await runQuery(insRec, [messageId, g2.id, 'failed', 'john@example.com', 'en']);
+  await runQuery(insRec, [messageId, g3.id, 'pending', 'alice@example.com', 'lt']);
+
+  // Example pages and translations
+  const pageRes = await runQuery(
+    'INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)',
+    ['our-story', 1, 0, 1, 1]
+  );
+  const [pageRow] = await runQuery('SELECT id FROM pages WHERE slug = ?', ['our-story']);
+  const pageId = pageRow.id;
 
   const contentEn = JSON.stringify([
     { type: 'richText', content: '<p>We met in 2015, and the rest is history...</p>' },
@@ -302,7 +141,6 @@ async function seedDatabase() {
     { type: 'divider' },
     { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
   ]);
-
   const contentLt = JSON.stringify([
     { type: 'richText', content: '<p>Susipažinome 2015 metais, o visa kita – istorija...</p>' },
     { type: 'image', url: '/uploads/story.jpg', alt: 'Mes šypsomės' },
@@ -310,33 +148,30 @@ async function seedDatabase() {
     { type: 'map', embedUrl: 'https://maps.google.com/your-venue' }
   ]);
 
-  const transInsertSql = process.env.DB_TYPE === 'mysql'
-    ? 'INSERT IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)'
-    : 'INSERT OR IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)';
-  await runQuery(transInsertSql, [pageId, 'en', 'Our Story', contentEn]);
-  await runQuery(transInsertSql, [pageId, 'lt', 'Mūsų istorija', contentLt]);
+  await runQuery(
+    'INSERT IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)',
+    [pageId, 'en', 'Our Story', contentEn]
+  );
+  await runQuery(
+    'INSERT IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)',
+    [pageId, 'lt', 'Mūsų istorija', contentLt]
+  );
 
-  console.log('Example page and translations seeded successfully.');
+  // “All Blocks” page and a simple survey block
+  const pageAllRes = await runQuery(
+    'INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order) VALUES (?, ?, ?, ?, ?)',
+    ['all-blocks', 1, 0, 1, 2]
+  );
+  const [pageAllRow] = await runQuery('SELECT id FROM pages WHERE slug = ?', ['all-blocks']);
+  const pageAllId = pageAllRow.id;
 
-  // Insert "All Blocks" test page with survey
-  const pageAllRes = await runQuery(pageInsertSql, ['all-blocks', 1, 0, 1, 2]);
-  const pageAllId = pageAllRes.insertId || pageAllRes.lastID;
-  // Create a simple survey block for the new page
-  const surveyBlockSql = process.env.DB_TYPE === 'mysql'
-    ? 'INSERT INTO survey_blocks (page_id, locale, question, type, options, is_required, is_anonymous) VALUES (?, ?, ?, ?, ?, ?, ?)'
-    : 'INSERT OR IGNORE INTO survey_blocks (page_id, locale, question, type, options, is_required, is_anonymous) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const surveyOptions = JSON.stringify(['Option A', 'Option B']);
-  const surveyAllRes = await runQuery(surveyBlockSql, [
-    pageAllId,
-    'en',
-    'Do you like our site?',
-    'radio',
-    surveyOptions,
-    1, // is_required
-    0  // is_anonymous
-  ]);
-  const surveyAllId = surveyAllRes.insertId || surveyAllRes.lastID;
-  // Insert translation for "All Blocks" page
+  const surveyRes = await runQuery(
+    'INSERT INTO survey_blocks (page_id, locale, question, type, options, is_required, is_anonymous) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [pageAllId, 'en', 'Do you like our site?', 'radio', surveyOptions, 1, 0]
+  );
+  const surveyAllId = surveyRes.insertId;
+
   const allBlocksContent = JSON.stringify([
     { type: 'rich-text', html: '<p>Welcome to the all-blocks test page.</p>' },
     { type: 'image', src: '/uploads/story.jpg', alt: 'Us smiling' },
@@ -345,8 +180,16 @@ async function seedDatabase() {
     { type: 'divider' },
     { type: 'survey', id: surveyAllId }
   ]);
-  await runQuery(transInsertSql, [pageAllId, 'en', 'All Blocks Test', allBlocksContent]);
-  console.log('All Blocks test page seeded successfully.');
+  await runQuery(
+    'INSERT IGNORE INTO page_translations (page_id, locale, title, content) VALUES (?, ?, ?, ?)',
+    [pageAllId, 'en', 'All Blocks Test', allBlocksContent]
+  );
 
-  await closeDb();
-}
+  await db.end();
+  const logger = require('../helpers/logger');
+  logger.info('✅ Seed completed.');
+})().catch(err => {
+  const logger = require('../helpers/logger');
+  logger.error('❌ Seed failed:', err);
+  process.exit(1);
+});

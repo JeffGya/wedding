@@ -43,6 +43,7 @@ exports.up = async function up(knex) {
       });
     } catch (err) {
       // If you're on SQLite, dropping a column is non-trivial. You can ignore or implement a rebuild.
-      console.warn('Could not drop column deleted_at (likely SQLite). Skipping.', err.message);
+      const logger = require('../../helpers/logger');
+      logger.warn('Could not drop column deleted_at (likely SQLite). Skipping.', err.message);
     }
   };

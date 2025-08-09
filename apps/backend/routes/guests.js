@@ -81,7 +81,7 @@ async function sendConfirmationEmail(db, guestData) {
       });
     });
   } catch (e) {
-    console.error("Error in sendConfirmationEmail:", e);
+    logger.error("Error in sendConfirmationEmail:", e);
   }
 }
 

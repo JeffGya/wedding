@@ -1,49 +1,54 @@
 <template>
   <AdminPageWrapper 
-    title="Image Library" 
-    description="Manage and organize your wedding website images"
+    title="Media Library" 
+    description="Manage your uploaded images"
   >
+    <template #headerActions>
+      <Button 
+        icon="i-solar:upload-bold-duotone" 
+        label="Upload Image" 
+        @click="$router.push('/admin/media/upload')"
+      />
+    </template>
+
     <Card>
       <template #content>
         <DataTable 
           :value="images" 
-          tableStyle="min-width: 30rem" 
+          :loading="loading"
           paginator 
-          :rows="10" 
-          responsiveLayout="scroll"
-          stripedRows
-          class="w-full"
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 50]"
+          filterDisplay="menu"
+          :globalFilterFields="['filename', 'alt_text']"
         >
-          <Column header="Preview" style="width: 8rem">
+          <Column field="filename" header="Filename" sortable>
             <template #body="slotProps">
-              <img
-                :src="slotProps.data.url"
-                :alt="slotProps.data.alt_text"
-                class="h-12 w-12 object-cover rounded"
-              />
+              <div class="flex items-center gap-2">
+                <img 
+                  :src="slotProps.data.url" 
+                  :alt="slotProps.data.alt_text || slotProps.data.filename"
+                  class="w-8 h-8 object-cover rounded"
+                />
+                <span>{{ slotProps.data.filename }}</span>
+              </div>
             </template>
           </Column>
-          
-          <Column field="filename" header="Filename" />
-          <Column field="alt_text" header="Alt Text" />
-          
-          <Column field="created_at" header="Created At" style="width: 12rem">
+          <Column field="alt_text" header="Alt Text" sortable>
+            <template #body="slotProps">
+              {{ slotProps.data.alt_text || 'No alt text' }}
+            </template>
+          </Column>
+          <Column field="created_at" header="Uploaded" sortable>
             <template #body="slotProps">
               {{ new Date(slotProps.data.created_at).toLocaleDateString() }}
             </template>
           </Column>
-          
-          <Column field="updated_at" header="Updated At" style="width: 12rem">
-            <template #body="slotProps">
-              {{ new Date(slotProps.data.updated_at).toLocaleDateString() }}
-            </template>
-          </Column>
-          
           <Column header="Actions" style="width: 10rem">
             <template #body="slotProps">
               <div class="flex gap-2">
                 <Button
-                  icon="pi pi-pencil"
+                  icon="i-solar:pen-bold-duotone"
                   severity="secondary"
                   text
                   size="small"
@@ -51,7 +56,7 @@
                   v-tooltip.top="'Edit Image'"
                 />
                 <Button
-                  icon="pi pi-trash"
+                  icon="i-solar:trash-bin-trash-bold-duotone"
                   severity="danger"
                   text
                   size="small"
@@ -116,6 +121,7 @@ import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 
 const images = ref([]);
+const loading = ref(false);
 const toast = useToast();
 const confirm = useConfirm();
 const editDialog = ref(false);
@@ -125,10 +131,13 @@ const currentImage = ref(null);
 const saving = ref(false);
 
 const loadImages = async () => {
+  loading.value = true;
   try {
     images.value = await fetchImages();
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message });
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -160,7 +169,7 @@ const confirmDelete = (id) => {
   confirm.require({
     message: 'Are you sure you want to delete this image?',
     header: 'Delete Confirmation',
-    icon: 'pi pi-exclamation-triangle',
+    icon: 'i-solar:exclamation-triangle-bold-duotone',
     accept: async () => {
       try {
         await deleteImage(id);

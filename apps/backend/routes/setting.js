@@ -52,7 +52,7 @@ router.get('/email', requireAuth, async (req, res) => {
     const row = await dbGet('SELECT * FROM email_settings WHERE id = ?', [1]);
     res.json(row);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: 'Failed to fetch email settings' });
   }
 });
@@ -96,7 +96,7 @@ router.put('/email', requireAuth, async (req, res) => {
     await dbRun(sql, values);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: 'Failed to update email settings' });
   }
 });
@@ -129,7 +129,24 @@ router.put('/email', requireAuth, async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const row = await dbGet(
-      'SELECT enable_global_countdown AS enableGlobalCountdown, wedding_date AS weddingDate FROM settings WHERE id = 1'
+      `SELECT 
+        enable_global_countdown AS enableGlobalCountdown, 
+        wedding_date AS weddingDate,
+        venue_name,
+        venue_address,
+        event_start_date,
+        event_end_date,
+        event_time,
+        bride_name,
+        groom_name,
+        contact_email,
+        contact_phone,
+        event_type,
+        dress_code,
+        special_instructions,
+        website_url,
+        app_title
+      FROM settings WHERE id = 1`
     );
 
     let plainDate = null;
@@ -141,7 +158,21 @@ router.get('/', async (req, res) => {
 
     return res.json({
       enableGlobalCountdown: row ? Boolean(row.enableGlobalCountdown) : false,
-      weddingDate: plainDate
+      weddingDate: plainDate,
+      venueName: row?.venue_name || '',
+      venueAddress: row?.venue_address || '',
+      eventStartDate: row?.event_start_date || '',
+      eventEndDate: row?.event_end_date || '',
+      eventTime: row?.event_time || '',
+      brideName: row?.bride_name || '',
+      groomName: row?.groom_name || '',
+      contactEmail: row?.contact_email || '',
+      contactPhone: row?.contact_phone || '',
+      eventType: row?.event_type || '',
+      dressCode: row?.dress_code || '',
+      specialInstructions: row?.special_instructions || '',
+      websiteUrl: row?.website_url || '',
+      appTitle: row?.app_title || ''
     });
   } catch (err) {
     logger.error(err);
@@ -206,28 +237,103 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { enable_global_countdown, wedding_date } = req.body;
+    const { 
+      enable_global_countdown, 
+      wedding_date,
+      venue_name,
+      venue_address,
+      event_start_date,
+      event_end_date,
+      event_time,
+      bride_name,
+      groom_name,
+      contact_email,
+      contact_phone,
+      event_type,
+      dress_code,
+      special_instructions,
+      website_url,
+      app_title
+    } = req.body;
+    
     let sql;
     if (process.env.DB_TYPE === 'mysql') {
       sql = `
-        INSERT INTO settings (id, enable_global_countdown, wedding_date, created_at, updated_at)
-        VALUES (1, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        INSERT INTO settings (
+          id, enable_global_countdown, wedding_date, 
+          venue_name, venue_address, event_start_date, event_end_date, event_time,
+          bride_name, groom_name, contact_email, contact_phone,
+          event_type, dress_code, special_instructions,
+          website_url, app_title, created_at, updated_at
+        )
+        VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         ON DUPLICATE KEY UPDATE
           enable_global_countdown = VALUES(enable_global_countdown),
           wedding_date = VALUES(wedding_date),
+          venue_name = VALUES(venue_name),
+          venue_address = VALUES(venue_address),
+          event_start_date = VALUES(event_start_date),
+          event_end_date = VALUES(event_end_date),
+          event_time = VALUES(event_time),
+          bride_name = VALUES(bride_name),
+          groom_name = VALUES(groom_name),
+          contact_email = VALUES(contact_email),
+          contact_phone = VALUES(contact_phone),
+          event_type = VALUES(event_type),
+          dress_code = VALUES(dress_code),
+          special_instructions = VALUES(special_instructions),
+          website_url = VALUES(website_url),
+          app_title = VALUES(app_title),
           updated_at = CURRENT_TIMESTAMP
       `;
     } else {
       sql = `
-        INSERT INTO settings (id, enable_global_countdown, wedding_date, created_at, updated_at)
-        VALUES (1, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        INSERT INTO settings (
+          id, enable_global_countdown, wedding_date, 
+          venue_name, venue_address, event_start_date, event_end_date, event_time,
+          bride_name, groom_name, contact_email, contact_phone,
+          event_type, dress_code, special_instructions,
+          website_url, app_title, created_at, updated_at
+        )
+        VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         ON CONFLICT(id) DO UPDATE SET
           enable_global_countdown = excluded.enable_global_countdown,
           wedding_date = excluded.wedding_date,
+          venue_name = excluded.venue_name,
+          venue_address = excluded.venue_address,
+          event_start_date = excluded.event_start_date,
+          event_end_date = excluded.event_end_date,
+          event_time = excluded.event_time,
+          bride_name = excluded.bride_name,
+          groom_name = excluded.groom_name,
+          contact_email = excluded.contact_email,
+          contact_phone = excluded.contact_phone,
+          event_type = excluded.event_type,
+          dress_code = excluded.dress_code,
+          special_instructions = excluded.special_instructions,
+          website_url = excluded.website_url,
+          app_title = excluded.app_title,
           updated_at = CURRENT_TIMESTAMP
       `;
     }
-    const values = [enable_global_countdown ? 1 : 0, wedding_date || null];
+    const values = [
+      enable_global_countdown ? 1 : 0, 
+      wedding_date || null,
+      venue_name || null,
+      venue_address || null,
+      event_start_date || null,
+      event_end_date || null,
+      event_time || null,
+      bride_name || null,
+      groom_name || null,
+      contact_email || null,
+      contact_phone || null,
+      event_type || null,
+      dress_code || null,
+      special_instructions || null,
+      website_url || null,
+      app_title || null
+    ];
     try {
       await dbRun(sql, values);
       return res.json({ success: true });

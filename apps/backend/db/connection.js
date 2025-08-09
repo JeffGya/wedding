@@ -16,11 +16,12 @@ if (process.env.DB_TYPE === 'mysql') {
     connectionLimit: 10,
     queueLimit: 0,
   });
+  const logger = require('../helpers/logger');
   pool.getConnection((err, connection) => {
     if (err) {
-      console.error('❌ Failed to connect to MySQL database:', err.message);
+      logger.error('❌ Failed to connect to MySQL database:', err.message);
     } else {
-      console.log('✅ Connected to MySQL database.');
+      logger.info('✅ Connected to MySQL database.');
       connection.release();
     }
   });
@@ -31,9 +32,11 @@ if (process.env.DB_TYPE === 'mysql') {
   const dbPath = path.join(__dirname, '..', 'database.sqlite');
   const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
-      console.error('❌ Failed to connect to SQLite database:', err.message);
+      const logger = require('../helpers/logger');
+      logger.error('❌ Failed to connect to SQLite database:', err.message);
     } else {
-      console.log('✅ Connected to SQLite database.');
+      const logger = require('../helpers/logger');
+      logger.info('✅ Connected to SQLite database.');
     }
   });
   dbClient = db;

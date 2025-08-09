@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('../helpers/logger');
 const router = express.Router();
 
 const Page = require('../db/models/pages');
@@ -65,7 +66,7 @@ const SurveyBlock = require('../db/models/surveyBlock');
 // GET /api/pages — fetch all pages
 router.get('/', async (req, res) => {
   try {
-    console.log('[GET /api/pages] Fetching all pages with pagination & filters (route-level)...');
+    logger.debug('[GET /api/pages] Fetching all pages with pagination & filters (route-level)...');
 
     // Flags & params
     const includeDeleted = req.query.includeDeleted === 'true';
@@ -119,10 +120,10 @@ router.get('/', async (req, res) => {
       orderDir,
     };
 
-    console.log('[GET /api/pages] Returning', paged.length, 'of', total);
+    logger.debug('[GET /api/pages] Returning', paged.length, 'of', total);
     res.json({ data: paged, meta });
   } catch (err) {
-    console.error('[GET /api/pages] Error:', err.message, err.stack);
+    logger.error('[GET /api/pages] Error:', err.message, err.stack);
     res.status(500).json({ error: `Failed to fetch pages: ${err.message}` });
   }
 });
@@ -178,12 +179,12 @@ router.get('/:id', async (req, res) => {
         message: 'Invalid page id'
       });
     }
-    console.log(`[GET /api/pages/${id}] Fetching page and translations...`);
+    logger.debug(`[GET /api/pages/${id}] Fetching page and translations...`);
     const page = await Page.getById(id, { includeDeleted: true });
     const translations = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
     res.json({ ...page, translations });
   } catch (err) {
-    console.error(`[GET /api/pages/${req.params.id}] Error:`, err.message, err.stack);
+    logger.error(`[GET /api/pages/${req.params.id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to fetch page: ${err.message}` });
   }
 });
@@ -254,7 +255,7 @@ router.post('/', async (req, res) => {
       translations = [],
     } = req.body;
 
-    console.log('[POST /api/pages] Request body:', req.body);
+    logger.debug('[POST /api/pages] Request body:', req.body);
 
     // --------------------------------------------------
     // 1) Pre-validate ALL translations & survey refs first (no DB writes yet)
@@ -262,11 +263,11 @@ router.post('/', async (req, res) => {
     const preparedTranslations = [];
     for (const translation of translations) {
       const { locale, title, content } = translation || {};
-      console.log('[POST /api/pages] Pre-validating translation:', translation);
+      logger.debug('[POST /api/pages] Pre-validating translation:', translation);
 
       if (!locale || typeof content === 'undefined') {
         const msg = `Invalid translation payload (locale/content missing)`;
-        console.warn('[POST /api/pages]', msg, translation);
+        logger.warn('[POST /api/pages]', msg, translation);
         return res.status(400).json({
           error: { message: msg, code: 'INVALID_TRANSLATION' },
           message: msg
@@ -282,7 +283,7 @@ router.post('/', async (req, res) => {
         });
         processedBlocks = blocks;
       } catch (ve) {
-        console.error('[POST /api/pages] Block validation error:', ve.message);
+        logger.error('[POST /api/pages] Block validation error:', ve.message);
         return res.status(400).json({
           error: { message: ve.message, code: 'INVALID_BLOCK' },
           message: ve.message
@@ -296,7 +297,7 @@ router.post('/', async (req, res) => {
           const sb = await SurveyBlock.getById(sid, { includeDeleted: false }).catch(() => null);
           if (!sb) {
             const msg = `Survey block id ${sid} does not exist.`;
-            console.error('[POST /api/pages] ' + msg);
+            logger.error('[POST /api/pages] ' + msg);
             return res.status(400).json({
               error: { message: msg, code: 'SURVEY_NOT_FOUND' },
               message: msg
@@ -325,7 +326,7 @@ router.post('/', async (req, res) => {
         nav_order,
       });
     } catch (createErr) {
-      console.error('[POST /api/pages] Error creating page:', createErr.message);
+      logger.error('[POST /api/pages] Error creating page:', createErr.message);
       if (createErr.message.includes('UNIQUE constraint failed') || createErr.message.includes('duplicate key')) {
         return res.status(400).json({
           error: { message: 'Slug already exists. Please use a unique slug.', code: 'DUPLICATE_SLUG' },
@@ -335,7 +336,7 @@ router.post('/', async (req, res) => {
       return res.status(500).json({ error: { message: `Failed to create page: ${createErr.message}` }, message: `Failed to create page: ${createErr.message}` });
     }
 
-    console.log('[POST /api/pages] Created page:', newPage);
+    logger.debug('[POST /api/pages] Created page:', newPage);
 
     // Auto-link any survey blocks with null page_id to this new page
     const surveyIdsToLinkPost = preparedTranslations
@@ -347,10 +348,10 @@ router.post('/', async (req, res) => {
         const sb2 = await SurveyBlock.getById(sid, { includeDeleted: true });
         if (sb2 && sb2.page_id == null) {
           await SurveyBlock.update(sid, { page_id: newPage.id });
-          console.log(`[POST /api/pages] Linked survey block ${sid} to page ${newPage.id}`);
+          logger.debug(`[POST /api/pages] Linked survey block ${sid} to page ${newPage.id}`);
         }
       } catch (linkErr) {
-        console.warn(`[POST /api/pages] Could not link survey block ${sid}:`, linkErr.message);
+        logger.warn(`[POST /api/pages] Could not link survey block ${sid}:`, linkErr.message);
       }
     }
 
@@ -364,15 +365,15 @@ router.post('/', async (req, res) => {
           content: t.content,
         });
         createdTranslations.push(created);
-        console.log(`[POST /api/pages] Translation saved for locale: ${t.locale}`);
+        logger.debug(`[POST /api/pages] Translation saved for locale: ${t.locale}`);
       }
     } catch (trErr) {
-      console.error('[POST /api/pages] Failed while saving translations, cleaning up...', trErr.message);
+      logger.error('[POST /api/pages] Failed while saving translations, cleaning up...', trErr.message);
       // Attempt cleanup to avoid orphan page
       try {
         await Page.destroy(newPage.id);
       } catch (cleanupErr) {
-        console.error('[POST /api/pages] Cleanup failed:', cleanupErr.message);
+        logger.error('[POST /api/pages] Cleanup failed:', cleanupErr.message);
       }
       return res.status(500).json({
         error: { message: 'Failed to save translations', code: 'TRANSLATION_SAVE_FAILED' },
@@ -382,7 +383,7 @@ router.post('/', async (req, res) => {
 
     return res.status(201).json({ ...newPage, translations: createdTranslations });
   } catch (err) {
-    console.error('[POST /api/pages] Error creating page:', err.message, err.stack);
+    logger.error('[POST /api/pages] Error creating page:', err.message, err.stack);
     if (err.message.includes('UNIQUE constraint failed') || err.message.includes('duplicate key')) {
       return res.status(400).json({ error: 'Slug already exists. Please use a unique slug.' });
     }
@@ -466,12 +467,12 @@ router.put('/:id', async (req, res) => {
       translations = [],
     } = req.body;
 
-    console.log(`[PUT /api/pages/${id}] Updating page...`, req.body);
+    logger.debug(`[PUT /api/pages/${id}] Updating page...`, req.body);
 
     // Check if page exists
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
-      console.warn(`[PUT /api/pages/${id}] Page not found.`);
+      logger.warn(`[PUT /api/pages/${id}] Page not found.`);
       return res.status(404).json({ error: 'Page not found' });
     }
 
@@ -481,11 +482,11 @@ router.put('/:id', async (req, res) => {
     const preparedTranslations = [];
     for (const translation of translations) {
       const { locale, title, content } = translation || {};
-      console.log(`[PUT /api/pages/${id}] Pre-validating translation for ${locale}...`, translation);
+      logger.debug(`[PUT /api/pages/${id}] Pre-validating translation for ${locale}...`, translation);
 
       if (!locale || typeof content === 'undefined') {
         const msg = `Invalid translation payload (locale/content missing)`;
-        console.warn(`[PUT /api/pages/${id}]`, msg, translation);
+        logger.warn(`[PUT /api/pages/${id}]`, msg, translation);
         return res.status(400).json({
           error: { message: msg, code: 'INVALID_TRANSLATION' },
           message: msg
@@ -501,7 +502,7 @@ router.put('/:id', async (req, res) => {
         });
         processedBlocks = blocks;
       } catch (ve) {
-        console.error(`[PUT /api/pages/${id}] Block validation error (${locale}):`, ve.message);
+        logger.error(`[PUT /api/pages/${id}] Block validation error (${locale}):`, ve.message);
         return res.status(400).json({
           error: { message: ve.message, code: 'INVALID_BLOCK' },
           message: ve.message
@@ -515,7 +516,7 @@ router.put('/:id', async (req, res) => {
           const sb = await SurveyBlock.getById(sid, { includeDeleted: false }).catch(() => null);
           if (!sb) {
             const msg = `Survey block id ${sid} does not exist.`;
-            console.error(`[PUT /api/pages/${id}] ` + msg);
+            logger.error(`[PUT /api/pages/${id}] ` + msg);
             return res.status(400).json({
               error: { message: msg, code: 'SURVEY_NOT_FOUND' },
               message: msg
@@ -541,7 +542,7 @@ router.put('/:id', async (req, res) => {
       show_in_nav,
       nav_order,
     });
-    console.log(`[PUT /api/pages/${id}] Page updated.`);
+    logger.debug(`[PUT /api/pages/${id}] Page updated.`);
 
     // Auto-link any survey blocks with null page_id to this page
     const surveyIdsToLinkPut = preparedTranslations
@@ -553,10 +554,10 @@ router.put('/:id', async (req, res) => {
         const sb2 = await SurveyBlock.getById(sid, { includeDeleted: true });
         if (sb2 && sb2.page_id == null) {
           await SurveyBlock.update(sid, { page_id: id });
-          console.log(`[PUT /api/pages/${id}] Linked survey block ${sid} to page ${id}`);
+          logger.debug(`[PUT /api/pages/${id}] Linked survey block ${sid} to page ${id}`);
         }
       } catch (linkErr) {
-        console.warn(`[PUT /api/pages/${id}] Could not link survey block ${sid}:`, linkErr.message);
+        logger.warn(`[PUT /api/pages/${id}] Could not link survey block ${sid}:`, linkErr.message);
       }
     }
 
@@ -570,7 +571,7 @@ router.put('/:id', async (req, res) => {
           title: t.title,
           content: t.content,
         });
-        console.log(`[PUT /api/pages/${id}] Updated translation for locale: ${t.locale}`);
+        logger.debug(`[PUT /api/pages/${id}] Updated translation for locale: ${t.locale}`);
       } else {
         await PageTranslation.create({
           page_id: id,
@@ -578,7 +579,7 @@ router.put('/:id', async (req, res) => {
           title: t.title,
           content: t.content,
         });
-        console.log(`[PUT /api/pages/${id}] Created translation for locale: ${t.locale}`);
+        logger.debug(`[PUT /api/pages/${id}] Created translation for locale: ${t.locale}`);
       }
     }
 
@@ -586,7 +587,7 @@ router.put('/:id', async (req, res) => {
     const updatedPage = await Page.getById(id, { includeDeleted: true });
     return res.json({ ...updatedPage, translations: updatedTranslations });
   } catch (err) {
-    console.error(`[PUT /api/pages/${req.params.id}] Error:`, err.message, err.stack);
+    logger.error(`[PUT /api/pages/${req.params.id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to update page: ${err.message}` });
   }
 });
@@ -631,7 +632,7 @@ router.delete('/:id', async (req, res) => {
         message: 'Invalid page id'
       });
     }
-    console.log(`[DELETE /api/pages/${id}] Deleting page and translations...`);
+    logger.debug(`[DELETE /api/pages/${id}] Deleting page and translations...`);
     // Soft delete translations then page
     const trs = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
     for (const tr of trs) {
@@ -640,7 +641,7 @@ router.delete('/:id', async (req, res) => {
     await Page.softDelete(id);
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error(`[DELETE /api/pages/${req.params.id}] Error:`, err.message, err.stack);
+    logger.error(`[DELETE /api/pages/${req.params.id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to delete page: ${err.message}` });
   }
 });
@@ -692,7 +693,7 @@ router.put('/:id/restore', async (req, res) => {
         message: 'Invalid page id'
       });
     }
-    console.log(`[RESTORE /api/pages/${id}] Restoring page and translations...`);
+    logger.debug(`[RESTORE /api/pages/${id}] Restoring page and translations...`);
 
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
@@ -715,7 +716,7 @@ router.put('/:id/restore', async (req, res) => {
 
     res.json({ ...restoredPage, translations: restoredTranslations });
   } catch (err) {
-    console.error(`[RESTORE /api/pages/${id}] Error:`, err.message, err.stack);
+    logger.error(`[RESTORE /api/pages/${id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to restore page: ${err.message}` });
   }
 });
@@ -762,7 +763,7 @@ router.delete('/:id/destroy', async (req, res) => {
         message: 'Invalid page id'
       });
     }
-    console.log(`[DESTROY /api/pages/${id}] Hard deleting page and translations...`);
+    logger.debug(`[DESTROY /api/pages/${id}] Hard deleting page and translations...`);
 
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
@@ -777,7 +778,7 @@ router.delete('/:id/destroy', async (req, res) => {
     await Page.destroy(id);
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error(`[DESTROY /api/pages/${id}] Error:`, err.message, err.stack);
+    logger.error(`[DESTROY /api/pages/${id}] Error:`, err.message, err.stack);
     res.status(500).json({ error: `Failed to permanently delete page: ${err.message}` });
   }
 });

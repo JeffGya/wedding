@@ -233,7 +233,8 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
 
     return res.json({ success: true });
   } catch (err) {
-    console.error(`[POST /api/surveys/${rawId}/respond] Error:`, err);
+    const logger = require('../helpers/logger');
+    logger.error(`[POST /api/surveys/${rawId}/respond] Error:`, err);
     return res.status(500).json({
       error: { message: 'Failed to save response' },
       message: 'Failed to save response'

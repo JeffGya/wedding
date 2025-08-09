@@ -69,60 +69,11 @@ const axios = require('axios');
 const logger = require('../helpers/logger');
 const getSenderInfo = require('../helpers/getSenderInfo');
 
-// Helper: send confirmation email
-async function sendConfirmationEmail(db, guest) {
-  try {
-    const senderInfo = await getSenderInfo(db);
+const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
 
-    // Fetch full group to get both primary and plus one info
-    const guests = await dbAll(
-      'SELECT * FROM guests WHERE group_id = ?',
-      [guest.group_id]
-    );
-
-    if (!guests) {
-      logger.error('Failed to load guest group data');
-      return;
-    }
-
-    const primary = guests.find(g => g.is_primary);
-    const plusOne = guests.find(g => !g.is_primary);
-
-    const template = await dbGet(
-      "SELECT * FROM templates WHERE name = ?",
-      ["RSVP Confirmation"]
-    );
-
-    if (!template) {
-      logger.error("Failed to load RSVP Confirmation template");
-      return;
-    }
-    const lang = primary.preferred_language === 'lt' ? 'lt' : 'en';
-    const subject = template.subject;
-    const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
-    const html = bodyTemplate
-      .replace(/{{\s*name\s*}}/g, primary.name)
-      .replace(/{{\s*groupLabel\s*}}/g, primary.group_label)
-      .replace(/{{\s*code\s*}}/g, primary.code)
-      .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${primary.code}`)
-      // Use plusOne?.name for the template
-      .replace(/{{\s*plusOneName\s*}}/g, plusOne?.name || '')
-      .replace(/{{\s*rsvpDeadline\s*}}/g, primary.rsvp_deadline ? formatDate(primary.rsvp_deadline) : '');
-    axios.post("https://api.resend.com/emails", {
-      from: senderInfo,
-      to: primary.email,
-      subject,
-      html
-    }, {
-      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
-    }).then(resp => {
-      logger.info("Confirmation email sent: %o", resp.data);
-    }).catch(err => {
-      logger.error("Error sending confirmation email: %o", err);
-    });
-  } catch (e) {
-    logger.error("Error in sendConfirmationEmail: %o", e);
-  }
+// Replace the old getInlineStyles function with new template system
+function applyEmailTemplate(content, style = 'elegant', options = {}) {
+  return generateEmailHTML(content, style, options);
 }
 
 /**
@@ -273,7 +224,7 @@ router.get('/:code', lookupRateLimit, async (req, res) => {
 // Public: submit RSVP by code
 // POST /api/rsvp
 router.post('/', async (req, res) => {
-  console.log('req.body →', req.body);
+  logger.debug('req.body →', req.body);
   const { code, attending, plus_one_name, dietary, notes, plus_one_dietary } = req.body;
   if (!code) return res.status(400).json({ error: 'Code is required' });
   // Input type validation
@@ -405,6 +356,42 @@ router.post('/', async (req, res) => {
     await sendConfirmationEmail(db, row);
   } catch (err) {
     return res.status(500).json({ error: 'Database error' });
+  }
+});
+
+/**
+ * @openapi
+ * /rsvp/template-styles:
+ *   get:
+ *     summary: Get available email template styles
+ *     tags:
+ *       - RSVP
+ *     responses:
+ *       '200':
+ *         description: List of available email template styles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   key:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ *       '500':
+ *         description: Failed to get template styles
+ */
+router.get('/template-styles', (req, res) => {
+  try {
+    const styles = getAvailableStyles();
+    res.json({ success: true, styles });
+  } catch (error) {
+    logger.error('Error getting template styles:', error);
+    res.status(500).json({ success: false, error: 'Failed to get template styles' });
   }
 });
 

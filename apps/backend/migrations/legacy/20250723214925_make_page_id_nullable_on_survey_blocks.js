@@ -87,7 +87,8 @@ exports.up = async function (knex) {
     try {
       await knex.raw(`ALTER TABLE survey_blocks MODIFY page_id ${columnType} NOT NULL`);
     } catch (err) {
-      console.warn('Down migration: could not modify page_id to NOT NULL (likely null values exist):', err.message);
+      const logger = require('../../helpers/logger');
+      logger.warn('Down migration: could not modify page_id to NOT NULL (likely null values exist):', err.message);
     }
 
     // Attempt to re-add FK with RESTRICT on delete
@@ -101,7 +102,8 @@ exports.up = async function (knex) {
           .onUpdate('CASCADE');
       });
     } catch (err) {
-      console.warn('Down migration: could not re-add FK with RESTRICT:', err.message);
+      const logger = require('../../helpers/logger');
+      logger.warn('Down migration: could not re-add FK with RESTRICT:', err.message);
     }
     } else {
       await knex.schema.alterTable('survey_blocks', (t) => {

@@ -5,6 +5,7 @@
 'use strict';
 
 const getDb = require('../db/connection');
+const logger = require('../helpers/logger');
 
 const COOKIE_NAME = 'rsvp_session';
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 4; // 4 hours
@@ -68,7 +69,7 @@ async function parseGuestSession(req, res, next) {
     );
 
     if (!guest) {
-      console.log('[guestSession] Invalid guest cookie. Clearing.');
+      logger.debug('[guestSession] Invalid guest cookie. Clearing.');
       res.clearCookie(COOKIE_NAME);
       req.guest = null;
       req.guestId = null;
@@ -81,7 +82,7 @@ async function parseGuestSession(req, res, next) {
     refreshCookie(res, { guestId, code });
     return next();
   } catch (err) {
-    console.error('[guestSession] DB error while parsing session:', err);
+    logger.error('[guestSession] DB error while parsing session:', err);
     req.guest = null;
     req.guestId = null;
     return next();
@@ -89,12 +90,12 @@ async function parseGuestSession(req, res, next) {
 }
 
 function setGuestSession(res, guestId, code) {
-  console.log(`[guestSession] Setting session for guestId=${guestId}`);
+  logger.debug(`[guestSession] Setting session for guestId=${guestId}`);
   refreshCookie(res, { guestId, code });
 }
 
 function clearGuestSession(res) {
-  console.log('[guestSession] Clearing guest session cookie');
+  logger.debug('[guestSession] Clearing guest session cookie');
   res.clearCookie(COOKIE_NAME);
 }
 

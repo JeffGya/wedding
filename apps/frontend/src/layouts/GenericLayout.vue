@@ -49,7 +49,7 @@ useHead({
           <!-- Copyright -->
           <div class="text-center md:text-right">
             <p class="text-xs font-sans text-txt opacity-50">
-              © 2024 Brigita & Jeffrey. All rights reserved.
+              © 2025 Brigita & Jeffrey. All rights reserved.
             </p>
           </div>
         </div>

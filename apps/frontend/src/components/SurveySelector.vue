@@ -1,74 +1,128 @@
 <template>
-  <div class="survey-selector">
+  <div class="survey-selector space-y-16">
     <!-- Existing surveys dropdown -->
-    <div class="p-field p-grid p-ai-center p-mb-2">
-      <label class="p-col-fixed" style="width: 6rem;">Survey</label>
-      <div class="p-col">
-        <Dropdown
-          v-model="selectedId"
-          :options="surveyOptions"
-          optionLabel="question"
-          optionValue="id"
-          placeholder="Select survey..."
-          :filter="true"
-          filterPlaceholder="Search..."
-          @change="onSelect"
+    <div class="space-y-8">
+      <label class="text-txt font-medium block">Select Survey</label>
+      <div class="flex items-center gap-16">
+        <div class="flex-1">
+          <Select
+            v-model="selectedId"
+            :options="surveyOptions"
+            optionLabel="question"
+            optionValue="id"
+            placeholder="Choose an existing survey..."
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+            :filter="true"
+            filterPlaceholder="Search surveys..."
+            @change="onSelect"
+          />
+        </div>
+        <Button 
+          label="New Survey" 
+          icon="pi pi-plus" 
+          class="bg-btn-primary-base hover:bg-btn-primary-hover active:bg-btn-primary-active text-btn-primary-text"
+          @click="showDialog = true" 
         />
-      </div>
-      <div class="p-col-fixed">
-        <Button label="New Survey" icon="pi pi-plus" @click="showDialog = true" />
       </div>
     </div>
 
     <!-- Dialog to create new survey inline -->
-    <Dialog header="Create Survey" v-model:visible="showDialog" modal :closable="false">
-      <div class="p-fluid">
-        <div class="p-field">
-          <label for="question">Question</label>
-          <InputText id="question" v-model="newSurvey.question" />
+    <Dialog 
+      header="Create New Survey" 
+      v-model:visible="showDialog" 
+      modal 
+      :closable="false"
+      class="survey-dialog"
+    >
+      <div class="space-y-16">
+        <div class="space-y-8">
+          <label for="question" class="text-txt font-medium block">Question</label>
+          <InputText 
+            id="question" 
+            v-model="newSurvey.question" 
+            placeholder="Enter your survey question..."
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+          />
         </div>
-        <div class="p-field">
-          <label for="type">Type</label>
-          <Dropdown
+        
+        <div class="space-y-8">
+          <label for="type" class="text-txt font-medium block">Type</label>
+          <Select
             id="type"
             v-model="newSurvey.type"
             :options="typeOptions"
             optionLabel="label"
             optionValue="value"
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
           />
         </div>
-        <div class="p-field">
-          <label>Options</label>
-          <div
-            v-for="(opt, idx) in newSurvey.options"
-            :key="idx"
-            class="p-inputgroup p-mb-2"
-          >
-            <InputText v-model="newSurvey.options[idx]" placeholder="Option text" />
-            <Button icon="pi pi-trash" class="p-button-danger" @click="removeOption(idx)" />
+        
+        <div class="space-y-8">
+          <label class="text-txt font-medium block">Options</label>
+          <div class="space-y-8">
+            <div
+              v-for="(opt, idx) in newSurvey.options"
+              :key="idx"
+              class="flex items-center gap-8"
+            >
+              <InputText 
+                v-model="newSurvey.options[idx]" 
+                placeholder="Option text" 
+                class="flex-1 bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+              />
+              <Button 
+                icon="pi pi-trash" 
+                class="bg-red-600 hover:bg-red-700 text-white"
+                @click="removeOption(idx)"
+                v-tooltip.top="'Remove Option'"
+              />
+            </div>
+            <Button 
+              label="Add Option" 
+              icon="pi pi-plus" 
+              class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+              @click="addOption" 
+            />
           </div>
-          <Button label="Add Option" icon="pi pi-plus" class="p-mt-2" @click="addOption" />
         </div>
-        <div class="p-field p-formgrid p-grid">
-          <div class="p-field-checkbox p-col-6">
-            <Checkbox id="is_required" v-model="newSurvey.is_required" />
-            <label for="is_required">Required</label>
-          </div>
-          <div class="p-field-checkbox p-col-6">
-            <Checkbox id="is_anonymous" v-model="newSurvey.is_anonymous" />
-            <label for="is_anonymous">Anonymous</label>
+        
+        <div class="space-y-8">
+          <div class="flex items-center gap-16">
+            <div class="flex items-center gap-8">
+              <Checkbox 
+                id="is_required" 
+                v-model="newSurvey.is_required" 
+                class="text-btn-primary-base"
+              />
+              <label for="is_required" class="text-txt font-medium">Required</label>
+            </div>
+            <div class="flex items-center gap-8">
+              <Checkbox 
+                id="is_anonymous" 
+                v-model="newSurvey.is_anonymous" 
+                class="text-btn-primary-base"
+              />
+              <label for="is_anonymous" class="text-txt font-medium">Anonymous</label>
+            </div>
           </div>
         </div>
       </div>
+      
       <template #footer>
-        <Button label="Cancel" class="p-button-text" @click="showDialog = false" />
-        <Button
-          label="Save"
-          icon="pi pi-save"
-          severity="primary"
-          @click="createNewSurvey"
-          :disabled="!canCreate"
-        />
+        <div class="flex items-center gap-8">
+          <Button 
+            label="Cancel" 
+            class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+            @click="showDialog = false" 
+          />
+          <Button
+            label="Save Survey"
+            icon="pi pi-save"
+            class="bg-btn-primary-base hover:bg-btn-primary-hover active:bg-btn-primary-active text-btn-primary-text"
+            @click="createNewSurvey"
+            :disabled="!canCreate"
+          />
+        </div>
       </template>
     </Dialog>
   </div>
@@ -76,11 +130,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import Dropdown from 'primevue/dropdown';
-import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
-import InputText from 'primevue/inputtext';
-import Checkbox from 'primevue/checkbox';
 import { fetchAllSurveys, createSurvey } from '@/api/pages';
 
 // Props: the page ID and the current selected survey ID
@@ -88,6 +137,7 @@ const props = defineProps({
   pageId: { type: Number, required: true },
   modelValue: { type: Number, default: null }
 });
+
 const emit = defineEmits(['update:modelValue']);
 
 // Local state
@@ -116,6 +166,7 @@ async function loadSurveys() {
   // Fetch all surveys and assign directly to options array
   surveyOptions.value = await fetchAllSurveys();
 }
+
 onMounted(loadSurveys);
 
 // Handle selection change
@@ -127,6 +178,7 @@ function onSelect() {
 function addOption() {
   newSurvey.value.options.push('');
 }
+
 function removeOption(idx) {
   newSurvey.value.options.splice(idx, 1);
 }
@@ -153,7 +205,38 @@ async function createNewSurvey() {
 </script>
 
 <style scoped>
-.survey-selector .p-inputgroup {
-  align-items: center;
+.survey-dialog :deep(.p-dialog-header) {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--form-border);
+  border-radius: 12px 12px 0 0;
+}
+
+.survey-dialog :deep(.p-dialog-content) {
+  background: var(--card-bg);
+  border-radius: 0 0 12px 12px;
+  padding: 24px;
+}
+
+.survey-dialog :deep(.p-dialog-title) {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.survey-dialog :deep(.p-dialog-footer) {
+  background: var(--card-bg);
+  border-top: 1px solid var(--form-border);
+  padding: 16px 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .survey-dialog :deep(.p-dialog-content) {
+    padding: 16px;
+  }
+  
+  .survey-dialog :deep(.p-dialog-footer) {
+    padding: 12px 16px;
+  }
 }
 </style>

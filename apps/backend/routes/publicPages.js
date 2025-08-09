@@ -9,34 +9,35 @@ const PageTranslation = require('../db/models/pageTranslation');
 const { processBlocks } = require('../utils/blockSchema');
 const SurveyBlock = require('../db/models/surveyBlock');
 const SurveyResponse = require('../db/models/surveyResponse');
+const logger = require('../helpers/logger');
 
 const router = express.Router();
 
 // GET /api/pages/navigation
 router.get('/navigation', async (req, res) => {
   const locale = req.query.locale || 'en';
-  console.log('[NAV] Navigation endpoint hit with locale:', locale);
+  logger.debug('[NAV] Navigation endpoint hit with locale:', locale);
   // Debug logs before try/catch
-  console.log('[NAV][DEBUG] typeof Page:', typeof Page);
-  console.log('[NAV][DEBUG] Page model keys:', Object.keys(Page));
-  console.log('[NAV][DEBUG] Page.findAll:', typeof Page.findAll);
+  logger.debug('[NAV][DEBUG] typeof Page:', typeof Page);
+  logger.debug('[NAV][DEBUG] Page model keys:', Object.keys(Page));
+  logger.debug('[NAV][DEBUG] Page.findAll:', typeof Page.findAll);
   try {
     // Debug log before calling Page.findAll
-    console.log('[NAV][DEBUG] About to call Page.findAll');
+    logger.debug('[NAV][DEBUG] About to call Page.findAll');
     // Fetch only published pages that should show in nav, ordered by nav_order
     const pages = await Page.findAll({
       where: { is_published: true, show_in_nav: true },
       order: [['nav_order', 'ASC']],
     });
-    console.log('[NAV] Pages fetched:', Array.isArray(pages) ? pages.map(p => ({id: p.id, slug: p.slug, is_published: p.is_published, show_in_nav: p.show_in_nav, nav_order: p.nav_order})) : pages);
+    logger.debug('[NAV] Pages fetched:', Array.isArray(pages) ? pages.map(p => ({id: p.id, slug: p.slug, is_published: p.is_published, show_in_nav: p.show_in_nav, nav_order: p.nav_order})) : pages);
 
     // Map to minimal nav payload with locale fallback
     const nav = await Promise.all(pages.map(async (p) => {
       let tr = await PageTranslation.getByPageIdAndLocale(p.id, locale);
-      console.log(`[NAV] Translation for page ${p.slug} (${locale}):`, tr);
+      logger.debug(`[NAV] Translation for page ${p.slug} (${locale}):`, tr);
       if (!tr && locale !== 'en') {
         tr = await PageTranslation.getByPageIdAndLocale(p.id, 'en');
-        console.log(`[NAV] Fallback translation for page ${p.slug} (en):`, tr);
+        logger.debug(`[NAV] Fallback translation for page ${p.slug} (en):`, tr);
       }
       return {
         slug: p.slug,
@@ -44,11 +45,11 @@ router.get('/navigation', async (req, res) => {
         order: p.nav_order
       };
     }));
-    console.log('[NAV] Final nav array:', nav);
+    logger.debug('[NAV] Final nav array:', nav);
 
     return res.json(nav);
   } catch (err) {
-    console.error('[NAV] error fetching navigation:', err, err && err.stack);
+    logger.error('[NAV] error fetching navigation:', err, err && err.stack);
     return res.status(500).json({ error: 'Could not load navigation' });
   }
 });
@@ -126,7 +127,7 @@ router.get('/:slug', async (req, res) => {
   const fallbackLocale = 'en';
   const guest = req.guest || null;
 
-  console.log(`[PUBLIC PAGE] slug="${slug}" locale="${requestedLocale}" guestId=${guest?.id || 'none'}`);
+  logger.debug(`[PUBLIC PAGE] slug="${slug}" locale="${requestedLocale}" guestId=${guest?.id || 'none'}`);
 
   try {
     // 1. Fetch page by slug
@@ -149,17 +150,29 @@ router.get('/:slug', async (req, res) => {
         );
 
       if (!isAttending) {
-        const reason = !guest
-          ? 'no_session'
-          : (guest.rsvp_status || (guest.attending ? 'unknown' : 'not_attending'));
-        return res.status(403).json({ error: 'Not allowed to access this page', reason });
+        let reason;
+        if (!guest) {
+          reason = 'no_session';
+        } else if (guest.rsvp_status === 'pending' || guest.rsvp_status === null) {
+          reason = 'pending';
+        } else if (guest.rsvp_status === 'not_attending') {
+          reason = 'not_attending';
+        } else {
+          reason = 'not_attending'; // fallback for any other status
+        }
+        
+        return res.status(403).json({ 
+          error: 'Not allowed to access this page', 
+          reason,
+          message: 'This page requires you to have RSVP\'d as attending'
+        });
       }
     }
 
     // 3. Fetch translation for requested locale (or fallback)
     let translation = await PageTranslation.getByPageIdAndLocale(page.id, requestedLocale);
     if (!translation && requestedLocale !== fallbackLocale) {
-      console.warn(`[PUBLIC PAGE] No translation for "${requestedLocale}", falling back to "${fallbackLocale}"`);
+      logger.warn(`[PUBLIC PAGE] No translation for "${requestedLocale}", falling back to "${fallbackLocale}"`);
       translation = await PageTranslation.getByPageIdAndLocale(page.id, fallbackLocale);
     }
 
@@ -171,7 +184,7 @@ router.get('/:slug', async (req, res) => {
     }
 
     if (!translation.content) {
-      console.error('[PUBLIC PAGE] Missing content in translation.');
+      logger.error('[PUBLIC PAGE] Missing content in translation.');
       return res.status(500).json({
         error: 'Invalid block data',
         message: 'Translation content is missing or invalid for page "' + slug + '" locale "' + translation.locale + '".'
@@ -183,11 +196,11 @@ router.get('/:slug', async (req, res) => {
     try {
       const { blocks, errors } = processBlocks(content, { mode: 'public', skipInvalid: true });
       if (errors.length) {
-        console.warn('[PUBLIC PAGE] Dropped invalid blocks:', errors.map(e => e.index));
+        logger.warn('[PUBLIC PAGE] Dropped invalid blocks:', errors.map(e => e.index));
       }
       content = blocks;
     } catch (ve) {
-      console.error('[PUBLIC PAGE] Block processing error:', ve.message);
+      logger.error('[PUBLIC PAGE] Block processing error:', ve.message);
       return res.status(500).json({
         error: 'Invalid block data',
         message: 'Failed to process page content: ' + ve.message
@@ -204,7 +217,7 @@ router.get('/:slug', async (req, res) => {
           try {
             const sb = await SurveyBlock.getById(sid, { includeDeleted: false });
             if (!sb) {
-              console.warn('[PUBLIC PAGE] Missing survey block id:', sid);
+              logger.warn('[PUBLIC PAGE] Missing survey block id:', sid);
               continue;
             }
             // Transform options for choice types into [{id, label}]
@@ -231,7 +244,7 @@ router.get('/:slug', async (req, res) => {
               alreadyResponded
             };
           } catch (e) {
-            console.error('[PUBLIC PAGE] Error loading survey block id', sid, e.message);
+            logger.error('[PUBLIC PAGE] Error loading survey block id', sid, e.message);
           }
         }
 
@@ -240,7 +253,7 @@ router.get('/:slug', async (req, res) => {
           if (block.type !== 'survey') return true;
           const data = surveyMap[block.id];
           if (!data) {
-            console.warn('[PUBLIC PAGE] Dropping survey block with missing id:', block.id);
+            logger.warn('[PUBLIC PAGE] Dropping survey block with missing id:', block.id);
             return false;
           }
           Object.assign(block, data);
@@ -249,7 +262,7 @@ router.get('/:slug', async (req, res) => {
       }
     }
 
-    console.log(`[PUBLIC PAGE] ✅ Served page "${slug}" (${translation.locale})`);
+    logger.debug(`[PUBLIC PAGE] ✅ Served page "${slug}" (${translation.locale})`);
 
     return res.json({
       slug: page.slug,
@@ -258,7 +271,7 @@ router.get('/:slug', async (req, res) => {
       content,
     });
   } catch (err) {
-    console.error('[PUBLIC PAGE] Unexpected error:', err);
+    logger.error('[PUBLIC PAGE] Unexpected error:', err);
     return res.status(500).json({
       error: 'Invalid block data',
       message: 'Unexpected error processing request: ' + err.message

@@ -11,7 +11,8 @@ const mysql = require('mysql2/promise');
     database: process.env.DB_NAME
   });
 
-  console.log('Seeding into database:', process.env.DB_NAME);
+  const logger = require('../helpers/logger');
+  logger.info('Seeding into database:', process.env.DB_NAME);
   await connection.query(`USE \`${process.env.DB_NAME}\``);
 
   // Define your users to seed
@@ -27,7 +28,7 @@ const mysql = require('mysql2/promise');
       VALUES (?, ?, ?)
     `;
     await connection.execute(sql, [u.name, u.email, hash]);
-    console.log(`– inserted user ${u.email}`);
+    logger.info(`– inserted user ${u.email}`);
   }
 
   // Seed email_settings
@@ -60,7 +61,7 @@ const mysql = require('mysql2/promise');
       e.provider, e.api_key, e.from_name, e.from_email,
       e.sender_name, e.sender_email, e.enabled
     ]);
-    console.log(`– seeded email_settings for provider ${e.provider}`);
+    logger.info(`– seeded email_settings for provider ${e.provider}`);
   }
 
   // Seed templates
@@ -69,22 +70,24 @@ const mysql = require('mysql2/promise');
       name: 'rsvp_request',
       subject: 'Please RSVP for our wedding!',
       body_en: 'Hey {{name}}, please let us know if you can make it …',
-      html: '<p>Hey <strong>{{name}}</strong>, please let us know if you can make it …</p>'
+      html: '<p>Hey <strong>{{name}}</strong>, please let us know if you can make it …</p>',
+      style: 'elegant'
     }
   ];
 
   for (const t of templates) {
     const sql = `
       INSERT INTO templates
-        (name, subject, body_en, html)
-      VALUES (?, ?, ?, ?)
+        (name, subject, body_en, html, style)
+      VALUES (?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
         subject = VALUES(subject),
         body_en = VALUES(body_en),
-        html = VALUES(html)
+        html = VALUES(html),
+        style = VALUES(style)
     `;
-    await connection.execute(sql, [t.name, t.subject, t.body_en, t.html]);
-    console.log(`– seeded template ${t.name}`);
+    await connection.execute(sql, [t.name, t.subject, t.body_en, t.html, t.style]);
+    logger.info(`– seeded template ${t.name}`);
   }
 
   // Seed example page and translations
@@ -146,7 +149,7 @@ const mysql = require('mysql2/promise');
     [pageId, 'lt', 'Mūsų istorija', contentLt]
   );
 
-  console.log('– seeded example page and translations');
+  logger.info('– seeded example page and translations');
 
   // Seed "All Blocks" test page with every block type
   const [allPageRes] = await connection.execute(
@@ -208,9 +211,9 @@ const mysql = require('mysql2/promise');
      VALUES (?, ?, ?, ?)`,
     [allPageId, 'lt', 'Visi blokai', allContentLt]
   );
-  console.log('– seeded "All Blocks" test page and translations');
+  logger.info('– seeded "All Blocks" test page and translations');
 
   await connection.end();
-  console.log('✅ MySQL: users seeded.');
+  logger.info('✅ MySQL: users seeded.');
   process.exit(0);
 })();

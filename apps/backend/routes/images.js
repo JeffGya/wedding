@@ -31,6 +31,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const logger = require('../helpers/logger');
 
 /**
  * Sanitize filenames by replacing unsafe characters with underscores
@@ -266,15 +267,24 @@ router.delete('/:id', async (req, res, next) => {
       return res.status(404).json({ error: 'Image not found' });
     }
 
-    // Delete file from disk
-    fs.unlink(path.join(uploadsDir, image.filename), (fsErr) => {
-      if (fsErr) console.error('Error deleting file:', fsErr);
-    });
+    // Delete file from disk using promises
+    const filePath = path.join(uploadsDir, image.filename);
+    try {
+      await fs.promises.unlink(filePath);
+      logger.info(`File deleted successfully: ${filePath}`);
+    } catch (fsErr) {
+      logger.error('Error deleting file:', fsErr);
+      // Continue with database deletion even if file deletion fails
+      // (file might not exist or already be deleted)
+    }
 
     // Delete record from database
     await dbRun('DELETE FROM images WHERE id = ?', [id]);
+    logger.info(`Image record deleted from database: ${id}`);
+    
     res.status(204).end();
   } catch (err) {
+    logger.error('Error in image deletion:', err);
     next(err);
   }
 });

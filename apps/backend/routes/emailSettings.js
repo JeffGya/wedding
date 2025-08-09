@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('../helpers/logger');
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
 let dbGet, dbRun;
@@ -61,7 +62,7 @@ router.get('/', requireAuth, async (req, res) => {
     
     res.json(row);
   } catch (err) {
-    console.error('Error retrieving email settings:', err);
+    logger.error('Error retrieving email settings:', err);
     return res.status(500).json({ error: 'Failed to retrieve email settings' });
   }
 });
@@ -147,7 +148,7 @@ router.post('/', requireAuth, async (req, res) => {
       res.json({ success: true, created: result.insertId || result.lastID || 1 });
     }
   } catch (err) {
-    console.error('Error updating email settings:', err);
+    logger.error('Error updating email settings:', err);
     return res.status(500).json({ error: 'Failed to update email settings' });
   }
 });

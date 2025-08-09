@@ -1,96 +1,152 @@
 <template>
-  <div class="p-mb-4">
+  <div class="space-y-16">
     <!-- Add Block Control -->
-    <div class="p-mb-3">
+    <div class="space-y-8">
+      <label class="text-txt font-medium block mb-8">Add Content Block</label>
       <Select
         :options="blockTypeOptions"
         optionLabel="label"
         optionValue="value"
-        placeholder="Add block..."
+        placeholder="Select block type..."
+        class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
         @change="e => addBlock(e.value)"
       />
     </div>
 
     <!-- Block List -->
-    <div v-for="(block, idx) in blocks" :key="idx" class="p-mb-4 p-p-3 p-shadow-2">
-      <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
-        <span class="p-text-bold">{{ idx + 1 }}. {{ block.type }}</span>
-        <div>
-          <Button icon="pi pi-arrow-up" class="p-button-text p-mr-2"
-            :disabled="idx === 0" @click="moveUp(idx)" />
-          <Button icon="pi pi-arrow-down" class="p-button-text p-mr-2"
-            :disabled="idx === blocks.length - 1" @click="moveDown(idx)" />
-          <Button icon="pi pi-trash" class="p-button-text p-button-danger"
-            @click="removeBlock(idx)" />
+    <div class="space-y-16">
+      <div 
+        v-for="(block, idx) in blocks" 
+        :key="idx" 
+        class="block-item bg-card-bg border border-form-border rounded-lg p-16 space-y-16"
+      >
+        <!-- Block Header -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-16">
+            <span class="text-txt font-semibold">{{ idx + 1 }}. {{ getBlockTypeLabel(block.type) }}</span>
+            <Tag :value="block.type" severity="info" class="text-xs" />
+          </div>
+          
+          <div class="flex items-center gap-8">
+            <Button 
+              icon="pi pi-arrow-up" 
+              class="p-button-text text-btn-secondary-base hover:text-btn-secondary-hover"
+              :disabled="idx === 0" 
+              @click="moveUp(idx)"
+              v-tooltip.top="'Move Up'"
+            />
+            <Button 
+              icon="pi pi-arrow-down" 
+              class="p-button-text text-btn-secondary-base hover:text-btn-secondary-hover"
+              :disabled="idx === blocks.length - 1" 
+              @click="moveDown(idx)"
+              v-tooltip.top="'Move Down'"
+            />
+            <Button 
+              icon="pi pi-trash" 
+              class="p-button-text text-red-600 hover:text-red-700"
+              @click="removeBlock(idx)"
+              v-tooltip.top="'Delete Block'"
+            />
+          </div>
+        </div>
+
+        <!-- Block Content -->
+        <div class="block-content">
+          <FormField
+            v-if="block.type === 'richText'"
+            :state="props.blockErrors[idx] ? 'error' : null"
+            :helper="props.blockErrors[idx]"
+          >
+            <RichTextEditor
+              :modelValue="block.translations[locale].html"
+              @update:modelValue="val => updateBlock(idx, 'html', val)"
+            />
+          </FormField>
+          
+          <FormField
+            v-else-if="block.type === 'image'"
+            :state="props.blockErrors[idx] ? 'error' : null"
+            :helper="props.blockErrors[idx]"
+          >
+            <div class="space-y-16">
+              <div class="flex items-center gap-16">
+                <div v-if="block.translations[locale].src" class="image-preview">
+                  <img
+                    :src="block.translations[locale].src"
+                    :alt="block.translations[locale].alt || 'Preview'"
+                    class="preview-image"
+                  />
+                </div>
+                <Button
+                  :label="block.translations[locale].src ? 'Change Image' : 'Select Image'"
+                  icon="pi pi-image"
+                  class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+                  @click="toggleImagePicker(idx, true)"
+                />
+              </div>
+              
+              <ImagePicker
+                :visible="imagePickerVisible[idx] || false"
+                @update:visible="val => toggleImagePicker(idx, val)"
+                @select="url => updateBlock(idx, 'src', url)"
+              />
+              
+              <div class="space-y-8">
+                <label class="text-txt font-medium block">Alt Text</label>
+                <InputText
+                  :value="block.translations[locale].alt"
+                  placeholder="Enter alt text for accessibility"
+                  class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+                  @input="val => updateBlock(idx, 'alt', val)"
+                />
+              </div>
+            </div>
+          </FormField>
+          
+          <FormField
+            v-else-if="block.type === 'video' || block.type === 'map'"
+            :state="props.blockErrors[idx] ? 'error' : null"
+            :helper="props.blockErrors[idx]"
+          >
+            <div class="space-y-8">
+              <label class="text-txt font-medium block">
+                {{ block.type === 'video' ? 'Video Embed' : 'Map Embed' }}
+              </label>
+              <EmbedEditor
+                :modelValue="block.translations[locale].embed"
+                @update:modelValue="val => updateBlock(idx, 'embed', val)"
+              />
+            </div>
+          </FormField>
+          
+          <FormField
+            v-else-if="block.type === 'survey'"
+            :state="props.blockErrors[idx] ? 'error' : null"
+            :helper="props.blockErrors[idx]"
+          >
+            <div class="space-y-8">
+              <label class="text-txt font-medium block">Survey</label>
+              <SurveySelector
+                :modelValue="block.translations[locale].id"
+                @update:modelValue="val => updateBlock(idx, 'id', val)"
+                :page-id="pageId"
+              />
+            </div>
+          </FormField>
+          
+          <div v-else-if="block.type === 'divider'" class="divider-block">
+            <Divider class="border-form-border" />
+            <p class="text-center text-txt text-sm mt-8">Content Divider</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <FormField
-        v-if="block.type === 'richText'"
-        :state="props.blockErrors[idx] ? 'error' : null"
-        :helper="props.blockErrors[idx]"
-      >
-        <RichTextEditor
-          :modelValue="block.translations[locale].html"
-          @update:modelValue="val => updateBlock(idx, 'html', val)"
-        />
-      </FormField>
-      <FormField
-        v-else-if="block.type === 'image'"
-        :state="props.blockErrors[idx] ? 'error' : null"
-        :helper="props.blockErrors[idx]"
-      >
-        <div class="p-d-flex p-ai-center p-mb-2">
-          <img
-            v-if="block.translations[locale].src"
-            :src="block.translations[locale].src"
-            alt=""
-            style="height: 50px; margin-right: 1rem;"
-          />
-          <Button
-            label="Select Image"
-            icon="pi pi-image"
-            class="p-button-text"
-            @click="toggleImagePicker(idx, true)"
-          />
-        </div>
-        <ImagePicker
-          :visible="imagePickerVisible[idx] || false"
-          @update:visible="val => toggleImagePicker(idx, val)"
-          @select="url => updateBlock(idx, 'src', url)"
-        />
-        <InputText
-          class="p-mt-2"
-          :value="block.translations[locale].alt"
-          placeholder="Alt text"
-          @input="val => updateBlock(idx, 'alt', val)"
-        />
-      </FormField>
-      <FormField
-        v-else-if="block.type === 'video' || block.type === 'map'"
-        :state="props.blockErrors[idx] ? 'error' : null"
-        :helper="props.blockErrors[idx]"
-      >
-        <EmbedEditor
-          :modelValue="block.translations[locale].embed"
-          @update:modelValue="val => updateBlock(idx, 'embed', val)"
-        />
-      </FormField>
-      <FormField
-        v-else-if="block.type === 'survey'"
-        :state="props.blockErrors[idx] ? 'error' : null"
-        :helper="props.blockErrors[idx]"
-      >
-        <SurveySelector
-          :modelValue="block.translations[locale].id"
-          @update:modelValue="val => updateBlock(idx, 'id', val)"
-          :page-id="pageId"
-        />
-      </FormField>
-      <div v-else-if="block.type === 'divider'">
-        <Divider />
-      </div>
-
+    <!-- Empty State -->
+    <div v-if="blocks.length === 0" class="empty-state text-center py-32">
+      <i class="pi pi-plus-circle text-4xl text-gray-400 mb-16"></i>
+      <p class="text-txt">No content blocks yet. Use the dropdown above to add your first block.</p>
     </div>
   </div>
 </template>
@@ -100,6 +156,7 @@ import { computed, reactive } from 'vue';
 import { defineProps, defineEmits } from 'vue';
 import { FormField } from '@primevue/forms';
 import Divider from 'primevue/divider';
+import Tag from 'primevue/tag';
 import RichTextEditor from '@/components/forms/RichTextEditor.vue';
 import ImagePicker from '@/components/ui/ImagePicker.vue';
 import EmbedEditor from '@/components/EmbedEditor.vue';
@@ -124,6 +181,7 @@ const props = defineProps({
 const emit = defineEmits(['update:blocks']);
 
 const imagePickerVisible = reactive({});
+
 function toggleImagePicker(idx, val) {
   imagePickerVisible[idx] = val;
 }
@@ -137,6 +195,19 @@ const blockTypeOptions = [
   { label: 'Divider', value: 'divider' },
   { label: 'Survey', value: 'survey' }
 ];
+
+// Helper function to get block type labels
+function getBlockTypeLabel(type) {
+  const labels = {
+    richText: 'Rich Text',
+    image: 'Image',
+    video: 'Video',
+    map: 'Map',
+    divider: 'Divider',
+    survey: 'Survey'
+  };
+  return labels[type] || type;
+}
 
 // Helpers to emit updated blocks array
 function updateBlocks(newBlocks) {
@@ -177,6 +248,7 @@ function moveUp(idx) {
   b[idx] = temp;
   updateBlocks(b);
 }
+
 function moveDown(idx) {
   if (idx === props.blocks.length - 1) return;
   const b = [...props.blocks];
@@ -216,3 +288,69 @@ function updateBlock(idx, field, value) {
   updateBlocks(b);
 }
 </script>
+
+<style scoped>
+.block-item {
+  transition: all 0.2s ease;
+}
+
+.block-item:hover {
+  border-color: var(--form-border-hover);
+}
+
+.block-content {
+  border-top: 1px solid var(--form-border);
+  padding-top: 16px;
+}
+
+.image-preview {
+  width: 80px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--form-border);
+  background: var(--form-bg);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.divider-block {
+  padding: 16px 0;
+}
+
+.empty-state {
+  background: var(--form-bg);
+  border: 2px dashed var(--form-border);
+  border-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .block-item {
+    padding: 12px;
+  }
+  
+  .block-content {
+    padding-top: 12px;
+  }
+  
+  .image-preview {
+    width: 60px;
+    height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .block-item {
+    padding: 8px;
+  }
+  
+  .block-content {
+    padding-top: 8px;
+  }
+}
+</style>

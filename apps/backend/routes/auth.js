@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('../helpers/logger');
 const bcrypt = require('bcryptjs');
 const getDbConnection = require('../db/connection');
 // Initialize database connection and helper methods for SQLite or MySQL
@@ -56,7 +57,7 @@ const router = express.Router();
  *         description: Database error
  */
 router.post('/login', async (req, res) => {
-  console.log('Login request received:');
+  logger.debug('Login request received:');
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
@@ -75,7 +76,7 @@ router.post('/login', async (req, res) => {
     });
     return res.json({ success: true, name: user.name });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: 'Database error.' });
   }
 });
@@ -114,7 +115,7 @@ router.get('/me', async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Invalid session.' });
     return res.json({ id: user.id, name: user.name, email: user.email });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: 'Database error.' });
   }
 });

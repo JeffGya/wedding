@@ -1,5 +1,6 @@
 <template>
   <div class="space-y-8">
+    <!-- Template Selection -->
     <div>
       <FloatLabel variant="in">
         <Select
@@ -16,6 +17,23 @@
       </FloatLabel>
     </div>
 
+    <!-- Style Selection -->
+    <div>
+      <FloatLabel variant="in">
+        <Select
+          id="style"
+          v-model="form.style"
+          :options="styleOptions"
+          optionLabel="name"
+          optionValue="key"
+          class="w-full"
+          placeholder="Select email style"
+        />
+        <label for="style">Email Style</label>
+      </FloatLabel>
+    </div>
+
+    <!-- Subject -->
     <div>
       <FloatLabel variant="in">
         <InputText
@@ -28,6 +46,7 @@
       </FloatLabel>
     </div>
 
+    <!-- Content Editor -->
     <div>
       <div class="mb-4">
         <SelectButton
@@ -49,12 +68,14 @@
       </div>
     </div>
 
+    <!-- Save Template Modal -->
     <SaveTemplateModal
       v-if="showSaveTemplate"
       :show="showSaveTemplate"
       :subject="form.subject"
       :bodyEn="form.bodyEn"
       :bodyLt="form.bodyLt"
+      :style="form.style"
       :templates="templates"
       @close="showSaveTemplate = false"
       @saved="handleTemplateSaved"
@@ -63,7 +84,8 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, onMounted } from 'vue'
+import { getTemplateStyles } from '@/api/templates'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 
@@ -98,6 +120,19 @@ const form = reactive({
   subject: '',
   bodyEn: '',
   bodyLt: '',
+  style: 'elegant' // Default style
+})
+
+const styleOptions = ref([])
+
+// Load available styles
+onMounted(async () => {
+  try {
+    const response = await getTemplateStyles()
+    styleOptions.value = response.styles
+  } catch (error) {
+    console.error('Failed to load template styles:', error)
+  }
 })
 
 function loadTemplate() {
@@ -109,6 +144,7 @@ function loadTemplate() {
       form.subject = selected.subject || ''
       form.bodyEn = selected.body_en || ''
       form.bodyLt = selected.body_lt || ''
+      form.style = selected.style || 'elegant' // Load template style
     }
   }
 }
@@ -121,16 +157,28 @@ watch(() => props.message, (newMsg) => {
   }
 }, { immediate: true })
 
-const getData = () => ({
-  subject: form.subject,
-  body_en: form.bodyEn,
-  body_lt: form.bodyLt,
+// Watch for form changes
+watch(() => form.bodyEn, (newValue) => {
 })
 
-const setData = ({ subject, body_en, body_lt }) => {
+watch(() => form.bodyLt, (newValue) => {
+})
+
+const getData = () => {
+  const data = {
+    subject: form.subject,
+    body_en: form.bodyEn,
+    body_lt: form.bodyLt,
+    style: form.style
+  }
+  return data;
+}
+
+const setData = ({ subject, body_en, body_lt, style }) => {
   form.subject = subject || ''
   form.bodyEn = body_en || ''
   form.bodyLt = body_lt || ''
+  form.style = style || 'elegant'
 }
 
 function handleTemplateSaved() {

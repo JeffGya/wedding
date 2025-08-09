@@ -140,6 +140,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import Chart from 'primevue/chart';
 
 const props = defineProps({
   title: { type: String, required: false },

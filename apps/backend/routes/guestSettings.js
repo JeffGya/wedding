@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('../helpers/logger');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
 
@@ -70,7 +71,7 @@ router.get('/', async (req, res) => {
       rsvp_deadline: deadlineString
     });
   } catch (err) {
-    console.error('Error fetching guest settings:', err);
+    logger.error('Error fetching guest settings:', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -136,7 +137,7 @@ router.post('/', async (req, res) => {
     await dbRun('UPDATE guests SET rsvp_deadline = ?', [rsvp_deadline]);
     return res.json({ rsvp_open, rsvp_deadline });
   } catch (err) {
-    console.error('Error saving guest settings or updating deadlines:', err);
+    logger.error('Error saving guest settings or updating deadlines:', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });

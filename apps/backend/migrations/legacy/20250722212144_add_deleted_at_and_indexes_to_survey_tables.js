@@ -66,7 +66,8 @@ exports.up = async function up(knex) {
         table.dropColumn('deleted_at');
       });
     } catch (err) {
-      console.warn('SQLite cannot drop survey_blocks.deleted_at easily; skipping.', err.message);
+      const logger = require('../../helpers/logger');
+      logger.warn('SQLite cannot drop survey_blocks.deleted_at easily; skipping.', err.message);
     }
   
     try {
@@ -75,6 +76,7 @@ exports.up = async function up(knex) {
         table.dropColumn('responded_at');
       });
     } catch (err) {
-      console.warn('SQLite cannot drop survey_responses columns easily; skipping.', err.message);
+      const logger = require('../../helpers/logger');
+      logger.warn('SQLite cannot drop survey_responses columns easily; skipping.', err.message);
     }
   };
