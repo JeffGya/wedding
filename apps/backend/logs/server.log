@@ -219,3 +219,286 @@ SyntaxError: missing ) after argument list
 [2025-08-09T15:10:55.564Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
 [2025-08-09T15:10:55.567Z] [DEBUG] [GET /api/pages] Returning 2 of 2
 [2025-08-09T15:11:13.312Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T15:17:46.331Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-09T15:17:46.333Z] [INFO] Server is running on port 5001
+[2025-08-09T15:17:46.341Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-09T15:20:08.337Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-09T15:20:08.352Z] [DEBUG] [GET /api/pages] Returning 2 of 2
+[2025-08-09T15:20:40.588Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T15:20:42.772Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T15:20:42.773Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T15:20:42.772Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T15:20:42.773Z] [DEBUG] 📤 Sending response
+[2025-08-09T15:20:42.772Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "24px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T15:20:42.775Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T15:21:00.069Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T15:21:01.502Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T15:21:04.422Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/6/preview
+[2025-08-09T15:21:04.423Z] [DEBUG] Preview request: {"id":"6"}
+[2025-08-09T15:21:04.425Z] [DEBUG] Template found: Wedding Update
+[2025-08-09T15:21:04.426Z] [DEBUG] Sample guests found: 5
+[2025-08-09T15:21:04.426Z] [DEBUG] Getting variables for first sample guest
+[2025-08-09T15:21:04.430Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpLink","plusOneName","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","websiteUrl","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2025-08-09T15:21:04.430Z] [DEBUG] Selected guest for preview: Alice
+[2025-08-09T15:21:04.431Z] [DEBUG] Replaced subject: Important wedding update, Alice
+[2025-08-09T15:21:04.431Z] [DEBUG] Original body_en length: 263
+[2025-08-09T15:21:04.431Z] [DEBUG] Replaced body_en length: 226
+[2025-08-09T15:21:04.432Z] [DEBUG] Preview response prepared with style: elegant
+[2025-08-09T15:21:04.431Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"pending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2025-08-09T15:21:04.431Z] [DEBUG] Original subject: Important wedding update, {{guestName}}
+[2025-08-09T15:21:04.431Z] [DEBUG] Variable replacement results:
+[2025-08-09T15:22:06.657Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2025-08-09T15:22:06.658Z] [DEBUG] 🔍 Fetching template styles...
+[2025-08-09T15:22:06.658Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Sophisticated design with serif fonts and pronounced borders",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "border": "3px solid #DED4C4",
+      "borderRadius": "12px",
+      "boxShadow": "0 6px 20px rgba(68, 39, 39, 0.2)",
+      "bodyFont": "'Lora', serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "2px solid #E3B13F40",
+      "font": "'Lora', serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "border": "none",
+      "borderRadius": "16px",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "border": "1px solid #E9E7D910",
+      "borderRadius": "24px",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2025-08-09T15:22:06.658Z] [DEBUG] 📤 Sending response
+[2025-08-09T15:22:06.660Z] [DEBUG] ✅ Response sent successfully
+[2025-08-09T15:22:06.663Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2025-08-09T15:22:34.528Z] [DEBUG] 🧭 Route hit: POST /api/messages
+[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with headers: {"host":"localhost:5001","connection":"keep-alive","content-length":"738","sec-ch-ua-platform":"\"macOS\"","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36","accept":"application/json, text/plain, */*","sec-ch-ua":"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\"","content-type":"application/json","dnt":"1","sec-ch-ua-mobile":"?0","origin":"http://localhost:5173","sec-fetch-site":"same-site","sec-fetch-mode":"cors","sec-fetch-dest":"empty","referer":"http://localhost:5173/","accept-encoding":"gzip, deflate, br, zstd","accept-language":"en-US,en;q=0.9","cookie":"session_id=s%3A5.84tR7u6yeO1YnIy76a%2BdCNpAPdIJXYiw6plq6DnBjkM"}
+[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] Inserting message with params: ["Welcome to our wedding celebration, {{guestName}}!","<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","draft",null,"elegant"]
+[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] POST /messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31]}
+[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] Extracted fields: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31],"style":"elegant"}
+[2025-08-09T15:22:34.529Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[27,31]}
+[2025-08-09T15:22:34.534Z] [DEBUG] 🧰 [messages.js] Inserted messageId: 2
+[2025-08-09T15:22:34.534Z] [DEBUG] 🧰 [messages.js] Recipients provided: [27,31]
+[2025-08-09T15:22:34.535Z] [DEBUG] 🧰 [messages.js] Guests fetched for recipients: [{"id":27,"email":"Jeffogya@gmail.com","preferred_language":"lt"},{"id":31,"email":"test-9soytm94s@srv1.mail-tester.com","preferred_language":"en"}]
+[2025-08-09T15:22:34.535Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":27,"email":"Jeffogya@gmail.com","preferred_language":"lt"}
+[2025-08-09T15:22:34.536Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":31,"email":"test-9soytm94s@srv1.mail-tester.com","preferred_language":"en"}
+[2025-08-09T15:22:34.554Z] [DEBUG] 🧭 Route hit: POST /api/messages/2/send
+[2025-08-09T15:22:34.555Z] [DEBUG] ✅ Route hit: POST /:id/send — messageId: 2
+[2025-08-09T15:22:34.555Z] [DEBUG] ➡️ Preparing to send messageId: 2 with guestIds: [27,31]
+[2025-08-09T15:22:34.557Z] [DEBUG] 📫 Sender info: Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>
+[2025-08-09T15:22:34.558Z] [DEBUG] 📦 Loaded message: {"id":2,"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<p>Dear {{guestName}},\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** {{eventStartDate}}\n- **Venue:** {{venueName}}\n- **Time:** {{eventStartTime}}\n\nWe can't wait to celebrate with you!\n\nBest regards,\n{{brideName}} &amp; {{groomName}}</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduled_for":null,"style":"elegant","created_at":"2025-08-09T15:22:34.000Z","updated_at":"2025-08-09T15:22:34.000Z"}
+[2025-08-09T15:22:34.871Z] [DEBUG] 📤 Email data to send: {"from":"Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>","to":"Jeffogya@gmail.com","subject":"Welcome to our wedding celebration, Jeffrey!","html":"\n            <!DOCTYPE html>\n            <html>\n            <head>\n              <meta charset=\"utf-8\">\n              <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n              <link href=\"https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap\" rel=\"stylesheet\">\n              \n            <style>\n              .email-container {\n                font-family: Lora, Georgia, serif; color: #333333; line-height: 1.6; padding: 20px; background-color: #F5F5DC; border: 2px solid #D2B48C; text-align: left; font-size: 16px; border-radius: 8px; max-width: 600px; margin: 0 auto\n              }\n              .email-container h1, .email-container h2, .email-container h3 {\n                margin: 0 0 15px 0;\n                font-weight: 600;\n                color: #333333;\n              }\n              .email-container h1 {\n                font-size: 24px;\n                border-bottom: 2px solid #D2B48C;\n                padding-bottom: 8px;\n              }\n              .email-container h2 {\n                font-size: 20px;\n              }\n              .email-container h3 {\n                font-size: 18px;\n              }\n              .email-container p {\n                margin: 0 0 15px 0;\n                color: #333333;\n              }\n              .email-container .signature {\n                margin-top: 20px;\n                padding-top: 15px;\n                border-top: 1px solid #cccccc;\n                font-style: italic;\n                color: #333333;\n              }\n              @media screen and (max-width: 600px) {\n                .email-container {\n                  padding: 15px !important;\n                  margin: 10px !important;\n                }\n              }\n            </style>\n          \n            </head>\n            <body style=\"margin: 0; padding: 0; background-color: #f4f4f4;\">\n              <div class=\"email-container\">\n                <p>Dear Jeffrey,\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** August 1, 2025\n- **Venue:** Geert Grootestraat\n- **Time:** \n\nWe can't wait to celebrate with you!\n\nBest regards,\nBrigita &amp; Jeffrey</p>\n              </div>\n            </body>\n            </html>\n          "}
+[2025-08-09T15:22:35.988Z] [INFO] ✅ Email accepted by Resend for delivery: 9ac831d3-aa2f-4365-a4f5-68f38aef81c4
+[2025-08-09T15:22:35.988Z] [DEBUG] ✅ Resend response: {"status":200,"data":{"id":"9ac831d3-aa2f-4365-a4f5-68f38aef81c4"}}
+[2025-08-09T15:22:35.991Z] [DEBUG] 🧰 [messages.js] Formatted sentAt for MySQL: 2025-08-09 15:22:35
+[2025-08-09T15:22:38.303Z] [DEBUG] 📤 Email data to send: {"from":"Brigita & Jeffrey <messagesfrom@brigitaplusjeffrey.com>","to":"test-9soytm94s@srv1.mail-tester.com","subject":"Welcome to our wedding celebration, Alice!","html":"\n            <!DOCTYPE html>\n            <html>\n            <head>\n              <meta charset=\"utf-8\">\n              <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n              <link href=\"https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap\" rel=\"stylesheet\">\n              \n            <style>\n              .email-container {\n                font-family: Lora, Georgia, serif; color: #333333; line-height: 1.6; padding: 20px; background-color: #F5F5DC; border: 2px solid #D2B48C; text-align: left; font-size: 16px; border-radius: 8px; max-width: 600px; margin: 0 auto\n              }\n              .email-container h1, .email-container h2, .email-container h3 {\n                margin: 0 0 15px 0;\n                font-weight: 600;\n                color: #333333;\n              }\n              .email-container h1 {\n                font-size: 24px;\n                border-bottom: 2px solid #D2B48C;\n                padding-bottom: 8px;\n              }\n              .email-container h2 {\n                font-size: 20px;\n              }\n              .email-container h3 {\n                font-size: 18px;\n              }\n              .email-container p {\n                margin: 0 0 15px 0;\n                color: #333333;\n              }\n              .email-container .signature {\n                margin-top: 20px;\n                padding-top: 15px;\n                border-top: 1px solid #cccccc;\n                font-style: italic;\n                color: #333333;\n              }\n              @media screen and (max-width: 600px) {\n                .email-container {\n                  padding: 15px !important;\n                  margin: 10px !important;\n                }\n              }\n            </style>\n          \n            </head>\n            <body style=\"margin: 0; padding: 0; background-color: #f4f4f4;\">\n              <div class=\"email-container\">\n                <p>Dear Alice,\n\nWe are thrilled to invite you to our special day!\n\n**Event Details:**\n- **Date:** August 1, 2025\n- **Venue:** Geert Grootestraat\n- **Time:** \n\nWe can't wait to celebrate with you!\n\nBest regards,\nBrigita &amp; Jeffrey</p>\n              </div>\n            </body>\n            </html>\n          "}
+[2025-08-09T15:22:38.853Z] [INFO] ✅ Email accepted by Resend for delivery: c16f484c-400e-46e6-a5eb-fa034355a294
+[2025-08-09T15:22:38.853Z] [DEBUG] ✅ Resend response: {"status":200,"data":{"id":"c16f484c-400e-46e6-a5eb-fa034355a294"}}
+[2025-08-09T15:22:38.853Z] [DEBUG] 🧰 [messages.js] Formatted sentAt for MySQL: 2025-08-09 15:22:38
+[2025-08-09T15:22:38.856Z] [INFO] ✅ Marking message as sent - 2 emails sent successfully
+[2025-08-09T15:24:55.361Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T15:24:57.910Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-09T15:24:57.912Z] [DEBUG] [GET /api/pages] Returning 2 of 2
+[2025-08-09T15:24:59.637Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-08-09T15:25:05.330Z] [INFO] File deleted successfully: uploads/Save_the_date.png
+[2025-08-09T15:25:05.332Z] [INFO] Image record deleted from database: 3

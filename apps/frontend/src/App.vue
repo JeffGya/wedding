@@ -1,5 +1,6 @@
 <template>
     <Alert position="top-center"/>
+    <ConfirmDialog />
     <Loader />
     <TopBar v-if="auth.isLoggedIn" />
     <router-view />
