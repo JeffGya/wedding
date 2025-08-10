@@ -13,7 +13,7 @@
 
     <div class="space-y-8">
       <p class="text-txt font-medium">
-        {{ t('rsvp.attendingLabel') }}
+        {{ $t('rsvp.attendingLabel') }}
       </p>
       <div class="space-y-8">
         <div class="flex items-center gap-16">
@@ -24,7 +24,7 @@
             :value="true"
             class="text-btn-primary-base"
           />
-          <label for="attending-yes" class="text-txt font-medium">{{ t('rsvp.attendingYes') }}</label>
+          <label for="attending-yes" class="text-txt font-medium">{{ $t('rsvp.attendingYes') }}</label>
         </div>
         <div class="flex items-center gap-16">
           <RadioButton 
@@ -34,7 +34,7 @@
             :value="false" 
             class="text-btn-primary-base"
           />
-          <label for="attending-no" class="text-txt font-medium">{{ t('rsvp.attendingNo') }}</label>
+          <label for="attending-no" class="text-txt font-medium">{{ $t('rsvp.attendingNo') }}</label>
         </div>
       </div>
       <Banner v-if="errors.attending" type="error" :closable="false" class="text-sm">
@@ -45,7 +45,7 @@
     <div class="space-y-8">
       <Field name="dietary">
         <label for="dietary" class="text-txt font-medium block mb-8">
-          {{ t('rsvp.dietaryLabel') }}
+          {{ $t('rsvp.dietaryLabel') }}
         </label>
         <InputText 
           id="dietary" 
@@ -62,7 +62,7 @@
     <div class="space-y-8">
       <Field name="notes">
         <label for="notes" class="text-txt font-medium block mb-8">
-          {{ t('rsvp.notesLabel') }}
+          {{ $t('rsvp.notesLabel') }}
         </label>
         <Textarea
           id="notes" 
@@ -77,7 +77,7 @@
 
     <div v-if="props.guest.can_bring_plus_one" class="space-y-8">
       <p class="text-txt font-medium">
-        {{ t('rsvp.plusOneLabel') }}
+        {{ $t('rsvp.plusOneLabel') }}
       </p>
       <div class="flex items-center gap-16">
         <ToggleSwitch 
@@ -86,7 +86,7 @@
           class="text-btn-primary-base"
         />
         <label for="add-plus-one" class="text-txt font-medium">
-          {{ form.add_plus_one ? t('rsvp.yes') : t('rsvp.no') }}
+          {{ form.add_plus_one ? $t('rsvp.yes') : $t('rsvp.no') }}
         </label>
       </div>
     </div>
@@ -98,7 +98,7 @@
       <div class="space-y-8">
         <Field name="plus_one_name">
           <label for="plus_one_name" class="text-txt font-medium block mb-8">
-            {{ t('rsvp.plusOneNameLabel') }}
+            {{ $t('rsvp.plusOneNameLabel') }}
           </label>
           <InputText
             id="plus_one_name"
@@ -114,7 +114,7 @@
       <div class="space-y-8">
         <Field name="plus_one_dietary">
           <label for="plus_one_dietary" class="text-txt font-medium block mb-8">
-            {{ t('rsvp.plusOneDietaryLabel') }}
+            {{ $t('rsvp.plusOneDietaryLabel') }}
           </label>
           <InputText 
             id="plus_one_dietary" 
@@ -134,7 +134,7 @@
       :disabled="isDisabled"
       class="w-full bg-btn-primary-base hover:bg-btn-primary-hover active:bg-btn-primary-active text-btn-primary-text font-semibold rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      {{ t('rsvp.submitButton') }}
+      {{ $t('rsvp.submitButton') }}
     </Button>
   </Form>
 </template>

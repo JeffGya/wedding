@@ -2,7 +2,7 @@
   <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto">
     <Banner
       v-if="!settingsLoading && isClosed()"
-      :message="t('rsvp.closed')"
+      :message="$t('rsvp.closed')"
     />
     <div v-else>
       <h1 class="mb-16">{{ $t('rsvp.title') }}</h1>

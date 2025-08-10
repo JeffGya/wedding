@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import UnoCSS from 'unocss/vite'
 import Icons from 'unplugin-icons/vite'
-import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig(({ command, mode }) => {
@@ -14,12 +13,6 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       UnoCSS(),
       Icons({ compiler: 'vue3' }),
-      VueI18n({
-        runtimeOnly: true,
-        compositionOnly: true,
-        strictMessage: true,
-        include: fileURLToPath(new URL('./src/locales/**', import.meta.url)),
-      }),
     ],
     
     // Base configuration

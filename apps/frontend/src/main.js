@@ -65,7 +65,6 @@ import App from './App.vue'
 import router from '@/router'
 import { configure, defineRule } from 'vee-validate';
 import { localize } from '@vee-validate/i18n';
-import validationEn from '@vee-validate/i18n/dist/locale/en.json';
 import i18n from '@/i18n';
 import * as rules from '@vee-validate/rules';
 
@@ -81,10 +80,10 @@ Object.keys(rules).forEach(name => {
   }
 });
 
-// Configure VeeValidate
+// Configure VeeValidate without i18n
 configure({
-  generateMessage: localize({ en: validationEn }),  // use VeeValidate English locale
-  validateOnInput: true,              // validate on each input event
+  // generateMessage: localize({ en: validationEn }),  // Comment this out
+  validateOnInput: true,
 });
 
 const app = createApp(App)

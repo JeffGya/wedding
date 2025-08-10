@@ -4,7 +4,7 @@
     <Banner
       v-if="responded"
       type="success"
-      :message="t('survey.submitSuccess')"
+      :message="$t('survey.submitSuccess')"
       class="mb-4"
     />
 

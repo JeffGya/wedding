@@ -136,8 +136,6 @@ export default defineConfig({
   preflights: [
     {
       getCSS: () => `
-
-
         /* Light mode variables */
         :root {
           /* Background Glass */
@@ -185,7 +183,6 @@ export default defineConfig({
           /* Card background */
           --card-bg: #E9E7D9;
         }
-
 
         /* Dark mode overrides */
         .dark-mode {
@@ -250,13 +247,13 @@ export default defineConfig({
         }
         @font-face {
           font-family: 'Lora';
-          font-style: medium;
+          font-style: normal;
           font-weight: 500;
           src: url('/fonts/Lora/Lora-Medium.ttf') format('truetype');
         }
         @font-face {
           font-family: 'Lora';
-          font-style: bold;
+          font-style: normal;
           font-weight: 700;
           src: url('/fonts/Lora/Lora-Bold.ttf') format('truetype');
         }
@@ -268,19 +265,19 @@ export default defineConfig({
         }
         @font-face {
           font-family: 'Open Sans';
-          font-style: medium;
+          font-style: normal;
           font-weight: 500;
           src: url('/fonts/OpenSans/OpenSans-Medium.ttf') format('truetype');
         }
         @font-face {
           font-family: 'Open Sans';
-          font-style: semi-bold;
+          font-style: normal;
           font-weight: 600;
-          src: url('/fonts/OpenSans/OpenSans-Medium.ttf') format('truetype');
+          src: url('/fonts/OpenSans/OpenSans-SemiBold.ttf') format('truetype');
         }
         @font-face {
           font-family: 'Open Sans';
-          font-style: bold;
+          font-style: normal;
           font-weight: 700;
           src: url('/fonts/OpenSans/OpenSans-Bold.ttf') format('truetype');
         }

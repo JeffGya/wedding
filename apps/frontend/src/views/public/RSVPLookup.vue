@@ -5,13 +5,13 @@
       <!-- Show closed banner if RSVP is closed -->
       <Banner
         v-if="isClosed()"
-        :message="t('rsvp.closed')"
+        :message="$t('rsvp.closed')"
         class="mb-8"
         type="info"
       />
       <!-- Otherwise show lookup form -->
       <template v-else>
-        <h1 class="mb-16">{{ t('rsvp.lookupTitle') }}</h1>
+        <h1 class="mb-16">{{ $t('rsvp.lookupTitle') }}</h1>
         <Card>
           <template #content>
               <Banner 
@@ -28,7 +28,7 @@
                   required
                 />
                 <label for="lookup-code">
-                  {{ t('rsvp.lookupLabel') }}
+                  {{ $t('rsvp.lookupLabel') }}
                 </label>
               </FloatLabel>
               <Button
@@ -36,7 +36,7 @@
                 class="w-full md:w-auto"
                 size="large"
                 :disabled="submitting"
-                :label="t('rsvp.lookupButton')"
+                :label="$t('rsvp.lookupButton')"
                 aria-label="Lookup RSVP" 
                 icon="i-solar:magnifer-linear"
               >

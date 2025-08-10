@@ -3,11 +3,11 @@
     <p class="font-serif font-400 text-lg mt-0 mb-16">August 1st, 2026 — Vilnius, Lithuania </p>
     <p class="font-serif font-600 text-3xl mt-0 mb-16
     ">
-      {{ months }} {{ t('home.countdown.months', { count: months }) }}
-      {{ days }} {{ t('home.countdown.days', { count: days }) }}
+      {{ months }} {{ $t('home.countdown.months', { count: months }) }}
+      {{ days }} {{ $t('home.countdown.days', { count: days }) }}
     </p>
     <p class="font-serif m-0">
-      {{ t('home.countdown.label') }}
+      {{ $t('home.countdown.label') }}
     </p>
   </div>
 </template>
