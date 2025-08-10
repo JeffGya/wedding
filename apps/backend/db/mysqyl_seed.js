@@ -15,19 +15,19 @@ const mysql = require('mysql2/promise');
   logger.info('Seeding into database:', process.env.DB_NAME);
   await connection.query(`USE \`${process.env.DB_NAME}\``);
 
-  // Define your users to seed
+  // Seed users
   const users = [
-    { name: 'Future Husband Jeffrey', email: 'jeffogya@gmail.com', password: 'Fbjqp4H6woww9' },
-    { name: 'Future Wife Brigita', email: 'brigitabruno@gmail.com', password: '6B2jt5qy8WHqm' }
+    { username: 'admin', email: 'admin@example.com', password: 'admin123' },
+    { username: 'jeff', email: 'jeff@example.com', password: 'password123' }
   ];
 
   for (const u of users) {
     const hash = await bcrypt.hash(u.password, 10);
     const sql = `
-      INSERT IGNORE INTO users (name, email, passwordHash)
+      INSERT IGNORE INTO users (username, email, password_hash)
       VALUES (?, ?, ?)
     `;
-    await connection.execute(sql, [u.name, u.email, hash]);
+    await connection.execute(sql, [u.username, u.email, hash]);
     logger.info(`– inserted user ${u.email}`);
   }
 
@@ -68,9 +68,11 @@ const mysql = require('mysql2/promise');
   const templates = [
     {
       name: 'rsvp_request',
-      subject: 'Please RSVP for our wedding!',
+      category: 'rsvp',
+      subject_en: 'Please RSVP for our wedding!',
+      subject_lt: 'Prašome atsakyti į mūsų vestuvių pakvietimą!',
       body_en: 'Hey {{name}}, please let us know if you can make it …',
-      html: '<p>Hey <strong>{{name}}</strong>, please let us know if you can make it …</p>',
+      body_lt: 'Labas {{name}}, prašome pranešti, ar galite atvykti…',
       style: 'elegant'
     }
   ];
@@ -78,23 +80,37 @@ const mysql = require('mysql2/promise');
   for (const t of templates) {
     const sql = `
       INSERT INTO templates
-        (name, subject, body_en, html, style)
-      VALUES (?, ?, ?, ?, ?)
+        (name, category, subject_en, subject_lt, body_en, body_lt, style)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
-        subject = VALUES(subject),
+        subject_en = VALUES(subject_en),
+        subject_lt = VALUES(subject_lt),
         body_en = VALUES(body_en),
-        html = VALUES(html),
+        body_lt = VALUES(body_lt),
         style = VALUES(style)
     `;
-    await connection.execute(sql, [t.name, t.subject, t.body_en, t.html, t.style]);
+    await connection.execute(sql, [t.name, t.category, t.subject_en, t.subject_lt, t.body_en, t.body_lt, t.style]);
     logger.info(`– seeded template ${t.name}`);
   }
 
-  // Seed example page and translations
+  // Seed settings with all the additional columns from migrations
+  await connection.execute(`
+    INSERT IGNORE INTO settings 
+      (site_name, site_description, logo_url, primary_color, secondary_color, accent_color, base_color, font_family,
+       venue_name, venue_address, event_start_date, event_end_date, event_time, bride_name, groom_name, 
+       contact_email, contact_phone, event_type, dress_code, special_instructions, website_url, app_title)
+    VALUES 
+      ('Jeff & Brigit Wedding', 'Our special day', '/uploads/logo.png', '#000000', '#ffffff', '#ff6b6b', '#f8f9fa', 'serif',
+       'Beautiful Venue', '123 Wedding St, City', '2024-06-15', '2024-06-15', '4:00 PM', 'Brigit', 'Jeff',
+       'hello@ourwedding.com', '+1234567890', 'wedding', 'Formal', 'Please arrive 30 minutes early', 'https://ourwedding.com', 'Jeff & Brigit Wedding')
+  `);
+  logger.info('– seeded settings');
+
+  // Seed example page
   const [pageResult] = await connection.execute(
-    `INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order)
-     VALUES (?, ?, ?, ?, ?)`,
-    ['our-story', 1, 0, 1, 1]
+    `INSERT IGNORE INTO pages (slug, title_en, title_lt, is_published)
+     VALUES (?, ?, ?, ?)`,
+    ['our-story', 'Our Story', 'Mūsų istorija', 1]
   );
   const [pageRow] = await connection.execute(`SELECT id FROM pages WHERE slug = ?`, ['our-story']);
   const pageId = pageRow[0].id;
@@ -102,19 +118,25 @@ const mysql = require('mysql2/promise');
   // Seed survey blocks for example page
   const [surveyResEn] = await connection.execute(
     `INSERT IGNORE INTO survey_blocks
-      (page_id, locale, question, type, options, is_required, is_anonymous)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [pageId, 'en', 'Will you join us for brunch?', 'radio',
-     JSON.stringify(['Yes', 'No']), 1, 0]
+      (page_id, type, content, \`order\`, requires_rsvp)
+     VALUES (?, ?, ?, ?, ?)`,
+    [pageId, 'radio', JSON.stringify({
+       question: 'Will you join us for brunch?',
+       options: ['Yes', 'No'],
+       required: true
+     }), 1, false]
   );
   const surveyEnId = surveyResEn.insertId;
 
   const [surveyResLt] = await connection.execute(
     `INSERT IGNORE INTO survey_blocks
-      (page_id, locale, question, type, options, is_required, is_anonymous)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [pageId, 'lt', 'Ar prisijungsite prie mūsų pusryčių?', 'radio',
-     JSON.stringify(['Taip', 'Ne']), 1, 0]
+      (page_id, type, content, \`order\`, requires_rsvp)
+     VALUES (?, ?, ?, ?, ?)`,
+    [pageId, 'radio', JSON.stringify({
+       question: 'Ar prisijungsite prie mūsų pusryčių?',
+       options: ['Taip', 'Ne'],
+       required: true
+     }), 2, false]
   );
   const surveyLtId = surveyResLt.insertId;
 
@@ -136,14 +158,14 @@ const mysql = require('mysql2/promise');
   ]);
 
   await connection.execute(
-    `INSERT INTO page_translations (page_id, locale, title, content)
+    `INSERT INTO page_translations (page_id, language, title, content)
      VALUES (?, ?, ?, ?)
      ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content)`,
     [pageId, 'en', 'Our Story', contentEn]
   );
 
   await connection.execute(
-    `INSERT INTO page_translations (page_id, locale, title, content)
+    `INSERT INTO page_translations (page_id, language, title, content)
      VALUES (?, ?, ?, ?)
      ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content)`,
     [pageId, 'lt', 'Mūsų istorija', contentLt]
@@ -153,9 +175,9 @@ const mysql = require('mysql2/promise');
 
   // Seed "All Blocks" test page with every block type
   const [allPageRes] = await connection.execute(
-    `INSERT IGNORE INTO pages (slug, is_published, requires_rsvp, show_in_nav, nav_order)
-     VALUES (?, ?, ?, ?, ?)`,
-    ['all-blocks', 1, 0, 0, 99]
+    `INSERT IGNORE INTO pages (slug, title_en, title_lt, is_published)
+     VALUES (?, ?, ?, ?)`,
+    ['all-blocks', 'All Blocks', 'Visi blokai', 1]
   );
   const [allPageRow] = await connection.execute(
     `SELECT id FROM pages WHERE slug = ?`,
@@ -166,19 +188,25 @@ const mysql = require('mysql2/promise');
   // Seed survey blocks for "All Blocks" page
   const [surveyAllEn] = await connection.execute(
     `INSERT IGNORE INTO survey_blocks
-      (page_id, locale, question, type, options, is_required, is_anonymous)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [allPageId, 'en', 'Do you like our site?', 'radio',
-     JSON.stringify(['Option A', 'Option B']), 1, 0]
+      (page_id, type, content, \`order\`)
+     VALUES (?, ?, ?, ?)`,
+    [allPageId, 'radio', JSON.stringify({
+       question: 'Do you like our site?',
+       options: ['Option A', 'Option B'],
+       required: true
+     }), 1]
   );
   const surveyAllEnId = surveyAllEn.insertId;
 
   const [surveyAllLt] = await connection.execute(
     `INSERT IGNORE INTO survey_blocks
-      (page_id, locale, question, type, options, is_required, is_anonymous)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [allPageId, 'lt', 'Ar patinka mūsų svetainė?', 'radio',
-     JSON.stringify(['Parinktis A', 'Parinktis B']), 1, 0]
+      (page_id, type, content, \`order\`)
+     VALUES (?, ?, ?, ?)`,
+    [allPageId, 'radio', JSON.stringify({
+       question: 'Ar patinka mūsų svetainė?',
+       options: ['Parinktis A', 'Parinktis B'],
+       required: true
+     }), 2]
   );
   const surveyAllLtId = surveyAllLt.insertId;
 
@@ -202,12 +230,12 @@ const mysql = require('mysql2/promise');
 
   // Insert translations for "All Blocks" page
   await connection.execute(
-    `INSERT IGNORE INTO page_translations (page_id, locale, title, content)
+    `INSERT IGNORE INTO page_translations (page_id, language, title, content)
      VALUES (?, ?, ?, ?)`,
     [allPageId, 'en', 'All Blocks Test', allContentEn]
   );
   await connection.execute(
-    `INSERT IGNORE INTO page_translations (page_id, locale, title, content)
+    `INSERT IGNORE INTO page_translations (page_id, language, title, content)
      VALUES (?, ?, ?, ?)`,
     [allPageId, 'lt', 'Visi blokai', allContentLt]
   );

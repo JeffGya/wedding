@@ -331,15 +331,17 @@ async function seedTemplates() {
     
     for (const template of templates) {
       const insertSql = process.env.DB_TYPE === 'mysql'
-        ? `INSERT INTO templates (name, subject, body_en, body_lt, style) VALUES (?, ?, ?, ?, ?)`
-        : 'INSERT INTO templates (name, subject, body_en, body_lt, style) VALUES (?, ?, ?, ?, ?)';
+        ? `INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt, style, category) VALUES (?, ?, ?, ?, ?, ?, ?)`
+        : 'INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt, style, category) VALUES (?, ?, ?, ?, ?, ?, ?)';
       
       await runQuery(insertSql, [
         template.name,
-        template.subject,
+        template.subject,  // Use for subject_en
+        template.subject,  // Use for subject_lt (same value for both languages)
         template.body_en,
         template.body_lt,
-        template.style
+        template.style,
+        'general'  // Default category since it's required
       ]);
       
       logger.info(`✅ Added template: ${template.name}`);
