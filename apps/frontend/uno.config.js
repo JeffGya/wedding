@@ -1,17 +1,27 @@
 // uno.config.ts
 import { defineConfig } from 'unocss'
+import presetUno from '@unocss/preset-uno'
 import presetIcons from '@unocss/preset-icons'
+import { transformerDirectives, transformerVariantGroup } from 'unocss'
 
 export default defineConfig({
-    presets: [
-      presetIcons({
-        collections: {
-          solar: async () =>
-            (await import('@iconify-json/solar/icons.json')).default,
-          },
-        prefix: 'i-',
-      }),
-    ],
+  presets: [
+    presetUno(),
+    presetIcons({
+      collections: {
+        solar: async () =>
+          (await import('@iconify-json/solar/icons.json')).default,
+      },
+      prefix: 'i-',
+    }),
+  ],
+  
+  // Add this section
+  transformers: [
+    transformerDirectives(),
+    transformerVariantGroup(),
+  ],
+  
   // optional safelist for classes you use dynamically
   safelist: [],
   theme: {

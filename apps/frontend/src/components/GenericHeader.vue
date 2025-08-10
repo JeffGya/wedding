@@ -112,6 +112,7 @@ export default {
     return {
       darkMode: false, // Default mode
       menuItems: [],
+      appTitle: import.meta.env.VITE_APP_TITLE || 'Brigita + Jeffrey',
     };
   },
   methods: {

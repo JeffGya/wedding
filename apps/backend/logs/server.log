@@ -1,0 +1,978 @@
+[2025-08-10T14:04:29.615Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:04:29.618Z] [INFO] Server is running on port 5001
+[2025-08-10T14:04:29.628Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:05:11.990Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:05:11.992Z] [INFO] Server is running on port 5001
+[2025-08-10T14:05:12.068Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:05:22.429Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:05:22.429Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:05:22.429Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:05:22.429Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:05:22.429Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:05:22.435Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:05:22.444Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:05:22.447Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:05:22.448Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:05:23.512Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:05:23.513Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:05:23.513Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:05:23.513Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:05:23.513Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:05:23.516Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:05:23.534Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:05:23.535Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:05:23.535Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:05:45.649Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:05:45.651Z] [INFO] Server is running on port 5001
+[2025-08-10T14:05:45.658Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:05:49.424Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:05:49.424Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:05:49.424Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:05:49.424Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:05:49.423Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:05:49.435Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:05:49.438Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:05:49.447Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:05:49.447Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:06:12.350Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:06:12.352Z] [INFO] Server is running on port 5001
+[2025-08-10T14:06:12.359Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:06:23.527Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:06:23.527Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:06:23.527Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:06:23.527Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:06:23.527Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:06:23.535Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:06:23.541Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:06:23.544Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:06:23.544Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:06:26.836Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-10T14:06:26.843Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-10T14:06:28.565Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:06:28.588Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:06:42.274Z] [DEBUG] Login request received:
+[2025-08-10T14:06:54.501Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-10T14:06:54.503Z] [DEBUG] [GET /api/pages] Returning 2 of 2
+[2025-08-10T14:06:55.340Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2025-08-10T14:06:55.341Z] [DEBUG] [GET /api/pages] Returning 2 of 2
+[2025-08-10T14:07:02.070Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:07:02.070Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:07:02.070Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:07:02.070Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:07:02.070Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:07:02.072Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:07:02.074Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:07:02.074Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:07:02.074Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:10:50.844Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:10:50.846Z] [INFO] Server is running on port 5001
+[2025-08-10T14:10:50.855Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:11:07.654Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:11:07.654Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:11:07.654Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:11:07.654Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:11:07.654Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:11:07.658Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:11:07.671Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:11:07.673Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:11:07.673Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:22:44.846Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:22:44.848Z] [INFO] Server is running on port 5001
+[2025-08-10T14:22:44.855Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:23:31.714Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:23:31.717Z] [INFO] Server is running on port 5001
+[2025-08-10T14:23:31.723Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:23:35.750Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:23:35.753Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:23:35.996Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:23:35.997Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:23:35.998Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:32.716Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:32.718Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:34.585Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:34.587Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:38.547Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:38.549Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:24:38.551Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:09.617Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:09.618Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:27.562Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:26:27.564Z] [INFO] Server is running on port 5001
+[2025-08-10T14:26:27.573Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:26:29.111Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:29.115Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:29.116Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:29.334Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:29.344Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:29.344Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:31.321Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:31.322Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:31.323Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:32.301Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:26:32.304Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:27:41.729Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:27:41.731Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:27:41.968Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:27:41.970Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:27:59.945Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:27:59.946Z] [INFO] Server is running on port 5001
+[2025-08-10T14:27:59.953Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:28:01.817Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:01.820Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:01.821Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:02.079Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:02.080Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:02.080Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:50.761Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:50.763Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:50.764Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:59.533Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:59.537Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:59.633Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:59.636Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:28:59.640Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:29:01.843Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:29:01.845Z] [INFO] Server is running on port 5001
+[2025-08-10T14:29:01.854Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:29:03.737Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:29:03.740Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:29:03.741Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:29:03.855Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:29:03.871Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:29:03.874Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:00.918Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-10T14:30:00.918Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-10T14:30:00.921Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-10T14:30:00.921Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-10T14:30:38.472Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:38.474Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:38.475Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:38.501Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:38.505Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:38.507Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:57.977Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:57.978Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:58.023Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:58.029Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:30:58.031Z] [ERROR] 🔥 Error handler caught: Error: CORS policy: origin http://localhost:3000 not allowed
+    at origin (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:114:21)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:219:13
+    at optionsCallback (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:199:9)
+    at corsMiddleware (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/cors/lib/index.js:204:7)
+    at Layer.handleRequest (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:342:13)
+    at /Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:297:9
+    at processParams (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:582:12)
+    at next (/Users/jeffreygyamfi/Sites/wedding-site/node_modules/router/index.js:291:5)
+    at parseGuestSession (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/middleware/guestSession.js:61:12)
+[2025-08-10T14:31:23.507Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:31:23.509Z] [INFO] Server is running on port 5001
+[2025-08-10T14:31:23.516Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:31:28.867Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:31:28.867Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:31:28.867Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:31:28.867Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:31:28.867Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:31:28.869Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:31:28.871Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:31:28.882Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:31:28.882Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:31:49.222Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:31:49.222Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:31:49.222Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:31:49.222Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:31:49.222Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:31:49.225Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:31:49.228Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:31:49.228Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:31:49.228Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:32:50.572Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-10T14:32:50.577Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-10T14:32:51.499Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:32:51.514Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:33:06.046Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:33:06.062Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:34:29.563Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:34:29.563Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:34:29.564Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:34:29.563Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:34:29.564Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:34:29.570Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:34:29.573Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:34:29.573Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:34:29.573Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:34:43.319Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-10T14:34:43.321Z] [INFO] Server is running on port 5001
+[2025-08-10T14:34:43.329Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-10T14:34:45.242Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:34:45.242Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:34:45.242Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:34:45.242Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:34:45.242Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:34:45.253Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:34:45.257Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:34:45.260Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:34:45.260Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:34:52.354Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:34:52.379Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:37:53.870Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:37:53.872Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:37:53.872Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:37:53.872Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:37:53.872Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:37:53.872Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:37:53.874Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:37:53.877Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:37:53.906Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:37:53.907Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:37:53.908Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:39:41.136Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:39:41.137Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:39:41.137Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:39:41.137Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:39:41.137Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:39:41.141Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:39:41.144Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:39:41.146Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:39:41.146Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:39:55.018Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:39:55.019Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:39:55.018Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:39:55.019Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:39:55.018Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:39:55.020Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:39:55.020Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:39:55.021Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:39:55.021Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:45:28.064Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:45:28.064Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:45:28.064Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:45:28.064Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:45:28.064Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:45:28.067Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:45:28.068Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:45:28.068Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:45:28.068Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:45:28.886Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:45:28.886Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:45:28.886Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:45:28.886Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:45:28.886Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:45:28.887Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:45:28.888Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:45:28.888Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:45:28.888Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:45:30.171Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:45:30.171Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:45:30.171Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:45:30.171Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:45:30.171Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:45:30.174Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:45:30.177Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:45:30.178Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:45:30.178Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:01.116Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:47:01.116Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:47:01.116Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:47:01.116Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:47:01.116Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:47:01.118Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:47:01.122Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:01.124Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:01.125Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:47:08.043Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:47:08.043Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:47:08.043Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:47:08.043Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:47:08.043Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:47:08.044Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:47:08.048Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:08.048Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:08.048Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:47:19.045Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:47:19.045Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:47:19.045Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:47:19.045Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:47:19.045Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:47:19.046Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:47:19.047Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:19.048Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:19.048Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:47:44.562Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:47:44.562Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:47:44.562Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:47:44.562Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:47:44.562Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:47:44.566Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:47:44.571Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:44.571Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:47:44.572Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:48:50.839Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:48:50.839Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:48:50.839Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:48:50.839Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:48:50.839Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:48:50.842Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:48:50.843Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:48:50.845Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:48:50.845Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:49:29.933Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:49:29.936Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:50:41.067Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:50:41.067Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:50:41.067Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:50:41.067Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:50:41.067Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:50:41.067Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:50:41.067Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:50:41.068Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:50:41.069Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:50:41.069Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:50:41.074Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:51:43.106Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:51:43.106Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:51:43.106Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:51:43.106Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:51:43.106Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:51:43.107Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:51:43.107Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:51:43.107Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:51:43.107Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:51:43.107Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:51:43.111Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:52:03.123Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:52:03.128Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:52:29.555Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-10T14:52:29.561Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-10T14:52:33.907Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:52:33.907Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:52:33.907Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:52:33.907Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:52:33.907Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:52:33.911Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:52:33.913Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:52:33.916Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:52:33.916Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:52:35.382Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-10T14:52:35.385Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-10T14:52:40.740Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-10T14:52:40.743Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-10T14:52:41.665Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:52:41.665Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:52:41.665Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:52:41.665Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:52:41.665Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:52:41.666Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-10T14:52:41.666Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:52:41.670Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:52:41.670Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:52:41.671Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-10T14:52:41.670Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:52:58.586Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:52:58.586Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:52:58.586Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:52:58.586Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:52:58.586Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:52:58.587Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:52:58.590Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:52:58.591Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:52:58.591Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-10T14:53:18.309Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-10T14:53:18.309Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-10T14:53:18.309Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-10T14:53:18.309Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-10T14:53:18.309Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-10T14:53:18.316Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-10T14:53:18.317Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:53:18.318Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-10T14:53:18.318Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]

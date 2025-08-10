@@ -25,6 +25,7 @@ const routes = [
       path: 'home',
       name: 'home',
       component: () => import('@/views/public/Home.vue'),
+      meta: { title: 'Home' }, // Added title only
       beforeEnter: (to, from, next) => {
         const lang = to.params.lang || 'en';
         const langStore = useLangStore();
@@ -36,6 +37,7 @@ const routes = [
       path: 'rsvp',
       name: 'public-rsvp-lookup',
       component: () => import('@/views/public/RSVPLookup.vue'),
+      meta: { title: 'RSVP Lookup' }, // Added title only
       beforeEnter: (to, from, next) => {
         const lang = to.params.lang || 'en';
         const langStore = useLangStore();
@@ -47,6 +49,7 @@ const routes = [
       path: 'rsvp/:code',
       name: 'public-rsvp',
       component: () => import('@/views/public/RSVP.vue'),
+      meta: { title: 'RSVP' }, // Added title only
       beforeEnter: (to, from, next) => {
         const lang = to.params.lang || 'en';
         const langStore = useLangStore();
@@ -58,6 +61,7 @@ const routes = [
       path: 'rsvp/:code/success',
       name: 'public-rsvp-success',
       component: () => import('@/views/public/RSVPSuccess.vue'),
+      meta: { title: 'RSVP Success' }, // Added title only
       beforeEnter: (to, from, next) => {
         // ensure locale is set without breaking the ref
         i18n.global.locale.value = to.params.lang;
@@ -68,6 +72,7 @@ const routes = [
       path: 'pages/:slug',
       name: 'public-page',
       component: () => import('@/views/public/PageView.vue'),
+      meta: { title: 'Page' }, // Keep this as fallback
       beforeEnter: (to, from, next) => {
         const lang = to.params.lang || 'en';
         const langStore = useLangStore();
@@ -90,8 +95,8 @@ const routes = [
     component: AdminLayout,
     meta: { requiresAuth: true },
     children: [
-      { path: 'overview', name: 'admin-overview', component: () => import('@/views/admin/Overview.vue') },
-      { path: 'pages', name: 'admin-pages', component: () => import('@/views/admin/pages/PageList.vue') },
+      { path: 'overview', name: 'admin-overview', component: () => import('@/views/admin/Overview.vue'), meta: { title: 'Admin Overview' } },
+      { path: 'pages', name: 'admin-pages', component: () => import('@/views/admin/pages/PageList.vue'), meta: { title: 'Page Management' } },
       {
         path: 'surveys',
         name: 'admin-surveys',
@@ -197,6 +202,11 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  // Add page title update (only this addition)
+  const appTitle = import.meta.env.VITE_APP_TITLE || 'Brigita + Jeffrey'
+  const pageTitle = to.meta.title ? `${to.meta.title} - ` : ''
+  document.title = `${pageTitle}${appTitle}`
+
   // synchronize i18n locale from route parameter
   const lang = to.params.lang || 'en';
   // Determine locales, whether availableLocales is a function or an array

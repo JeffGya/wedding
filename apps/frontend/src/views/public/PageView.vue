@@ -67,6 +67,12 @@ async function loadPage() {
     const data = await fetchPublicPage(route.params.slug, locale.value, true);
     // Assign blocks directly from the response
     blocks.value = data.content || [];
+    
+    // Update the page title dynamically
+    if (data.title) {
+      const appTitle = import.meta.env.VITE_APP_TITLE || 'Brigita + Jeffrey';
+      document.title = `${data.title} - ${appTitle}`;
+    }
   } catch (err) {
     // Handle RSVP-protected pages by capturing the gate reason
     if (err.response?.status === 403) {
