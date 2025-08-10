@@ -1,17 +1,17 @@
 DROP TABLE IF EXISTS `email_settings`;
 CREATE TABLE `email_settings` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `provider` varchar(100) NOT NULL DEFAULT 'resend',
-  `api_key` varchar(255) DEFAULT NULL,
-  `from_name` varchar(255) DEFAULT NULL,
-  `from_email` varchar(255) DEFAULT NULL,
-  `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `provider` varchar(50) NOT NULL,
+  `api_key` varchar(255) NOT NULL,
+  `from_name` varchar(255) NOT NULL,
+  `from_email` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL DEFAULT 1,
   `sender_name` varchar(255) DEFAULT NULL,
   `sender_email` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `guest_settings`;
 CREATE TABLE `guest_settings` (
@@ -43,44 +43,50 @@ CREATE TABLE `guests` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `code` (`code`),
+  KEY `group_id` (`group_id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `images`;
 CREATE TABLE `images` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alt_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `filename` varchar(255) NOT NULL,
+  `original_name` varchar(255) NOT NULL,
+  `mime_type` varchar(100) NOT NULL,
+  `size` int NOT NULL,
+  `path` varchar(500) NOT NULL,
+  `alt_text` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `knex_migrations`;
 CREATE TABLE `knex_migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `batch` int DEFAULT NULL,
-  `migration_time` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `knex_migrations_lock`;
 CREATE TABLE `knex_migrations_lock` (
-  `index` int unsigned NOT NULL AUTO_INCREMENT,
+  `index` int unsigned NOT NULL DEFAULT '1',
   `is_locked` int DEFAULT NULL,
   PRIMARY KEY (`index`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
   `id` int NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
-  `body_en` text NOT NULL,
-  `body_lt` text,
+  `body_en` longtext NOT NULL,
+  `body_lt` longtext,
   `status` varchar(50) NOT NULL DEFAULT 'draft',
   `scheduled_for` timestamp NULL DEFAULT NULL,
-  `style` enum('elegant','modern','friendly') DEFAULT 'elegant',
+  `style` varchar(50) DEFAULT 'elegant',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -103,10 +109,8 @@ CREATE TABLE `message_recipients` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `message_id` (`message_id`),
-  KEY `guest_id` (`guest_id`),
-  CONSTRAINT `message_recipients_ibfk_1` FOREIGN KEY (`message_id`) REFERENCES `messages` (`id`),
-  CONSTRAINT `message_recipients_ibfk_2` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `guest_id` (`guest_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `pages` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -118,6 +122,9 @@ CREATE TABLE `pages` (
   `meta_description_en` text,
   `meta_description_lt` text,
   `is_published` tinyint(1) NOT NULL DEFAULT '0',
+  `show_in_nav` tinyint(1) NOT NULL DEFAULT 1,
+  `nav_order` int DEFAULT NULL,
+  `requires_rsvp` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -128,30 +135,36 @@ CREATE TABLE `pages` (
 CREATE TABLE `page_translations` (
   `id` int NOT NULL AUTO_INCREMENT,
   `page_id` int NOT NULL,
-  `language` varchar(10) NOT NULL,
+  `locale` varchar(10) NOT NULL,
   `title` varchar(255) NOT NULL,
   `content` longtext,
-  `meta_description` text,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `page_id` (`page_id`),
-  KEY `language` (`language`)
+  KEY `locale` (`locale`),
+  KEY `deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `settings` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `site_name` varchar(255) NOT NULL,
-  `site_description` text,
-  `logo_url` varchar(255) DEFAULT NULL,
-  `primary_color` varchar(7) DEFAULT '#000000',
-  `secondary_color` varchar(7) DEFAULT '#ffffff',
-  `accent_color` varchar(7) DEFAULT '#ff6b6b',
-  `base_color` varchar(7) DEFAULT '#f8f9fa',
-  `font_family` varchar(100) DEFAULT 'serif',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `enable_global_countdown` tinyint(1) NOT NULL DEFAULT 0,
+  `wedding_date` date DEFAULT NULL,
+  `venue_name` varchar(255) DEFAULT NULL,
+  `venue_address` text DEFAULT NULL,
+  `event_start_date` date DEFAULT NULL,
+  `event_end_date` date DEFAULT NULL,
+  `event_time` time DEFAULT NULL,
+  `bride_name` varchar(255) DEFAULT NULL,
+  `groom_name` varchar(255) DEFAULT NULL,
+  `contact_email` varchar(255) DEFAULT NULL,
+  `contact_phone` varchar(50) DEFAULT NULL,
+  `event_type` varchar(100) DEFAULT NULL,
+  `dress_code` varchar(100) DEFAULT NULL,
+  `special_instructions` text DEFAULT NULL,
+  `website_url` varchar(500) DEFAULT NULL,
+  `app_title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -159,15 +172,21 @@ DROP TABLE IF EXISTS `survey_blocks`;
 CREATE TABLE `survey_blocks` (
   `id` int NOT NULL AUTO_INCREMENT,
   `page_id` int DEFAULT NULL,
+  `locale` varchar(10) DEFAULT NULL,
   `type` varchar(50) NOT NULL,
-  `content` json DEFAULT NULL,
-  `order` int DEFAULT '0',
+  `question` varchar(500) DEFAULT NULL,
+  `options` json DEFAULT NULL,
+  `is_required` tinyint(1) DEFAULT 0,
+  `is_anonymous` tinyint(1) DEFAULT 0,
   `requires_rsvp` tinyint(1) DEFAULT '0',
+  `block_order` int DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `page_id` (`page_id`),
-  KEY `order` (`order`)
+  KEY `locale` (`locale`),
+  KEY `deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `survey_responses` (
@@ -186,9 +205,7 @@ CREATE TABLE `survey_responses` (
 CREATE TABLE `templates` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `category` varchar(100) NOT NULL,
-  `subject_en` varchar(255) NOT NULL,
-  `subject_lt` varchar(255) DEFAULT NULL,
+  `subject` varchar(255) NOT NULL,
   `body_en` longtext NOT NULL,
   `body_lt` longtext,
   `style` enum('elegant','modern','friendly') DEFAULT 'elegant',
@@ -199,13 +216,10 @@ CREATE TABLE `templates` (
 
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
-  `role` enum('admin','user') NOT NULL DEFAULT 'user',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `passwordHash` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

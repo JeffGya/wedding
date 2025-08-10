@@ -34,6 +34,9 @@
     "seed:mysql": "node db/mysqyl_seed.js",
     "seed:templates": "node scripts/seedTemplates.js",
     "import:baseline": "node scripts/importBaseline.js",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex migrate:latest",
+    "validate:schema": "node scripts/validateSchema.js",
+    "pre:seed:mysql": "npm run validate:schema",
+    "pre:import:baseline": "npm run validate:schema"
   }
 }
