@@ -140,7 +140,7 @@ export default defineConfig({
         :root {
           /* Background Glass */
           --bg-glass: linear-gradient(to right bottom, #E9E7D980, #D2C6B260);
-          --bg-glass-border: #E9E7D910;
+          --bg-glass-border: #E9E7D925;
 
           /* Background Gradient */
           --bg-color: #DAA520;

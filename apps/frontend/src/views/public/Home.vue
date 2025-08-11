@@ -1,25 +1,28 @@
 <template>
- <main class="home md:mt-80 lg:mt-96">
+ <main class="home md:mt-48 lg:mt-64">
     <section class="hero mb-24 md:mb-32 text-center relative">
       <img 
-        src="http://localhost:5001/uploads/hero.png"
+        :src="uploadsUrl + '/hero.png'"
         alt="Brigita and Jeffrey in tokyo smiling at each other"
-        class="w-full h-auto rounded-md -z-10 -mb-24 lg:-mb-40 border-solid border-[1rem] border-[var(--int-text)]"
+        class="w-full h-auto rounded-md -z-10 -mb-24 lg:-mb-40 border-solid border-[.5rem] md:border-[1rem] border-[var(--bg-glass-border)]"
       />
       <h1
-        class="font-cursive w-full text-[var(--int-base)] text-5xl md:text-[5rem] lg:text-[rem] m-0 z-0
-          md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:-translate-y-1/2
-          md:px-4 md:py-4 md:text-shadow-sm"
+        class="font-cursive w-full text-[var(--int-base)] text-3xl m-0 z-0
+          md:mt-0 md:text-[3rem] md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:-translate-y-1/2 md:px-4 md:py-4 md:text-shadow-sm
+          lg:text-[4rem]
+          "
+          
       >
         Brigita & Jeffrey
       </h1>
 
       <p 
-        class="font-cursive text-2xl/10 md:text-[4rem]/10 mt-2 mb-8 text-[var(--int-base)] md:text-shadow-sm"
+        class="font-cursive text-xl/10 mt-0 md:text-4xl lg:text-5xl lg:mt-8 mb-8 text-[var(--int-base)] md:text-shadow-sm"
       >
       {{ $t('home.hero.subtitle') }}</p>
       <div 
       id="home-rsvp"
+      class="mt-24"
       v-if="!loading"
       >
         <Button
@@ -33,12 +36,6 @@
     </section>
 
     <WeddingCountdown />
-
-    <section class="story">
-      <h2>{{ $t('home.story.title') }}</h2>
-      <p>{{ $t('home.story.text1') }}</p>
-      <p>{{ $t('home.story.text2') }}</p>
-    </section>
 
     <section class="details">
       <h2>{{ $t('home.details.title') }}</h2>
@@ -64,6 +61,9 @@ const { settings, loading, isClosed } = useGuestSettings()
 const route = useRoute()
 const router = useRouter()
 const lang = route.params.lang || 'en'
+
+// Define the uploads URL based on environment
+const uploadsUrl = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:5001/uploads'
 
 /**
  * Navigate to the full RSVP form if there’s an active session; otherwise, go to lookup.
