@@ -218,17 +218,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
-import { 
-  fetchTemplates, 
-  deleteTemplate as deleteTemplateApi,
-  seedTemplates as seedTemplatesApi 
-} from '@/api/templates'
-import TemplatePreview from '@/components/templates/TemplatePreview.vue'
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import TemplateCategoryFilter from '@/components/templates/TemplateCategoryFilter.vue'
+import { fetchTemplates, deleteTemplate as deleteTemplateApi, seedTemplates as seedTemplatesApi } from '@/api/templates'
+import { getTemplatePreviewWithSample } from '@/utils/htmlTemplates'
+import TemplatePreview from '@/components/templates/TemplatePreview.vue'
 import { 
   getTemplateCategory, 
   getCategorySeverity, 
@@ -299,9 +297,9 @@ function useTemplate(template) {
 
 function getTemplatePreview(body) {
   if (!body) return 'No content'
-  return body
-    .replace(/\{\{[^}]+\}\}/g, '[Variable]')
-    .replace(/\{\{#if[^}]+\}\}[\s\S]*?\{\{\/if\}\}/g, '[Conditional]')
+  
+  // Use the imported function directly
+  return getTemplatePreviewWithSample({ body_en: body }, false)
     .substring(0, 100) + '...'
 }
 

@@ -50,36 +50,67 @@ async function sendConfirmationEmail(db, guestData) {
   try {
     // Fetch sender info
     const senderInfo = await getSenderInfo(db);
-    // Fetch confirmation template
-    db.get("SELECT * FROM templates WHERE name = ?", ["RSVP Confirmation"], (err, template) => {
-      if (err || !template) {
-        logger.error("Failed to load RSVP Confirmation template: %o", err);
-        return;
-      }
-      // Determine language
-      const lang = guestData.preferred_language === 'lt' ? 'lt' : 'en';
-      const subject = template.subject;
-      const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
-      // Replace placeholders
-      const html = bodyTemplate
-        .replace(/{{\s*name\s*}}/g, guestData.name)
-        .replace(/{{\s*groupLabel\s*}}/g, guestData.group_label)
-        .replace(/{{\s*code\s*}}/g, guestData.code)
-        .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.CORS_ORIGINS}/rsvp/${guestData.code}`);
-      // Send via Resend
-      axios.post("https://api.resend.com/emails", {
-        from: senderInfo,
-        to: guestData.email,
-        subject,
-        html
-      }, {
-        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
-      }).then(resp => {
-        logger.info("Confirmation email sent: %o", resp.data);
-      }).catch(emailErr => {
-        logger.error("Error sending confirmation email: %o", emailErr);
+    
+    // Determine which template to use based on RSVP status
+    let templateName;
+    if (guestData.rsvp_status === 'attending') {
+      templateName = 'Thank You - Attending';
+    } else if (guestData.rsvp_status === 'not_attending') {
+      templateName = 'Thank You - Not Attending';
+    } else {
+      // Fallback for pending status
+      templateName = 'Thank You - Attending';
+    }
+    
+    // Fetch the appropriate template
+    const template = await dbGet("SELECT * FROM templates WHERE name = ?", [templateName]);
+    if (!template) {
+      logger.error(`Failed to load template: ${templateName}`);
+      return;
+    }
+    
+    // Determine language
+    const lang = guestData.preferred_language === 'lt' ? 'lt' : 'en';
+    const subject = lang === 'lt' ? template.subject_lt : template.subject_en;
+    const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
+    
+    // Replace placeholders with enhanced data
+    const html = bodyTemplate
+      .replace(/{{\s*guestName\s*}}/g, guestData.name)
+      .replace(/{{\s*name\s*}}/g, guestData.name)
+      .replace(/{{\s*groupLabel\s*}}/g, guestData.group_label || '')
+      .replace(/{{\s*code\s*}}/g, guestData.code || '')
+      .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.CORS_ORIGINS}/rsvp/${guestData.code}`)
+      .replace(/{{\s*brideName\s*}}/g, 'Brigita')
+      .replace(/{{\s*groomName\s*}}/g, 'Jeffrey')
+      .replace(/{{\s*eventStartDate\s*}}/g, 'Your Wedding Date')
+      .replace(/{{\s*venueName\s*}}/g, 'Your Venue')
+      .replace(/{{\s*eventStartTime\s*}}/g, 'Your Event Time')
+      .replace(/{{\s*plusOneName\s*}}/g, guestData.plus_one_name || '')
+      .replace(/{{\s*dietary\s*}}/g, guestData.dietary || '')
+      .replace(/{{\s*notes\s*}}/g, guestData.notes || '')
+      // Handle conditional blocks (simple version)
+      .replace(/\{\{#if plusOneName\}\}(.*?)\{\{\/if\}\}/gs, (match, content) => {
+        return guestData.plus_one_name ? content : '';
+      })
+      .replace(/\{\{#if dietary\}\}(.*?)\{\{\/if\}\}/gs, (match, content) => {
+        return guestData.dietary ? content : '';
+      })
+      .replace(/\{\{#if notes\}\}(.*?)\{\{\/if\}\}/gs, (match, content) => {
+        return guestData.notes ? content : '';
       });
+    
+    // Send via Resend
+    const response = await axios.post("https://api.resend.com/emails", {
+      from: senderInfo,
+      to: guestData.email,
+      subject,
+      html
+    }, {
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
     });
+    
+    logger.info("Confirmation email sent:", response.data);
   } catch (e) {
     logger.error("Error in sendConfirmationEmail:", e);
   }

@@ -6,22 +6,37 @@
 const fs = require('fs');
 const path = require('path');
 
-// Read SVG logo from external file and add size constraints
-let svgLogo = '';
+// Try PNG logo first (most reliable), fallback to sized SVG
+let logoHtml = '';
+
 try {
-  const rawSvg = fs.readFileSync(
-    path.join(__dirname, 'wedding-logo.svg'), 
-    'utf8'
-  );
-  // Add size constraints to the SVG
-  svgLogo = rawSvg.replace(
-    '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01">',
-    '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01" width="120" height="116" style="max-width: 120px; max-height: 116px;">'
-  );
+  // First try to load the PNG logo for maximum email compatibility
+  const pngPath = path.join(__dirname, 'Logo.png');
+  if (fs.existsSync(pngPath)) {
+    const pngBuffer = fs.readFileSync(pngPath);
+    const base64Png = pngBuffer.toString('base64');
+    logoHtml = `<img src="data:image/png;base64,${base64Png}" alt="Wedding Logo" style="max-width: 120px; max-height: 116px; display: block; margin: 0 auto;">`;
+  } else {
+    throw new Error('PNG logo not found');
+  }
 } catch (error) {
-  const logger = require('../helpers/logger');
-  logger.warn('Warning: Could not load wedding-logo.svg, using placeholder');
-  svgLogo = '<!-- SVG Logo Placeholder -->';
+  try {
+    // Fallback to SVG with proper sizing (similar to PNG dimensions)
+    const rawSvg = fs.readFileSync(
+      path.join(__dirname, 'wedding-logo.svg'), 
+      'utf8'
+    );
+    // Size the SVG to match the PNG dimensions (120x116)
+    logoHtml = rawSvg.replace(
+      '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01">',
+      '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01" width="120" height="116" style="max-width: 120px; max-height: 116px;">'
+    );
+  } catch (svgError) {
+    // Final fallback to text logo
+    const logger = require('../helpers/logger');
+    logger.warn('Warning: Could not load any logo, using text fallback');
+    logoHtml = '<div style="font-family: \'Great Vibes\', cursive; font-size: 32px; color: #442727; margin-bottom: 20px;">Brigita & Jeffrey</div>';
+  }
 }
 
 const EMAIL_TEMPLATES = {
@@ -132,7 +147,7 @@ const EMAIL_TEMPLATES = {
 function generateEmailHTML(content, style = 'elegant', options = {}) {
   const config = EMAIL_TEMPLATES[style] || EMAIL_TEMPLATES.elegant;
   const {
-    title = 'Brigtia & Jeffrey',
+    title = 'Brigita & Jeffrey',
     buttonText,
     buttonUrl,
     footerText = 'With love and joy,',
@@ -179,7 +194,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
                 <tr>
                   <td style="text-align: center;">
                     <div style="margin-bottom: 20px;">
-                      ${svgLogo}
+                      ${logoHtml}
                     </div>
                     <h1 class="mobile-title" style="margin: 0; font-family: ${config.header.titleFont}; font-size: ${config.header.titleSize}; color: ${config.header.titleColor}; font-weight: normal;">
                       ${title}
@@ -228,7 +243,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
                       ${footerText}
                     </p>
                     <p style="margin: 0 0 15px 0; font-weight: bold;">
-                      Brigtia & Jeffrey
+                      Brigita & Jeffrey
                     </p>
                     <p style="margin: 0; font-size: 14px;">
                       <a href="${siteUrl}" style="color: #DAA520; text-decoration: none;">

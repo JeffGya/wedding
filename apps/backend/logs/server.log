@@ -1,0 +1,74 @@
+[2025-08-11T21:20:01.121Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:20:01.127Z] [INFO] Server is running on port 5001
+[2025-08-11T21:20:01.144Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:20:19.078Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:20:19.080Z] [INFO] Server is running on port 5001
+[2025-08-11T21:20:19.091Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:21:34.573Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-11T21:21:34.578Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-11T21:21:34.583Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-11T21:21:34.597Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-11T21:21:34.597Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-11T21:21:52.587Z] [DEBUG] Login request received:
+[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-11T21:22:24.428Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-11T21:22:24.429Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-11T21:22:24.432Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-11T21:22:24.433Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-11T21:22:24.433Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-11T21:22:29.187Z] [DEBUG] [guestSession] Setting session for guestId=39
+[2025-08-11T21:22:29.386Z] [DEBUG] [guestSession] Setting session for guestId=39
+[2025-08-11T21:22:41.542Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:22:41.544Z] [INFO] Server is running on port 5001
+[2025-08-11T21:22:41.557Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:23:01.820Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:23:01.822Z] [INFO] Server is running on port 5001
+[2025-08-11T21:23:01.834Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:30:00.379Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-11T21:30:00.380Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-11T21:30:00.401Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-11T21:30:00.401Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-11T21:30:10.651Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:30:10.653Z] [INFO] Server is running on port 5001
+[2025-08-11T21:30:10.667Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:32:14.488Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:32:14.490Z] [INFO] Server is running on port 5001
+[2025-08-11T21:32:14.503Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:32:17.803Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:32:17.806Z] [INFO] Server is running on port 5001
+[2025-08-11T21:32:17.815Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:50:15.343Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:50:15.345Z] [INFO] Server is running on port 5001
+[2025-08-11T21:50:15.360Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:53:58.828Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:53:58.830Z] [INFO] Server is running on port 5001
+[2025-08-11T21:53:58.842Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:54:05.561Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:54:05.564Z] [INFO] Server is running on port 5001
+[2025-08-11T21:54:05.574Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:57:31.359Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:57:31.362Z] [INFO] Server is running on port 5001
+[2025-08-11T21:57:31.473Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:58:33.796Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:58:33.809Z] [INFO] Server is running on port 5001
+[2025-08-11T21:58:33.924Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T21:58:41.845Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T21:58:41.848Z] [INFO] Server is running on port 5001
+[2025-08-11T21:58:41.859Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T22:00:00.954Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-11T22:00:00.955Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-11T22:00:00.962Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-11T22:00:00.961Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-11T22:11:13.572Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T22:11:13.575Z] [INFO] Server is running on port 5001
+[2025-08-11T22:11:13.587Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-11T22:11:36.187Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-11T22:11:36.190Z] [INFO] Server is running on port 5001
+[2025-08-11T22:11:36.201Z] [INFO] ✅ Connected to MySQL database.

@@ -201,9 +201,66 @@ export function generateHtmlFromText(textContent, theme = 'elegant') {
 }
 
 /**
+ * Enhanced conditional block processing for frontend preview
+ */
+function processConditionalBlocks(text, variables = {}) {
+  // Handle {{#if condition}}...{{/if}} blocks
+  text = text.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, content) => {
+    return evaluateCondition(condition, variables) ? content : '';
+  });
+  
+  // Handle {{#if condition}}...{{else}}...{{/if}} blocks
+  text = text.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, ifContent, elseContent) => {
+    return evaluateCondition(condition, variables) ? ifContent : elseContent;
+  });
+  
+  return text;
+}
+
+/**
+ * Evaluate conditional expressions for frontend
+ */
+function evaluateCondition(condition, variables) {
+  // Handle simple boolean checks
+  if (condition.includes('===')) {
+    const [key, value] = condition.split('===').map(s => s.trim().replace(/['"]/g, ''));
+    return variables[key] === value;
+  }
+  
+  if (condition.includes('!==')) {
+    const [key, value] = condition.split('!==').map(s => s.trim().replace(/['"]/g, ''));
+    return variables[key] !== value;
+  }
+  
+  if (condition.includes('==')) {
+    const [key, value] = condition.split('==').map(s => s.trim().replace(/['"]/g, ''));
+    return variables[key] == value;
+  }
+  
+  if (condition.includes('!=')) {
+    const [key, value] = condition.split('!=').map(s => s.trim().replace(/['"]/g, ''));
+    return variables[key] != value;
+  }
+  
+  // Handle simple truthy checks
+  const key = condition.trim();
+  const value = variables[key];
+  
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.length > 0 && value !== 'null' && value !== 'undefined';
+  if (typeof value === 'number') return value !== 0;
+  if (Array.isArray(value)) return value.length > 0;
+  
+  return !!value;
+}
+
+/**
  * Convert plain text to HTML paragraphs with UnoCSS styling
  */
-function convertTextToHtml(text) {
+function convertTextToHtml(text, variables = {}) {
+  // First process conditional blocks
+  text = processConditionalBlocks(text, variables);
+  
   return text
     .split('\n\n')
     .map(paragraph => {
@@ -227,13 +284,75 @@ export function hasHtmlVersion(template) {
 }
 
 /**
- * Get template preview (HTML or text)
+ * Get sample variables for template preview
  */
-export function getTemplatePreview(template, preferHtml = true) {
+export function getSampleVariables() {
+  return {
+    // Guest Properties
+    guestName: 'John Doe',
+    groupLabel: 'Bride\'s Family',
+    code: 'ABC123',
+    rsvpLink: 'https://example.com/rsvp/ABC123',
+    plusOneName: 'Jane Doe',
+    rsvpDeadline: 'December 1, 2024',
+    email: 'john@example.com',
+    preferredLanguage: 'en',
+    attending: true,
+    rsvp_status: 'attending',
+    responded_at: '2024-11-15',
+    can_bring_plus_one: true,
+    dietary: 'Vegetarian',
+    notes: 'Will arrive early to help with setup',
+    
+    // Conditional Flags
+    hasPlusOne: true,
+    isPlusOne: false,
+    hasResponded: true,
+    isAttending: true,
+    isNotAttending: false,
+    isPending: false,
+    isBrideFamily: true,
+    isGroomFamily: false,
+    isEnglishSpeaker: true,
+    isLithuanianSpeaker: false,
+    
+    // System Properties
+    siteUrl: 'https://example.com',
+    weddingDate: 'December 15, 2024',
+    venueName: 'Beautiful Gardens',
+    venueAddress: '123 Wedding Lane, City, State',
+    eventStartDate: 'December 15, 2024',
+    eventEndDate: 'December 15, 2024',
+    eventTime: '4:00 PM',
+    brideName: 'Brigita',
+    groomName: 'Jeffrey',
+    contactEmail: 'hello@ourwedding.com',
+    contactPhone: '+1 (555) 123-4567',
+    rsvpDeadlineDate: 'December 1, 2024',
+    eventType: 'Wedding Ceremony & Reception',
+    dressCode: 'Semi-Formal',
+    specialInstructions: 'Please arrive 30 minutes early',
+    websiteUrl: 'https://ourwedding.com',
+    appTitle: 'Brigita & Jeffrey\'s Wedding',
+    senderName: 'Brigita & Jeffrey',
+    senderEmail: 'hello@ourwedding.com',
+    currentDate: new Date().toLocaleDateString(),
+    daysUntilWedding: '30 days'
+  };
+}
+
+/**
+ * Get template preview with sample data
+ */
+export function getTemplatePreviewWithSample(template, preferHtml = true) {
+  const sampleVariables = getSampleVariables();
+  
   if (preferHtml && hasHtmlVersion(template)) {
-    return template.html
+    return processConditionalBlocks(template.html, sampleVariables);
   }
-  return template.body_en || template.body_lt
+  
+  const body = template.body_en || template.body_lt;
+  return processConditionalBlocks(body, sampleVariables);
 }
 
 /**

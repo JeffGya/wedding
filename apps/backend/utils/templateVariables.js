@@ -36,23 +36,113 @@ function processConditionalBlocks(template, vars) {
 }
 
 /**
- * Evaluate conditional expressions
+ * Evaluate conditional expressions with enhanced logic
  */
 function evaluateCondition(condition, vars) {
   // Handle simple boolean checks
   if (condition.includes('===')) {
-    const [key, value] = condition.split('===').map(s => s.trim());
+    const [key, value] = condition.split('===').map(s => s.trim().replace(/['"]/g, ''));
     return vars[key] === value;
   }
   
   if (condition.includes('!==')) {
-    const [key, value] = condition.split('!==').map(s => s.trim());
+    const [key, value] = condition.split('!==').map(s => s.trim().replace(/['"]/g, ''));
     return vars[key] !== value;
   }
   
-  // Handle simple truthy checks
+  if (condition.includes('==')) {
+    const [key, value] = condition.split('==').map(s => s.trim().replace(/['"]/g, ''));
+    return vars[key] == value; // Use loose equality for type coercion
+  }
+  
+  if (condition.includes('!=')) {
+    const [key, value] = condition.split('!=').map(s => s.trim().replace(/['"]/g, ''));
+    return vars[key] != value; // Use loose equality for type coercion
+  }
+  
+  // Handle simple truthy checks with better logic
   const key = condition.trim();
-  return !!vars[key];
+  const value = vars[key];
+  
+  // Handle different types of values
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  
+  if (typeof value === 'string') {
+    return value.length > 0 && value !== 'null' && value !== 'undefined';
+  }
+  
+  if (typeof value === 'number') {
+    return value !== 0;
+  }
+  
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+  
+  // Default truthy check
+  return !!value;
+}
+
+/**
+ * Check if a guest has a plus one
+ */
+async function checkIfGuestHasPlusOne(db, guestId) {
+  try {
+    if (process.env.DB_TYPE === 'mysql') {
+      const [rows] = await db.query(
+        'SELECT COUNT(*) as count FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0',
+        [guestId]
+      );
+      return rows[0].count > 0;
+    } else {
+      // SQLite logic
+      return new Promise((resolve, reject) => {
+        db.get(
+          'SELECT COUNT(*) as count FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0',
+          [guestId],
+          (err, row) => {
+            if (err) reject(err);
+            else resolve(row.count > 0);
+          }
+        );
+      });
+    }
+  } catch (err) {
+    logger.error('Error checking plus one status:', err);
+    return false;
+  }
+}
+
+/**
+ * Get the plus one's name for a guest
+ */
+async function getPlusOneName(db, guestId) {
+  try {
+    if (process.env.DB_TYPE === 'mysql') {
+      const [rows] = await db.query(
+        'SELECT name FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0 LIMIT 1',
+        [guestId]
+      );
+      return rows[0]?.name || '';
+    } else {
+      // SQLite logic
+      return new Promise((resolve, reject) => {
+        db.get(
+          'SELECT name FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0 LIMIT 1',
+          [guestId],
+          (err, row) => {
+            if (err) reject(err);
+            else resolve(row?.name || '');
+          }
+        );
+      });
+    }
+  } catch (err) {
+    logger.error('Error getting plus one name:', err);
+    return '';
+  }
 }
 
 /**
@@ -71,6 +161,10 @@ async function getTemplateVariables(guest, template = null) {
   
   // Determine if guest can bring plus one (not a plus one themselves and has permission)
   const canBringPlusOne = !isPlusOne && guest.can_bring_plus_one;
+  
+  // Get plus one information
+  const hasPlusOne = await checkIfGuestHasPlusOne(db, guest.id);
+  const plusOneName = await getPlusOneName(db, guest.id);
   
   // Calculate derived values
   const hasResponded = guest.responded_at !== null;
@@ -92,7 +186,7 @@ async function getTemplateVariables(guest, template = null) {
     groupLabel: guest.group_label || '',
     code: guest.code,
     rsvpLink: `${SITE_URL}/${guest.preferred_language}/rsvp/${guest.code}`,
-    plusOneName: '', // Plus one name would be stored separately or in notes
+    plusOneName: plusOneName,
     rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline),
     email: guest.email,
     preferredLanguage: guest.preferred_language,
@@ -104,8 +198,8 @@ async function getTemplateVariables(guest, template = null) {
     notes: guest.notes,
     
     // Conditional Flags
-    hasPlusOne: false, // This would be determined by checking if they've added a plus one
-    isPlusOne: isPlusOne, // New variable to indicate if this guest is a plus one
+    hasPlusOne: hasPlusOne,
+    isPlusOne: isPlusOne,
     hasResponded,
     isAttending,
     isNotAttending,
@@ -278,5 +372,7 @@ module.exports = {
   getTemplateVariables,
   getAvailableVariables,
   processConditionalBlocks,
-  evaluateCondition
+  evaluateCondition,
+  checkIfGuestHasPlusOne,
+  getPlusOneName
 }; 

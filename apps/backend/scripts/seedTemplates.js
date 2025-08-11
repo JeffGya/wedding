@@ -8,16 +8,34 @@ let db, runQuery, closeDb;
 
 const templates = [
   {
-    name: 'Welcome Message',
-    subject: 'Welcome to our wedding celebration, {{guestName}}!',
+    name: 'Wedding Invitation',
+    subject_en: 'You\'re Invited to Our Wedding, {{guestName}}!',
+    subject_lt: 'Jūs esate pakviestas į mūsų vestuves, {{guestName}}!',
     body_en: `Dear {{guestName}},
 
-We are thrilled to invite you to our special day!
+We are delighted to invite you to celebrate our wedding with us!
 
-**Event Details:**
-- **Date:** {{eventStartDate}}
-- **Venue:** {{venueName}}
-- **Time:** {{eventStartTime}}
+**Wedding Details:**
+{{#if weddingDate}}
+**Date:** {{weddingDate}}
+{{/if}}
+{{#if venueName}}
+**Venue:** {{venueName}}
+{{/if}}
+{{#if venueAddress}}
+**Address:** {{venueAddress}}
+{{/if}}
+{{#if eventTime}}
+**Time:** {{eventTime}}
+{{/if}}
+
+{{#if hasPlusOne}}
+You are welcome to bring a plus one: {{plusOneName}}
+{{/if}}
+
+**Please RSVP:** We kindly request your response by {{rsvpDeadline}} to help us plan our special day.
+
+**RSVP Link:** {{rsvpLink}}
 
 We can't wait to celebrate with you!
 
@@ -25,94 +43,58 @@ Best regards,
 {{brideName}} & {{groomName}}`,
     body_lt: `Brangus {{guestName}},
 
-Mums džiaugiamės kviesdami jus į mūsų ypatingą dieną!
+Mums labai malonu pakviesti jus švęsti mūsų vestuves!
 
-**Renginio informacija:**
-- **Data:** {{eventStartDate}}
-- **Vieta:** {{venueName}}
-- **Laikas:** {{eventStartTime}}
+**Vestuvių informacija:**
+{{#if weddingDate}}
+**Data:** {{weddingDate}}
+{{/if}}
+{{#if venueName}}
+**Vieta:** {{venueName}}
+{{/if}}
+{{#if venueAddress}}
+**Adresas:** {{venueAddress}}
+{{/if}}
+{{#if eventTime}}
+**Laikas:** {{eventTime}}
+{{/if}}
+
+{{#if hasPlusOne}}
+Galite atsinešti svečią: {{plusOneName}}
+{{/if}}
+
+**Prašome RSVP:** Maloniai prašome atsakyti iki {{rsvpDeadline}}, kad galėtume planuoti mūsų ypatingą dieną.
+
+**RSVP nuoroda:** {{rsvpLink}}
 
 Nekantriai laukiame švęsti su jumis!
 
 Su meile,
 {{brideName}} & {{groomName}}`,
-    style: 'friendly'
-  },
-  {
-    name: 'RSVP Reminder',
-    subject: 'Please RSVP for our wedding, {{guestName}}',
-    body_en: `Dear {{guestName}},
-
-This is a friendly reminder to RSVP for our wedding celebration.
-
-**RSVP Deadline:** {{rsvpDeadline}}
-
-Please visit our wedding website to confirm your attendance.
-
-We look forward to hearing from you!
-
-Best regards,
-{{brideName}} & {{groomName}}`,
-    body_lt: `Brangus {{guestName}},
-
-Tai draugiškas priminimas apie RSVP mūsų vestuvėms.
-
-**RSVP terminas:** {{rsvpDeadline}}
-
-Apsilankykite mūsų vestuvių svetainėje, kad patvirtintumėte savo dalyvavimą.
-
-Nekantriai laukiame jūsų atsakymo!
-
-Su meile,
-{{brideName}} & {{groomName}}`,
-    style: 'modern'
-  },
-  {
-    name: 'Wedding Update',
-    subject: 'Important wedding update, {{guestName}}',
-    body_en: `Dear {{guestName}},
-
-We have an important update about our wedding celebration.
-
-**Update Details:**
-{{updateDetails}}
-
-If you have any questions, please don't hesitate to contact us.
-
-Thank you for your understanding!
-
-Best regards,
-{{brideName}} & {{groomName}}`,
-    body_lt: `Brangus {{guestName}},
-
-Turime svarbų atnaujinimą apie mūsų vestuvių šventę.
-
-**Atnaujinimo informacija:**
-{{updateDetails}}
-
-Jei turite klausimų, nedvejodami susisiekite su mumis.
-
-Ačiū už supratimą!
-
-Su meile,
-{{brideName}} & {{groomName}}`,
-    style: 'elegant'
+    style: 'elegant',
+    category: 'invitation'
   },
   {
     name: 'Thank You - Attending',
-    subject: 'Thank you for your RSVP, {{guestName}}!',
+    subject_en: 'Thank you for your RSVP, {{guestName}}!',
+    subject_lt: 'Ačiū už jūsų RSVP, {{guestName}}!',
     body_en: `Dear {{guestName}},
 
 Thank you so much for confirming your attendance at our wedding!
 
-We are thrilled that you'll be joining us on our special day.
+{{#if hasPlusOne}}
+We're delighted that {{plusOneName}} will also be joining us!
+{{/if}}
 
-**Event Details:**
-- **Date:** {{eventStartDate}}
-- **Venue:** {{venueName}}
-- **Time:** {{eventStartTime}}
+{{#if dietary}}
+We've noted your dietary preference: {{dietary}}
+{{/if}}
 
-We can't wait to celebrate with you!
+{{#if notes}}
+Thank you for your note: "{{notes}}"
+{{/if}}
+
+We're looking forward to celebrating with you on our special day!
 
 Best regards,
 {{brideName}} & {{groomName}}`,
@@ -120,29 +102,38 @@ Best regards,
 
 Labai ačiū, kad patvirtinote savo dalyvavimą mūsų vestuvėse!
 
-Mums labai malonu, kad prisijungsite prie mūsų ypatingos dienos.
+{{#if hasPlusOne}}
+Mums labai malonu, kad {{plusOneName}} taip pat prisijungs prie mūsų!
+{{/if}}
 
-**Renginio informacija:**
-- **Data:** {{eventStartDate}}
-- **Vieta:** {{venueName}}
-- **Laikas:** {{eventStartTime}}
+{{#if dietary}}
+Pastebėjome jūsų mitybos pageidavimą: {{dietary}}
+{{/if}}
 
-Nekantriai laukiame švęsti su jumis!
+{{#if notes}}
+Ačiū už jūsų pastabą: "{{notes}}"
+{{/if}}
+
+Nekantriai laukiame švęsti su jumis mūsų ypatingoje dienoje!
 
 Su meile,
 {{brideName}} & {{groomName}}`,
-    style: 'friendly'
+    style: 'friendly',
+    category: 'confirmation'
   },
   {
     name: 'Thank You - Not Attending',
-    subject: 'Thank you for your RSVP, {{guestName}}',
+    subject_en: 'Thank you for your RSVP, {{guestName}}',
+    subject_lt: 'Ačiū už jūsų RSVP, {{guestName}}',
     body_en: `Dear {{guestName}},
 
 Thank you for letting us know that you won't be able to attend our wedding.
 
-We understand and appreciate you taking the time to respond.
+{{#if notes}}
+We appreciate your note: "{{notes}}"
+{{/if}}
 
-We'll miss you on our special day, but we hope to see you soon!
+We understand and will miss you on our special day. We hope to celebrate with you on another occasion!
 
 Best regards,
 {{brideName}} & {{groomName}}`,
@@ -150,121 +141,79 @@ Best regards,
 
 Ačiū, kad pranešėte, kad negalėsite dalyvauti mūsų vestuvėse.
 
-Suprantame ir vertiname, kad skyrėte laiko atsakyti.
+{{#if notes}}
+Vertiname jūsų pastabą: "{{notes}}"
+{{/if}}
 
-Mums trūks jūsų mūsų ypatingoje dienoje, bet tikimės susitikti netrukus!
+Suprantame ir mums trūks jūsų mūsų ypatingoje dienoje. Tikimės švęsti su jumis kitu atveju!
 
 Su meile,
 {{brideName}} & {{groomName}}`,
-    style: 'modern'
+    style: 'friendly',
+    category: 'confirmation'
   },
   {
-    name: 'Group-Specific Welcome',
-    subject: 'Special welcome for {{groupLabel}}, {{guestName}}!',
+    name: 'RSVP Reminder',
+    subject_en: 'Friendly RSVP Reminder, {{guestName}}',
+    subject_lt: 'Draugiškas RSVP priminimas, {{guestName}}',
     body_en: `Dear {{guestName}},
 
-As a member of {{groupLabel}}, we wanted to send you a special welcome message!
+This is a friendly reminder about RSVPing for our wedding!
 
-We're so excited to have you join us for our wedding celebration.
-
-**Special Information for {{groupLabel}}:**
-{{#if groupLabel === 'Bride\\'s Family'}}
-- Special family photo session at 4:30 PM
-- Reserved seating in the front rows
-{{else if groupLabel === 'Groom\\'s Family'}}
-- Special family photo session at 4:30 PM
-- Reserved seating in the front rows
-{{else if groupLabel === 'Bride\\'s Friends'}}
-- Pre-wedding gathering at 3:00 PM
-- Casual dress code for the gathering
-{{else if groupLabel === 'Groom\\'s Friends'}}
-- Pre-wedding gathering at 3:00 PM
-- Casual dress code for the gathering
-{{else}}
-- General guest information will be provided
+{{#if rsvpDeadline}}
+**RSVP Deadline:** {{rsvpDeadline}}
 {{/if}}
 
-We can't wait to see you!
+{{#if isPending}}
+You haven't responded yet. Please let us know if you can attend!
+{{/if}}
+
+{{#if hasResponded}}
+Thank you for your response! We're looking forward to celebrating with you.
+{{/if}}
+
+{{#if isAttending}}
+We're thrilled you'll be joining us!
+{{/if}}
+
+{{#if isNotAttending}}
+We understand and will miss you on our special day.
+{{/if}}
+
+**RSVP Link:** {{rsvpLink}}
 
 Best regards,
 {{brideName}} & {{groomName}}`,
     body_lt: `Brangus {{guestName}},
 
-Kaip {{groupLabel}} nariui, norėjome išsiųsti jums specialų pasveikinimą!
+Tai draugiškas priminimas apie RSVP mūsų vestuvėms!
 
-Mums labai malonu, kad prisijungsite prie mūsų vestuvių šventės.
-
-**Speciali informacija {{groupLabel}}:**
-{{#if groupLabel === 'Bride\\'s Family'}}
-- Speciali šeimos nuotraukų sesija 16:30
-- Rezervuotos vietos priekinėse eilėse
-{{else if groupLabel === 'Groom\\'s Family'}}
-- Speciali šeimos nuotraukų sesija 16:30
-- Rezervuotos vietos priekinėse eilėse
-{{else if groupLabel === 'Bride\\'s Friends'}}
-- Išankstinis susirinkimas 15:00
-- Kasualus drabužių kodas susirinkimui
-{{else if groupLabel === 'Groom\\'s Friends'}}
-- Išankstinis susirinkimas 15:00
-- Kasualus drabužių kodas susirinkimui
-{{else}}
-- Bus pateikta bendra svečių informacija
+{{#if rsvpDeadline}}
+**RSVP terminas:** {{rsvpDeadline}}
 {{/if}}
 
-Nekantriai laukiame susitikimo!
+{{#if isPending}}
+Jūs dar neatsakėte. Prašome pranešti, ar galite dalyvauti!
+{{/if}}
+
+{{#if hasResponded}}
+Ačiū už jūsų atsakymą! Nekantriai laukiame švęsti su jumis.
+{{/if}}
+
+{{#if isAttending}}
+Mums labai malonu, kad prisijungsite!
+{{/if}}
+
+{{#if isNotAttending}}
+Suprantame ir mums trūks jūsų mūsų ypatingoje dienoje.
+{{/if}}
+
+**RSVP nuoroda:** {{rsvpLink}}
 
 Su meile,
 {{brideName}} & {{groomName}}`,
-    style: 'friendly'
-  },
-  {
-    name: 'Travel Information',
-    subject: 'Travel information for our wedding, {{guestName}}',
-    body_en: `Dear {{guestName}},
-
-Here's some helpful travel information for our wedding:
-
-**Venue Address:**
-{{venueName}}
-{{venueAddress}}
-
-**Getting There:**
-- By car: {{#if parking}}Parking available on site{{else}}Street parking available{{/if}}
-- By public transport: {{#if publicTransport}}Nearest station: {{nearestStation}}{{else}}Limited public transport{{/if}}
-
-**Accommodation:**
-{{#if nearbyHotels}}
-Nearby hotels:
-{{nearbyHotels}}
-{{/if}}
-
-We can't wait to see you!
-
-Best regards,
-{{brideName}} & {{groomName}}`,
-    body_lt: `Brangus {{guestName}},
-
-Štai naudinga kelionės informacija mūsų vestuvėms:
-
-**Vietos adresas:**
-{{venueName}}
-{{venueAddress}}
-
-**Kaip patekti:**
-- Automobiliu: {{#if parking}}Stovėjimo aikštelė vietoje{{else}}Stovėjimas gatvėje{{/if}}
-- Viešuoju transportu: {{#if publicTransport}}Artimiausia stotis: {{nearestStation}}{{else}}Ribotas viešasis transportas{{/if}}
-
-**Apgyvendinimas:**
-{{#if nearbyHotels}}
-Artimiausi viešbučiai:
-{{nearbyHotels}}
-{{/if}}
-
-Nekantriai laukiame susitikimo!
-
-Su meile,
-{{brideName}} & {{groomName}}`,
-    style: 'elegant'
+    style: 'friendly',
+    category: 'reminder'
   }
 ];
 
@@ -314,46 +263,44 @@ async function seedTemplates() {
     await initializeDatabase();
     
     const logger = require('../helpers/logger');
-    logger.info('️ Clearing existing templates...');
+    logger.info('🌱 Starting template seeder...');
+    logger.info('️ Clearing ALL existing templates...');
     
-    // Clear existing templates
+    // Clear ALL existing templates (not just specific names)
     const clearSql = process.env.DB_TYPE === 'mysql'
-      ? 'DELETE FROM templates WHERE name IN (?, ?, ?, ?, ?, ?, ?)'
-      : 'DELETE FROM templates WHERE name IN (?, ?, ?, ?, ?, ?, ?)';
+      ? 'DELETE FROM templates'
+      : 'DELETE FROM templates';
     
-    const templateNames = templates.map(t => t.name);
-    await runQuery(clearSql, templateNames);
+    await runQuery(clearSql);
+    logger.info('✅ All existing templates cleared.');
     
-    logger.info('✅ Existing templates cleared.');
-    
-    // Insert new templates
     logger.info('🌱 Inserting pre-built templates...');
     
+    // Insert new templates
     for (const template of templates) {
       const insertSql = process.env.DB_TYPE === 'mysql'
-        ? `INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt, style, category) VALUES (?, ?, ?, ?, ?, ?, ?)`
+        ? 'INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt, style, category) VALUES (?, ?, ?, ?, ?, ?, ?)'
         : 'INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt, style, category) VALUES (?, ?, ?, ?, ?, ?, ?)';
       
-      await runQuery(insertSql, [
+      const params = [
         template.name,
-        template.subject,  // Use for subject_en
-        template.subject,  // Use for subject_lt (same value for both languages)
+        template.subject_en,
+        template.subject_lt,
         template.body_en,
         template.body_lt,
         template.style,
-        'general'  // Default category since it's required
-      ]);
+        template.category
+      ];
       
-      logger.info(`✅ Added template: ${template.name}`);
+      await runQuery(insertSql, params);
+      logger.info(`✅ Template "${template.name}" inserted.`);
     }
     
     logger.info('🎉 Template seeding completed successfully!');
-    logger.info(`📧 Added ${templates.length} pre-built templates:`);
-    templates.forEach(t => logger.info(`   - ${t.name}`));
     
   } catch (error) {
-    const logger2 = require('../helpers/logger');
-    logger2.error('❌ Template seeder failed:', error);
+    const logger = require('../helpers/logger');
+    logger.error('❌ Template seeder failed:', error);
     throw error;
   } finally {
     if (closeDb) {
@@ -362,20 +309,17 @@ async function seedTemplates() {
   }
 }
 
-// Export the function for use in other modules
-module.exports = { seedTemplates };
-
-// If this file is run directly, execute the seeding
+// Run the seeder if this file is executed directly
 if (require.main === module) {
-  const logger = require('../helpers/logger');
-  logger.info('🌱 Starting template seeder...');
   seedTemplates()
     .then(() => {
-      logger.info('✅ Seeding completed successfully!');
+      console.log('✅ Seeding completed successfully!');
       process.exit(0);
     })
     .catch((error) => {
-      logger.error('❌ Seeding failed:', error);
+      console.error('❌ Seeding failed:', error);
       process.exit(1);
     });
 }
+
+module.exports = { seedTemplates };
