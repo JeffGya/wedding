@@ -68,25 +68,29 @@ const mysql = require('mysql2/promise');
   const templates = [
     {
       name: 'rsvp_request',
-      subject: 'Please RSVP for our wedding!',
+      subject_en: 'Please RSVP for our wedding!',
+      subject_lt: 'Prašome RSVP mūsų vestuvėms!',
       body_en: 'Hey {{name}}, please let us know if you can make it to our special day!',
       body_lt: 'Labas {{name}}, prašome pranešti, ar galite atvykti į mūsų ypatingą dieną!',
-      style: 'elegant'
+      style: 'elegant',
+      category: 'rsvp'
     }
   ];
 
   for (const t of templates) {
     const sql = `
       INSERT INTO templates
-        (name, subject, body_en, body_lt, style)
-      VALUES (?, ?, ?, ?, ?)
+        (name, subject_en, subject_lt, body_en, body_lt, style, category)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
-        subject = VALUES(subject),
+        subject_en = VALUES(subject_en),
+        subject_lt = VALUES(subject_lt),
         body_en = VALUES(body_en),
         body_lt = VALUES(body_lt),
-        style = VALUES(style)
+        style = VALUES(style),
+        category = VALUES(category)
     `;
-    await connection.execute(sql, [t.name, t.subject, t.body_en, t.body_lt, t.style]);
+    await connection.execute(sql, [t.name, t.subject_en, t.subject_lt, t.body_en, t.body_lt, t.style, t.category]);
     logger.info(`– seeded template ${t.name}`);
   }
 
@@ -94,9 +98,9 @@ const mysql = require('mysql2/promise');
   await connection.execute(`
     INSERT IGNORE INTO settings 
       (id, enable_global_countdown, wedding_date, venue_name, venue_address, event_start_date, event_end_date, event_time,
-       bride_name, groom_name, contact_email, contact_phone, event_type, dress_code, special_instructions, website_url, app_title)
+       bride_name, groom_name, contact_email, contact_phone, event_type, dress_code, special_instructions, website_url, app_title, created_at, updated_at)
     VALUES 
-      (1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+      (1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   `);
   logger.info('– seeded basic settings');
 

@@ -352,10 +352,16 @@ router.post('/', async (req, res) => {
       );
     }
 
-    res.json({ success: true });
+    // Send email first (before response)
     await sendConfirmationEmail(db, row);
+    
+    // Then send response
+    res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ error: 'Database error' });
+    // Only send error response if headers haven't been sent
+    if (!res.headersSent) {
+      return res.status(500).json({ error: 'Database error' });
+    }
   }
 });
 

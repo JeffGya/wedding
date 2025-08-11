@@ -55,7 +55,7 @@ CREATE TABLE `images` (
   `original_name` varchar(255) NOT NULL,
   `mime_type` varchar(100) NOT NULL,
   `size` int NOT NULL,
-  `path` varchar(500) NOT NULL,
+  `url` varchar(500) NOT NULL,
   `alt_text` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -165,6 +165,8 @@ CREATE TABLE `settings` (
   `special_instructions` text DEFAULT NULL,
   `website_url` varchar(500) DEFAULT NULL,
   `app_title` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -205,10 +207,12 @@ CREATE TABLE `survey_responses` (
 CREATE TABLE `templates` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `subject` varchar(255) NOT NULL,
+  `subject_en` varchar(255) NOT NULL,
+  `subject_lt` varchar(255),
   `body_en` longtext NOT NULL,
   `body_lt` longtext,
   `style` enum('elegant','modern','friendly') DEFAULT 'elegant',
+  `category` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
