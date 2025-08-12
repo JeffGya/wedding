@@ -2,6 +2,7 @@
   "home.hero.title": "Sveiki atvykę į mūsų vestuvių svetainę!",
   "home.hero.subtitle": "Vienintelė vieta viskam, kas susiję su mūsų ypatinga diena.",
   "home.hero.cta": "Patvirtinkite dalyvavimą",
+  "home.hero.deadline": "RSVP iki {deadline}",
   "home.rsvpClosed": "RSVP dar nėra atidaryti. Laukite naujienų.",
   "home.details.title": "Renginio detalės",
   "home.details.dateLabel": "Data",

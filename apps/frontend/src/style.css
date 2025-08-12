@@ -2,6 +2,13 @@
 
 @unocss;
 
+/* Ensure proper scrolling behavior */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 /* Increase specificity for ToggleSwitch styles */
 body  {
   /* PrimeVue Button Overrides */
@@ -145,6 +152,11 @@ body  {
   --p-paginator-color:                        var(--text);
 
   --p-datatable-row-striped-background:       var(--form-background);
+
+  /* PrimeVue Menubar Overrides */
+  --p-menubar-border-radius:                  0;
+  --p-menubar-item-color:                     var(--int-base);
+
 }
 
 p, li {

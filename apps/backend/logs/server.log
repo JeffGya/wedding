@@ -1,74 +1,657 @@
-[2025-08-11T21:20:01.121Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:20:01.127Z] [INFO] Server is running on port 5001
-[2025-08-11T21:20:01.144Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:20:19.078Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:20:19.080Z] [INFO] Server is running on port 5001
-[2025-08-11T21:20:19.091Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:21:34.573Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2025-08-11T21:21:34.573Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2025-08-11T21:21:34.578Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
-[2025-08-11T21:21:34.583Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-11T21:21:34.597Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-11T21:21:34.597Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
-[2025-08-11T21:21:52.587Z] [DEBUG] Login request received:
-[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2025-08-11T21:22:24.428Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2025-08-11T21:22:24.428Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2025-08-11T21:22:24.429Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
-[2025-08-11T21:22:24.432Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-11T21:22:24.433Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
-[2025-08-11T21:22:24.433Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2025-08-11T21:22:29.187Z] [DEBUG] [guestSession] Setting session for guestId=39
-[2025-08-11T21:22:29.386Z] [DEBUG] [guestSession] Setting session for guestId=39
-[2025-08-11T21:22:41.542Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:22:41.544Z] [INFO] Server is running on port 5001
-[2025-08-11T21:22:41.557Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:23:01.820Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:23:01.822Z] [INFO] Server is running on port 5001
-[2025-08-11T21:23:01.834Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:30:00.379Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-08-11T21:30:00.380Z] [DEBUG] 📨 Starting scheduled message check...
-[2025-08-11T21:30:00.401Z] [DEBUG] ✅ Scheduled message check completed.
-[2025-08-11T21:30:00.401Z] [DEBUG] ✅ No scheduled messages ready to send.
-[2025-08-11T21:30:10.651Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:30:10.653Z] [INFO] Server is running on port 5001
-[2025-08-11T21:30:10.667Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:32:14.488Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:32:14.490Z] [INFO] Server is running on port 5001
-[2025-08-11T21:32:14.503Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:32:17.803Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:32:17.806Z] [INFO] Server is running on port 5001
-[2025-08-11T21:32:17.815Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:50:15.343Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:50:15.345Z] [INFO] Server is running on port 5001
-[2025-08-11T21:50:15.360Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:53:58.828Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:53:58.830Z] [INFO] Server is running on port 5001
-[2025-08-11T21:53:58.842Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:54:05.561Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:54:05.564Z] [INFO] Server is running on port 5001
-[2025-08-11T21:54:05.574Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:57:31.359Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:57:31.362Z] [INFO] Server is running on port 5001
-[2025-08-11T21:57:31.473Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:58:33.796Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:58:33.809Z] [INFO] Server is running on port 5001
-[2025-08-11T21:58:33.924Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T21:58:41.845Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T21:58:41.848Z] [INFO] Server is running on port 5001
-[2025-08-11T21:58:41.859Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T22:00:00.954Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2025-08-11T22:00:00.955Z] [DEBUG] 📨 Starting scheduled message check...
-[2025-08-11T22:00:00.962Z] [DEBUG] ✅ Scheduled message check completed.
-[2025-08-11T22:00:00.961Z] [DEBUG] ✅ No scheduled messages ready to send.
-[2025-08-11T22:11:13.572Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T22:11:13.575Z] [INFO] Server is running on port 5001
-[2025-08-11T22:11:13.587Z] [INFO] ✅ Connected to MySQL database.
-[2025-08-11T22:11:36.187Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2025-08-11T22:11:36.190Z] [INFO] Server is running on port 5001
-[2025-08-11T22:11:36.201Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-12T08:47:13.270Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T08:47:13.270Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T08:47:13.270Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T08:47:13.270Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T08:47:13.270Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T08:47:13.272Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T08:47:13.274Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:47:13.274Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:47:13.274Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T08:49:18.816Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T08:49:18.816Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T08:49:18.816Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T08:49:18.816Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T08:49:18.816Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T08:49:18.818Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T08:49:18.821Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:49:18.824Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:49:18.824Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T08:55:06.146Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T08:55:06.146Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T08:55:06.146Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T08:55:06.146Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T08:55:06.146Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T08:55:06.148Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T08:55:06.149Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:06.149Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:06.149Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T08:55:08.217Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T08:55:08.217Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T08:55:08.217Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T08:55:08.217Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T08:55:08.217Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T08:55:08.218Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T08:55:08.219Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:08.220Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T08:55:08.220Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:22.483Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T08:55:22.483Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T08:55:22.483Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T08:55:22.483Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T08:55:22.483Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T08:55:22.485Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T08:55:22.486Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:22.487Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:22.487Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T08:55:44.893Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T08:55:44.893Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T08:55:44.893Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T08:55:44.893Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T08:55:44.893Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T08:55:44.901Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T08:55:44.902Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:44.903Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T08:55:44.903Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T09:00:00.722Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-12T09:00:00.722Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-12T09:00:00.725Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-12T09:00:00.725Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-12T09:04:59.933Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T09:04:59.933Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T09:04:59.933Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T09:04:59.933Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T09:04:59.933Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T09:04:59.935Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T09:04:59.950Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T09:04:59.952Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T09:04:59.952Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T12:30:00.571Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-12T12:30:00.572Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-12T12:30:00.574Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-12T12:30:00.574Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-12T14:13:50.439Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:13:50.439Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:13:50.439Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:13:50.439Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:13:50.439Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:13:50.441Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:13:50.443Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:13:50.443Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:13:50.443Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:24:46.907Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-12T14:24:46.916Z] [INFO] Server is running on port 5001
+[2025-08-12T14:24:46.964Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-12T14:28:03.214Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-12T14:28:03.217Z] [INFO] Server is running on port 5001
+[2025-08-12T14:28:03.230Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-12T14:28:05.614Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:28:05.614Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:28:05.614Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:28:05.614Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:28:05.614Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:28:05.619Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:28:05.622Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:28:05.626Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:28:05.626Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:30:00.354Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-12T14:30:00.356Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-12T14:30:00.360Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-12T14:30:00.360Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-12T14:36:32.009Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:36:32.009Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:36:32.009Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:36:32.009Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:36:32.009Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:36:32.029Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:36:32.038Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:36:32.042Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:36:32.042Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:37:08.532Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:37:08.532Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:37:08.532Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:37:08.532Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:37:08.532Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:37:08.533Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:37:08.534Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:37:08.535Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:37:08.535Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:40:19.600Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:40:19.600Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:40:19.600Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:40:19.600Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:40:19.600Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:40:19.603Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:40:19.605Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:40:19.605Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:40:19.605Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:42:51.612Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:42:51.609Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:42:51.612Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:42:51.612Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:42:51.612Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:42:51.617Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:42:51.619Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:42:51.619Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:42:51.619Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:49:57.029Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:49:57.029Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:49:57.029Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:49:57.029Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:49:57.029Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:49:57.109Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:49:57.111Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:49:57.111Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:49:57.111Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:51:41.407Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:51:41.407Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:51:41.407Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:51:41.407Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:51:41.407Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:51:41.409Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:51:41.411Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:51:41.411Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:51:41.411Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:51:50.108Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:51:50.108Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:51:50.108Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:51:50.108Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:51:50.108Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:51:50.110Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:51:50.110Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:51:50.111Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:51:50.111Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:54:07.158Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:54:07.158Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:54:07.158Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:54:07.158Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:54:07.158Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:54:07.159Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:54:07.160Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:54:07.161Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:54:07.161Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:55:54.176Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T14:55:54.176Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T14:55:54.176Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T14:55:54.176Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T14:55:54.176Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T14:55:54.182Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T14:55:54.184Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:55:54.184Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T14:55:54.184Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T14:56:39.976Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-12T14:56:39.983Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-12T14:56:47.500Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-12T14:56:47.503Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-12T15:00:00.943Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-12T15:00:00.943Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-12T15:00:00.946Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-12T15:00:00.946Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-12T15:00:11.571Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:00:11.571Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:00:11.571Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:00:11.571Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:00:11.571Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:00:11.573Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:00:11.574Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:00:11.575Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:00:11.575Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:00:12.666Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:00:12.666Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:00:12.666Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:00:12.666Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:00:12.666Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:00:12.667Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:00:12.669Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:00:12.669Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:00:12.669Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:01:27.328Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:01:27.328Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:01:27.328Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:01:27.328Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:01:27.328Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:01:27.331Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:01:27.336Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:27.337Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:27.337Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:01:38.813Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:01:38.813Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:01:38.813Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:01:38.813Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:01:38.813Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:01:38.816Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:01:38.818Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:38.818Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:01:38.818Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:51.431Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:01:51.431Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:01:51.431Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:01:51.431Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:01:51.431Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:01:51.432Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:01:51.433Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:51.435Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:51.435Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:01:52.827Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:01:52.827Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:01:52.827Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:01:52.827Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:01:52.827Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:01:52.828Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:01:52.830Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:52.832Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:01:52.832Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:02:42.472Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:02:42.472Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:02:42.472Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:02:42.472Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:02:42.472Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:02:42.478Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:02:42.480Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:02:42.480Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:02:42.480Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:02:50.938Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:02:50.938Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:02:50.938Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:02:50.938Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:02:50.938Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:02:50.939Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:02:50.941Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:02:50.942Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:02:50.942Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:07:08.408Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:07:08.408Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:07:08.409Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:07:08.408Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:07:08.409Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:07:08.423Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:07:08.440Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:07:08.449Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:07:08.449Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:07:40.246Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:07:40.246Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:07:40.246Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:07:40.246Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:07:40.246Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:07:40.248Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:07:40.250Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:07:40.250Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:07:40.250Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:09:35.087Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:09:35.087Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:09:35.087Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:09:35.087Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:09:35.087Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:09:35.088Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:09:35.089Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:09:35.090Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:09:35.090Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:09:50.704Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:09:50.704Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:09:50.704Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:09:50.704Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:09:50.704Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:09:50.705Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:09:50.705Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:09:50.706Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:09:50.706Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:09:51.637Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:09:51.638Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:09:51.638Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:09:51.640Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:09:51.640Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:09:51.645Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:09:51.646Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:09:51.646Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:09:51.646Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:13:46.066Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:13:46.066Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:13:46.066Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:13:46.066Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:13:46.066Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:13:46.070Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:13:46.073Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:13:46.073Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:13:46.073Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:14:31.454Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:14:31.454Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:14:31.455Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:14:31.455Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:14:31.455Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:14:31.457Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:14:31.457Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:14:31.458Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:14:31.458Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:14:32.688Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:14:32.688Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:14:32.688Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:14:32.688Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:14:32.688Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:14:32.690Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:14:32.690Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:14:32.691Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:14:32.691Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:14:46.496Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:14:46.496Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:14:46.497Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:14:46.496Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:14:46.497Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:14:46.498Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:14:46.499Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:14:46.499Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:14:46.499Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:17:08.163Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:17:08.163Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:17:08.163Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:17:08.163Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:17:08.163Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:17:08.167Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:17:08.167Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:17:08.168Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:17:08.168Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:21:23.063Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:21:23.063Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:21:23.063Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:21:23.063Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:21:23.063Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:21:23.064Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:21:23.066Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:21:23.067Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:21:23.067Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:21:55.938Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:21:55.939Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:21:55.939Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:21:55.939Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:21:55.939Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:21:55.940Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:21:55.940Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:21:55.941Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:21:55.941Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:21:56.988Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:21:56.988Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:21:56.988Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:21:56.988Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:21:56.988Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:21:56.989Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:21:56.990Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:21:56.991Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:21:56.991Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:22:24.779Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:22:24.779Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:22:24.779Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:22:24.779Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:22:24.779Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:22:24.780Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:22:24.781Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:22:24.781Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:22:24.782Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:22:45.553Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:22:45.553Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:22:45.553Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:22:45.553Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:22:45.553Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:22:45.555Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:22:45.556Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:22:45.556Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:22:45.556Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:23:53.614Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:23:53.614Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:23:53.614Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:23:53.615Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:23:53.615Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:23:53.617Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:23:53.618Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:23:53.618Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:23:53.618Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:26:45.676Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:26:45.676Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:26:45.676Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:26:45.676Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:26:45.676Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:26:45.678Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:26:45.684Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:26:45.685Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:26:45.685Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:27:05.640Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:27:05.640Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:27:05.640Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:27:05.640Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:27:05.640Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:27:05.642Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:27:05.645Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:27:05.646Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:27:05.646Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:27:08.628Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:27:08.628Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:27:08.628Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:27:08.628Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:27:08.628Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:27:08.630Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:27:08.632Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:27:08.632Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:27:08.632Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:27:25.972Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:27:25.972Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:27:25.972Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:27:25.972Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:27:25.972Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:27:25.974Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:27:25.978Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:27:25.978Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:27:25.978Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:28:04.760Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:28:04.760Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:28:04.759Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:28:04.760Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:28:04.760Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:28:04.762Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:28:04.764Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:28:04.764Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:28:04.764Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:28:06.517Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:28:06.517Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:28:06.517Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:28:06.517Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:28:06.517Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:28:06.519Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:28:06.521Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:28:06.521Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:28:06.521Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:28:22.667Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:28:22.667Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:28:22.668Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:28:22.668Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:28:22.668Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:28:22.693Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:28:22.699Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:28:22.700Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:28:22.700Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:30:00.254Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-12T15:30:00.254Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-12T15:30:00.262Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-12T15:30:00.262Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-12T15:30:28.559Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:30:28.559Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:30:28.559Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:30:28.559Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:30:28.559Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:30:28.561Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:30:28.563Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:30:28.564Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:30:28.564Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:32:26.449Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:32:26.449Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:32:26.450Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:32:26.450Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:32:26.449Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:32:26.453Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:32:26.458Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:32:26.458Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:32:26.458Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:32:27.299Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:32:27.299Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:32:27.299Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:32:27.299Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:32:27.299Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:32:27.300Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:32:27.301Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:32:27.302Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:32:27.302Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:32:32.334Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-08-12T15:32:32.337Z] [INFO] Server is running on port 5001
+[2025-08-12T15:32:32.351Z] [INFO] ✅ Connected to MySQL database.
+[2025-08-12T15:32:35.246Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:32:35.246Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:32:35.245Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:32:35.246Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:32:35.246Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:32:35.259Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:32:35.262Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:32:35.268Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:32:35.269Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:33:57.431Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:33:57.431Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:33:57.431Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:33:57.431Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:33:57.431Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:33:57.437Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:33:57.439Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:33:57.439Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:33:57.439Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:37:02.017Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:37:02.017Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:37:02.017Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:37:02.017Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:37:02.017Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:37:02.020Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:37:02.021Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:37:02.023Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:37:02.023Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:42:22.796Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:42:22.796Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:42:22.796Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:42:22.796Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:42:22.796Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:42:22.804Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:42:22.805Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:42:22.806Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:42:22.806Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:42:37.500Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:42:37.500Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:42:37.500Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:42:37.500Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:42:37.500Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:42:37.502Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:42:37.503Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:42:37.503Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:42:37.503Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:46:18.079Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:46:18.079Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:46:18.079Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:46:18.079Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:46:18.079Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:46:18.091Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:46:18.093Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:46:18.093Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:46:18.093Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:46:20.112Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:46:20.113Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:46:20.113Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:46:20.113Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:46:20.113Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:46:20.117Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:46:20.118Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:46:20.118Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:46:20.118Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:49:13.223Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:49:13.251Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:49:13.251Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:49:13.222Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:49:13.223Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:49:13.533Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:49:13.661Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:49:13.669Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:49:13.670Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:49:14.602Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:49:14.602Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:49:14.602Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:49:14.602Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:49:14.602Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:49:14.605Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:49:14.618Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:49:14.618Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:49:14.619Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:49:32.768Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:49:32.768Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:49:32.768Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:49:32.768Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:49:32.768Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:49:32.769Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:49:32.770Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:49:32.771Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:49:32.771Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:50:45.907Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:50:45.907Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:50:45.907Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:50:45.907Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:50:45.907Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:50:45.909Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:50:45.910Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:50:45.911Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:50:45.911Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T15:50:49.075Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-12T15:50:49.082Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-12T15:50:50.619Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-12T15:50:50.644Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-12T15:56:28.198Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=none
+[2025-08-12T15:56:28.224Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
+[2025-08-12T15:56:46.775Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T15:56:46.775Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T15:56:46.775Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T15:56:46.775Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T15:56:46.775Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T15:56:46.783Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T15:56:46.785Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:56:46.786Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T15:56:46.786Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T16:00:00.481Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-08-12T16:00:00.483Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-08-12T16:00:00.488Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-08-12T16:00:00.488Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-08-12T16:00:35.121Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T16:00:35.122Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T16:00:35.122Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T16:00:35.122Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T16:00:35.122Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T16:00:35.124Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T16:00:35.130Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:00:35.131Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:00:35.131Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T16:00:39.483Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=none
+[2025-08-12T16:00:39.486Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
+[2025-08-12T16:10:08.488Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T16:10:08.488Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T16:10:08.488Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T16:10:08.488Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T16:10:08.488Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T16:10:08.489Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T16:10:08.496Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:10:08.497Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T16:10:08.497Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:11:57.435Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T16:11:57.435Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T16:11:57.435Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T16:11:57.435Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T16:11:57.435Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T16:11:57.438Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T16:11:57.439Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:11:57.439Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:11:57.439Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T16:12:30.303Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2025-08-12T16:12:30.303Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2025-08-12T16:12:30.303Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2025-08-12T16:12:30.303Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2025-08-12T16:12:30.303Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2025-08-12T16:12:30.304Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2}]
+[2025-08-12T16:12:30.306Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2025-08-12T16:12:30.306Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2}]
+[2025-08-12T16:12:30.306Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"richText","content":"<p>We met in 2015, and the rest is history...</p>"},{"alt":"Us smiling","url":"/uploads/story.jpg","type":"image"},{"type":"divider"},{"type":"map","embedUrl":"https://maps.google.com/your-venue"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}

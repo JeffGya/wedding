@@ -1,6 +1,7 @@
 {
   "home.hero.subtitle": "It's happening, in Vilnius. Don't miss it.",
   "home.hero.cta": "RSVP",
+  "home.hero.deadline": "RSVP by {deadline}",
   "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
 
   "home.details.title": "Event Details",
