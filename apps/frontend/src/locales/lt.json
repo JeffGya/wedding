@@ -61,5 +61,6 @@
   "rsvpGate.pendingRSVP": "Jūs dar neužpildėte savo RSVP. Prašome jį užpildyti, kad galėtumėte pasiekti šį puslapį.",
   "rsvpGate.completeRSVP": "Užpildyti mano RSVP",
   "rsvpGate.accessDenied": "Prieiga uždrausta",
-  "rsvpGate.accessDeniedMessage": "Šis puslapis reikalauja, kad būtumėte patvirtinę dalyvavimą. Prašome užpildyti savo RSVP, kad galėtumėte tęsti."
+  "rsvpGate.accessDeniedMessage": "Šis puslapis reikalauja, kad būtumėte patvirtinę dalyvavimą. Prašome užpildyti savo RSVP, kad galėtumėte tęsti.",
+  "home.scrollHint": "Pereiti į kitą skyrių"
 }

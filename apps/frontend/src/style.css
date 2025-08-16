@@ -9,6 +9,11 @@ html, body {
   overflow-y: auto;
 }
 
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Increase specificity for ToggleSwitch styles */
 body  {
   /* PrimeVue Button Overrides */

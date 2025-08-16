@@ -4,6 +4,32 @@
   "home.hero.deadline": "RSVP by {deadline}",
   "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
 
+  "home.ourWedding.title": "Our Wedding",
+  "home.ourWedding.description": "We're excited to share our special day with you. Our wedding will be a celebration of love, family, and friendship. We've chosen a beautiful venue that reflects our style and the intimate atmosphere we want to create for our guests.",
+  "home.ourWedding.imagePlaceholder": "Optional Image",
+  "home.ourWedding.cta": "Learn More About Us",
+
+  "home.eventDetails.title": "Event Details",
+  "home.eventDetails.description": "Join us for a day filled with love, laughter, and celebration. We've planned every detail to ensure you have an unforgettable experience. From the ceremony to the reception, every moment will be special.",
+  "home.eventDetails.imagePlaceholder": "Optional Venue Image",
+  "home.eventDetails.cta": "View Full Details",
+
+  "home.tips.title": "Wedding Weekend Tips",
+  "home.tips.description": "Make the most of your time in Vilnius! We've put together some recommendations for accommodation, dining, and activities to help you plan the perfect wedding weekend getaway.",
+  "home.tips.iconPlaceholder": "Tips Icon",
+  "home.tips.cta": "View Our Tips",
+
+  "home.travel.title": "Travel & Accommodation",
+  "home.travel.description": "Planning your trip to Vilnius? We've gathered information about transportation options, recommended hotels, and local attractions to help make your journey smooth and enjoyable.",
+  "home.travel.imagePlaceholder": "Map/Location Image",
+  "home.travel.cta": "Travel Guide",
+
+  "home.contact.title": "Final RSVP Reminder",
+  "home.contact.description": "Haven't RSVP'd yet? We'd love to know if you can join us on our special day. Please take a moment to confirm your attendance so we can plan accordingly.",
+  "home.contact.cta": "RSVP Now",
+
+  "home.backToTop": "Back to top",
+
   "home.details.title": "Event Details",
   "home.details.dateLabel": "Date",
   "home.details.dateValue": "June 25, 2025",
@@ -76,5 +102,6 @@
   "rsvpGate.pendingRSVP": "You haven't completed your RSVP yet. Please complete it to access this page.",
   "rsvpGate.completeRSVP": "Complete My RSVP",
   "rsvpGate.accessDenied": "Access Denied",
-  "rsvpGate.accessDeniedMessage": "This page requires you to have RSVP'd as attending. Please complete your RSVP to continue."
+  "rsvpGate.accessDeniedMessage": "This page requires you to have RSVP'd as attending. Please complete your RSVP to continue.",
+  "home.scrollHint": "Scroll to next section"
 }
