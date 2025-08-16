@@ -308,10 +308,10 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { useToast } from 'primevue/usetoast'
 import { fetchMainSettings, updateMainSettings, validateMainSettings } from '@/api/settings'
+import { useToastService } from '@/utils/toastService'
 
-const toast = useToast()
+const { showSuccess, showError } = useToastService()
 
 const form = ref({
   enable_global_countdown: false,
@@ -392,12 +392,7 @@ async function loadSettings() {
 
 
   } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load main settings',
-      life: 5000
-    })
+    showError('Error', 'Failed to load main settings', 5000)
   }
 }
 
@@ -405,31 +400,16 @@ async function saveSettings() {
   // Validate settings
   const validation = validateMainSettings(form.value)
   if (!validation.isValid) {
-    toast.add({
-      severity: 'error',
-      summary: 'Validation Error',
-      detail: validation.errors.join(', '),
-      life: 5000
-    })
+    showError('Validation Error', validation.errors.join(', '), 5000)
     return
   }
 
   try {
     saving.value = true
     await updateMainSettings(form.value)
-    toast.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Main settings saved successfully',
-      life: 5000
-    })
+    showSuccess('Success', 'Main settings saved successfully', 5000)
   } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to save main settings',
-      life: 5000
-    })
+    showError('Error', 'Failed to save main settings', 5000)
   } finally {
     saving.value = false
   }

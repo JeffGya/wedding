@@ -55,15 +55,15 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { fetchGuestByCode } from '@/api/rsvp';
 import Banner from '@/components/ui/Banner.vue';
-import { useToast as usePrimeToast } from 'primevue/usetoast';
 import { useGuestSettings } from '@/hooks/useGuestSettings'
 import FloatLabel from 'primevue/floatlabel';
+import { useToastService } from '@/utils/toastService';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
-const primeToast = usePrimeToast();
 const { loading: settingsLoading, isClosed } = useGuestSettings()
+const { showSuccess } = useToastService();
 
 const code = ref('');
 const error = ref('');
@@ -80,12 +80,7 @@ async function submitLookup(event) {
   submitting.value = true;
   try {
     await fetchGuestByCode(code.value.trim());
-    primeToast.add({ 
-      severity: 'success', 
-      summary: 'Success', 
-      detail: t('rsvp.lookupSuccess'), 
-      life: '5000' 
-    });
+    showSuccess('Success', t('rsvp.lookupSuccess'), 5000);
     router.push({
       name: 'public-rsvp',
       params: { lang: route.params.lang, code: code.value.trim() }

@@ -12,8 +12,9 @@
     <div class="space-y-8">
       <Button 
         label="Normalize Embed" 
-        icon="pi pi-cog"
-        class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+        icon="i-solar:settings-minimalistic-bold-duotone"
+        size="normal"
+        severity="secondary"
         @click="applyEmbed" 
       />
     </div>

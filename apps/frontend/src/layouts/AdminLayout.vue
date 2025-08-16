@@ -55,7 +55,6 @@
     </div>
 
     <!-- Global Toast for all admin pages -->
-    <Toast />
   </div>
 </template>
 

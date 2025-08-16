@@ -178,7 +178,8 @@
           <Button
             v-if="message.status === 'draft' || message.status === 'scheduled'"
             label="Delete Message"
-            icon="pi pi-trash"
+            icon="i-solar:trash-bin-trash-bold-duotone"
+            size="normal"
             severity="danger"
             @click="deleteMessage(message.id)"
           />
@@ -208,14 +209,14 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import api from '@/api'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
+import { useToastService } from '@/utils/toastService'
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+const { showSuccess, showError, showWarning } = useToastService()
 
 const message = ref(null)
 const deliveryLogs = ref([])
@@ -320,12 +321,7 @@ const fetchMessage = async () => {
     deliveryLogs.value = logsResponse.data.logs
   } catch (error) {
     console.error('Failed to load message:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load message details',
-      life: 3000
-    })
+    showError('Error', 'Failed to load message details')
   }
 }
 
@@ -334,21 +330,11 @@ const deleteMessage = async (id) => {
   
   try {
     await api.delete(`/messages/${id}`)
-    toast.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Message deleted successfully',
-      life: 3000
-    })
+    showSuccess('Success', 'Message deleted successfully')
     router.push('/admin/guests/messages')
   } catch (error) {
     console.error('Failed to delete message:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to delete message',
-      life: 3000
-    })
+    showError('Error', 'Failed to delete message')
   }
 }
 
@@ -357,23 +343,13 @@ const resendFailed = async () => {
     const response = await api.post(`/messages/${message.value.id}/resend`)
     const { sentCount, failedCount } = response.data
     
-    toast.add({
-      severity: 'success',
-      summary: 'Resend Complete',
-      detail: `✅ ${sentCount} sent, ❌ ${failedCount} failed`,
-      life: 5000
-    })
+    showSuccess('Resend Complete', `✅ ${sentCount} sent, ❌ ${failedCount} failed`, 5000)
     
     // Refresh data
     await fetchMessage()
   } catch (error) {
     console.error('Failed to resend failed messages:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to resend failed messages',
-      life: 3000
-    })
+    showError('Error', 'Failed to resend failed messages')
   }
 }
 

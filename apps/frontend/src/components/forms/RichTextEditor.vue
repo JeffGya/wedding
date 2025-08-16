@@ -7,7 +7,6 @@
       editorStyle="height: 400px"
       ref="editorRef"
       @text-change="handleTextChange"
-      @selection-change="handleSelectionChange"
     >
       <template #toolbar>
         <div class="ql-toolbar ql-snow">
@@ -107,6 +106,12 @@
       @select="insertImage"
     />
     
+    <ButtonConfigModal
+      :visible="buttonConfigVisible"
+      @close="buttonConfigVisible = false"
+      @insert="handleButtonConfigInsert"
+    />
+    
     <div v-if="showHtml" class="mt-2">
       <textarea v-model="htmlContent" rows="10" class="w-full border rounded p-2" @input="updateFromHtml"></textarea>
     </div>
@@ -118,16 +123,24 @@ import { ref, onMounted, nextTick, watch } from 'vue';
 import Editor from 'primevue/editor';
 import Quill from 'quill';
 import ImagePicker from '@/components/ui/ImagePicker.vue';
+import ButtonConfigModal from '@/components/ui/ButtonConfigModal.vue';
 
 // Register custom font formats
 const Font = Quill.import('formats/font');
 Font.whitelist = ['serif', 'sans', 'cursive', 'monospace'];
 Quill.register(Font, true);
 
+// Remove the custom Quill format code entirely
+
 const props = defineProps({
   modelValue: {
     type: String,
     default: ''
+  },
+  context: {
+    type: String,
+    default: 'email', // 'email' for messages/templates, 'page' for page blocks
+    validator: (value) => ['email', 'page'].includes(value)
   }
 });
 
@@ -163,26 +176,36 @@ const formats = [
 const editorRef = ref(null);
 const showHtml = ref(false);
 const pickerVisible = ref(false);
+const buttonConfigVisible = ref(false);
 
-// Function to convert button markers to proper HTML
+// Enhanced function to convert button markers to proper HTML based on context
 function convertButtonMarkersToHtml(content) {
   if (!content) return content;
   
-  // Replace button markers with proper email-compatible HTML
-  return content.replace(
-    /\[BUTTON:([^\]]+)\]/g,
-    (match, buttonText) => `
-      <table cellpadding="0" cellspacing="0" border="0" style="margin: 20px auto;">
-        <tr>
-          <td style="background: #442727; border-radius: 8px; padding: 12px 24px; text-align: center;">
-            <a href="#" style="font-family: 'Open Sans', sans-serif; font-size: 16px; font-weight: 600; color: #DAA520; text-decoration: none; display: inline-block;">
-              ${buttonText}
-            </a>
-          </td>
-        </tr>
-      </table>
-    `
-  );
+  let processedContent = content;
+  
+  if (props.context === 'page') {
+    // Page buttons are already HTML, no conversion needed
+    return processedContent;
+  } else {
+    // Convert email button markers to table structure with URLs
+    processedContent = processedContent.replace(
+      /\[BUTTON:([^|]+)\|([^\]]+)\]/g,
+      (match, buttonText, buttonUrl) => `
+        <table cellpadding="0" cellspacing="0" border="0" style="margin: 20px auto;">
+          <tr>
+            <td style="background: #442727; border-radius: 8px; padding: 12px 24px; text-align: center;">
+              <a href="${buttonUrl}" style="font-family: 'Open Sans', sans-serif; font-size: 16px; font-weight: 600; color: #DAA520; text-decoration: none; display: inline-block;">
+                ${buttonText}
+              </a>
+            </td>
+          </tr>
+        </table>
+      `
+    );
+  }
+  
+  return processedContent;
 }
 
 // Modify the existing handleTextChange function to process button markers
@@ -201,59 +224,170 @@ function handleTextChange(delta, oldDelta, source) {
   }
 }
 
-// Add button insertion functionality
+// Enhanced button insertion that opens config modal
 function insertButton() {
+  buttonConfigVisible.value = true;
+}
+
+// Handle button configuration from modal
+function handleButtonConfigInsert(buttonConfig) {
   if (editorRef.value && editorRef.value.quill) {
     const quill = editorRef.value.quill;
     const range = quill.getSelection();
     
-    // Insert a button marker that will be converted to HTML later
-    const buttonMarker = '[BUTTON:Click Here]';
-    
-    if (range) {
-      // Insert new line before button if not at start
-      if (range.index > 0) {
-        quill.insertText(range.index, '\n', 'user');
-        range.index += 1;
-      }
-      
-      // Insert button marker with styling that matches the email template
-      quill.insertText(range.index, buttonMarker, {
-        'bold': true,
-        'color': '#DAA520',
-        'background': '#442727'
-      });
-      
-      // Insert new line after button
-      quill.insertText(range.index + buttonMarker.length, '\n', 'user');
-      
-      // Set selection after the button
-      quill.setSelection(range.index + buttonMarker.length + 1);
+    if (props.context === 'page') {
+      // Insert page button with PrimeVue styling
+      insertPageButton(quill, range, buttonConfig);
     } else {
-      // Insert at the end
-      const length = quill.getLength();
-      
-      // Insert new line before button if not empty
-      if (length > 1) {
-        quill.insertText(length - 1, '\n', 'user');
-      }
-      
-      // Insert button marker with styling that matches the email template
-      quill.insertText(length, buttonMarker, {
-        'bold': true,
-        'color': '#DAA520',
-        'background': '#442727'
-      });
-      
-      // Insert new line after button
-      quill.insertText(length + buttonMarker.length, '\n', 'user');
-      
-      // Set selection after the button
-      quill.setSelection(length + buttonMarker.length + 1);
+      // Insert email button with table structure
+      insertEmailButton(quill, range, buttonConfig);
     }
     
-    // Trigger content update
+    // Close modal and trigger content update
+    buttonConfigVisible.value = false;
     handleTextChange();
+  }
+}
+
+// Insert button for page blocks (PrimeVue Button) - Using simple HTML insertion
+function insertPageButton(quill, range, buttonConfig) {
+  // Create button HTML
+  const buttonHtml = `
+    <button 
+      class="p-button p-button-primary" 
+      style="
+        background: var(--int-base);
+        border: 2px solid var(--int-hover);
+        color: var(--acc2-base);
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      "
+      onclick="window.location.href='${buttonConfig.url}'"
+      onmouseover="this.style.background='var(--int-hover)';this.style.color='var(--acc2-base)'"
+      onmouseout="this.style.background='var(--int-base)';this.style.color='var(--acc2-base)'"
+    >
+      ${buttonConfig.text}
+    </button>
+  `;
+  
+  // Insert HTML at the current position
+  if (range) {
+    // Insert new line before button if not at start
+    if (range.index > 0) {
+      quill.insertText(range.index, '\n', 'user');
+      range.index += 1;
+    }
+    
+    // Insert HTML using Quill's clipboard API
+    const delta = quill.clipboard.convert(buttonHtml);
+    quill.updateContents(delta);
+    
+    // Insert new line after button
+    quill.insertText(range.index + 1, '\n', 'user');
+    
+    // Set selection after the button
+    quill.setSelection(range.index + 2);
+  } else {
+    // Insert at the end
+    const length = quill.getLength();
+    
+    // Insert new line before button if not empty
+    if (length > 1) {
+      quill.insertText(length - 1, '\n', 'user');
+    }
+    
+    // Insert HTML at the end
+    const delta = quill.clipboard.convert(buttonHtml);
+    quill.updateContents(delta);
+    
+    // Insert new line after button
+    quill.insertText(length + 1, '\n', 'user');
+    
+    // Set selection after the button
+    quill.setSelection(length + 2);
+  }
+}
+
+// Insert button for email templates/messages (table structure)
+function insertEmailButton(quill, range, buttonConfig) {
+  const buttonMarker = `[BUTTON:${buttonConfig.text}|${buttonConfig.url}]`;
+  
+  if (range) {
+    // Insert new line before button if not at start
+    if (range.index > 0) {
+      quill.insertText(range.index, '\n', 'user');
+      range.index += 1;
+    }
+    
+    // Insert button marker with styling
+    quill.insertText(range.index, buttonMarker, {
+      'bold': true,
+      'color': '#DAA520',
+      'background': '#442727'
+    });
+    
+    // Insert new line after button
+    quill.insertText(range.index + buttonMarker.length, '\n', 'user');
+    
+    // Set selection after the button
+    quill.setSelection(range.index + buttonMarker.length + 1);
+  } else {
+    // Insert new line before button if not empty
+    const length = quill.getLength();
+    
+    if (length > 1) {
+      quill.insertText(length - 1, '\n', 'user');
+    }
+    
+    // Insert button marker
+    quill.insertText(length, buttonMarker, {
+      'bold': true,
+      'color': '#DAA520',
+      'background': '#442727'
+    });
+    
+    // Insert new line after button
+    quill.insertText(length + buttonMarker.length, '\n', 'user');
+    
+    // Set selection after the button
+    quill.setSelection(length + buttonMarker.length + 1);
+  }
+}
+
+// Helper function to insert HTML at a specific position
+function insertHtmlAtPosition(quill, range, html) {
+  if (range) {
+    // Insert new line before button if not at start
+    if (range.index > 0) {
+      quill.insertText(range.index, '\n', 'user');
+      range.index += 1;
+    }
+    
+    // Insert HTML at cursor position
+    const currentHtml = quill.root.innerHTML;
+    const beforeCursor = currentHtml.substring(0, range.index);
+    const afterCursor = currentHtml.substring(range.index);
+    const newHtml = beforeCursor + html + afterCursor;
+    
+    quill.root.innerHTML = newHtml;
+    
+    // Set cursor position after the inserted button
+    quill.setSelection(range.index + html.length);
+  } else {
+    // Insert at the end
+    const currentHtml = quill.root.innerHTML;
+    const newHtml = currentHtml + html;
+    quill.root.innerHTML = newHtml;
+    
+    // Set cursor at the end
+    quill.setSelection(quill.getLength());
   }
 }
 

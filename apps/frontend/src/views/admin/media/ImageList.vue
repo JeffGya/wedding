@@ -50,16 +50,14 @@
                 <Button
                   icon="i-solar:pen-bold-duotone"
                   severity="secondary"
-                  text
-                  size="small"
+                  size="normal"
                   @click="openEditDialog(slotProps.data)"
                   v-tooltip.top="'Edit Image'"
                 />
                 <Button
                   icon="i-solar:trash-bin-trash-bold-duotone"
                   severity="danger"
-                  text
-                  size="small"
+                  size="normal"
                   @click="confirmDelete(slotProps.data.id)"
                   v-tooltip.top="'Delete Image'"
                 />
@@ -117,13 +115,13 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Card from 'primevue/card';
 import { fetchImages, deleteImage, updateImage } from '@/api/images';
-import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
+import { useToastService } from '@/utils/toastService';
 
 const images = ref([]);
 const loading = ref(false);
-const toast = useToast();
 const confirm = useConfirm();
+const { showSuccess, showError } = useToastService();
 const editDialog = ref(false);
 const editAltText = ref('');
 const editFilename = ref('');
@@ -135,7 +133,7 @@ const loadImages = async () => {
   try {
     images.value = await fetchImages();
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Error', detail: err.message });
+    showError('Error', err.message);
   } finally {
     loading.value = false;
   }
@@ -157,9 +155,9 @@ const saveEdit = async () => {
     });
     editDialog.value = false;
     await loadImages();
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Image updated successfully' });
+    showSuccess('Success', 'Image updated successfully');
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Error', detail: err.message });
+    showError('Error', err.message);
   } finally {
     saving.value = false;
   }
@@ -174,9 +172,9 @@ const confirmDelete = (id) => {
       try {
         await deleteImage(id);
         await loadImages();
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Image deleted successfully' });
+        showSuccess('Success', 'Image deleted successfully');
       } catch (err) {
-        toast.add({ severity: 'error', summary: 'Error', detail: err.message });
+        showError('Error', err.message);
       }
     }
   });

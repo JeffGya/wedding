@@ -388,3 +388,12 @@ input, textarea {
   font-family: 'Great Vibes', cursive;
   font-size: 1.125rem;
 }
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  border: 1px solid;
+  margin: 1em;
+  opacity: 75%;
+}

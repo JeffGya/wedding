@@ -8,7 +8,7 @@
         optionLabel="label"
         optionValue="value"
         placeholder="Select block type..."
-        class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+        class="w-full"
         @change="e => addBlock(e.value)"
       />
     </div>
@@ -18,7 +18,7 @@
       <div 
         v-for="(block, idx) in blocks" 
         :key="idx" 
-        class="block-item bg-card-bg border border-form-border rounded-lg p-16 space-y-16"
+        class="block-item bg-card-bg rounded-lg p-16 space-y-16"
       >
         <!-- Block Header -->
         <div class="flex items-center justify-between">
@@ -28,25 +28,33 @@
           </div>
           
           <div class="flex items-center gap-8">
+            <ButtonGroup>
+              <Button 
+                icon="i-solar:round-alt-arrow-up-bold" 
+                severity="secondary"
+                variant="text"
+                :disabled="idx === 0" 
+                @click="moveUp(idx)"
+                v-tooltip.top="'Move Up'"
+                size="large"
+              />
+              <Button 
+                icon="i-solar:round-alt-arrow-down-bold" 
+                severity="secondary"
+                variant="text"
+                :disabled="idx === blocks.length - 1" 
+                @click="moveDown(idx)"
+                v-tooltip.top="'Move Down'"
+                size="large"
+
+              />
+            </ButtonGroup>
             <Button 
-              icon="pi pi-arrow-up" 
-              class="p-button-text text-btn-secondary-base hover:text-btn-secondary-hover"
-              :disabled="idx === 0" 
-              @click="moveUp(idx)"
-              v-tooltip.top="'Move Up'"
-            />
-            <Button 
-              icon="pi pi-arrow-down" 
-              class="p-button-text text-btn-secondary-base hover:text-btn-secondary-hover"
-              :disabled="idx === blocks.length - 1" 
-              @click="moveDown(idx)"
-              v-tooltip.top="'Move Down'"
-            />
-            <Button 
-              icon="pi pi-trash" 
-              class="p-button-text text-red-600 hover:text-red-700"
+              icon="i-solar:trash-bin-minimalistic-bold-duotone" 
+              severity="danger"
               @click="removeBlock(idx)"
               v-tooltip.top="'Delete Block'"
+              size="large"
             />
           </div>
         </div>
@@ -60,6 +68,7 @@
           >
             <RichTextEditor
               :modelValue="block.translations[locale].html"
+              :context="'page'"
               @update:modelValue="val => updateBlock(idx, 'html', val)"
             />
           </FormField>
@@ -80,9 +89,10 @@
                 </div>
                 <Button
                   :label="block.translations[locale].src ? 'Change Image' : 'Select Image'"
-                  icon="pi pi-image"
-                  class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+                  icon="i-solar:gallery-add-bold-duotone"
                   @click="toggleImagePicker(idx, true)"
+                  severity="secondary"
+                  size="normal"
                 />
               </div>
               
@@ -110,9 +120,6 @@
             :helper="props.blockErrors[idx]"
           >
             <div class="space-y-8">
-              <label class="text-txt font-medium block">
-                {{ block.type === 'video' ? 'Video Embed' : 'Map Embed' }}
-              </label>
               <EmbedEditor
                 :modelValue="block.translations[locale].embed"
                 @update:modelValue="val => updateBlock(idx, 'embed', val)"
@@ -126,7 +133,6 @@
             :helper="props.blockErrors[idx]"
           >
             <div class="space-y-8">
-              <label class="text-txt font-medium block">Survey</label>
               <SurveySelector
                 :modelValue="block.translations[locale].id"
                 @update:modelValue="val => updateBlock(idx, 'id', val)"
@@ -145,7 +151,7 @@
 
     <!-- Empty State -->
     <div v-if="blocks.length === 0" class="empty-state text-center py-32">
-      <i class="pi pi-plus-circle text-4xl text-gray-400 mb-16"></i>
+      <i class="i-solar:add-circle-bold-duotone text-4xl text-gray-400 mb-16"/>
       <p class="text-txt">No content blocks yet. Use the dropdown above to add your first block.</p>
     </div>
   </div>
@@ -299,8 +305,8 @@ function updateBlock(idx, field, value) {
 }
 
 .block-content {
-  border-top: 1px solid var(--form-border);
-  padding-top: 16px;
+  border-bottom: 1px solid var(--form-border);
+  padding-bottom: 16px;
 }
 
 .image-preview {

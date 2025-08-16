@@ -27,9 +27,9 @@
 
 <script setup>
 import { uploadImage } from '@/api/images';
-import { useToast } from 'primevue/usetoast';
+import { useToastService } from '@/utils/toastService';
 
-const toast = useToast();
+const { showSuccess, showError } = useToastService();
 const emit = defineEmits(['uploaded']);
 
 async function onFileSelect(event) {
@@ -37,10 +37,10 @@ async function onFileSelect(event) {
   if (!file) return;
   try {
     const { id } = await uploadImage(file);
-    toast.add({ severity: 'success', summary: 'Uploaded', detail: `Image ID ${id}` });
+    showSuccess('Uploaded', `Image ID ${id}`);
     emit('uploaded');
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Upload Failed', detail: err.message || err });
+    showError('Upload Failed', err.message || err);
   }
 }
 </script>

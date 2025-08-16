@@ -61,7 +61,7 @@
         icon="i-solar:pen-new-square-bold"
         @click="goToRSVP"
       />
-      <Message v-else severity="contrast" variant="outlined" size="small" icon="i-solar:alarm-sleep-bold">{{ $t('home.rsvpClosed')}}</Message>
+      <Message v-else severity="contrast" variant="outlined" size="normal" icon="i-solar:alarm-sleep-bold">{{ $t('home.rsvpClosed')}}</Message>
     </div>
   </section>
 

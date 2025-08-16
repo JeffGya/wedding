@@ -26,7 +26,7 @@
           <Button 
             label="Refresh" 
             icon="i-solar-refresh-bold-duotone" 
-            size="small"
+            size="normal"
             @click="loadPreview"
             :loading="loading"
           />
@@ -94,7 +94,7 @@
           <Button 
             label="Toggle Debug" 
             icon="i-solar-code-bold-duotone" 
-            size="small"
+            size="normal"
             text
             @click="showDebug = !showDebug"
           />
@@ -148,8 +148,8 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { useToast } from 'primevue/usetoast'
 import { previewMessage } from '@/api/messages'
+import { useToastService } from '@/utils/toastService'
 
 const props = defineProps({
   visible: {
@@ -167,7 +167,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:visible'])
-const toast = useToast()
+const { showError } = useToastService()
 
 const activeLanguageTab = ref(0)
 const selectedGuestId = ref(null)
@@ -290,12 +290,7 @@ async function loadPreview() {
     
   } catch (error) {
     console.error('Failed to preview message:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to preview message',
-      life: 3000
-    })
+    showError('Error', 'Failed to preview message')
   } finally {
     loading.value = false
   }

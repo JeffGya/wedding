@@ -87,7 +87,7 @@
         <div class="flex flex-wrap gap-2">
           <Button
             label="Save Draft"
-            icon="pi pi-save"
+            icon="i-solar:diskette-bold"
             severity="secondary"
             :loading="actionTypeBeingHandled === 'draft'"
             @click="handleComposerAction('draft')"
@@ -99,6 +99,13 @@
             severity="info"
             :loading="actionTypeBeingHandled === 'scheduled'"
             @click="handleComposerAction('scheduled')"
+          />
+          
+          <Button
+            label="Save as Template"
+            icon="pi pi-file-edit"
+            severity="help"
+            @click="isTemplateModalOpen = true"
           />
           
           <Button
@@ -212,16 +219,16 @@
 <script setup>
 import { ref, computed, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import { createMessage, updateMessage, sendMessage, fetchMessage } from '@/api/messages'
 import { fetchTemplates } from '@/api/templates'
 import MessageComposer from '@/components/messaging/MessageComposer.vue'
 import RecipientPicker from '@/components/messaging/RecipientPicker.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
+import { useToastService } from '@/utils/toastService'
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+const { showSuccess, showError, showWarning, showInfo } = useToastService()
 
 const composerRef = ref(null)
 const recipientsRef = ref(null)
@@ -254,24 +261,14 @@ const handleComposerAction = async (actionType) => {
   try {
     const composerData = composerRef.value?.getData()
     if (!composerData) {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please fill in the message content',
-        life: 3000
-      })
+      showError('Error', 'Please fill in the message content')
       return
     }
 
     const recipients = recipientsRef.value?.getSelectedRecipients() || []
     
     if (actionType === 'scheduled' && !scheduledAt.value) {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please select a schedule time',
-        life: 3000
-      })
+      showError('Error', 'Please select a schedule time')
       return
     }
 
@@ -292,22 +289,12 @@ const handleComposerAction = async (actionType) => {
       // Update existing message
       const response = await updateMessage(route.params.id, messageData)
       messageId = route.params.id
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Message updated successfully',
-        life: 3000
-      })
+      showSuccess('Success', 'Message updated successfully')
     } else {
       // Create new message
       const response = await createMessage(messageData)
       messageId = response.messageId
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Message created successfully',
-        life: 3000
-      })
+      showSuccess('Success', 'Message created successfully')
     }
 
     // Handle different action types
@@ -315,12 +302,7 @@ const handleComposerAction = async (actionType) => {
       // For "Send Now" - send the draft immediately
       await handleSendMessage(messageId)
     } else if (actionType === 'scheduled') {
-      toast.add({
-        severity: 'success',
-        summary: 'Scheduled',
-        detail: 'Message scheduled successfully',
-        life: 3000
-      })
+      showSuccess('Scheduled', 'Message scheduled successfully')
       router.push('/admin/guests/messages')
     } else {
       // Draft - just redirect
@@ -328,12 +310,7 @@ const handleComposerAction = async (actionType) => {
     }
   } catch (error) {
     console.error('Error handling composer action:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: error.response?.data?.error || 'Failed to save message',
-      life: 3000
-    })
+    showError('Error', error.response?.data?.error || 'Failed to save message')
   } finally {
     actionTypeBeingHandled.value = null
   }
@@ -385,21 +362,11 @@ const handleSendMessage = async (messageId) => {
     // Show appropriate message based on results
     if (response.sentCount > 0 && response.failedCount === 0) {
       // All messages sent successfully
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: `Message sent to ${response.sentCount} recipients`,
-        life: 3000
-      })
+      showSuccess('Success', `Message sent to ${response.sentCount} recipients`)
       sendingState.value = 'summary'
     } else if (response.sentCount > 0 && response.failedCount > 0) {
       // Mixed results - some sent, some failed
-      toast.add({
-        severity: 'warn',
-        summary: 'Partial Success',
-        detail: `${response.sentCount} sent, ${response.failedCount} failed`,
-        life: 5000
-      })
+      showWarning('Partial Success', `${response.sentCount} sent, ${response.failedCount} failed`, 5000)
       sendingState.value = 'summary'
     } else if (response.sentCount === 0 && response.failedCount > 0) {
       // All messages failed
@@ -409,12 +376,7 @@ const handleSendMessage = async (messageId) => {
         failedCount: response.failedCount
       }
       sendingState.value = 'summary'
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'All messages failed to send. Message remains as draft.',
-        life: 5000
-      })
+      showError('Error', 'All messages failed to send. Message remains as draft.', 5000)
     } else {
       // No recipients or other edge case
       sendingSummary.value = {
@@ -423,12 +385,7 @@ const handleSendMessage = async (messageId) => {
         failedCount: response.failedCount
       }
       sendingState.value = 'summary'
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No messages were sent. Message remains as draft.',
-        life: 5000
-      })
+      showError('Error', 'No messages were sent. Message remains as draft.', 5000)
     }
   } catch (error) {
     console.error('Error sending message:', error)
@@ -440,12 +397,7 @@ const handleSendMessage = async (messageId) => {
     sendingState.value = 'summary'
     
     // Show error toast - message remains as draft
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to send messages. Message saved as draft.',
-      life: 5000
-    })
+    showError('Error', 'Failed to send messages. Message saved as draft.', 5000)
   }
 }
 
@@ -456,12 +408,7 @@ const handleSummaryDismiss = () => {
 
 const handleTemplateSaved = () => {
   isTemplateModalOpen.value = false
-  toast.add({
-    severity: 'success',
-    summary: 'Success',
-    detail: 'Template saved successfully',
-    life: 3000
-  })
+  showSuccess('Success', 'Template saved successfully')
   // Reload templates
   loadTemplates()
 }
@@ -504,12 +451,7 @@ const loadMessageForEdit = async () => {
     })
   } catch (error) {
     console.error('Failed to load message for edit:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load message for editing',
-      life: 3000
-    })
+    showError('Error', 'Failed to load message for editing')
   }
 }
 

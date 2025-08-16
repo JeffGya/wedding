@@ -121,7 +121,7 @@
             />
             <Button
               label="Save Settings"
-              icon="pi pi-save"
+              icon="i-solar:diskette-bold"
               type="submit"
               :loading="saving"
             />
@@ -134,10 +134,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useToast } from 'primevue/usetoast'
 import { fetchEmailSettings, updateEmailSettings, validateEmailSettings } from '@/api/settings'
+import { useToastService } from '@/utils/toastService'
 
-const toast = useToast()
+const { showSuccess, showError, showWarning, showInfo } = useToastService()
 
 const form = ref({
   provider: 'resend',
@@ -186,12 +186,7 @@ async function loadSettings() {
     }
   } catch (error) {
     console.error('Error loading settings:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load email settings',
-      life: 5000
-    })
+    showError('Error', 'Failed to load email settings', 5000)
   } finally {
     loading.value = false
   }
@@ -201,12 +196,7 @@ async function saveSettings() {
   // Validate settings
   const validation = validateEmailSettings(form.value)
   if (!validation.isValid) {
-    toast.add({
-      severity: 'error',
-      summary: 'Validation Error',
-      detail: validation.errors.join(', '),
-      life: 5000
-    })
+    showError('Validation Error', validation.errors.join(', '), 5000)
     return
   }
 
@@ -214,20 +204,10 @@ async function saveSettings() {
     saving.value = true
     console.log('Saving settings:', form.value)
     await updateEmailSettings(form.value)
-    toast.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Email settings saved successfully',
-      life: 5000
-    })
+    showSuccess('Success', 'Email settings saved successfully', 5000)
   } catch (error) {
     console.error('Error saving settings:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to save email settings',
-      life: 5000
-    })
+    showError('Error', 'Failed to save email settings', 5000)
   } finally {
     saving.value = false
   }
@@ -238,19 +218,9 @@ async function testConfiguration() {
     testing.value = true
     // Note: This would require a test endpoint in the backend
     // await testEmailConfiguration(form.value)
-    toast.add({
-      severity: 'info',
-      summary: 'Info',
-      detail: 'Test email functionality not yet implemented',
-      life: 5000
-    })
+    showInfo('Info', 'Test email functionality not yet implemented', 5000)
   } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to test email configuration',
-      life: 5000
-    })
+    showError('Error', 'Failed to test email configuration', 5000)
   } finally {
     testing.value = false
   }

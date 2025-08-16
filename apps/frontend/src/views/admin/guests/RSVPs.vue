@@ -70,7 +70,7 @@
           :paginator="true"
           :rows="guestsPerPage"
           :totalRecords="totalGuests"
-          size="small"
+          size="normal"
           stripedRows
           lazy
           :sortField="sortField"
@@ -108,7 +108,7 @@
                 icon="pi pi-pencil" 
                 severity="secondary" 
                 text 
-                size="small"
+                size="normal"
                 @click="openEditModal(slotProps.data)"
                 v-tooltip.top="'Edit RSVP'"
               />

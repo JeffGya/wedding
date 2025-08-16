@@ -61,14 +61,14 @@
         />
       </div>
 
-      <div v-show="tab === 'en'">
-        <label class="block text-sm font-medium mb-2">Message (English)</label>
-        <RichTextEditor v-model="form.bodyEn" />
-      </div>
-      <div v-show="tab === 'lt'">
-        <label class="block text-sm font-medium mb-2">Message (Lietuviškai)</label>
-        <RichTextEditor v-model="form.bodyLt" />
-      </div>
+              <div v-show="tab === 'en'">
+          <label class="block text-sm font-medium mb-2">Message (English)</label>
+          <RichTextEditor v-model="form.bodyEn" :context="'email'" />
+        </div>
+        <div v-show="tab === 'lt'">
+          <label class="block text-sm font-medium mb-2">Message (Lietuviškai)</label>
+          <RichTextEditor v-model="form.bodyLt" :context="'email'" />
+        </div>
     </div>
 
     <!-- Save Template Modal -->

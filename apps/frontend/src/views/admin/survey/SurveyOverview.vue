@@ -77,16 +77,14 @@
                 <Button
                   icon="pi pi-pencil"
                   severity="secondary"
-                  text
-                  size="small"
+                  size="normal"
                   @click="navigateToEdit(slotProps.data)"
                   v-tooltip.top="'Edit Survey'"
                 />
                 <Button
-                  icon="pi pi-trash"
+                  icon="i-solar:trash-bin-trash-bold-duotone"
                   severity="danger"
-                  text
-                  size="small"
+                  size="normal"
                   @click="deleteSurveyById(slotProps.data.id)"
                   v-tooltip.top="'Delete Survey'"
                 />

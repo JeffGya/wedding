@@ -87,24 +87,21 @@
                 <Button
                   icon="pi pi-eye"
                   severity="info"
-                  text
-                  size="small"
+                  size="normal"
                   @click="navigateToPreview(slotProps.data)"
                   v-tooltip.top="'Preview Page'"
                 />
                 <Button
                   icon="pi pi-pencil"
                   severity="secondary"
-                  text
-                  size="small"
+                  size="normal"
                   @click="navigateToEdit(slotProps.data)"
                   v-tooltip.top="'Edit Page'"
                 />
                 <Button
-                  icon="pi pi-trash"
+                  icon="i-solar:trash-bin-trash-bold-duotone"
                   severity="danger"
-                  text
-                  size="small"
+                  size="normal"
                   @click="deletePage(slotProps.data.id)"
                   v-tooltip.top="'Delete Page'"
                 />

@@ -117,7 +117,7 @@
                       label="Add Option" 
                       icon="pi pi-plus" 
                       severity="secondary"
-                      size="small"
+                      size="normal"
                       @click="addOption" 
                     />
                   </div>
@@ -133,10 +133,10 @@
                       class="flex-1"
                     />
                     <Button
-                      icon="pi pi-trash"
+                      icon="i-solar:trash-bin-trash-bold-duotone"
                       severity="danger"
                       text
-                      size="small"
+                      size="normal"
                       @click="removeOption(idx)"
                       v-tooltip.top="'Remove Option'"
                     />
@@ -148,7 +148,7 @@
                 <div class="flex gap-2">
                   <Button
                     :label="isEditMode ? 'Update' : 'Create'"
-                    icon="pi pi-save"
+                    icon="i-solar:diskette-bold"
                     severity="primary"
                     @click="saveSurvey"
                     :loading="saving"

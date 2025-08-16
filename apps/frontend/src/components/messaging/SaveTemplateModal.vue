@@ -83,10 +83,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { useToast } from 'primevue/usetoast'
+import { ref, computed, watch, onMounted } from 'vue'
 import * as templatesApi from '@/api/templates.js'
 import { getTemplateStyles } from '@/api/templates'
+import { useToastService } from '@/utils/toastService'
 
 const props = defineProps({
   subject: String,
@@ -98,7 +98,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
-const toast = useToast()
+const { showSuccess, showError } = useToastService()
 
 const mode = ref('new')
 const templateName = ref('')
@@ -133,22 +133,12 @@ watch(() => props.show, (newValue) => {
 
 async function handleSave() {
   if (mode.value === 'new' && !templateName.value.trim()) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Please enter a template name',
-      life: 3000
-    })
+    showError('Error', 'Please enter a template name')
     return
   }
 
   if (mode.value === 'overwrite' && !selectedId.value) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Please select a template to overwrite',
-      life: 3000
-    })
+    showError('Error', 'Please select a template to overwrite')
     return
   }
 
@@ -165,31 +155,16 @@ async function handleSave() {
 
     if (mode.value === 'new') {
       await templatesApi.createTemplate(templateData)
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Template created successfully',
-        life: 3000
-      })
+      showSuccess('Success', 'Template created successfully')
     } else {
       await templatesApi.updateTemplate(selectedId.value, templateData)
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Template updated successfully',
-        life: 3000
-      })
+      showSuccess('Success', 'Template updated successfully')
     }
 
     emit('saved')
   } catch (error) {
     console.error('Error saving template:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to save template',
-      life: 3000
-    })
+    showError('Error', 'Failed to save template')
   } finally {
     saving.value = false
   }

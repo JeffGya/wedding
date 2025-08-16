@@ -5,7 +5,7 @@
       <Button 
         label="Clear Filter" 
         icon="pi pi-times" 
-        size="small"
+        size="normal"
         text
         @click="clearFilter"
         v-if="selectedCategory !== 'all'"
@@ -31,7 +31,7 @@
               <Tag 
                 :value="getCategoryCount(category)" 
                 :severity="getCategoryColor(category)"
-                size="small"
+                size="normal"
               />
             </div>
           </div>

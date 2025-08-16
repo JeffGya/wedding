@@ -9,21 +9,21 @@
         label="Admin Overview"
         severity="contrast"
         variant="outlined"
-        size="small"
+        size="normal"
       />
       <Button
         @click="$router.push('/')"
         label="Public Site"
         severity="contrast"
         variant="outlined"
-        size="small"
+        size="normal"
       />
     </ButtonGroup>
     <Button
       icon="i-solar:logout-3-bold-duotone"
       @click="auth.logout"
       label="Logout"
-      size="small"
+      size="normal"
     />
   </div>
 </template>

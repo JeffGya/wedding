@@ -64,7 +64,7 @@
           <div class="flex gap-3 pt-4 border-t">
             <Button
               label="Save Settings"
-              icon="pi pi-save"
+              icon="i-solar:diskette-bold"
               type="submit"
               :loading="saving"
             />
@@ -84,10 +84,10 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { useToast } from 'primevue/usetoast'
 import { fetchGuestSettings, updateGuestSettings, validateGuestSettings } from '@/api/settings'
+import { useToastService } from '@/utils/toastService'
 
-const toast = useToast()
+const { showSuccess, showError } = useToastService()
 
 const form = ref({
   rsvp_open: false,
@@ -119,12 +119,7 @@ async function loadSettings() {
       dateValue.value = null
     }
   } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load guest settings',
-      life: 5000
-    })
+    showError('Error', 'Failed to load guest settings', 5000)
   }
 }
 
@@ -132,31 +127,16 @@ async function saveSettings() {
   // Validate settings
   const validation = validateGuestSettings(form.value)
   if (!validation.isValid) {
-    toast.add({
-      severity: 'error',
-      summary: 'Validation Error',
-      detail: validation.errors.join(', '),
-      life: 5000
-    })
+    showError('Validation Error', validation.errors.join(', '), 5000)
     return
   }
 
   try {
     saving.value = true
     await updateGuestSettings(form.value)
-    toast.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Guest settings saved successfully',
-      life: 5000
-    })
+    showSuccess('Success', 'Guest settings saved successfully', 5000)
   } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to save guest settings',
-      life: 5000
-    })
+    showError('Error', 'Failed to save guest settings', 5000)
   } finally {
     saving.value = false
   }

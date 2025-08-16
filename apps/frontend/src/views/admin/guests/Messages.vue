@@ -88,15 +88,15 @@
                       label="Edit"
                       icon="pi pi-pencil"
                       severity="secondary"
-                      size="small"
+                      size="normal"
                       @click.stop="goToDetail(item.msg.id, true)"
                     />
                     <Button
                       v-if="item.msg.status === 'draft' || item.msg.status === 'scheduled'"
                       label="Delete"
-                      icon="pi pi-trash"
+                      icon="i-solar:trash-bin-trash-bold-duotone"
                       severity="danger"
-                      size="small"
+                      size="normal"
                       @click.stop="deleteMessage(item.msg.id)"
                     />
                     <Button
@@ -104,7 +104,7 @@
                       label="Resend Failed"
                       icon="pi pi-redo"
                       severity="warning"
-                      size="small"
+                      size="normal"
                       @click.stop="resendFailed(item.msg.id)"
                     />
                   </div>
@@ -144,13 +144,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import api from '@/api'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
+import { useToastService } from '@/utils/toastService'
 
 const router = useRouter()
-const toast = useToast()
+const { showSuccess, showError, showWarning } = useToastService()
 const messages = ref([])
 const loading = ref(false)
 
@@ -248,12 +248,7 @@ const fetchMessages = async () => {
   } catch (error) {
     console.error('Failed to load messages:', error)
     console.error('Error response:', error.response?.data)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load messages',
-      life: 3000
-    })
+    showError('Error', 'Failed to load messages')
     messages.value = []
   } finally {
     loading.value = false
@@ -266,20 +261,10 @@ const deleteMessage = async (id) => {
   try {
     await api.delete(`/messages/${id}`)
     messages.value = messages.value.filter(m => m.id !== id)
-    toast.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Message deleted successfully',
-      life: 3000
-    })
+    showSuccess('Success', 'Message deleted successfully')
   } catch (error) {
     console.error('Failed to delete message:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to delete message',
-      life: 3000
-    })
+    showError('Error', 'Failed to delete message')
   }
 }
 
@@ -288,23 +273,13 @@ const resendFailed = async (id) => {
     const response = await api.post(`/messages/${id}/resend`)
     const { sentCount, failedCount } = response.data
     
-    toast.add({
-      severity: 'success',
-      summary: 'Resend Complete',
-      detail: `✅ ${sentCount} sent, ❌ ${failedCount} failed`,
-      life: 5000
-    })
+    showSuccess('Resend Complete', `✅ ${sentCount} sent, ❌ ${failedCount} failed`, 5000)
     
     // Refresh messages to update stats
     await fetchMessages()
   } catch (error) {
     console.error('Failed to resend failed messages:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to resend failed messages',
-      life: 3000
-    })
+    showError('Error', 'Failed to resend failed messages')
   }
 }
 

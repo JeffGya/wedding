@@ -95,13 +95,13 @@
                   <Button 
                     label="Use Template" 
                     icon="i-solar-copy-bold-duotone" 
-                    size="small"
+                    size="normal"
                     @click.stop="useTemplate(template)"
                   />
                   <Button 
                     label="Preview" 
                     icon="i-solar-eye-bold-duotone" 
-                    size="small"
+                    size="normal"
                     severity="secondary"
                     text
                     @click.stop="previewTemplate(template)"
@@ -220,7 +220,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import TemplateCategoryFilter from '@/components/templates/TemplateCategoryFilter.vue'
@@ -232,10 +231,11 @@ import {
   getCategorySeverity, 
   filterTemplatesByCategory 
 } from '@/utils/templateCategories'
+import { useToastService } from '@/utils/toastService'
 
 const router = useRouter()
-const toast = useToast()
 const confirm = useConfirm()
+const { showSuccess, showError, showWarning } = useToastService()
 
 const templates = ref([])
 const loading = ref(true)
@@ -308,19 +308,9 @@ async function seedTemplates() {
     seeding.value = true
     await seedTemplatesApi() // Call the API
     await loadTemplates() // Reload templates
-    toast.add({ 
-      severity: 'success', 
-      summary: 'Success', 
-      detail: 'Templates seeded successfully.',
-      life: 5000
-    })
+    showSuccess('Success', 'Templates seeded successfully.', 5000)
   } catch (error) {
-    toast.add({ 
-      severity: 'error', 
-      summary: 'Error', 
-      detail: 'Failed to seed templates.',
-      life: 5000
-    })
+    showError('Error', 'Failed to seed templates.', 5000)
   } finally {
     seeding.value = false
   }
@@ -336,12 +326,7 @@ async function loadTemplates() {
     const response = await fetchTemplates()
     templates.value = response.templates
   } catch (error) {
-    toast.add({ 
-      severity: 'error', 
-      summary: 'Error', 
-      detail: 'Failed to load templates.',
-      life: 5000
-    })
+    showError('Error', 'Failed to load templates.', 5000)
   } finally {
     loading.value = false
   }
@@ -356,19 +341,9 @@ async function deleteTemplate(id) {
       try {
         await deleteTemplateApi(id)
         templates.value = templates.value.filter(t => t.id !== id)
-        toast.add({ 
-          severity: 'success', 
-          summary: 'Success', 
-          detail: 'Template deleted successfully.',
-          life: 5000
-        })
+        showSuccess('Success', 'Template deleted successfully.', 5000)
       } catch (error) {
-        toast.add({ 
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'Failed to delete template.',
-          life: 5000
-        })
+        showError('Error', 'Failed to delete template.', 5000)
       }
     }
   })

@@ -128,16 +128,14 @@
                   <Button
                     icon="pi pi-pencil"
                     severity="secondary"
-                    text
-                    size="small"
+                    size="normal"
                     @click="openEditForGuest(slotProps.data)"
                     v-tooltip.top="'Edit Guest'"
                   />
                   <Button
-                    icon="pi pi-trash"
+                    icon="i-solar:trash-bin-trash-bold-duotone"
                     severity="danger"
-                    text
-                    size="small"
+                    size="normal"
                     @click="deleteGuest(slotProps.data.id)"
                     v-tooltip.top="'Delete Guest'"
                   />

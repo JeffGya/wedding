@@ -121,7 +121,7 @@ watch(locale, loadPage);
 
 /* Deep styling for content blocks - using Tailwind classes where possible */
 :deep(.block-renderer__block) {
-  @apply mb-8;
+  @apply mb-16;
 }
 
 :deep(.block-renderer__block:last-child) {
@@ -129,19 +129,19 @@ watch(locale, loadPage);
 }
 
 :deep(.block-renderer__block h1) {
-  @apply font-serif text-4xl md:text-5xl text-int-base mb-8;
+  @apply font-serif text-4xl md:text-5xl text-int-base mb-16;
 }
 
 :deep(.block-renderer__block h2) {
-  @apply font-serif text-2xl md:text-3xl text-txt mb-6;
+  @apply font-serif text-2xl md:text-3xl text-int-base mb-8;
 }
 
 :deep(.block-renderer__block h3) {
-  @apply font-serif text-xl md:text-2xl text-txt mb-4;
+  @apply font-serif text-xl md:text-2xl text-int-base mb-6;
 }
 
 :deep(.block-renderer__block p) {
-  @apply font-sans text-base text-txt mb-4;
+  @apply font-sans text-base/6 text-txt mb-4;
 }
 
 :deep(.block-renderer__block p:last-child) {

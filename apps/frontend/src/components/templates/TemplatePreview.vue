@@ -26,7 +26,7 @@
           <Button 
             label="Refresh" 
             icon="i-solar-refresh-bold-duotone" 
-            size="small"
+            size="normal"
             @click="loadPreview"
             :loading="loading"
           />
@@ -90,7 +90,7 @@
           <Button 
             label="Toggle Debug" 
             icon="i-solar-code-bold-duotone" 
-            size="small"
+            size="normal"
             text
             @click="showDebug = !showDebug"
           />
@@ -154,8 +154,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import { previewTemplate } from '@/api/templates';
+import { useToastService } from '@/utils/toastService'
 
 const props = defineProps({
   visible: {
@@ -175,7 +175,7 @@ const props = defineProps({
 const emit = defineEmits(['update:visible', 'use-template'])
 
 const router = useRouter()
-const toast = useToast()
+const { showError } = useToastService()
 
 const preview = ref(null)
 const sampleGuests = ref([])
@@ -228,12 +228,7 @@ async function loadPreview() {
     }
   } catch (error) {
     console.error('Failed to preview template:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to preview template',
-      life: 3000
-    })
+    showError('Error', 'Failed to preview template')
   } finally {
     loading.value = false
   }

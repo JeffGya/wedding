@@ -112,6 +112,7 @@
                   </label>
                   <RichTextEditor
                     v-model="form.body_en"
+                    :context="'email'"
                     placeholder="Enter English content..."
                   />
                 </div>
@@ -123,6 +124,7 @@
                   </label>
                   <RichTextEditor
                     v-model="form.body_lt"
+                    :context="'email'"
                     placeholder="Enter Lithuanian content..."
                   />
                 </div>
@@ -209,14 +211,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import { createTemplate, updateTemplate, fetchTemplate } from '@/api/templates'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import { getTemplateStyles } from '@/api/templates';
+import { useToastService } from '@/utils/toastService'
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+const { showSuccess, showError } = useToastService()
 
 const isEditMode = computed(() => route.params.id !== undefined)
 const saving = ref(false)
@@ -268,12 +270,7 @@ async function loadTemplate() {
     }
   } catch (error) {
     console.error('Error loading template:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load template',
-      life: 3000
-    })
+    showError('Error', 'Failed to load template')
   }
 }
 
@@ -291,31 +288,16 @@ async function saveTemplate() {
     
     if (isEditMode.value) {
       await updateTemplate(route.params.id, templateData)
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Template updated successfully',
-        life: 3000
-      })
+      showSuccess('Success', 'Template updated successfully')
     } else {
       await createTemplate(templateData)
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Template created successfully',
-        life: 3000
-      })
+      showSuccess('Success', 'Template created successfully')
     }
     
     router.push('/admin/templates')
   } catch (error) {
     console.error('Error saving template:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to save template',
-      life: 3000
-    })
+    showError('Error', 'Failed to save template')
   } finally {
     saving.value = false
   }

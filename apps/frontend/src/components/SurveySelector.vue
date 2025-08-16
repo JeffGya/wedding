@@ -2,16 +2,16 @@
   <div class="survey-selector space-y-16">
     <!-- Existing surveys dropdown -->
     <div class="space-y-8">
-      <label class="text-txt font-medium block">Select Survey</label>
-      <div class="flex items-center gap-16">
+      <label class="text-txt font-medium block">Choose a survey</label>
+      <div class="flex gap-16">
         <div class="flex-1">
           <Select
+            class="w-full"
             v-model="selectedId"
             :options="surveyOptions"
             optionLabel="question"
             optionValue="id"
             placeholder="Choose an existing survey..."
-            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
             :filter="true"
             filterPlaceholder="Search surveys..."
             @change="onSelect"
@@ -19,8 +19,9 @@
         </div>
         <Button 
           label="New Survey" 
-          icon="pi pi-plus" 
-          class="bg-btn-primary-base hover:bg-btn-primary-hover active:bg-btn-primary-active text-btn-primary-text"
+          icon="i-solar:add-circle-bold-duotone"
+          severity="secondary"
+          size="normal"
           @click="showDialog = true" 
         />
       </div>
@@ -28,7 +29,7 @@
 
     <!-- Dialog to create new survey inline -->
     <Dialog 
-      header="Create New Survey" 
+      header="Create a new survey" 
       v-model:visible="showDialog" 
       modal 
       :closable="false"
@@ -36,29 +37,29 @@
     >
       <div class="space-y-16">
         <div class="space-y-8">
-          <label for="question" class="text-txt font-medium block">Question</label>
+          <label for="question" class="text-txt font-medium">What will be the question?</label>
           <InputText 
             id="question" 
             v-model="newSurvey.question" 
             placeholder="Enter your survey question..."
-            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+            class="w-full"
           />
         </div>
         
         <div class="space-y-8">
-          <label for="type" class="text-txt font-medium block">Type</label>
+          <label for="type" class="text-txt font-medium">What type of survey will it be?</label>
           <Select
             id="type"
             v-model="newSurvey.type"
             :options="typeOptions"
             optionLabel="label"
             optionValue="value"
-            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+            class="w-full"
           />
         </div>
         
         <div class="space-y-8">
-          <label class="text-txt font-medium block">Options</label>
+          <label class="text-txt font-medium">Which response options will be available?</label>
           <div class="space-y-8">
             <div
               v-for="(opt, idx) in newSurvey.options"
@@ -67,20 +68,21 @@
             >
               <InputText 
                 v-model="newSurvey.options[idx]" 
-                placeholder="Option text" 
-                class="flex-1 bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+                placeholder="Option text"
+                class="w-full"
               />
               <Button 
-                icon="pi pi-trash" 
-                class="bg-red-600 hover:bg-red-700 text-white"
+                icon="i-solar:trash-bin-trash-bold-duotone"
+                size="normal"
+                severity="danger"
                 @click="removeOption(idx)"
-                v-tooltip.top="'Remove Option'"
+                v-tooltip.top="'Remove response option'"
               />
             </div>
             <Button 
-              label="Add Option" 
-              icon="pi pi-plus" 
-              class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+              label="Add a option" 
+              class="mt-16"
+              icon="i-solar:add-circle-bold-duotone" 
               @click="addOption" 
             />
           </div>
@@ -92,7 +94,7 @@
               <Checkbox 
                 id="is_required" 
                 v-model="newSurvey.is_required" 
-                class="text-btn-primary-base"
+                binary
               />
               <label for="is_required" class="text-txt font-medium">Required</label>
             </div>
@@ -100,7 +102,7 @@
               <Checkbox 
                 id="is_anonymous" 
                 v-model="newSurvey.is_anonymous" 
-                class="text-btn-primary-base"
+                binary
               />
               <label for="is_anonymous" class="text-txt font-medium">Anonymous</label>
             </div>
@@ -112,13 +114,13 @@
         <div class="flex items-center gap-8">
           <Button 
             label="Cancel" 
-            class="bg-btn-secondary-base hover:bg-btn-secondary-hover active:bg-btn-secondary-active text-btn-secondary-text"
+            severity="secondary"
             @click="showDialog = false" 
           />
           <Button
             label="Save Survey"
-            icon="pi pi-save"
-            class="bg-btn-primary-base hover:bg-btn-primary-hover active:bg-btn-primary-active text-btn-primary-text"
+            icon="i-solar:diskette-bold"
+            severity="primary"
             @click="createNewSurvey"
             :disabled="!canCreate"
           />
@@ -161,6 +163,31 @@ const newSurvey = ref({
   locale: 'en'
 });
 
+// Computed properties that ensure boolean values and handle reactivity
+const isRequired = computed({
+  get: () => {
+    // Safely access the value with fallback
+    return Boolean(newSurvey.value?.is_required ?? false);
+  },
+  set: (value) => {
+    if (newSurvey.value) {
+      newSurvey.value.is_required = Boolean(value);
+    }
+  }
+});
+
+const isAnonymous = computed({
+  get: () => {
+    // Safely access the value with fallback
+    return Boolean(newSurvey.value?.is_anonymous ?? false);
+  },
+  set: (value) => {
+    if (newSurvey.value) {
+      newSurvey.value.is_anonymous = Boolean(value);
+    }
+  }
+});
+
 // Load existing surveys for this page
 async function loadSurveys() {
   // Fetch all surveys and assign directly to options array
@@ -192,14 +219,28 @@ const canCreate = computed(() => {
 
 // Create a new survey via API
 async function createNewSurvey() {
-  const payload = { ...newSurvey.value, page_id: props.pageId };
+  const payload = { 
+    ...newSurvey.value, 
+    page_id: props.pageId,
+    is_required: Boolean(isRequired.value),
+    is_anonymous: Boolean(isAnonymous.value)
+  };
+  
   const result = await createSurvey(props.pageId, payload);
   // Refresh list and select the new survey
   await loadSurveys();
   selectedId.value = result.id;
   emit('update:modelValue', result.id);
+  
   // Reset and close dialog
-  newSurvey.value = { question: '', type: 'radio', options: [''], is_required: false, is_anonymous: false, locale: 'en' };
+  newSurvey.value = { 
+    question: '', 
+    type: 'radio', 
+    options: [''], 
+    is_required: false, 
+    is_anonymous: false, 
+    locale: 'en' 
+  };
   showDialog.value = false;
 }
 </script>
