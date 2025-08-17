@@ -6,7 +6,7 @@
       <!-- Light mode image -->
       <img 
         :src="uploadsUrl + '/hero.png'"
-        alt="Brigita and Jeffrey in tokyo smiling at each other"
+        alt="Brigita and Jeffrey looking confidently at the camera on shibuya crossing - Light version"
         class="w-full h-full object-cover transition-opacity duration-300"
         :class="{ 'opacity-0': isDarkMode, 'opacity-100': !isDarkMode }"
       />
@@ -14,7 +14,7 @@
       <!-- Dark mode image -->
       <img 
         :src="uploadsUrl + '/hero-dark.png'"
-        alt="Brigita and Jeffrey in tokyo smiling at each other"
+        alt="Brigita and Jeffrey looking confidently at the camera on shibuya crossing - Dark version"
         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
         :class="{ 'opacity-100': isDarkMode, 'opacity-0': !isDarkMode }"
       />
@@ -52,7 +52,7 @@
           variant="outlined" 
           size="normal" 
           icon="i-solar:alarm-sleep-bold"
-          class="w-full md:w-fit m-auto">
+          class="w-full md:w-fit m-auto animate-bounce">
           {{ $t('home.rsvpClosed') }}
         </Message>
       </div>
@@ -68,9 +68,10 @@
         size="large"
         severity="secondary"
         rounded
+        text
         :aria-label="$t('home.scrollHint')"
+        icon="i-solar:alt-arrow-down-bold"
       >
-        <i class="i-solar:alt-arrow-down-bold text-2xl"></i>
       </Button>
     </div>
   </section>
@@ -87,14 +88,19 @@
           :label="$t('home.ourWedding.cta')"
           icon="i-solar:heart-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
+          severity="secondary"
           @click="scrollToSection('event-details')"
         />
       </div>
       
       <!-- Right side: Image/placeholder -->
       <div class="section-visual section-visual-right">
-        <div class="w-full h-full bg-form-bg rounded-lg border-2 border-dashed border-form-border flex items-center justify-center">
-          <span class="text-form-placeholder-text">{{ $t('home.ourWedding.imagePlaceholder') }}</span>
+        <div class="w-full h-full border-2 border-form-border flex items-center justify-center">
+          <img 
+            :src="uploadsUrl + '/us-cute.jpg'" 
+            alt="Brigita and Jeffrey in tokyo smiling at each other"
+            class="w-full h-fit object-cover rounded-lg"
+          >
         </div>
       </div>
     </div>
@@ -118,6 +124,7 @@
           :label="$t('home.eventDetails.cta')"
           icon="i-solar:calendar-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
+          severity="secondary"
           @click="scrollToSection('tips')"
         />
       </div>
@@ -135,13 +142,14 @@
           :label="$t('home.tips.cta')"
           icon="i-solar:lightbulb-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
+          severity="secondary"
           @click="scrollToSection('travel')"
         />
       </div>
       
       <!-- Right side: Icon/placeholder -->
       <div class="section-visual section-visual-right">
-        <div class="w-full h-full bg-form-bg rounded-full border-2 border-dashed border-form-border flex items-center justify-center">
+        <div class="w-full h-full bg-form-bg flex items-center justify-center">
           <span class="text-form-placeholder-text text-sm">{{ $t('home.tips.iconPlaceholder') }}</span>
         </div>
       </div>
@@ -152,8 +160,8 @@
     <div class="section-layout">
       <!-- Left side: Map/placeholder -->
       <div class="section-visual section-visual-left">
-        <div class="w-full h-full bg-form-bg rounded-lg border-2 border-dashed border-form-border flex items-center justify-center">
-          <span class="text-form-placeholder-text">{{ $t('home.travel.imagePlaceholder') }}</span>
+        <div class="w-full h-full bg-form-bg flex items-center justify-center">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2307.701961118108!2d24.823395412643794!3d54.66207197535635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2snl!4v1755461757182!5m2!1sen!2snl" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
       
@@ -166,6 +174,7 @@
           :label="$t('home.travel.cta')"
           icon="i-solar:map-point-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
+          severity="secondary"
           @click="scrollToSection('contact')"
         />
       </div>
@@ -183,6 +192,7 @@
           :label="$t('home.contact.cta')"
           icon="i-solar:pen-new-square-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
+          severity="secondary"
           @click="goToRSVP"
         />
       </div>
@@ -419,7 +429,7 @@ html, body {
 
 /* Visual side - extends to viewport edge */
 .section-visual {
-  @apply w-full h-full p-8 lg:p-0;
+  @apply w-full h-full max-h-160 p-8 lg:p-0;
 }
 
 .section-visual-left {
@@ -464,11 +474,11 @@ html, body {
 
 /* Typography using design tokens */
 .section-title {
-  @apply font-serif text-int-base text-4xl md:text-5xl mb-8;
+  @apply font-serif text-int-base text-3xl md:text-4xl mb-8;
 }
 
 .section-description {
-  @apply font-sans text-txt text-lg md:text-xl leading-relaxed max-w-3xl;
+  @apply font-sans text-txt leading-relaxed max-w-3xl;
 }
 
 /* Button styles - unified hover effects */
