@@ -58,7 +58,7 @@
           </template>
           <template #end>
             <div class="flex items-center">
-              <LanguageSwitcher class="mr-8 !hidden md:!inline-flex" />
+              <LanguageSwitcher class="mr-8" />
               <ToggleSwitch
                 v-model="darkMode"
                 class="ml-2 custom-toggle"

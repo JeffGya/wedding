@@ -1,5 +1,5 @@
 <template>
-  <div v-if="enabled && targetDate" class="wedding-countdown text-center my-24 p-16 md:mx-auto md:w-3/4 rounded-md backdrop-blur-sm">
+  <div v-if="enabled && targetDate" class="wedding-countdown text-center my-24 p-16 md:mx-auto lg:w-1/3  md:w-1/2 rounded-md backdrop-blur-sm">
     <p class="font-serif font-400 text-lg mt-0 mb-16">August 1st, 2026 — Vilnius, Lithuania </p>
     <p class="font-serif font-600 text-3xl mt-0 mb-16
     ">

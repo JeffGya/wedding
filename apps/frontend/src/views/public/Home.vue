@@ -43,11 +43,11 @@
           class="hero-cta-button w-full md:w-auto"
         />
         <Message v-else 
-          severity="contrast" 
+          severity="contrast"
           variant="outlined" 
           size="normal" 
           icon="i-solar:alarm-sleep-bold"
-          class="w-full md:w-fit m-auto animate-bounce">
+          class="w-full md:w-fit m-auto">
           {{ $t('home.rsvpClosed') }}
         </Message>
       </div>
@@ -91,10 +91,10 @@
       <div class="section-visual section-visual-right">
         <div class="w-full h-full flex items-center justify-center">
           <img 
-            :src="uploadsUrl + '/us-cute.jpg'" 
-            alt="Brigita and Jeffrey in tokyo smiling at each other"
+            :src="uploadsUrl + '/engagement.jpg'" 
+            alt="Brigita and Jeffrey in a restaurant, after their engagement on table mountain in cape town, south africa"
             class="w-full h-fit object-cover"
-            :class="{ 'brightness-75': isDarkMode, 'brightness-100': !isDarkMode }"
+            :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
           >
         </div>
       </div>
@@ -156,7 +156,7 @@
       <!-- Left side: Map/placeholder -->
       <div class="section-visual section-visual-left">
         <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2307.701961118108!2d24.823395412643794!3d54.66207197535635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2snl!4v1755461757182!5m2!1sen!2snl" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1CvgheUvMiHJBmExqMLYyjtlqHThaLHo&ehbc=2E312F&noprof=1" class="w-full h-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;" allowfullscreen=""></iframe>
         </div>
       </div>
       
@@ -179,7 +179,7 @@
   <section id="contact" class="content-section content-section-alt">
     <div class="section-layout">
       <!-- Left side: Text content -->
-      <div class="section-content">
+      <div class="section-content section-content-left">
         <h2 class="section-title text-left animate-on-scroll-left">{{ $t('home.contact.title') }}</h2>
         <p class="section-description text-left animate-on-scroll-left">{{ $t('home.contact.description') }}</p>
         
@@ -195,7 +195,12 @@
       <!-- Right side: Image/placeholder -->
       <div class="section-visual section-visual-right">
         <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <span class="text-form-placeholder-text">{{ $t('home.contact.imagePlaceholder') }}</span>
+          <img 
+            :src="uploadsUrl + '/us-cute.jpg'" 
+            alt="Brigita and Jeffrey in tokyo smiling at each other"
+            class="w-full h-fit object-cover"
+            :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
+          >
         </div>
       </div>
     </div>
@@ -426,7 +431,6 @@ html, body {
 /* Section layout - two equal columns with aligned gutters */
 .section-layout {
   @apply grid grid-cols-1 lg:grid-cols-2 min-h-96;
-  gap: 0 40px; /* 40px horizontal gap on desktop */
 }
 
 /* Visual side - ensure it stays in its column */
@@ -450,11 +454,11 @@ html, body {
 }
 
 .section-content-left {
-  @apply order-2 lg:order-1 px-16 md:px-40 lg:pr-0;
+  @apply order-2 lg:order-1 px-16 md:px-40 lg:pr-40;
 }
 
 .section-content-right {
-  @apply order-2 lg:order-2 px-16 md:px-40 lg:pl-0;
+  @apply order-2 lg:order-2 px-16 md:px-40 lg:pl-40;
 }
 
 /* Alternating vertical alignment */
@@ -523,19 +527,6 @@ html, body {
 .animate-on-scroll-right.animate-visible {
   @apply opacity-100;
   transform: translateX(0);
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .section-layout {
-    @apply grid-cols-1;
-  }
-  
-  .section-content {
-    @apply px-16 md:px-40;
-  }
-  
-  /* Remove this section since we're using Tailwind responsive classes above */
 }
 
 /* Custom bounce animation for scroll button */
