@@ -405,13 +405,6 @@ main.container .hero-section { z-index: 0 !important; }
 main.container .content-section { z-index: 1 !important; }
 main.container .p-scrolltop { z-index: 50 !important; }
 
-/* Ensure proper scrolling */
-html, body {
-  overflow-x: visible !important;
-  overflow-y: auto !important;
-  height: auto !important;
-}
-
 /* Hero background - no need for extra height now */
 .hero-background {
   height: 100%;

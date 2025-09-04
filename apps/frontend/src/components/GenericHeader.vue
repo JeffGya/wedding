@@ -1,5 +1,5 @@
 <template>
-        <Menubar class="MainNav w-full flex justify-center" :model="menuItems">
+        <Menubar class="MainNav w-full flex justify-center sticky top-0 z-50" :model="menuItems">
           <template #start>
             <div class="p-menubar-item" role="menuitem" aria-label="Home">
               <div class="p-menubar-item-content">

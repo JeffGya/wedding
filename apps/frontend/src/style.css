@@ -4,9 +4,8 @@
 
 /* Ensure proper scrolling behavior */
 html, body {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: auto;
+
 }
 
 /* Smooth scrolling */

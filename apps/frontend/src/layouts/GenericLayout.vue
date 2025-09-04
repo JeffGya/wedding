@@ -16,8 +16,8 @@ useHead({
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- Full-width header -->
-    <header class="w-full">
+    <!-- Header - sticky on desktop only -->
+    <header class="w-full md:sticky md:top-0 z-50">
       <GenericHeader />
     </header>
     
@@ -95,5 +95,12 @@ export default {
 </script>
 
 <style scoped>
-/* Add your styles here */
+/* Ensure sticky positioning works on desktop */
+@media (min-width: 768px) {
+  header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+  }
+}
 </style>
