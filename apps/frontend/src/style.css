@@ -5,7 +5,6 @@
 /* Ensure proper scrolling behavior */
 html, body {
   height: auto;
-
 }
 
 /* Smooth scrolling */
@@ -189,8 +188,20 @@ label {
   background-image: var(--bg-gradient);
 }
 
+/* Only reset background for specific elements that need their own backgrounds */
+.page-header {
+  background-image: none !important;
+  background-color: var(--acc-base) !important;
+}
+
+/* Allow page header to override when image is present */
+.page-header[style*="background-image"] {
+  background-image: var(--header-bg-image) !important;
+  background-color: transparent !important;
+}
+
 main {
-  @apply mx-16 md:mx-40 lg:mx-80 mt-8;
+  @apply mt-16;
 }
 
 .admin main {
@@ -394,10 +405,8 @@ input, textarea {
 }
 
 hr {
-  box-sizing: content-box;
-  height: 0;
-  overflow: visible;
   border: 1px solid;
-  margin: 1em;
+  border-color: var(--form-border);
+  margin: 0 1em;
   opacity: 75%;
 }

@@ -85,6 +85,10 @@ export default defineConfig({
       // Background glass
       'bg-glass': 'var(--bg-glass)',
       'bg-glass-border': 'var(--bg-glass-border)',
+
+      // Header background and border
+      'header-bg': 'var(--header-bg)',
+      'header-border': 'var(--header-border)',
     },
     // Spacing scale (8px increments, 0.5rem–2.5rem)
     spacing: {
@@ -158,6 +162,9 @@ export default defineConfig({
           --acc2-base: #D2C6B2;
           --acc2-active: #BFB6A3;
           --acc2-hover: #DED4C4;
+
+          --header-bg: #DAA520;
+          --header-border: #E3B13F;
           
           /* Interactive Text */
           --int-text: #D2C6B2;
@@ -206,6 +213,9 @@ export default defineConfig({
           --acc2-base: #442727;
           --acc2-active: #3B1E1E;
           --acc2-hover: #5A3A3A;
+
+          --header-bg: #442727;
+          --header-border: #5A3A3A;
 
           /* Ineractive Text */
           --int-text: #442727;

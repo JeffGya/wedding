@@ -86,9 +86,11 @@ import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import Menubar from 'primevue/menubar';
 
 const PAGE_ICON_MAP = {
-  'our-story': 'i-solar:heart-angle-bold',
-  'all-blocks': 'i-solar:layers-minimalistic-bold',
   // Add more slug: icon-class pairs as needed
+  'our-wedding': 'i-solar:heart-angle-bold',
+  'event-details': 'i-solar:calendar-mark-bold-duotone',
+  'tips': 'i-solar:lightbulb-bold',
+  'travel-accommodation': 'i-solar:plane-bold',
 };
 
 export default {
@@ -157,7 +159,7 @@ export default {
 .MainNav {
   background: var(--bg-glass);
   border: 1px solid var(--bg-glass-border);
-  @apply backdrop-blur-sm;
+  @apply backdrop-blur-md shadow-2xl px-16 md:px-40 lg:px-160;
 }
 
 .cls-1 {

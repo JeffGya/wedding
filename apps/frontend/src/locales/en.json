@@ -1,40 +1,31 @@
 {
-  "home.hero.subtitle": "It's happening, in Vilnius. Don't miss it.",
+  "home.hero.subtitle": "The big celebration, in Vilnius. The way only we can do!",
   "home.hero.cta": "RSVP",
   "home.hero.deadline": "RSVP by {deadline}",
-  "home.rsvpClosed": "RSVP's are not open yet. We will inform you when it is possible",
+  "home.rsvpClosed": "RSVP's are not open yet. We will send out invitations with RSVP codes in the coming months.",
 
   "home.ourWedding.title": "Our Wedding",
-  "home.ourWedding.description": "We couldn't be more excited to celebrate with you! Our wedding will be a blend of cultures, traditions and us. Our goal is create a weekend of laughter, love and memories we will all remember. ",
-  "home.ourWedding.cta": "Learn more about our wedding",
+  "home.ourWedding.description": "On 18th of November 2025, we decided that we want to spend the rest of our lives together and that deserves a big celebration. Coming from totally different cultures and backgrounds we want our wedding to reflect that and be a blend of both worlds. This is why we are so excited to celebrate with you in Lithuania. We can't wait to see you there!",
+  "home.ourWedding.cta": "Everything about our wedding",
 
   "home.eventDetails.title": "Event Details",
-  "home.eventDetails.description": "Join us for a day filled with love, laughter, and celebration. We've planned every detail to ensure you have an unforgettable experience. From the ceremony to the reception, every moment will be special.",
-  "home.eventDetails.imagePlaceholder": "Optional Venue Image",
+  "home.eventDetails.description": "We hope you can join us for our big celebration! We have all the important details about the event here, including the date, time, and location.",
   "home.eventDetails.cta": "View evente details",
 
-  "home.tips.title": "Wedding Weekend Tips",
-  "home.tips.description": "Make the most of your time in Vilnius! We've put together some recommendations for accommodation, dining, and activities to help you plan the perfect wedding weekend getaway.",
-  "home.tips.iconPlaceholder": "Tips Icon",
+  "home.travel.title": "Travel & Accommodation",
+  "home.travel.description": "We recommend coming a couple of days early so you can explore the beautiful city of Vilnius. To help with that we have put together some travel and accommodation tips.",
+  "home.travel.cta": "Essential travel info",
+
+  "home.tips.title": "Tips",
+  "home.tips.description": "We got what you need to make the most out of your stay in Vilnius. We got the best places to eat, drink, party, and see in city.",
   "home.tips.cta": "Explore our tips",
 
-  "home.travel.title": "Travel & Accommodation",
-  "home.travel.description": "Planning your trip to Vilnius? We've gathered information about transportation options, recommended hotels, and local attractions to help make your journey smooth and enjoyable.",
-  "home.travel.cta": "Travel tips",
-
-  "home.contact.title": "Final RSVP Reminder",
-  "home.contact.description": "Haven't RSVP'd yet? We'd love to know if you can join us on our special day. Please take a moment to confirm your attendance so we can plan accordingly.",
+  "home.contact.title": "Another RSVP Reminder",
+  "home.contact.description": "Haven't RSVP'd yet? Why not get to it now! We need to know. Stop playing around! If you have already RSVP'd, please disregard this message and thank you! You the real MVP.",
   "home.contact.cta": "RSVP Now",
 
   "home.backToTop": "Back to top",
 
-  "home.details.title": "Event Details",
-  "home.details.dateLabel": "Date",
-  "home.details.dateValue": "June 25, 2025",
-  "home.details.venueLabel": "Venue",
-  "home.details.venueValue": "Grand Hall, Main Street",
-  "home.details.timeLabel": "Time",
-  "home.details.timeValue": "5:00 PM",
   "home.countdown.label": "Until the big day!",
   "home.countdown.months": "Month(s)",
   "home.countdown.days": "Day(s)",

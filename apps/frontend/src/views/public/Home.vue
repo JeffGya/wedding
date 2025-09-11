@@ -106,7 +106,12 @@
       <!-- Left side: Image/placeholder -->
       <div class="section-visual section-visual-left">
         <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <span class="text-form-placeholder-text">{{ $t('home.eventDetails.imagePlaceholder') }}</span>
+          <img 
+            :src="uploadsUrl + '/KissingAtDoor.JPG'" 
+            alt="Brigita and Jeffrey in a restaurant, after their engagement on table mountain in cape town, south africa"
+            class="w-full h-fit object-cover"
+            :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
+          >
         </div>
       </div>
       
@@ -126,57 +131,63 @@
     </div>
   </section>
 
-  <section id="tips" class="content-section content-section-alt">
+  <section id="travel" class="content-section-alt">
     <div class="section-layout">
-      <!-- Left side: Text content -->
-      <div class="section-content section-content-left">
-        <h2 class="section-title text-left animate-on-scroll-left">{{ $t('home.tips.title') }}</h2>
-        <p class="section-description text-left animate-on-scroll-left">{{ $t('home.tips.description') }}</p>
-        
-        <Button 
-          :label="$t('home.tips.cta')"
-          icon="i-solar:lightbulb-bold"
-          class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
-          severity="secondary"
-          @click="scrollToSection('travel')"
-        />
-      </div>
-      
-      <!-- Right side: Icon/placeholder -->
-      <div class="section-visual section-visual-right">
-        <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <span class="text-form-placeholder-text text-sm">{{ $t('home.tips.iconPlaceholder') }}</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="travel" class="content-section">
-    <div class="section-layout">
-      <!-- Left side: Map/placeholder -->
-      <div class="section-visual section-visual-left">
-        <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1CvgheUvMiHJBmExqMLYyjtlqHThaLHo&ehbc=2E312F&noprof=1" class="w-full h-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;" allowfullscreen=""></iframe>
-        </div>
-      </div>
-      
       <!-- Right side: Text content -->
-      <div class="section-content section-content-right">
-        <h2 class="section-title text-left animate-on-scroll-right">{{ $t('home.travel.title') }}</h2>
-        <p class="section-description text-left animate-on-scroll-right">{{ $t('home.travel.description') }}</p>
+      <div class="section-content section-content-left">
+        <h2 class="section-title text-left animate-on-scroll-left">{{ $t('home.travel.title') }}</h2>
+        <p class="section-description text-left animate-on-scroll-left">{{ $t('home.travel.description') }}</p>
         
         <Button 
           :label="$t('home.travel.cta')"
           icon="i-solar:map-point-bold"
-          class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
+          class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
           severity="secondary"
           @click="scrollToSection('contact')"
+        />
+      </div>
+
+      <!-- Left side: Map/placeholder -->
+      <div class="section-visual section-visual-right">
+        <div class="w-full h-full flex items-center justify-center">
+          <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1CvgheUvMiHJBmExqMLYyjtlqHThaLHo&ehbc=2E312F&noprof=1" class="w-full min-h-64 h-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;" allowfullscreen=""></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tips" class="content-section content-section">
+    <div class="section-layout">
+
+      <!-- Left side: Image/placeholder -->
+      <div class="section-visual section-visual-left">
+        <div class="w-full h-full bg-form-bg flex items-center justify-center">
+          <img 
+            :src="uploadsUrl + '/collage.png'" 
+            alt="Collage of pictures from Lithuania including buildings in Vilnius, summer houses and peole enjoying themselves"
+            class="w-full h-fit object-cover"
+            :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
+          >
+        </div>
+      </div>
+
+      <!-- Right side: Text content -->
+      <div class="section-content section-content-right">
+        <h2 class="section-title text-left animate-on-scroll-right">{{ $t('home.tips.title') }}</h2>
+        <p class="section-description text-left animate-on-scroll-right">{{ $t('home.tips.description') }}</p>
+        
+        <Button 
+          :label="$t('home.tips.cta')"
+          icon="i-solar:lightbulb-bold"
+          class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
+          severity="secondary"
+          @click="scrollToSection('travel')"
         />
       </div>
     </div>
   </section>
 
-  <section id="contact" class="content-section content-section-alt">
+  <section v-if="!isClosed()" id="contact" class="content-section content-section-alt">
     <div class="section-layout">
       <!-- Left side: Text content -->
       <div class="section-content section-content-left">
@@ -447,11 +458,11 @@ main.container .p-scrolltop { z-index: 50 !important; }
 }
 
 .section-content-left {
-  @apply order-2 lg:order-1 px-16 md:px-40 lg:pr-40;
+  @apply order-2 lg:order-1 px-16 md:px-40 lg:pl-160;
 }
 
 .section-content-right {
-  @apply order-2 lg:order-2 px-16 md:px-40 lg:pl-40;
+  @apply order-2 lg:order-2 px-16 md:px-40 lg:pr-160;
 }
 
 /* Alternating vertical alignment */

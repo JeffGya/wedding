@@ -73,6 +73,44 @@
           >
             <InputNumber id="nav_order" v-model="page.nav_order" :min="1" :disabled="!page.show_in_nav" />
           </FormField>
+
+          <!-- Header Image -->
+          <FormField
+            class="md:col-span-12"
+            for="header_image_url"
+            label="Header Background Image"
+            helper="Choose an image to display behind the page title. Leave empty to use default color."
+          >
+            <div class="flex items-center gap-4">
+              <div v-if="page.header_image_url" class="flex items-center gap-2">
+                <img 
+                  :src="page.header_image_url" 
+                  :alt="'Header image preview'"
+                  class="w-16 h-16 object-cover rounded border border-form-border"
+                />
+                <span class="text-sm text-text">{{ page.header_image_url.split('/').pop() }}</span>
+              </div>
+              <div v-else class="text-sm text-form-placeholder-text">
+                No image selected - will use default color background
+              </div>
+              <div class="flex gap-2">
+                <Button 
+                  label="Select Image" 
+                  icon="i-solar:gallery-bold"
+                  severity="secondary" 
+                  @click="showImagePicker = true"
+                />
+                <Button 
+                  v-if="page.header_image_url"
+                  label="Remove" 
+                  icon="i-solar:trash-bin-minimalistic-bold"
+                  severity="danger" 
+                  text
+                  @click="page.header_image_url = null"
+                />
+              </div>
+            </div>
+          </FormField>
         </div>
       </template>
     </Card>
@@ -191,6 +229,13 @@
     >
       <BlockRenderer :blocks="blocks" :locale="currentLocale" withSurveys />
     </Dialog>
+
+    <!-- Image Picker Modal -->
+    <ImagePicker 
+      :visible="showImagePicker"
+      @update:visible="showImagePicker = $event"
+      @select="onImageSelected"
+    />
   </AdminPageWrapper>
 </template>
 
@@ -204,6 +249,7 @@ import BlockRenderer from '@/components/BlockRenderer.vue';
 import ProgressBar from 'primevue/progressbar';
 import Skeleton from 'primevue/skeleton';
 import Banner from '@/components/ui/Banner.vue';
+import ImagePicker from '@/components/ui/ImagePicker.vue';
 
 import {
   fetchPage,
@@ -224,7 +270,8 @@ const page = ref({
   is_published: false,
   requires_rsvp: false,
   show_in_nav: false,
-  nav_order: 1
+  nav_order: 1,
+  header_image_url: null
 });
 const currentLocale = ref('en');
 
@@ -244,6 +291,12 @@ const initialTranslations = ref(null);
 const initialBlocks = ref(null);
 const loading = ref(false);
 const previewVisible = ref(false);
+const showImagePicker = ref(false);
+
+const onImageSelected = (imageUrl) => {
+  page.value.header_image_url = imageUrl;
+  showImagePicker.value = false;
+};
 
 // Slug validation
 const slugError = ref('');
@@ -307,7 +360,8 @@ onMounted(async () => {
         is_published: Boolean(pageData.is_published),
         requires_rsvp: Boolean(pageData.requires_rsvp),
         show_in_nav: Boolean(pageData.show_in_nav),
-        nav_order: pageData.nav_order
+        nav_order: pageData.nav_order,
+        header_image_url: pageData.header_image_url
       };
       pageData.translations.forEach(t => {
         pageTranslations.value[t.locale] = { title: t.title };
@@ -439,6 +493,7 @@ const savePage = async () => {
       requires_rsvp: page.value.requires_rsvp,
       show_in_nav: page.value.show_in_nav,
       nav_order: page.value.nav_order,
+      header_image_url: page.value.header_image_url,
       translations: localeOptions.map(({ value: locale }) => ({
         locale,
         title: pageTranslations.value[locale].title,

@@ -28,6 +28,13 @@ export async function fetchPage(id) {
 /**
  * Create a new page (admin)
  * @param {Object} payload - Page data
+ * @param {string} payload.slug - Page slug
+ * @param {boolean} payload.is_published - Published status
+ * @param {boolean} payload.requires_rsvp - RSVP requirement
+ * @param {boolean} payload.show_in_nav - Show in navigation
+ * @param {number} payload.nav_order - Navigation order
+ * @param {string|null} [payload.header_image_url] - Header background image URL
+ * @param {Array} payload.translations - Page translations
  * @returns {Promise<Object>} Created page object
  */
 export async function createPage(payload) {
@@ -41,6 +48,13 @@ export async function createPage(payload) {
  * Update an existing page (admin)
  * @param {number} id - Page ID
  * @param {Object} payload - Updated page data
+ * @param {string} [payload.slug] - Page slug
+ * @param {boolean} [payload.is_published] - Published status
+ * @param {boolean} [payload.requires_rsvp] - RSVP requirement
+ * @param {boolean} [payload.show_in_nav] - Show in navigation
+ * @param {number} [payload.nav_order] - Navigation order
+ * @param {string|null} [payload.header_image_url] - Header background image URL
+ * @param {Array} [payload.translations] - Page translations
  * @returns {Promise<Object>} Updated page object
  */
 export async function updatePage(id, payload) {
@@ -160,6 +174,11 @@ export async function fetchPublicPages(locale) {
  * @param {string} locale
  * @param {boolean} withSurveys
  * @returns {Promise<Object>} Page DTO with blocks
+ * @returns {string} returns.slug - Page slug
+ * @returns {string} returns.locale - Page locale
+ * @returns {string} returns.title - Page title
+ * @returns {string|null} returns.header_image_url - Header background image URL
+ * @returns {Array} returns.content - Page content blocks
  */
 export async function fetchPublicPage(slug, locale, withSurveys = false) {
   const { data } = await api.get(`/pages/${slug}`, {

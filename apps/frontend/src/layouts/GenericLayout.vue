@@ -17,17 +17,17 @@ useHead({
 <template>
   <div class="min-h-screen flex flex-col">
     <!-- Header - sticky on desktop only -->
-    <header class="w-full md:sticky md:top-0 z-50">
+    <header class="w-full sticky top-0 z-50">
       <GenericHeader />
     </header>
     
     <!-- Main content with margins - flex-grow to push footer down -->
-    <main class="container mx-auto px-16 md:px-40 lg:px-80 flex-grow">
+    <main class="w-full mx-auto flex-grow">
       <router-view :key="$route.fullPath" />
     </main>
     
     <!-- Footer with background - sticky to bottom -->
-    <footer class="mt-32 md:mt-40 lg:mt-48 py-16 md:py-24 border-t border-form-border bg-card-bg bg-opacity-50 backdrop-blur-sm relative z-10 pb-80">
+    <footer class="py-16 md:py-24 bg-card-bg bg-opacity-50 backdrop-blur-sm relative z-10 pb-80">
       <div class="container mx-auto px-16 md:px-40 lg:px-80">
         <div class="flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0">
           <!-- Wedding Info -->

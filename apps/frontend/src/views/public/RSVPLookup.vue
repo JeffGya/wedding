@@ -1,5 +1,5 @@
 <template>
-  <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto">
+  <div class="px-16 md:px-40 lg:px-80 md:w-1/2 md:mx-auto lg:mx-auto">
     <!-- Wait until settingsLoading is false -->
     <template v-if="!settingsLoading">
       <!-- Show closed banner if RSVP is closed -->
@@ -11,7 +11,7 @@
       />
       <!-- Otherwise show lookup form -->
       <template v-else>
-        <h1 class="mb-16">{{ $t('rsvp.lookupTitle') }}</h1>
+        <h1 class="mt-0 md:mt-16 mb-16">{{ $t('rsvp.lookupTitle') }}</h1>
         <Card>
           <template #content>
               <Banner 
@@ -46,7 +46,7 @@
         </Card>
       </template>
     </template>
-  </main>
+  </div>
 </template>
 
 <script setup>

@@ -31,7 +31,6 @@ const iconClass = computed(() => {
     v-if="message"
     :severity="type"
     :icon="iconClass"
-    class="mb-4"
   >
     {{ message }}
   </Message>

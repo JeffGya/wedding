@@ -268,6 +268,7 @@ router.get('/:slug', async (req, res) => {
       slug: page.slug,
       locale: translation.locale,
       title: translation.title,
+      header_image_url: page.header_image_url,  // Add this line
       content,
     });
   } catch (err) {

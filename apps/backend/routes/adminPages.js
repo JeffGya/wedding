@@ -1,11 +1,58 @@
 const express = require('express');
 const logger = require('../helpers/logger');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 
 const Page = require('../db/models/pages');
 const PageTranslation = require('../db/models/pageTranslation');
 const { processBlocks } = require('../utils/blockSchema');
 const SurveyBlock = require('../db/models/surveyBlock');
+
+// Validate header image URL format and ensure internal uploads exist
+async function validateHeaderImageUrl(url) {
+  if (!url) return; // allow null/undefined
+
+  const siteUrl = process.env.SITE_URL || 'http://localhost:5001';
+  const uploadsDir = process.env.UPLOADS_PATH || path.join(__dirname, '../uploads');
+
+  if (typeof url !== 'string') {
+    throw new Error('Header image URL must be a string.');
+  }
+
+  // Site-relative upload path
+  if (url.startsWith('/uploads/')) {
+    const filename = url.replace('/uploads/', '');
+    const filePath = path.join(uploadsDir, filename);
+    try {
+      await fs.promises.access(filePath, fs.constants.F_OK);
+    } catch {
+      throw new Error(`Header image file not found: ${filename}`);
+    }
+    return;
+  }
+
+  // Absolute URL pointing to this site's uploads
+  if (url.startsWith(`${siteUrl}/uploads/`)) {
+    try {
+      const parsed = new URL(url);
+      const filename = parsed.pathname.replace('/uploads/', '');
+      const filePath = path.join(uploadsDir, filename);
+      await fs.promises.access(filePath, fs.constants.F_OK);
+    } catch (e) {
+      throw new Error(`Invalid or missing header image file: ${e.message}`);
+    }
+    return;
+  }
+
+  // External absolute URL — validate format
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url);
+  } catch (e) {
+    throw new Error(`Invalid header image URL: ${e.message}`);
+  }
+}
 
 /**
  * @openapi
@@ -252,6 +299,7 @@ router.post('/', async (req, res) => {
       requires_rsvp,
       show_in_nav,
       nav_order,
+      header_image_url,
       translations = [],
     } = req.body;
 
@@ -324,6 +372,7 @@ router.post('/', async (req, res) => {
         requires_rsvp,
         show_in_nav,
         nav_order,
+        header_image_url,
       });
     } catch (createErr) {
       logger.error('[POST /api/pages] Error creating page:', createErr.message);
@@ -464,6 +513,7 @@ router.put('/:id', async (req, res) => {
       requires_rsvp,
       show_in_nav,
       nav_order,
+      header_image_url,
       translations = [],
     } = req.body;
 
@@ -541,6 +591,7 @@ router.put('/:id', async (req, res) => {
       requires_rsvp,
       show_in_nav,
       nav_order,
+      header_image_url,
     });
     logger.debug(`[PUT /api/pages/${id}] Page updated.`);
 

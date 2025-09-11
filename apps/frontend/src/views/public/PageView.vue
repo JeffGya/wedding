@@ -1,7 +1,7 @@
 <template>
-  <main class="mx-16 md:mx-40 lg:mx-80 mt-8">
-    <!-- Not Found -->
+  <div class="mb-40">
     <div v-if="notFound" class="text-center py-16 md:py-24">
+    <!-- Not Found -->
       <h1 class="font-cursive text-4xl md:text-5xl text-int-base mb-8">
         {{ $t('page.notFound.title', 'Page Not Found') }}
       </h1>
@@ -18,16 +18,18 @@
       </div>
     </div>
 
-    <!-- Loading State -->
+
     <div v-else-if="loading" class="flex items-center justify-center py-16 md:py-24">
+    <!-- Loading State -->
       <div class="text-center">
         <i class="i-solar:refresh-bold text-4xl text-acc-base mb-4 animate-spin"></i>
         <p class="font-sans text-lg text-txt">{{ $t('page.loading', 'Loading page...') }}</p>
       </div>
     </div>
 
-    <!-- RSVP Gate -->
+    
     <div v-else-if="rsvpGate" class="flex items-center justify-center py-16 md:py-24">
+    <!-- RSVP Gate -->
       <RsvpGate
         :reason="rsvpGate"
         :redirect-path="route.fullPath"
@@ -35,10 +37,17 @@
     </div>
 
     <!-- Page Content -->
-    <div v-else class="w-full">
+    <div v-else class="w-full px-16 md:px-40 lg:px-160">
+      <!-- Page Header -->
+      <PageHeader 
+        :title="pageTitle" 
+        :header-image-url="headerImageUrl" 
+      />
+      
+      <!-- Page Content Blocks -->
       <BlockRenderer :blocks="blocks" :locale="locale" withSurveys />
     </div>
-  </main>
+  </div>
 </template>
 
 <script setup>
@@ -48,6 +57,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { fetchPublicPage } from '@/api/pages';
 import BlockRenderer from '@/components/BlockRenderer.vue';
 import RsvpGate from '@/components/RsvpGate.vue';
+import PageHeader from '@/components/PageHeader.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -57,6 +67,8 @@ const rsvpGate = ref(null);
 const blocks = ref([]);
 const loading = ref(true);
 const notFound = ref(false);
+const pageTitle = ref('');
+const headerImageUrl = ref(null);
 
 async function loadPage() {
   loading.value = true;
@@ -67,6 +79,10 @@ async function loadPage() {
     const data = await fetchPublicPage(route.params.slug, locale.value, true);
     // Assign blocks directly from the response
     blocks.value = data.content || [];
+    
+    // Store page data for header
+    pageTitle.value = data.title || '';
+    headerImageUrl.value = data.header_image_url || null;
     
     // Update the page title dynamically
     if (data.title) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(block, idx) in blocks" :key="idx" class="block-renderer__block p-mb-4">
+    <div v-for="(block, idx) in blocks" :key="idx" class="block-renderer__block h-auto">
       <div
         v-if="block.type === 'richText' || block.type === 'rich-text'"
         v-html="getContent(block).html"
@@ -9,17 +9,19 @@
         <img :src="getContent(block).src" :alt="getContent(block).alt || ''" class="block-renderer__image" />
       </div>
       <div v-else-if="block.type === 'video' || block.type === 'map'" v-html="getContent(block).embed"></div>
-      <hr v-else-if="block.type === 'divider'" />
+      <hr v-else-if="block.type === 'divider'"/>
       <div v-else-if="block.type === 'survey' && withSurveys">
         <SurveyForm :survey="block" />
       </div>
       <Banner
         v-else-if="block.type === 'error'"
+        class="m-16"
         :message="block.message"
         type="error"
       />
       <Banner
         v-else
+        class="my-4"
         :message="`Unknown block type: ${block.type}`"
         type="warn"
       />

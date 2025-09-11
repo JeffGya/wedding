@@ -86,6 +86,27 @@ const FIELD_DEFS = {
       return v;
     },
   },
+  header_image_url: {
+    modes: ['create', 'update'],
+    validate(v) {
+      if (v === null || v === undefined) return null;
+      if (typeof v !== 'string') {
+        throw new Error('Field "header_image_url" must be a string or null.');
+      }
+      if (v.length > 500) {
+        throw new Error('Field "header_image_url" must be 500 characters or less.');
+      }
+      
+      // Validate URL format
+      try {
+        new URL(v);
+      } catch {
+        throw new Error('Field "header_image_url" must be a valid URL.');
+      }
+      
+      return v;
+    },
+  },
   created_at: { modes: [], validate: v => v }, // DB managed
   updated_at: { modes: [], validate: v => v }, // DB managed
 };
