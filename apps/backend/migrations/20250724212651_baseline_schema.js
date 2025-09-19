@@ -18,12 +18,15 @@ exports.up = async (knex) => {
   sql = sql.replace(/\/\*![\s\S]*?\*\//g, '');
 
   // Split statements
+  // Filter out any DROP/CREATE of Knex's own meta tables, allowing for
+  // optional IF [NOT] EXISTS and optional schema qualification.
+  const META_TABLE_RE = /^\s*(?:DROP|CREATE)\s+TABLE\s+(?:IF\s+(?:NOT\s+)?EXISTS\s+)?(?:(?:`[^`]+`|\w+)\.)?`?knex_migrations(?:_lock)?`?\b/i;
+
   const statements = sql
     .split(/;\s*(?:\r?\n|$)/)
     .map(s => s.trim())
     .filter(Boolean)
-    // Do NOT drop/create Knex's meta tables inside a migration
-    .filter(s => !/^\s*(DROP|CREATE)\s+TABLE\s+`?knex_migrations(_lock)?`?/i.test(s));
+    .filter(s => !META_TABLE_RE.test(s));
 
   await knex.raw('SET FOREIGN_KEY_CHECKS = 0;');
   for (const stmt of statements) {

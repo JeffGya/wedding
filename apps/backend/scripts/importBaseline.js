@@ -27,9 +27,22 @@ const mysql = require('mysql2/promise');
   await conn.query(`USE \`${DB_NAME}\``);
 
   const sqlPath = path.resolve(__dirname, '../migrations/mysql_baseline_schema.sql');
-  const sql = fs.readFileSync(sqlPath, 'utf8');
+  let sql = fs.readFileSync(sqlPath, 'utf8');
 
-  await conn.query(sql);
+  // Strip MySQL directive comments and ensure we do not touch Knex meta tables
+  sql = sql.replace(/\/\*![\s\S]*?\*\//g, '');
+
+  // Filter out any DROP/CREATE for knex meta tables, including IF [NOT] EXISTS and schema-qualified names
+  const META_TABLE_RE = /^\s*(?:DROP|CREATE)\s+TABLE\s+(?:IF\s+(?:NOT\s+)?EXISTS\s+)?(?:(?:`[^`]+`|\w+)\.)?`?knex_migrations(?:_lock)?`?\b/i;
+  const statements = sql
+    .split(/;\s*(?:\r?\n|$)/)
+    .map(s => s.trim())
+    .filter(Boolean)
+    .filter(s => !META_TABLE_RE.test(s));
+
+  const filteredSql = statements.join(';\n') + ';';
+
+  await conn.query(filteredSql);
 
   await conn.end();
   const logger = require('../helpers/logger');
