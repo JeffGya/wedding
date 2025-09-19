@@ -25,11 +25,11 @@
       <div class="mb-4 flex justify-center">
       </div>
       
-      <h1 class="font-cursive w-full text-int-base m-0 text-5xl md:text-5xl text-shadow-sm lg:text-8xl">
+      <h1 class="font-cursive w-full text-int-base m-0 text-5xl md:text-8xl text-shadow-lg lg:text-9xl">
         Brigita & Jeffrey
       </h1>
 
-      <p class="font-serif font-bold text-lg/10 md:text-xl lg:text-4xl mb-16 text-int-base text-shadow-sm">
+      <p class="font-serif font-bold text-lg/10 md:text-xl lg:text-2xl mb-16 text-int-base text-shadow-sm">
         {{ $t('home.hero.subtitle') }}
       </p>
       
@@ -83,7 +83,7 @@
           icon="i-solar:heart-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
           severity="secondary"
-          @click="scrollToSection('event-details')"
+          @click="goToPageOrScroll(pageSlugMap.ourWedding, 'event-details')"
         />
       </div>
       
@@ -125,7 +125,7 @@
           icon="i-solar:calendar-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
           severity="secondary"
-          @click="scrollToSection('tips')"
+          @click="goToPageOrScroll(pageSlugMap.eventDetails, 'tips')"
         />
       </div>
     </div>
@@ -143,7 +143,7 @@
           icon="i-solar:map-point-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
           severity="secondary"
-          @click="scrollToSection('contact')"
+          @click="goToPageOrScroll(pageSlugMap.travel, 'contact')"
         />
       </div>
 
@@ -181,7 +181,7 @@
           icon="i-solar:lightbulb-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
           severity="secondary"
-          @click="scrollToSection('travel')"
+          @click="goToPageOrScroll(pageSlugMap.tips, 'travel')"
         />
       </div>
     </div>
@@ -231,6 +231,7 @@ import { useGuestSettings } from '@/hooks/useGuestSettings'
 import { useRoute } from 'vue-router'
 import WeddingCountdown from '@/components/WeddingCountdown.vue'
 import { useRouter } from 'vue-router'
+import { fetchNavigation } from '@/api/navigation'
 import { fetchRSVPSession } from '@/api/rsvp'
 import { fetchGuestSettings } from '@/api/settings'
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -241,6 +242,18 @@ const { settings, loading, isClosed } = useGuestSettings()
 const route = useRoute()
 const router = useRouter()
 const lang = route.params.lang || 'en'
+
+// Map home CTAs to their intended page slugs
+// Update these slugs to match created pages in Admin
+const pageSlugMap = {
+  ourWedding: 'our-story',
+  eventDetails: 'event-details',
+  travel: 'travel',
+  tips: 'tips'
+}
+
+// Track available public page slugs to know whether to route or scroll
+const availableSlugs = ref(new Set())
 
 // Theme state
 const isDarkMode = ref(false)
@@ -308,6 +321,17 @@ async function goToRSVP() {
 }
 
 /**
+ * Navigate to a public page by slug if it exists; otherwise scroll to section.
+ */
+function goToPageOrScroll(slug, fallbackSectionId) {
+  if (slug && availableSlugs.value.has(slug)) {
+    router.push({ name: 'public-page', params: { lang, slug } })
+  } else {
+    scrollToSection(fallbackSectionId)
+  }
+}
+
+/**
  * Scroll to a specific section
  */
 function scrollToSection(sectionId) {
@@ -364,6 +388,17 @@ onMounted(() => {
   handleScroll()
   
   fetchRSVPDeadline()
+
+  // Load navigation pages and cache their slugs
+  fetchNavigation(lang)
+    .then(pages => {
+      const slugs = new Set((pages || []).map(p => p.slug))
+      availableSlugs.value = slugs
+    })
+    .catch(() => {
+      // If the request fails, we'll just fallback to scrolling
+      availableSlugs.value = new Set()
+    })
 })
 
 onUnmounted(() => {
