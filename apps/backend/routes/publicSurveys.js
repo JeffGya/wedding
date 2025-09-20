@@ -146,7 +146,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
           if (!attending) {
             return res.status(403).json({
               error: { message: 'RSVP required to respond to this survey', code: 'RSVP_REQUIRED' },
-              message: 'RSVP required to respond to this survey'
+              message: 'This survey is for attending guests. An attending RSVP required to respond to this survey'
             });
           }
         }
@@ -204,7 +204,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     }
 
     if (!valid) {
-      return badRequest(res, 'Response does not meet survey requirements');
+      return badRequest(res, 'Your response does not meet survey requirements, please check and try again', 'INVALID_RESPONSE');
     }
 
     // Determine guest_id
@@ -212,8 +212,8 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     if (!survey.is_anonymous) {
       if (!req.guest || !req.guestId) {
         return res.status(401).json({
-          error: { message: 'Authentication required to submit this survey', code: 'AUTH_REQUIRED' },
-          message: 'Authentication required to submit this survey'
+          error: { message: 'This survey is for attending guests. An attending RSVP required to respond to this survey', code: 'AUTH_REQUIRED' },
+          message: 'This survey is for attending guests. An attending RSVP required to respond to this survey'
         });
       }
       guestId = req.guestId;
@@ -237,7 +237,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     logger.error(`[POST /api/surveys/${rawId}/respond] Error:`, err);
     return res.status(500).json({
       error: { message: 'Failed to save response' },
-      message: 'Failed to save response'
+      message: 'It looks like something went wrong on our end. Please try again later.'
     });
   }
 });

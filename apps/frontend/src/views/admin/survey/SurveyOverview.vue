@@ -124,7 +124,7 @@ const getTypeSeverity = (type) => {
 const fetchData = async () => {
   loading.value = true;
   try {
-    surveys.value = await fetchAllSurveys();
+    surveys.value = await fetchAllSurveys({ limit: 1000 });
   } catch (err) {
     console.error('Failed to load surveys', err);
   } finally {

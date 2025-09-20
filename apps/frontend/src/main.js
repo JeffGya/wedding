@@ -1,6 +1,9 @@
 import './loggingGuard'
 import 'virtual:uno.css'
 import 'uno.css'
+// Quill CSS for editor content rendering
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
 import PrimeVue from 'primevue/config';
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';

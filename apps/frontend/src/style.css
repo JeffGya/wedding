@@ -398,3 +398,17 @@ hr {
   margin: 0 1em;
   opacity: 75%;
 }
+
+/* Quill content fallback mappings to ensure styles render on public pages */
+.block-renderer__block .ql-font-serif { font-family: 'Lora', serif; }
+.block-renderer__block .ql-font-sans { font-family: 'Open Sans', sans-serif; }
+.block-renderer__block .ql-font-monospace { font-family: monospace; }
+.block-renderer__block .ql-font-cursive { font-family: 'Great Vibes', cursive; }
+
+.block-renderer__block .ql-size-small { font-size: 0.875rem; } /* ~14px (theme sm) */
+.block-renderer__block .ql-size-large { font-size: 1.125rem; }   /* ~24px (theme 2xl) */
+.block-renderer__block .ql-size-huge { font-size: 1.5rem; }   /* ~36px (theme 4xl) */
+
+.block-renderer__block .ql-align-center { text-align: center; }
+.block-renderer__block .ql-align-right { text-align: right; }
+.block-renderer__block .ql-align-justify { text-align: justify; }

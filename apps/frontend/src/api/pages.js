@@ -104,29 +104,31 @@ export async function saveTranslation(pageId, locale, payload) {
 }
 
 /**
- * Fetch surveys for a page (admin)
- * @param {number} pageId
+ * Fetch survey blocks (admin)
+ * @param {Object} [params]
+ * @param {number} [params.pageId] - Optional page filter
  * @returns {Promise<Array>} Array of survey block objects
  */
-export async function fetchSurveys(pageId) {
-  const { data } = await api.get(`/admin/pages/${pageId}/surveys`, {
+export async function fetchSurveys(params = {}) {
+  const { pageId } = params;
+  const { data } = await api.get('/admin/surveys', {
+    params: pageId ? { page_id: pageId } : undefined,
     meta: { showLoader: true }
   });
-  // Supports either `data.surveys` or `data.data`
-  return data.surveys ?? data.data;
+  // Supports either `data.surveys`, paginated `data.data`, or direct payloads
+  return data.surveys ?? data.data ?? data;
 }
 
 /**
- * Create a survey block on a page (admin)
- * @param {number} pageId
+ * Create a survey block (admin)
  * @param {Object} payload - Survey block data
  * @returns {Promise<Object>} Created survey block object
  */
-export async function createSurvey(pageId, payload) {
-  const { data } = await api.post(`/admin/pages/${pageId}/surveys`, payload, {
+export async function createSurvey(payload) {
+  const { data } = await api.post('/admin/surveys', payload, {
     meta: { showLoader: true }
   });
-  return data;
+  return data.data ?? data;
 }
 
 /**
@@ -188,14 +190,36 @@ export async function fetchPublicPage(slug, locale, withSurveys = false) {
   return data;
 }
 /**
- * Fetch all survey blocks (admin).
+ * Fetch survey blocks (admin).
+ * @param {Object} [params]
+ * @param {boolean} [params.includeDeleted]
+ * @param {number} [params.page]
+ * @param {number} [params.limit]
  */
-export async function fetchAllSurveys() {
+export async function fetchAllSurveys(params = {}) {
+  const {
+    includeDeleted,
+    page,
+    limit
+  } = params;
+
+  const query = {
+    limit: limit ?? 1000,
+  };
+
+  if (includeDeleted !== undefined) {
+    query.includeDeleted = includeDeleted;
+  }
+  if (page !== undefined) {
+    query.page = page;
+  }
+
   const { data } = await api.get('/admin/surveys', {
+    params: query,
     meta: { showLoader: true }
   });
-  // Supports either `data.surveys` or paginated `data.data`
-  return data.surveys ?? data.data;
+  // Supports either `data.surveys`, paginated `data.data`, or direct payloads
+  return data.surveys ?? data.data ?? data;
 }
 
 /**

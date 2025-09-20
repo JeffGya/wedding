@@ -190,8 +190,8 @@ const isAnonymous = computed({
 
 // Load existing surveys for this page
 async function loadSurveys() {
-  // Fetch all surveys and assign directly to options array
-  surveyOptions.value = await fetchAllSurveys();
+  const allSurveys = await fetchAllSurveys();
+  surveyOptions.value = allSurveys.filter(s => s.page_id === props.pageId || s.page_id == null);
 }
 
 onMounted(loadSurveys);
@@ -226,7 +226,7 @@ async function createNewSurvey() {
     is_anonymous: Boolean(isAnonymous.value)
   };
   
-  const result = await createSurvey(props.pageId, payload);
+  const result = await createSurvey(payload);
   // Refresh list and select the new survey
   await loadSurveys();
   selectedId.value = result.id;

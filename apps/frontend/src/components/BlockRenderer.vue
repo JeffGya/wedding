@@ -3,6 +3,7 @@
     <div v-for="(block, idx) in blocks" :key="idx" class="block-renderer__block h-auto">
       <div
         v-if="block.type === 'richText' || block.type === 'rich-text'"
+        class="ql-editor ql-snow"
         v-html="getContent(block).html"
       ></div>
       <div v-else-if="block.type === 'image'">

@@ -263,7 +263,6 @@ const locales = [
 
 const typeOptions = [
   { label: 'Text', value: 'text' },
-  { label: 'Select', value: 'select' },
   { label: 'Radio', value: 'radio' },
   { label: 'Checkbox', value: 'checkbox' }
 ];
@@ -289,11 +288,58 @@ const parseJsonResponse = (responseText) => {
   }
 };
 
+const normaliseSurveyData = (data = {}) => {
+  const next = { ...data };
+
+  next.type = next.type === 'select' ? 'radio' : (next.type || 'text');
+  next.question = typeof next.question === 'string' ? next.question.trim() : '';
+  next.locale = typeof next.locale === 'string' ? (next.locale.trim() || 'en') : 'en';
+  next.page_id = next.page_id != null ? Number(next.page_id) : null;
+  next.is_required = !!next.is_required;
+  next.is_anonymous = !!next.is_anonymous;
+  if (next.requires_rsvp !== undefined) {
+    next.requires_rsvp = !!next.requires_rsvp;
+  }
+  next.options = Array.isArray(next.options)
+    ? next.options.map(opt => (typeof opt === 'string' ? opt : String(opt)))
+    : [];
+  if (next.type === 'text') {
+    next.options = [];
+  }
+
+  return next;
+};
+
+const buildSurveyPayload = () => {
+  const type = survey.value.type === 'select' ? 'radio' : survey.value.type;
+  const options = Array.isArray(survey.value.options)
+    ? survey.value.options
+        .map(opt => (typeof opt === 'string' ? opt.trim() : String(opt).trim()))
+        .filter(Boolean)
+    : [];
+
+  const payload = {
+    question: (survey.value.question || '').trim(),
+    locale: typeof survey.value.locale === 'string' ? survey.value.locale.trim() || 'en' : 'en',
+    page_id: survey.value.page_id != null ? Number(survey.value.page_id) : null,
+    type,
+    is_required: !!survey.value.is_required,
+    is_anonymous: !!survey.value.is_anonymous,
+    options: type === 'text' ? [] : options,
+  };
+
+  if (survey.value.requires_rsvp !== undefined) {
+    payload.requires_rsvp = !!survey.value.requires_rsvp;
+  }
+
+  return payload;
+};
+
 const loadSurvey = async () => {
   if (isEditMode.value) {
     try {
       const surveyData = await fetchSurvey(surveyId);
-      survey.value = { ...surveyData };
+      survey.value = normaliseSurveyData(surveyData);
     } catch (err) {
       console.error('Failed to load survey', err);
       errorMsg.value = 'Failed to load survey';
@@ -332,43 +378,47 @@ const removeOption = (index) => {
   survey.value.options.splice(index, 1);
 };
 
-const validateForm = () => {
+const validateForm = (payload) => {
   fieldErrors.value = {};
-  
-  if (!survey.value.question.trim()) {
+  const data = payload ?? buildSurveyPayload();
+
+  if (!data.question) {
     fieldErrors.value.question = 'Question is required';
   }
-  
-  if (!survey.value.locale) {
+
+  if (!data.locale) {
     fieldErrors.value.locale = 'Locale is required';
   }
-  
-  if (!survey.value.page_id) {
+
+  if (!data.page_id) {
     fieldErrors.value.page_id = 'Page is required';
   }
-  
-  if (!survey.value.type) {
+
+  if (!data.type) {
     fieldErrors.value.type = 'Type is required';
   }
-  
-  if (['select', 'radio', 'checkbox'].includes(survey.value.type) && survey.value.options.length === 0) {
+
+  if (['radio', 'checkbox'].includes(data.type) && data.options.length === 0) {
     fieldErrors.value.options = 'At least one option is required for this type';
   }
-  
+
   return Object.keys(fieldErrors.value).length === 0;
 };
 
 const saveSurvey = async () => {
-  if (!validateForm()) return;
-  
+  const payload = buildSurveyPayload();
+  survey.value = normaliseSurveyData({ ...survey.value, ...payload });
+
+  if (!validateForm(payload)) return;
+
   saving.value = true;
   errorMsg.value = '';
   
   try {
     if (isEditMode.value) {
-      await updateSurvey(surveyId, survey.value);
+      await updateSurvey(surveyId, payload);
     } else {
-      await createSurvey(survey.value);
+      await createSurvey(payload);
     }
     router.push({ name: 'admin-surveys' });
   } catch (err) {
