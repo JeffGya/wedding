@@ -118,6 +118,12 @@
       <!-- Right side: Text content -->
       <div class="section-content section-content-right">
         <h2 class="section-title text-left animate-on-scroll-right">{{ $t('home.eventDetails.title') }}</h2>
+        <ul class="list-none list-outside -indent-10 font-sans space-y-4 mb-0 animate-on-scroll-right">
+          <li><strong>{{ $t('home.eventDetails.dateTitle') }}:</strong> {{ $t('home.eventDetails.date') }}</li>
+          <li><strong>{{ $t('home.eventDetails.locationTitle') }}:</strong> {{ $t('home.eventDetails.location') }}</li>
+          <li><strong>{{ $t('home.eventDetails.venueTitle') }}:</strong> {{ $t('home.eventDetails.venue') }}</li>
+          <li><strong>{{ $t('home.eventDetails.timeTitle') }}:</strong> {{ $t('home.eventDetails.time') }}</li>
+        </ul>
         <p class="section-description text-left animate-on-scroll-right">{{ $t('home.eventDetails.description') }}</p>
         
         <Button 
@@ -140,7 +146,7 @@
         
         <Button 
           :label="$t('home.travel.cta')"
-          icon="i-solar:map-point-bold"
+          icon="i-solar:point-on-map-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-left"
           severity="secondary"
           @click="goToPageOrScroll(pageSlugMap.travel, 'contact')"
@@ -178,7 +184,7 @@
         
         <Button 
           :label="$t('home.tips.cta')"
-          icon="i-solar:lightbulb-bold"
+          icon="i-solar:medal-ribbons-star-bold"
           class="mt-8 section-button w-full lg:w-fit animate-on-scroll-right"
           severity="secondary"
           @click="goToPageOrScroll(pageSlugMap.tips, 'travel')"

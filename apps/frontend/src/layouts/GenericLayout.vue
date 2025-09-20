@@ -1,6 +1,7 @@
 <script setup>
 import { useHead } from '@vueuse/head'
-import { computed } from 'vue'
+import GenericHeader from '@/components/GenericHeader.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 
 const appTitle = import.meta.env.VITE_APP_TITLE || 'Brigita + Jeffrey'
 
@@ -33,7 +34,7 @@ useHead({
           <!-- Wedding Info -->
           <div class="text-center md:text-left">
             <h3 class="text-xl font-cursive text-int-base mb-2">{{ appTitle }}</h3>
-            <p class="text-sm font-serif text-txt opacity-75">August 1st, 2026</p>
+            <p class="text-sm font-serif text-txt opacity-75">{{ $t('footer.date') }}</p>
           </div>
           
           <!-- Navigation Links -->
@@ -42,26 +43,26 @@ useHead({
               :to="{ name: 'home', params: { lang: $route.params.lang || 'en' } }"
               class="text-sm font-sans text-txt hover:text-int-base transition-colors duration-200"
             >
-              Home
+              {{ $t('footer.nav.home') }}
             </router-link>
             <router-link 
               :to="{ name: 'public-rsvp-lookup', params: { lang: $route.params.lang || 'en' } }"
               class="text-sm font-sans text-txt hover:text-int-base transition-colors duration-200"
             >
-              RSVP
+              {{ $t('footer.nav.rsvp') }}
             </router-link>
             <a 
-              href="mailto:contact@brigitaandjeffrey.com" 
+              href="mailto:messagesfrom@brigitaandjeffrey.com" 
               class="text-sm font-sans text-txt hover:text-int-base transition-colors duration-200"
             >
-              Contact
+              {{ $t('footer.nav.contact') }}
             </a>
           </nav>
           
           <!-- Copyright -->
           <div class="text-center md:text-right">
             <p class="text-xs font-sans text-txt opacity-50">
-              © 2025-2026. All rights reserved.
+              {{ $t('footer.copyright') }}
             </p>
           </div>
         </div>
@@ -70,7 +71,7 @@ useHead({
         <div class="mt-16 pt-16 border-t border-form-border opacity-50">
           <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <p class="text-xs font-sans text-txt">
-              Made with ❤️ for our big celebration.
+              {{ $t('footer.madeWith') }}
             </p>
             <div class="flex items-center space-x-4">
               <LanguageSwitcher />
@@ -82,17 +83,6 @@ useHead({
   </div>
 </template>
 
-<script>
-import GenericHeader from '@/components/GenericHeader.vue';
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
-
-export default {
-  components: {
-    GenericHeader,
-    LanguageSwitcher,
-  },
-};
-</script>
 
 <style scoped>
 /* Ensure sticky positioning works on desktop */

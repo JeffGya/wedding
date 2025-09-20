@@ -63,8 +63,12 @@ const routes = [
       component: () => import('@/views/public/RSVPSuccess.vue'),
       meta: { title: 'RSVP Success' }, // Added title only
       beforeEnter: (to, from, next) => {
-        // ensure locale is set without breaking the ref
-        i18n.global.locale.value = to.params.lang;
+        // Ensure both i18n and the lang store are updated for consistency.
+        // This prevents UI components that read from the store from desyncing.
+        const lang = to.params.lang || 'en';
+        const langStore = useLangStore();
+        langStore.setLanguage(lang);
+        i18n.global.locale.value = lang;
         next();
       }
     },

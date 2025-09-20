@@ -6,6 +6,7 @@
       optionLabel="label"
       optionValue="value"
       :placeholder="currentLanguageLabel"
+      @update:modelValue="onModelUpdate"
       @change="onLanguageChange"
     >
       <!-- Custom template for dropdown items -->
@@ -35,8 +36,8 @@
 import i18n from '@/i18n';
 import { useI18n } from 'vue-i18n';
 import { useLangStore } from '@/store/lang';
-import { useRouter } from 'vue-router';
-import { defineComponent, ref, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { defineComponent, ref, computed, watch } from 'vue';
 
 import { IconGb, IconLt } from '@iconify-prerendered/vue-circle-flags';
 
@@ -44,6 +45,7 @@ export default defineComponent({
   setup() {
     const langStore = useLangStore();
     const router = useRouter();
+    const route = useRoute();
     useI18n();
 
     // Define available languages with icons
@@ -52,8 +54,10 @@ export default defineComponent({
       { label: 'LT', value: 'lt', icon: IconLt },
     ]);
 
-    // Reactive property for the selected language
-    const selectedLanguage = ref(langStore.language);
+    // Reactive property for the selected language.
+    // Initialize from the route param if present, otherwise from the store.
+    // This ensures the control reflects the actual URL on first load.
+    const selectedLanguage = ref(route.params.lang || langStore.language);
 
     // Compute the current language label for the placeholder
     const currentLanguageLabel = computed(() => {
@@ -61,10 +65,20 @@ export default defineComponent({
       return currentLang ? currentLang.label : 'Select Language';
     });
 
-    // Handle language change from the Select component
+    // Normalize event payloads from PrimeVue Select across versions.
+    // Some versions emit the primitive value via update:modelValue, while
+    // @change can emit either the primitive or the full option object.
+    // Keeping both handlers ensures robustness in production.
+    const onModelUpdate = (value) => {
+      const lang = typeof value === 'string' ? value : value?.value;
+      if (lang) changeLanguage(lang);
+    };
+
+    // Handle language change from the Select component (fallback for versions emitting @change only)
     const onLanguageChange = (selected) => {
-      if (typeof selected === 'object' && selected.value) {
-        changeLanguage(selected.value); // Pass only the language code (value) to changeLanguage
+      const lang = typeof selected === 'string' ? selected : selected?.value;
+      if (lang) {
+        changeLanguage(lang);
       } else {
         console.error('Invalid selection:', selected);
       }
@@ -95,10 +109,29 @@ export default defineComponent({
       });
     };
 
+    // Keep the selector in sync when the URL language changes elsewhere in the app
+    // (e.g., header nav click, direct link, back/forward navigation).
+    watch(
+      () => router.currentRoute.value.params.lang,
+      (newLang) => {
+        if (newLang && selectedLanguage.value !== newLang) {
+          selectedLanguage.value = newLang;
+        }
+        // Keep store and i18n aligned with the URL to prevent desyncs.
+        if (newLang && langStore.language !== newLang) {
+          langStore.setLanguage(newLang);
+        }
+        if (newLang && i18n.global.locale.value !== newLang) {
+          i18n.global.locale.value = newLang;
+        }
+      }
+    );
+
     return {
       languages,
       selectedLanguage,
       currentLanguageLabel,
+      onModelUpdate,
       onLanguageChange,
       changeLanguage,
     };

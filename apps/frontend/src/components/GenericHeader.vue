@@ -84,13 +84,17 @@ import { fetchNavigation } from '@/api/navigation';
 import { fetchRSVPSession } from '@/api/rsvp';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import Menubar from 'primevue/menubar';
+// NOTE: Language/menu reactivity patch
+// We make the header refresh its navigation whenever the route language changes
+// and build RouterLink targets using named routes + params so they always use
+// the current language. This avoids stale labels/links after switching.
 
 const PAGE_ICON_MAP = {
   // Add more slug: icon-class pairs as needed
-  'our-wedding': 'i-solar:heart-angle-bold',
+  'our-wedding': 'i-solar:heart-shine-bold-duotone',
   'event-details': 'i-solar:calendar-mark-bold-duotone',
-  'tips': 'i-solar:lightbulb-bold',
-  'travel-accommodation': 'i-solar:plane-bold',
+  'tips': 'i-solar:medal-ribbons-star-bold-duotone',
+  'travel': 'i-solar:point-on-map-bold-duotone',
 };
 
 export default {
@@ -131,26 +135,43 @@ export default {
     onNavClick(to) {
       if (to) this.$router.push(to);
     },
-  },
-  async created() {
-    const lang = this.$route.params.lang || 'en';
-    try {
-      const pages = await fetchNavigation(lang);
-      if (Array.isArray(pages)) {
-        this.menuItems = [
-          ...pages.map(p => ({
-            label: p.title,
-            to: `/${lang}/pages/${p.slug}`,
-            icon: PAGE_ICON_MAP[p.slug] || '', // fallback: no icon
-          }))
-        ];
-      } else {
+    // Fetch navigation pages for the given lang and rebuild menu items.
+    // Using named routes with params keeps links language-aware reactively.
+    async loadMenu(lang) {
+      try {
+        const pages = await fetchNavigation(lang);
+        if (Array.isArray(pages)) {
+          this.menuItems = [
+            ...pages.map(p => ({
+              label: p.title,
+              // Build router location object so the link always matches current lang
+              to: { name: 'public-page', params: { lang, slug: p.slug } },
+              icon: PAGE_ICON_MAP[p.slug] || '',
+            }))
+          ];
+        } else {
+          this.menuItems = [];
+        }
+      } catch (err) {
+        console.error('Failed to load navigation', err);
         this.menuItems = [];
       }
-    } catch (err) {
-      console.error('Failed to load navigation', err);
-      this.menuItems = [];
-    }
+    },
+  },
+  async created() {
+    // Initial menu load with current route language.
+    const lang = this.$route.params.lang || 'en';
+    await this.loadMenu(lang);
+  },
+  watch: {
+    // Re-fetch nav and rebuild menu when language changes via URL or switcher.
+    '$route.params.lang': {
+      immediate: false,
+      handler(newLang) {
+        const lang = newLang || 'en';
+        this.loadMenu(lang);
+      },
+    },
   },
 };
 </script>

@@ -4,24 +4,32 @@
   "home.hero.deadline": "RSVP by {deadline}",
   "home.rsvpClosed": "RSVP's are not open yet. We will send out invitations with RSVP codes in the coming months.",
 
-  "home.ourWedding.title": "Our Wedding",
-  "home.ourWedding.description": "On 18th of November 2025, we decided that we want to spend the rest of our lives together and that deserves a big celebration. Coming from totally different cultures and backgrounds we want our wedding to reflect that and be a blend of both worlds. This is why we are so excited to celebrate with you in Lithuania. We can't wait to see you there!",
-  "home.ourWedding.cta": "Everything about our wedding",
+  "home.ourWedding.title": "The Wedding",
+  "home.ourWedding.description": "On November 18, 2025 we decided to spend our lives together and that moment deserves a celebration. We come from completly different cultures and backgrounds, and our wedding will reflect that. We will the share the best of both our worlds. This is why we are excited to celebrate this with you in Vilnius Lithuania. We can't wait to see you there!",
+  "home.ourWedding.cta": "All About the Wedding",
 
-  "home.eventDetails.title": "Event Details",
+  "home.eventDetails.title": "The Details",
   "home.eventDetails.description": "We hope you can join us for our big celebration! We have all the important details about the event here, including the date, time, and location.",
-  "home.eventDetails.cta": "View evente details",
+  "home.eventDetails.cta": "Everything you need to know",
+  "home.eventDetails.dateTitle": "Date",
+  "home.eventDetails.date": "August 1 - 3, 2026",
+  "home.eventDetails.locationTitle": "Location",
+  "home.eventDetails.location": "Trakai, Vilnius, Lithuania",
+  "home.eventDetails.timeTitle": "Time",
+  "home.eventDetails.time": "To be announced",
+  "home.eventDetails.venueTitle": "Venue",
+  "home.eventDetails.venue": "Keliautojų Namai",
 
-  "home.travel.title": "Travel & Accommodation",
-  "home.travel.description": "We recommend coming a couple of days early so you can explore the beautiful city of Vilnius. To help with that we have put together some travel and accommodation tips.",
-  "home.travel.cta": "Essential travel info",
+  "home.travel.title": "Travel & Stay",
+  "home.travel.description": "For the wedding weekend we have your stay covered. If you plan to arrive in Vilnius earlier or simply want some practical advice for traveling and staying in the city, this is the place to look. Here you’ll find all the information you need.",
+  "home.travel.cta": "Essential travel information",
 
-  "home.tips.title": "Tips",
-  "home.tips.description": "We got what you need to make the most out of your stay in Vilnius. We got the best places to eat, drink, party, and see in city.",
-  "home.tips.cta": "Explore our tips",
+  "home.tips.title": "Vilnius Recommendations",
+  "home.tips.description": "We recommend arriving a few days earlier to enjoy the beautiful city of Vilnius. There might even be a little surprise event before the wedding. Here you’ll find our recommendations to make the most of your stay in the city. Food, drinks, music, and experiences. we’ve got it covered!",
+  "home.tips.cta": "Our best recommendations",
 
   "home.contact.title": "Another RSVP Reminder",
-  "home.contact.description": "Haven't RSVP'd yet? Why not get to it now! We need to know. Stop playing around! If you have already RSVP'd, please disregard this message and thank you! You the real MVP.",
+  "home.contact.description": "Haven’t RSVP’d yet? What are you waiting for? Do it now so we can plan the party right. If you already RSVP’d, thank you! You’re the real MVP.",
   "home.contact.cta": "RSVP Now",
 
   "home.backToTop": "Back to top",
@@ -92,5 +100,13 @@
   "rsvpGate.completeRSVP": "Complete My RSVP",
   "rsvpGate.accessDenied": "Access Denied",
   "rsvpGate.accessDeniedMessage": "This page requires you to have RSVP'd as attending. Please complete your RSVP to continue.",
-  "home.scrollHint": "Scroll to next section"
+  "home.scrollHint": "Scroll to next section",
+
+  "footer.date": "August 1st, 2026",
+  "footer.madeWith": "Made with ❤️ for our big celebration.",
+  "footer.copyright": "© 2025-2026 Brigita & Jeffrey. All rights reserved.",
+
+  "footer.nav.home": "Home",
+  "footer.nav.rsvp": "RSVP",
+  "footer.nav.contact": "Contact"
 }

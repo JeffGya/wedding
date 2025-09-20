@@ -1,32 +1,36 @@
 {
-  "home.hero.subtitle": "Tai vyksta Vilniuje. Nepraleiskite!",
+  "home.hero.subtitle": "Didžioji šventė Vilniuje. Taip, kaip tik mes mokame!",
   "home.hero.cta": "Patvirtinkite dalyvavimą",
   "home.hero.deadline": "RSVP iki {deadline}",
-  "home.rsvpClosed": "RSVP dar nėra atidaryti. Laukite naujienų.",
+  "home.rsvpClosed": "RSVP dar neatidarytas. Artimiausiais mėnesiais išsiųsime kvietimus su RSVP kodais.",
 
   "home.ourWedding.title": "Mūsų vestuvės",
-  "home.ourWedding.description": "Mes džiaugiamės galėdami pasidalinti su jumis savo ypatinga diena. Mūsų vestuvės bus meilės, šeimos ir draugystės šventė. Mes pasirinkome gražią vietą, kuri atspindi mūsų stilių ir intymią atmosferą, kurią norime sukurti savo svečiams.",
-  "home.ourWedding.imagePlaceholder": "Pasirinktinis paveikslėlis",
-  "home.ourWedding.cta": "Sužinokite daugiau apie mus",
+  "home.ourWedding.description": "2025 m. lapkričio 18 d. nusprendėme praleisti gyvenimą kartu ir tas momentas vertas šventės. Esame iš visiškai skirtingų kultūrų ir aplinkų, todėl mūsų vestuvės tai atspindės. Pasidalinsime geriausia iš abiejų pasaulių. Štai kodėl esame taip laimingi galėdami švęsti su jumis Vilniuje, Lietuvoje. Negalime sulaukti susitikimo!",
+  "home.ourWedding.cta": "Visa apie vestuves",
 
   "home.eventDetails.title": "Renginio detalės",
-  "home.eventDetails.description": "Prisijunkite prie mūsų dienos, kupinos meilės, juoko ir šventės. Mes suplanavome kiekvieną detalę, kad užtikrintumėte nepamirštamą patirtį. Nuo ceremonijos iki priėmimo, kiekvienas momentas bus ypatingas.",
-  "home.eventDetails.imagePlaceholder": "Pasirinktinis vietos paveikslėlis",
-  "home.eventDetails.cta": "Peržiūrėti visas detales",
+  "home.eventDetails.description": "Tikimės, kad galėsite prisijungti prie mūsų šventės. Čia rasite visą informaciją apie savaitgalį. Turime viską – datą, laiką ir vietą.",
+  "home.eventDetails.cta": "Visa, ką reikia žinoti",
+  "home.eventDetails.dateTitle": "Data",
+  "home.eventDetails.date": "2026 m. rugpjūčio 1–3 d.",
+  "home.eventDetails.locationTitle": "Vieta",
+  "home.eventDetails.location": "Trakai, Vilnius, Lithuania",
+  "home.eventDetails.timeTitle": "Laikas",
+  "home.eventDetails.time": "Bus paskelbta",
+  "home.eventDetails.venueTitle": "Sodyba",
+  "home.eventDetails.venue": "Keliautojų Namai",
 
-  "home.tips.title": "Vestuvių savaitgalio patarimai",
-  "home.tips.description": "Išnaudokite maksimaliai savo laiką Vilniuje! Mes paruošėme rekomendacijas apgyvendinimui, valgykloms ir veikloms, kurios padės jums suplanuoti puikų vestuvių savaitgalio atostogas.",
-  "home.tips.iconPlaceholder": "Patarimų piktograma",
-  "home.tips.cta": "Peržiūrėti mūsų patarimus",
+  "home.tips.title": "Vilniaus rekomendacijos",
+  "home.tips.description": "Rekomenduojame atvykti keliomis dienomis anksčiau, kad galėtumėte pasimėgauti gražiu Vilniaus miestu. Galbūt prieš vestuves jūsų lauks ir maža staigmena. Čia rasite mūsų rekomendacijas, kurios padės kuo geriau išnaudoti viešnagę mieste. Maistas, gėrimai, muzika ir patirtys. Mes tuo pasirūpinome!",
+  "home.tips.cta": "Mūsų geriausios rekomendacijos",
 
   "home.travel.title": "Kelionė ir apgyvendinimas",
-  "home.travel.description": "Planuojate kelionę į Vilnių? Mes surinkome informaciją apie transporto galimybes, rekomenduojamus viešbučius ir vietines atrakcijas, kurios padės jūsų kelionei būti sklandžiai ir maloniai.",
-  "home.travel.imagePlaceholder": "Žemėlapio/vietos paveikslėlis",
-  "home.travel.cta": "Kelionių vadovas",
+  "home.travel.description": "Vestuviniam savaitgaliui apgyvendinimu pasirūpinome mes. Jei planuojate atvykti į Vilnių anksčiau arba tiesiog norite praktinės informacijos apie kelionę ir viešnagę mieste, viską rasite čia. Čia pateikta visa jums reikalinga informacija.",
+  "home.travel.cta": "Svarbi kelionės informacija",
 
   "home.contact.title": "Galutinis RSVP priminimas",
-  "home.contact.description": "Dar nepatvirtinote dalyvavimo? Mums būtų malonu žinoti, ar galėsite prisijungti prie mūsų ypatingos dienos. Prašome skirti minutę patvirtinti savo dalyvavimą, kad galėtume planuoti atitinkamai.",
-  "home.contact.cta": "Patvirtinti dabar",
+  "home.contact.description": "Dar neužpildėte RSVP? Ko laukiate? Padarykite tai dabar, kad galėtume tinkamai suplanuoti šventę. Jei jau užpildėte, ačiū jums! Jūs tikras šaunuolis.",
+  "home.contact.cta": "RSVP dabar",
 
   "home.backToTop": "Grįžti į viršų",
 
@@ -37,7 +41,7 @@
   "home.details.venueValue": "Didžioji salė, Pagrindinė gatvė",
   "home.details.timeLabel": "Laikas",
   "home.details.timeValue": "17:00",
-  "home.countdown.label": "Laikas iki mūsų vestuvių!",
+  "home.countdown.label": "Iki didžiosios dienos!",
   "home.countdown.months": "Mėnuo(-iai)",
   "home.countdown.days": "Diena(-os)",
 
@@ -105,5 +109,12 @@
   "rsvpGate.accessDenied": "Prieiga uždrausta",
   "rsvpGate.accessDeniedMessage": "Šis puslapis reikalauja, kad būtumėte patvirtinę dalyvavimą. Prašome užpildyti savo RSVP, kad galėtumėte tęsti.",
   
-  "home.scrollHint": "Pereiti į kitą skyrių"
+  "home.scrollHint": "Pereiti į kitą skyrių",
+
+  "footer.date": "2026 m. rugpjūčio 1 d.",
+  "footer.madeWith": "Sukurta su ❤️ mūsų didžiajai šventei.",
+  "footer.nav.home": "Pradžia",
+  "footer.nav.rsvp": "RSVP",
+  "footer.nav.contact": "Kontaktai",
+  "footer.copyright": "© 2025-2026 Brigita & Jeffrey. Visos teisės saugomos."
 }

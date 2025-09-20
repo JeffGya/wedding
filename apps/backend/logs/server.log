@@ -2,3 +2,17 @@
 [2025-09-20T11:49:48.998Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
 [2025-09-20T11:49:49.001Z] [INFO] Server is running on port 5001
 [2025-09-20T11:49:49.016Z] [INFO] ✅ Connected to MySQL database.
+[2025-09-20T12:38:51.582Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-09-20T12:38:51.586Z] [INFO] Server is running on port 5001
+[2025-09-20T12:38:51.599Z] [INFO] ✅ Connected to MySQL database.
+[2025-09-20T14:56:00.832Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-09-20T14:56:00.836Z] [INFO] Server is running on port 5001
+[2025-09-20T14:56:00.853Z] [INFO] ✅ Connected to MySQL database.
+[2025-09-20T15:00:00.143Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-09-20T15:00:00.144Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-09-20T15:00:00.156Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-09-20T15:00:00.156Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2025-09-20T16:00:00.498Z] [DEBUG] 📨 Starting scheduled message check...
+[2025-09-20T16:00:00.497Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2025-09-20T16:00:00.503Z] [DEBUG] ✅ Scheduled message check completed.
+[2025-09-20T16:00:00.503Z] [DEBUG] ✅ No scheduled messages ready to send.
