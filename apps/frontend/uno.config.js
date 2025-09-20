@@ -173,7 +173,7 @@ export default defineConfig({
           --text: #0F0F0F;
 
           /* Header/special text */
-          --txt-header:            var(--btn--primary--base);
+          --txt-header: var(--btn--primary--base);
 
           /* Form field colors (light mode) */
           --form-placeholder-text: #A0A0A0;

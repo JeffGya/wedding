@@ -246,7 +246,7 @@ const lang = route.params.lang || 'en'
 // Map home CTAs to their intended page slugs
 // Update these slugs to match created pages in Admin
 const pageSlugMap = {
-  ourWedding: 'our-story',
+  ourWedding: 'our-wedding',
   eventDetails: 'event-details',
   travel: 'travel',
   tips: 'tips'

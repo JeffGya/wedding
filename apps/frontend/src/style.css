@@ -188,18 +188,6 @@ label {
   background-image: var(--bg-gradient);
 }
 
-/* Only reset background for specific elements that need their own backgrounds */
-.page-header {
-  background-image: none !important;
-  background-color: var(--acc-base) !important;
-}
-
-/* Allow page header to override when image is present */
-.page-header[style*="background-image"] {
-  background-image: var(--header-bg-image) !important;
-  background-color: transparent !important;
-}
-
 main {
   @apply mt-16;
 }

@@ -1,0 +1,4 @@
+[2025-09-20T11:48:26.715Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2025-09-20T11:49:48.998Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2025-09-20T11:49:49.001Z] [INFO] Server is running on port 5001
+[2025-09-20T11:49:49.016Z] [INFO] ✅ Connected to MySQL database.
