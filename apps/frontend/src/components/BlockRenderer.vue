@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onMounted, watch, nextTick } from 'vue';
 import SurveyForm from '@/components/SurveyForm.vue';
 import Banner from '@/components/ui/Banner.vue';
 
@@ -51,6 +51,41 @@ const props = defineProps({
 });
 
 const { blocks, locale, withSurveys } = props;
+
+// Load and initialize Instagram embeds
+async function processInstagramEmbeds() {
+  await nextTick();
+  
+  if (!window.instgrm) {
+    const script = document.createElement('script');
+    script.src = 'https://www.instagram.com/embed.js';
+    script.async = true;
+    document.head.appendChild(script);
+    
+    script.onload = () => {
+      setTimeout(() => {
+        if (window.instgrm?.Embeds) {
+          window.instgrm.Embeds.process();
+        }
+      }, 100);
+    };
+  } else {
+    setTimeout(() => {
+      if (window.instgrm?.Embeds) {
+        window.instgrm.Embeds.process();
+      }
+    }, 100);
+  }
+}
+
+// Watch for block changes
+watch(() => blocks, () => {
+  processInstagramEmbeds();
+}, { deep: true, immediate: false });
+
+onMounted(() => {
+  processInstagramEmbeds();
+});
 
 /**
  * Retrieve localized content for admin blocks or top-level for public blocks

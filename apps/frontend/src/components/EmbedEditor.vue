@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -53,13 +53,65 @@ watch(
 
 function applyEmbed() {
   let code = rawInput.value.trim()
+  
+  // Check if it's already a blockquote embed (Instagram, etc.)
+  // or if it's already a valid iframe, or other embed markup
+  if (code.startsWith('<blockquote') || 
+      code.startsWith('<iframe') ||
+      code.startsWith('<div') ||
+      code.includes('<script')) {
+    // Already valid embed code, use as-is
+    iframe.value = code
+    emit('update:modelValue', code)
+    
+    // Process Instagram embeds in preview
+    if (code.includes('instagram-media')) {
+      nextTick(() => {
+        processInstagramEmbeds()
+      })
+    }
+    return
+  }
+  
   // If it's just a URL, wrap into a basic iframe
-  if (!code.startsWith('<iframe')) {
+  if (/^https?:\/\//i.test(code)) {
     code = `<iframe src="${code}" width="100%" height="360" frameborder="0" allowfullscreen></iframe>`
   }
+  
   iframe.value = code
   emit('update:modelValue', code)
 }
+
+async function processInstagramEmbeds() {
+  await nextTick()
+  
+  if (!window.instgrm) {
+    const script = document.createElement('script')
+    script.src = 'https://www.instagram.com/embed.js'
+    script.async = true
+    document.head.appendChild(script)
+    
+    script.onload = () => {
+      setTimeout(() => {
+        if (window.instgrm?.Embeds) {
+          window.instgrm.Embeds.process()
+        }
+      }, 100)
+    }
+  } else {
+    setTimeout(() => {
+      if (window.instgrm?.Embeds) {
+        window.instgrm.Embeds.process()
+      }
+    }, 100)
+  }
+}
+
+onMounted(() => {
+  if (iframe.value && iframe.value.includes('instagram-media')) {
+    processInstagramEmbeds()
+  }
+})
 </script>
 
 <style scoped>

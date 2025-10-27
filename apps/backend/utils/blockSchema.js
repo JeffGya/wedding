@@ -28,13 +28,15 @@ const ALLOWED_IFRAME_HOSTS = [
 const SANITIZE_HTML_OPTIONS = {
   allowedTags: [
     'p', 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'br', 'hr', 'span', 'div',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'iframe'
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'iframe', 'blockquote', 'script'
   ],
   allowedAttributes: {
     a: ['href', 'name', 'target', 'rel'],
     img: ['src', 'alt', 'title', 'width', 'height'],
     iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy'],
-    '*': ['style', 'class']
+    blockquote: ['class', 'data-instgrm-permalink', 'data-instgrm-version', 'style'],
+    script: ['src', 'async'],
+    '*': ['style', 'class', 'data-*']
   },
   // Do NOT allow inline event handlers
   allowedSchemes: ['http', 'https', 'mailto'],
@@ -211,13 +213,28 @@ function sanitizeBlock(block) {
       html = `<iframe src="${html}" frameborder="0" allowfullscreen></iframe>`;
     }
 
-    // Sanitize the iframe HTML
+    // Sanitize the embed HTML
     const sanitized = sanitizeHtml(html, SANITIZE_HTML_OPTIONS);
 
-    // After sanitize, ensure there is an iframe and host is allowed
+    // Check if this is an Instagram embed (blockquote with instagram-media class)
+    const isInstagramEmbed = sanitized.includes('instagram-media');
+    
+    if (isInstagramEmbed) {
+      // Instagram embeds use blockquote, not iframe - just sanitize and return
+      // Ensure it's actually from Instagram
+      if (!sanitized.includes('instagram.com')) {
+        const err = new Error('Embed sanitization failed: Instagram embed must originate from instagram.com');
+        err.code = ERRORS.EMBED_SANITIZATION_FAIL;
+        throw err;
+      }
+      b.embed = sanitized;
+      return b;
+    }
+
+    // For non-Instagram embeds, require iframe
     const match = sanitized.match(/<iframe[^>]+src=["']([^"']+)["']/i);
     if (!match) {
-      const err = new Error('Embed sanitization failed: <iframe> tag was stripped');
+      const err = new Error('Embed sanitization failed: <iframe> tag was stripped or not found');
       err.code = ERRORS.EMBED_SANITIZATION_FAIL;
       throw err;
     }
