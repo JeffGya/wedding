@@ -23,7 +23,12 @@ export default defineConfig({
   ],
   
   // optional safelist for classes you use dynamically
-  safelist: [],
+  safelist: [
+    'i-solar-close-circle-bold',
+    'i-solar-close-circle-bold-duotone',
+    'i-solar-check-circle-bold',
+    'i-solar-check-circle-bold-duotone',
+  ],
   theme: {
     fontFamily: {
       cursive: "Great Vibes, cursive",

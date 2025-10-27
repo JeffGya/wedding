@@ -73,10 +73,10 @@
           
           <Column header="Actions" style="width: 10rem">
             <template #body="slotProps">
-              <div class="flex gap-2">
+              <ButtonGroup>
                 <Button
-                  icon="pi pi-pencil"
-                  severity="secondary"
+                  icon="i-solar:pen-bold-duotone"
+                  severity="contrast"
                   size="normal"
                   @click="navigateToEdit(slotProps.data)"
                   v-tooltip.top="'Edit Survey'"
@@ -88,7 +88,7 @@
                   @click="deleteSurveyById(slotProps.data.id)"
                   v-tooltip.top="'Delete Survey'"
                 />
-              </div>
+              </ButtonGroup>
             </template>
           </Column>
         </DataTable>

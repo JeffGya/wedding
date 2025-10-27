@@ -51,10 +51,11 @@
           </div>
           
           <Button 
-            severity="danger" 
-            icon="pi pi-times" 
+            class="w-full"
+            severity="danger"
+            size="normal"
+            icon="i-solar:trash-bin-trash-bold-duotone" 
             @click="clearFilters"
-            text
           >
             Clear Filters
           </Button>
@@ -105,9 +106,8 @@
           <Column header="Actions" style="width: 8rem">
             <template #body="slotProps">
               <Button 
-                icon="pi pi-pencil" 
-                severity="secondary" 
-                text 
+                icon="i-solar:pen-bold-duotone" 
+                severity="contrast" 
                 size="normal"
                 @click="openEditModal(slotProps.data)"
                 v-tooltip.top="'Edit RSVP'"

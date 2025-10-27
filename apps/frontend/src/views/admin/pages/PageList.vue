@@ -59,7 +59,7 @@
           <Column header="RSVP Required" style="width: 8rem">
             <template #body="slotProps">
               <i 
-                :class="slotProps.data.requires_rsvp ? 'pi pi-check text-success' : 'pi pi-times text-muted'"
+                :class="slotProps.data.requires_rsvp ? 'i-solar:check-circle-bold text-success' : 'i-solar-close-circle-bold-duotone text-muted'"
               ></i>
             </template>
           </Column>
@@ -67,7 +67,7 @@
           <Column header="Show in Nav" style="width: 8rem">
             <template #body="slotProps">
               <i 
-                :class="slotProps.data.show_in_nav ? 'pi pi-check text-success' : 'pi pi-times text-muted'"
+                :class="slotProps.data.show_in_nav ? 'i-solar:check-circle-bold text-success' : 'i-solar-close-circle-bold-duotone text-muted'"
               ></i>
             </template>
           </Column>
@@ -84,27 +84,29 @@
           <Column header="Actions" style="width: 10rem">
             <template #body="slotProps">
               <div class="flex gap-2">
-                <Button
-                  icon="pi pi-eye"
-                  severity="info"
-                  size="normal"
-                  @click="navigateToPreview(slotProps.data)"
-                  v-tooltip.top="'Preview Page'"
-                />
-                <Button
-                  icon="pi pi-pencil"
-                  severity="secondary"
-                  size="normal"
-                  @click="navigateToEdit(slotProps.data)"
-                  v-tooltip.top="'Edit Page'"
-                />
-                <Button
-                  icon="i-solar:trash-bin-trash-bold-duotone"
-                  severity="danger"
-                  size="normal"
-                  @click="deletePage(slotProps.data.id)"
-                  v-tooltip.top="'Delete Page'"
-                />
+                <ButtonGroup>
+                  <Button
+                    icon="i-solar:eye-bold-duotone"
+                    severity="secondary"
+                    size="normal"
+                    @click="navigateToPreview(slotProps.data)"
+                    v-tooltip.top="'Preview Page'"
+                  />
+                  <Button
+                    icon="i-solar:pen-bold-duotone"
+                    severity="contrast"
+                    size="normal"
+                    @click="navigateToEdit(slotProps.data)"
+                    v-tooltip.top="'Edit Page'"
+                  />
+                  <Button
+                    icon="i-solar:trash-bin-trash-bold-duotone"
+                    severity="danger"
+                    size="normal"
+                    @click="deletePage(slotProps.data.id)"
+                    v-tooltip.top="'Delete Page'"
+                  />
+                </ButtonGroup>
               </div>
             </template>
           </Column>

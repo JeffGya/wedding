@@ -19,7 +19,7 @@
         :message="error"
         class="mb-4"
       />
-
+      
       <form @submit.prevent="onSubmit" class="space-y-4">
         <!-- Radio -->
         <div v-if="surveyType === 'radio'">
@@ -65,6 +65,7 @@
 
         <!-- Submit -->
         <Button
+          severity="secondary"
           type="submit"
           label="Submit"
           :disabled="!canSubmit"
@@ -137,7 +138,7 @@ async function onSubmit() {
 
 <style scoped>
 .survey-form {
-  max-width: 600px;
+  max-width: 100%;
 }
 
 .mb-2 {

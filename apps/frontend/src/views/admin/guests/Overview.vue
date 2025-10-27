@@ -124,22 +124,22 @@
             
             <Column header="Actions" style="width: 10rem">
               <template #body="slotProps">
-                <div class="flex gap-2">
-                  <Button
-                    icon="pi pi-pencil"
-                    severity="secondary"
-                    size="normal"
-                    @click="openEditForGuest(slotProps.data)"
-                    v-tooltip.top="'Edit Guest'"
-                  />
-                  <Button
-                    icon="i-solar:trash-bin-trash-bold-duotone"
-                    severity="danger"
-                    size="normal"
-                    @click="deleteGuest(slotProps.data.id)"
-                    v-tooltip.top="'Delete Guest'"
-                  />
-                </div>
+                <ButtonGroup> 
+                    <Button
+                      icon="i-solar:pen-bold-duotone"
+                      severity="contrast"
+                      size="normal"
+                      @click="openEditForGuest(slotProps.data)"
+                      v-tooltip.top="'Edit Guest'"
+                    />
+                    <Button
+                      icon="i-solar:trash-bin-trash-bold-duotone"
+                      severity="danger"
+                      size="normal"
+                      @click="deleteGuest(slotProps.data.id)"
+                      v-tooltip.top="'Delete Guest'"
+                    />
+                </ButtonGroup>
               </template>
             </Column>
           </DataTable>
