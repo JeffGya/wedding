@@ -19,6 +19,10 @@ const ALLOWED_IFRAME_HOSTS = [
   'youtube.com',
   'www.google.com',
   'maps.google.com',
+  'www.instagram.com',
+  'instagram.com',
+  'tiktok.com',
+  'www.tiktok.com',
 ];
 
 const SANITIZE_HTML_OPTIONS = {
