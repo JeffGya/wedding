@@ -40,12 +40,6 @@ useHead({
           <!-- Navigation Links -->
           <nav class="flex flex-wrap justify-center gap-8 md:gap-16">
             <router-link 
-              :to="{ name: 'home', params: { lang: $route.params.lang || 'en' } }"
-              class="text-sm font-sans text-txt hover:text-int-base transition-colors duration-200"
-            >
-              {{ $t('footer.nav.home') }}
-            </router-link>
-            <router-link 
               :to="{ name: 'public-rsvp-lookup', params: { lang: $route.params.lang || 'en' } }"
               class="text-sm font-sans text-txt hover:text-int-base transition-colors duration-200"
             >
@@ -58,6 +52,17 @@ useHead({
               {{ $t('footer.nav.contact') }}
             </a>
           </nav>
+          
+          <div class="flex justify-center">
+            <p class="text-sm font-sanse">{{ $t('footer.nav.credit') }}<a 
+              href="https://www.instagram.com/dziugiossventes" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-sm font-sans text-int-base hover:underline"
+            ><span icon="i-solar:camera-square-bold"></span>Iveta Dziuge</a>.
+            </p>
+          </div>
+          
           
           <!-- Copyright -->
           <div class="text-center md:text-right">
