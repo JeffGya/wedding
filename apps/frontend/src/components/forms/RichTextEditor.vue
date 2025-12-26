@@ -9,13 +9,15 @@
       @text-change="handleTextChange"
     >
       <template #toolbar>
-        <div class="ql-toolbar ql-snow">
+        <div :id="toolbarId" ref="toolbarRef" class="ql-toolbar ql-snow">
           <!-- Header dropdown -->
           <select class="ql-header">
             <option selected></option>
             <option value="1">Heading 1</option>
             <option value="2">Heading 2</option>
             <option value="3">Heading 3</option>
+            <option value="special-title">Special Title</option>
+
           </select>
           
           <!-- Font size dropdown -->
@@ -73,7 +75,7 @@
               @click="openImagePicker"
               title="Insert Image from Library"
             >
-              <i class="i-solar:gallery-bold"></i>
+              <span v-html="quillImageIcon"></span>
             </button>
           </span>
           
@@ -86,14 +88,14 @@
               @click="insertButton"
               title="Insert Button"
             >
-              <i class="i-solar:button-bold"></i>
+              <span v-html="quillButtonIcon"></span>
             </button>
           </span>
           
           <!-- HTML toggle -->
           <span class="ql-formats">
             <button type="button" @mousedown.prevent @click="toggleHtml" title="Toggle HTML">
-              <i class="i-solar:code-bold"></i>
+              <span v-html="quillCodeIcon"></span>
             </button>
           </span>
         </div>
@@ -113,7 +115,14 @@
     />
     
     <div v-if="showHtml" class="mt-2">
-      <textarea v-model="htmlContent" rows="10" class="w-full border rounded p-2" @input="updateFromHtml"></textarea>
+      <textarea 
+        v-model="htmlContent" 
+        rows="10" 
+        class="w-full border rounded p-2" 
+        @input="updateFromHtml"
+        @focus="onHtmlTextareaFocus"
+        @blur="onHtmlTextareaBlur"
+      ></textarea>
     </div>
   </div>
 </template>
@@ -125,10 +134,71 @@ import Quill from 'quill';
 import ImagePicker from '@/components/ui/ImagePicker.vue';
 import ButtonConfigModal from '@/components/ui/ButtonConfigModal.vue';
 
+// Get Quill's built-in icons
+const QuillIcons = Quill.import('ui/icons');
+
 // Register custom font formats
 const Font = Quill.import('formats/font');
 Font.whitelist = ['serif', 'sans', 'cursive', 'monospace'];
 Quill.register(Font, true);
+
+// Register custom title block
+const Block = Quill.import('blots/block');
+class SpecialTitle extends Block {}
+SpecialTitle.blotName = 'specialTitle';
+SpecialTitle.tagName = 'h2';
+// Don't set className as static property - Quill's Block expects single token
+// Store classes separately and apply in create method
+const specialTitleClasses = 'font-cursive text-center border border-bg-glass-border p-40 text-lg sm:text-xl md:text-2xl lg:text-3xl';
+
+// Override static value to recognize our format from DOM nodes
+SpecialTitle.value = function(node) {
+  // Check if node has our special classes (font-cursive and text-center are key identifiers)
+  if (node && node.classList) {
+    const hasSpecialClasses = node.classList.contains('font-cursive') && 
+                             node.classList.contains('text-center') &&
+                             node.classList.contains('border-bg-glass-border');
+    return hasSpecialClasses ? true : null;
+  }
+  return null;
+};
+
+// Add style method to apply background-image
+SpecialTitle.create = function(value) {
+  let node;
+  try {
+    node = Block.create.call(this, value);
+  } catch (e) {
+    throw e;
+  }
+  // Use value from formats() if available (when loading saved content), otherwise use defaults
+  const classesToApply = (value && typeof value === 'object' && value.class) ? value.class : specialTitleClasses;
+  const styleToApply = (value && typeof value === 'object' && value.style) ? value.style : 'var(--bg-glass)';
+  
+  // Apply background image style
+  if (styleToApply && styleToApply.includes('background-image')) {
+    // Extract just the background-image value if it's a full style string
+    const bgMatch = styleToApply.match(/background-image:\s*([^;]+)/);
+    node.style.backgroundImage = bgMatch ? bgMatch[1].trim() : styleToApply;
+  } else {
+    node.style.backgroundImage = styleToApply;
+  }
+  // Apply className to node using setAttribute to properly handle multiple classes
+  if (classesToApply) {
+    node.setAttribute('class', classesToApply);
+  }
+  return node;
+};
+
+// Override formats to preserve class and style attributes
+SpecialTitle.formats = function(node) {
+  return {
+    class: node.getAttribute('class'),
+    style: node.getAttribute('style')
+  };
+};
+
+Quill.register(SpecialTitle, true);
 
 // Remove the custom Quill format code entirely
 
@@ -150,33 +220,62 @@ const emit = defineEmits(['update:modelValue']);
 const editorContent = ref(props.modelValue || '');
 const htmlContent = ref(props.modelValue || '');
 const isInternalUpdate = ref(false);
+const isUpdatingFromHtml = ref(false); // Flag to prevent handleTextChange from updating htmlContent when updating from HTML
 
 // Proper modules configuration with toolbar enabled
+const toolbarRef = ref(null);
+const toolbarId = `ql-toolbar-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 const modules = {
   toolbar: {
-    container: '.ql-toolbar'
+    container: `#${toolbarId}`,
+    handlers: {
+      header(value) {
+        const quill = this.quill;
+        if (value === 'special-title') {
+          const range = quill.getSelection(true);
+          const line = quill.getLine(range.index);
+          quill.format('specialTitle', true);
+          // Trigger update after format is applied
+          nextTick(() => {
+            if (editorRef.value && editorRef.value.quill) {
+              const currentContent = editorRef.value.quill.root.innerHTML;
+              editorContent.value = currentContent;
+              htmlContent.value = currentContent;
+              emit('update:modelValue', currentContent);
+            }
+          });
+        } else {
+          quill.format('header', value);
+        }
+      },
+    },
   },
-  clipboard: {
-    matchVisual: false
-  }
+  clipboard: { matchVisual: false },
 };
 
 const formats = [
-  'font', 
-  'size', 
-  'header', 
-  'bold', 
-  'italic', 
-  'underline', 
-  'list', 
-  'link', 
-  'image'
+  'font',
+  'size',
+  'header',
+  'specialTitle',
+  'bold',
+  'italic',
+  'underline',
+  'list',
+  'link',
+  'image',
 ];
 
 const editorRef = ref(null);
 const showHtml = ref(false);
 const pickerVisible = ref(false);
 const buttonConfigVisible = ref(false);
+const isHtmlTextareaFocused = ref(false); // Track if HTML textarea has focus
+
+// Use Quill's built-in icons directly for custom buttons
+const quillImageIcon = QuillIcons.image || '<svg viewBox="0 0 18 18"><rect class="ql-stroke" height="10" width="12" x="3" y="4"></rect><circle class="ql-fill" cx="6" cy="7" r="1"></circle><polyline class="ql-even ql-fill" points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline></svg>';
+const quillButtonIcon = '<svg viewBox="0 0 18 18"><rect class="ql-stroke" height="4" width="12" x="3" y="7" rx="2"></rect><line class="ql-stroke" x1="6" x2="6" y1="5" y2="13"></line><line class="ql-stroke" x1="12" x2="12" y1="5" y2="13"></line></svg>';
+const quillCodeIcon = QuillIcons['code-block'] || '<svg viewBox="0 0 18 18"><polyline class="ql-stroke" points="5 7 3 9 5 11"></polyline><polyline class="ql-stroke" points="13 7 15 9 13 11"></polyline><line class="ql-stroke" x1="10" x2="8" y1="5" y2="13"></line></svg>';
 
 // Enhanced function to convert button markers to proper HTML based on context
 function convertButtonMarkersToHtml(content) {
@@ -217,8 +316,12 @@ function handleTextChange(delta, oldDelta, source) {
     // Convert button markers to proper HTML
     const processedContent = convertButtonMarkersToHtml(newContent);
     
+    // Only update htmlContent if we're NOT updating from HTML mode
+    // This prevents Quill's normalization from overwriting the user's HTML edits
+    if (!isUpdatingFromHtml.value) {
+      htmlContent.value = processedContent;
+    }
     editorContent.value = processedContent;
-    htmlContent.value = processedContent;
     emit('update:modelValue', processedContent);
     isInternalUpdate.value = false;
   }
@@ -460,6 +563,95 @@ function insertImage(imageUrl) {
 // Toggle HTML view
 function toggleHtml() {
   showHtml.value = !showHtml.value;
+  
+  // Sync editor content to HTML when opening HTML mode
+  if (showHtml.value && editorRef.value?.quill) {
+    // Only sync from Quill if htmlContent is empty or significantly different
+    // Otherwise, preserve the existing htmlContent (which may have custom classes)
+    if (!htmlContent.value || htmlContent.value.length < 10) {
+      const currentHtml = editorRef.value.quill.root.innerHTML;
+      htmlContent.value = currentHtml;
+    }
+    // Preserve existing htmlContent - it may have custom classes that Quill normalized
+  } else if (!showHtml.value && editorRef.value?.quill) {
+    // When switching back to visual mode, update Quill with the HTML content
+    nextTick(() => {
+      if (editorRef.value?.quill) {
+        isInternalUpdate.value = true;
+        const quill = editorRef.value.quill;
+        quill.root.innerHTML = htmlContent.value;
+        const afterHtml = quill.root.innerHTML;
+        editorContent.value = afterHtml;
+        emit('update:modelValue', afterHtml);
+        isInternalUpdate.value = false;
+      }
+    });
+  }
+}
+
+// Update editor content from HTML textarea - uses debouncing to avoid excessive updates
+let updateTimeout = null;
+function updateFromHtml() {
+  // Don't update if this is an internal update from handleTextChange
+  // This prevents infinite loops when visual editor updates htmlContent
+  if (isInternalUpdate.value) {
+    return;
+  }
+  
+  // Clear any pending update
+  if (updateTimeout) {
+    clearTimeout(updateTimeout);
+  }
+  
+  // Only update visual editor when textarea loses focus (user stops editing)
+  // This prevents Quill from normalizing HTML while user is actively typing
+  if (isHtmlTextareaFocused.value) {
+    return; // Don't update visual editor while user is typing in HTML mode
+  }
+  
+  // Update visual editor when textarea loses focus
+  updateTimeout = setTimeout(() => {
+    if (editorRef.value && editorRef.value.quill) {
+      isInternalUpdate.value = true;
+      isUpdatingFromHtml.value = true; // Set flag to prevent handleTextChange from overwriting htmlContent
+      const quill = editorRef.value.quill;
+      
+      // Directly set innerHTML - Quill will normalize it, but we preserve the user's HTML in htmlContent
+      // The flag prevents handleTextChange from overwriting htmlContent with normalized HTML
+      quill.root.innerHTML = htmlContent.value;
+      const afterHtml = quill.root.innerHTML;
+      
+      // Update editorContent with normalized HTML (for visual display)
+      // But emit the ORIGINAL htmlContent to preserve classes and attributes
+      editorContent.value = afterHtml;
+      emit('update:modelValue', htmlContent.value); // Emit original HTML to preserve classes
+      
+      // Reset flags after a short delay to allow any pending text-change events to complete
+      setTimeout(() => {
+        isInternalUpdate.value = false;
+        isUpdatingFromHtml.value = false;
+      }, 100);
+    }
+  }, 100); // Short delay for blur event
+}
+
+// Handle HTML textarea focus - don't update visual editor while user is typing
+function onHtmlTextareaFocus() {
+  isHtmlTextareaFocused.value = true;
+  // Clear any pending updates
+  if (updateTimeout) {
+    clearTimeout(updateTimeout);
+    updateTimeout = null;
+  }
+}
+
+// Handle HTML textarea blur - update visual editor when user stops editing
+function onHtmlTextareaBlur() {
+  isHtmlTextareaFocused.value = false;
+  // Trigger update to visual editor now that user stopped editing
+  if (editorRef.value && editorRef.value.quill && !isInternalUpdate.value) {
+    updateFromHtml();
+  }
 }
 
 // Initialize editor when component mounts

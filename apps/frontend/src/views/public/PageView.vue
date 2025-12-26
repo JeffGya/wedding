@@ -148,9 +148,12 @@ watch(locale, loadPage);
   @apply font-serif text-4xl md:text-5xl text-int-base mb-32;
 }
 
-:deep(.block-renderer__block h2) {
+/* Apply default h2 styling, but exclude special titles with font-cursive */
+:deep(.block-renderer__block h2:not(.font-cursive)) {
   @apply font-serif text-2xl md:text-3xl text-int-base mb-24;
 }
+
+/* Special titles keep all their classes from the HTML - no overrides needed */
 
 :deep(.block-renderer__block h3) {
   @apply font-serif text-xl md:text-2xl text-int-base mb-8;

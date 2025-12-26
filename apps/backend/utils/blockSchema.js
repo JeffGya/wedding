@@ -23,19 +23,20 @@ const ALLOWED_IFRAME_HOSTS = [
   'instagram.com',
   'tiktok.com',
   'www.tiktok.com',
+  'skyscanner.net',
+  'www.skyscanner.net',
 ];
 
 const SANITIZE_HTML_OPTIONS = {
   allowedTags: [
     'p', 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'br', 'hr', 'span', 'div',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'iframe', 'blockquote', 'script'
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'iframe', 'blockquote'
   ],
   allowedAttributes: {
     a: ['href', 'name', 'target', 'rel'],
     img: ['src', 'alt', 'title', 'width', 'height'],
     iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy'],
     blockquote: ['class', 'data-instgrm-permalink', 'data-instgrm-version', 'style'],
-    script: ['src', 'async'],
     '*': ['style', 'class', 'data-*']
   },
   // Do NOT allow inline event handlers
@@ -238,8 +239,31 @@ function sanitizeBlock(block) {
       err.code = ERRORS.EMBED_SANITIZATION_FAIL;
       throw err;
     }
-    const src = match[1];
-    const srcHost = new URL(src).hostname;
+
+    const src = (match[1] || '').trim();
+
+    // Allow same-origin wrappers ONLY under /embeds/
+    if (src.startsWith('/')) {
+      if (!src.startsWith('/embeds/')) {
+        const err = new Error('Embed sanitization failed: relative iframe src must start with "/embeds/".');
+        err.code = ERRORS.EMBED_SANITIZATION_FAIL;
+        throw err;
+      }
+      // Accept the sanitized HTML as-is for local wrappers
+      b.embed = sanitized;
+      return b;
+    }
+
+    // External sources must be on the allowlist
+    let srcHost;
+    try {
+      srcHost = new URL(src).hostname;
+    } catch {
+      const err = new Error('Embed sanitization failed: Invalid iframe src URL');
+      err.code = ERRORS.EMBED_SANITIZATION_FAIL;
+      throw err;
+    }
+
     if (!ensureIframeHost(src)) {
       const err = new Error(`Embed sanitization failed: host "${srcHost}" not allowed`);
       err.code = ERRORS.EMBED_SANITIZATION_FAIL;
