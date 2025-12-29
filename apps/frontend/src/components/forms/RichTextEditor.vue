@@ -149,7 +149,7 @@ SpecialTitle.blotName = 'specialTitle';
 SpecialTitle.tagName = 'h2';
 // Don't set className as static property - Quill's Block expects single token
 // Store classes separately and apply in create method
-const specialTitleClasses = 'font-cursive text-center border border-bg-glass-border p-40 text-lg sm:text-xl md:text-2xl lg:text-3xl';
+const specialTitleClasses = 'font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl';
 
 // Override static value to recognize our format from DOM nodes
 SpecialTitle.value = function(node) {
@@ -173,16 +173,35 @@ SpecialTitle.create = function(value) {
   }
   // Use value from formats() if available (when loading saved content), otherwise use defaults
   const classesToApply = (value && typeof value === 'object' && value.class) ? value.class : specialTitleClasses;
-  const styleToApply = (value && typeof value === 'object' && value.style) ? value.style : 'var(--bg-glass)';
+  const savedStyle = (value && typeof value === 'object' && value.style) ? value.style : null;
   
-  // Apply background image style
-  if (styleToApply && styleToApply.includes('background-image')) {
-    // Extract just the background-image value if it's a full style string
-    const bgMatch = styleToApply.match(/background-image:\s*([^;]+)/);
-    node.style.backgroundImage = bgMatch ? bgMatch[1].trim() : styleToApply;
-  } else {
-    node.style.backgroundImage = styleToApply;
+  // Parse saved style to extract background-image if present
+  let backgroundImage = 'var(--bg-glass)'; // default
+  if (savedStyle) {
+    if (savedStyle.includes('background-image')) {
+      const bgMatch = savedStyle.match(/background-image:\s*([^;]+)/);
+      if (bgMatch) {
+        backgroundImage = bgMatch[1].trim();
+      }
+    } else {
+      // If saved style doesn't have background-image, use it as the background-image value
+      backgroundImage = savedStyle;
+    }
   }
+  
+  // Always apply spacing as inline styles to override Quill's default h2 styles
+  // These should always be applied, regardless of saved content
+  node.style.width = '40%';
+  node.style.paddingTop = '1rem';
+  node.style.paddingBottom = '.75rem';
+  node.style.margin = 'auto';
+  node.style.marginTop = '1.5rem';
+  node.style.marginBottom = '.75rem';
+  node.style.border = '1px solid var(--bg-glass-border)';
+  
+  // Apply background image style (preserve from saved content if available)
+  node.style.backgroundImage = backgroundImage;
+  
   // Apply className to node using setAttribute to properly handle multiple classes
   if (classesToApply) {
     node.setAttribute('class', classesToApply);
@@ -733,5 +752,16 @@ watch(() => props.modelValue, (newValue) => {
 
 .ql-custom-image:hover {
   background-color: #e5e7eb;
+}
+
+/* Override Quill's default h2 styles for special titles */
+:deep(.ql-editor h2.font-cursive) {
+  margin: 0 !important;
+  padding: 2.5rem !important; /* p-40 */
+}
+
+/* Ensure width and other Tailwind classes work */
+:deep(.ql-editor h2.font-cursive.w-1\/2) {
+  width: 50% !important;
 }
 </style>

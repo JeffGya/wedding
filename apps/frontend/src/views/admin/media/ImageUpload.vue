@@ -9,8 +9,9 @@
     <template #content>
       <div class="flex items-center gap-4">
         <p class="text-text">Upload Image</p>
-        <Button severity="primary" icon="pi pi-upload">
+        <Button severity="primary" label="Choose & Upload">
           <label class="cursor-pointer">
+            <i class="solar:upload-bold-duotone"></i>
             <input
               type="file"
               accept=".jpg,.png,.gif,.webm"

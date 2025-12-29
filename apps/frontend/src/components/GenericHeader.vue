@@ -180,7 +180,7 @@ export default {
 .MainNav {
   background: var(--bg-glass);
   border: 1px solid var(--bg-glass-border);
-  @apply backdrop-blur-md shadow-2xl px-16 md:px-40 lg:px-160;
+  @apply backdrop-blur-md shadow-lg px-16 md:px-40 lg:px-160;
 }
 
 .cls-1 {

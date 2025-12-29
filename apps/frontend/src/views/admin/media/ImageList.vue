@@ -4,11 +4,7 @@
     description="Manage your uploaded images"
   >
     <template #headerActions>
-      <Button 
-        icon="i-solar:upload-bold-duotone" 
-        label="Upload Image" 
-        @click="$router.push('/admin/media/upload')"
-      />
+
     </template>
 
     <Card>
