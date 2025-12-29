@@ -50,6 +50,22 @@
             </button>
           </span>
           
+          <!-- Text alignment buttons -->
+          <span class="ql-formats">
+            <button class="ql-align" value="" title="Left Align">
+              <i class="i-solar:align-left-bold"></i>
+            </button>
+            <button class="ql-align" value="center" title="Center Align">
+              <i class="i-solar:align-center-bold"></i>
+            </button>
+            <button class="ql-align" value="right" title="Right Align">
+              <i class="i-solar:align-right-bold"></i>
+            </button>
+            <button class="ql-align" value="justify" title="Justify">
+              <i class="i-solar:text-align-justify-bold"></i>
+            </button>
+          </span>
+          
           <!-- List buttons -->
           <span class="ql-formats">
             <button class="ql-list" value="ordered" title="Numbered List">
@@ -76,6 +92,15 @@
               title="Insert Image from Library"
             >
               <span v-html="quillImageIcon"></span>
+            </button>
+            <button
+              type="button"
+              class="ql-custom-image-config"
+              @mousedown.prevent
+              @click="openImageConfig"
+              title="Configure Image"
+            >
+              <i class="i-solar:settings-bold"></i>
             </button>
           </span>
           
@@ -114,6 +139,16 @@
       @insert="handleButtonConfigInsert"
     />
     
+    <ImageConfigModal
+      :visible="imageConfigVisible"
+      :imageSrc="selectedImageSrc"
+      :currentWidth="selectedImageWidth"
+      :currentHeight="selectedImageHeight"
+      :currentAlign="selectedImageAlign"
+      @close="imageConfigVisible = false"
+      @apply="handleImageConfigApply"
+    />
+    
     <div v-if="showHtml" class="mt-2">
       <textarea 
         v-model="htmlContent" 
@@ -133,6 +168,7 @@ import Editor from 'primevue/editor';
 import Quill from 'quill';
 import ImagePicker from '@/components/ui/ImagePicker.vue';
 import ButtonConfigModal from '@/components/ui/ButtonConfigModal.vue';
+import ImageConfigModal from '@/components/ui/ImageConfigModal.vue';
 
 // Get Quill's built-in icons
 const QuillIcons = Quill.import('ui/icons');
@@ -219,7 +255,69 @@ SpecialTitle.formats = function(node) {
 
 Quill.register(SpecialTitle, true);
 
-// Remove the custom Quill format code entirely
+// Register custom image format with resizing support
+// Note: Alignment is handled at the block level, not the image level
+const Image = Quill.import('formats/image');
+
+class CustomImage extends Image {
+  static create(value) {
+    let node = super.create(value);
+    
+    // Always add responsive styles to ensure images scale down on smaller screens
+    node.style.maxWidth = '100%';
+    node.style.height = 'auto';
+    
+    // If value is an object with properties, apply them
+    if (typeof value === 'object' && value !== null) {
+      if (value.src) {
+        node.setAttribute('src', value.src);
+      }
+      if (value.width) {
+        const widthValue = value.width.includes('px') || value.width.includes('%') ? value.width : value.width + 'px';
+        node.setAttribute('width', value.width);
+        node.style.width = widthValue;
+        // Ensure max-width is still applied for responsiveness
+        node.style.maxWidth = '100%';
+      }
+      if (value.height) {
+        const heightValue = value.height.includes('px') || value.height.includes('%') ? value.height : value.height + 'px';
+        node.setAttribute('height', value.height);
+        node.style.height = heightValue;
+        // When height is set, we still want auto height for responsiveness
+        // But preserve the height attribute for aspect ratio hints
+        node.style.height = 'auto';
+      }
+    } else if (typeof value === 'string') {
+      // Simple string URL
+      node.setAttribute('src', value);
+    }
+    
+    return node;
+  }
+  
+  static value(node) {
+    if (node.tagName === 'IMG') {
+      return {
+        src: node.getAttribute('src') || node.src,
+        width: node.getAttribute('width') || node.style.width || '',
+        height: node.getAttribute('height') || node.style.height || ''
+      };
+    }
+    return super.value(node);
+  }
+  
+  static formats(node) {
+    if (node.tagName === 'IMG') {
+      return {
+        width: node.getAttribute('width') || node.style.width || '',
+        height: node.getAttribute('height') || node.style.height || ''
+      };
+    }
+    return {};
+  }
+}
+
+Quill.register(CustomImage, true);
 
 const props = defineProps({
   modelValue: {
@@ -280,6 +378,7 @@ const formats = [
   'bold',
   'italic',
   'underline',
+  'align',
   'list',
   'link',
   'image',
@@ -289,6 +388,12 @@ const editorRef = ref(null);
 const showHtml = ref(false);
 const pickerVisible = ref(false);
 const buttonConfigVisible = ref(false);
+const imageConfigVisible = ref(false);
+const selectedImageSrc = ref('');
+const selectedImageWidth = ref('');
+const selectedImageHeight = ref('');
+const selectedImageAlign = ref('');
+const selectedImageIndex = ref(null);
 const isHtmlTextareaFocused = ref(false); // Track if HTML textarea has focus
 
 // Use Quill's built-in icons directly for custom buttons
@@ -574,9 +679,190 @@ function insertImage(imageUrl) {
   if (range) {
     quill.insertEmbed(range.index, 'image', imageUrl);
     quill.setSelection(range.index + 1);
+    
+    // Ensure the newly inserted image is responsive
+    nextTick(() => {
+      ensureImagesAreResponsive();
+    });
   }
   
   pickerVisible.value = false;
+}
+
+// Open image configuration modal
+function openImageConfig() {
+  const quill = editorRef.value.quill;
+  if (!quill) return;
+  
+  const range = quill.getSelection();
+  const editorElement = quill.root;
+  
+  // Find all images in the editor
+  const images = editorElement.querySelectorAll('img');
+  if (images.length === 0) return;
+  
+  let targetImg = null;
+  
+  if (range) {
+    // Try to find image at or near cursor position
+    const [line] = quill.getLine(range.index);
+    if (line && line.domNode) {
+      // Check if line contains an image
+      const lineImages = line.domNode.querySelectorAll('img');
+      if (lineImages.length > 0) {
+        targetImg = lineImages[0];
+      } else if (line.domNode.tagName === 'IMG') {
+        targetImg = line.domNode;
+      }
+    }
+    
+    // If no image found in line, find the closest image by checking DOM position
+    if (!targetImg && images.length > 0) {
+      // Use the first image in the editor as fallback
+      targetImg = images[0];
+    }
+  }
+  
+  // If still no image found, use the first image
+  if (!targetImg && images.length > 0) {
+    targetImg = images[0];
+  }
+  
+  if (targetImg) {
+    selectedImageSrc.value = targetImg.src || targetImg.getAttribute('src') || '';
+    selectedImageWidth.value = targetImg.getAttribute('width') || targetImg.style.width || '';
+    selectedImageHeight.value = targetImg.getAttribute('height') || targetImg.style.height || '';
+    
+    // Check alignment - look at parent block
+    let blockParent = targetImg.parentElement;
+    while (blockParent && blockParent !== editorElement && 
+           !['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(blockParent.tagName)) {
+      blockParent = blockParent.parentElement;
+    }
+    
+    if (blockParent && blockParent !== editorElement && blockParent.style.textAlign) {
+      selectedImageAlign.value = blockParent.style.textAlign;
+    } else {
+      selectedImageAlign.value = '';
+    }
+    
+    imageConfigVisible.value = true;
+  }
+}
+
+// Handle image configuration apply
+function handleImageConfigApply(config) {
+  const quill = editorRef.value.quill;
+  if (!quill) return;
+  
+  // Find the image in the editor
+  const editorElement = quill.root;
+  const images = editorElement.querySelectorAll('img');
+  
+  let targetImg = null;
+  let targetIndex = null;
+  
+  for (const img of images) {
+    const imgSrc = img.src || img.getAttribute('src') || '';
+    const selectedSrc = selectedImageSrc.value;
+    if (imgSrc === selectedSrc || imgSrc.includes(selectedSrc) || selectedSrc.includes(imgSrc)) {
+      targetImg = img;
+      // Find the index of this image in the editor
+      const allNodes = editorElement.querySelectorAll('*');
+      let index = 0;
+      for (let i = 0; i < allNodes.length; i++) {
+        if (allNodes[i] === img) {
+          targetIndex = i;
+          break;
+        }
+      }
+      break;
+    }
+  }
+  
+  if (targetImg) {
+    // Always ensure responsive styles are applied
+    targetImg.style.maxWidth = '100%';
+    targetImg.style.height = 'auto';
+    
+    // Update image attributes
+    if (config.width) {
+      const widthValue = config.width.includes('px') || config.width.includes('%') ? config.width : config.width + 'px';
+      targetImg.setAttribute('width', config.width);
+      targetImg.style.width = widthValue;
+      // Ensure max-width is still applied for responsiveness
+      targetImg.style.maxWidth = '100%';
+    } else {
+      targetImg.removeAttribute('width');
+      targetImg.style.width = '';
+    }
+    
+    if (config.height) {
+      const heightValue = config.height.includes('px') || config.height.includes('%') ? config.height : config.height + 'px';
+      targetImg.setAttribute('height', config.height);
+      // Store height in attribute but use auto for actual display to maintain responsiveness
+      // The height attribute helps with aspect ratio calculation
+      targetImg.style.height = 'auto';
+    } else {
+      targetImg.removeAttribute('height');
+      targetImg.style.height = 'auto';
+    }
+    
+    // Handle alignment by applying text-align to the parent block
+    const parent = targetImg.parentElement;
+    if (config.align) {
+      // Find the block-level parent (p, div, etc.)
+      let blockParent = parent;
+      while (blockParent && blockParent !== editorElement && 
+             !['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(blockParent.tagName)) {
+        blockParent = blockParent.parentElement;
+      }
+      
+      if (blockParent && blockParent !== editorElement) {
+        blockParent.style.textAlign = config.align;
+      } else {
+        // If no block parent found, wrap in a div
+        if (parent && parent.tagName !== 'DIV') {
+          const wrapper = document.createElement('div');
+          wrapper.style.textAlign = config.align;
+          wrapper.style.display = 'block';
+          parent.insertBefore(wrapper, targetImg);
+          wrapper.appendChild(targetImg);
+        } else if (parent) {
+          parent.style.textAlign = config.align;
+          parent.style.display = 'block';
+        }
+      }
+    } else {
+      // Remove alignment
+      let blockParent = parent;
+      while (blockParent && blockParent !== editorElement && 
+             !['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(blockParent.tagName)) {
+        blockParent = blockParent.parentElement;
+      }
+      
+      if (blockParent && blockParent !== editorElement) {
+        blockParent.style.textAlign = '';
+      }
+      
+      // If image is wrapped in a div just for alignment, unwrap it
+      if (parent && parent.tagName === 'DIV' && parent.style.textAlign && 
+          parent.children.length === 1 && parent.children[0] === targetImg) {
+        const grandParent = parent.parentElement;
+        if (grandParent) {
+          grandParent.insertBefore(targetImg, parent);
+          grandParent.removeChild(parent);
+        }
+      }
+    }
+    
+    // Trigger content update
+    nextTick(() => {
+      handleTextChange();
+    });
+  }
+  
+  imageConfigVisible.value = false;
 }
 
 // Toggle HTML view
@@ -673,16 +959,53 @@ function onHtmlTextareaBlur() {
   }
 }
 
+// Function to ensure all images in editor are responsive
+function ensureImagesAreResponsive() {
+  if (!editorRef.value?.quill) return;
+  
+  const editorElement = editorRef.value.quill.root;
+  const images = editorElement.querySelectorAll('img');
+  
+  images.forEach(img => {
+    // Always ensure responsive styles are applied
+    if (!img.style.maxWidth || img.style.maxWidth !== '100%') {
+      img.style.maxWidth = '100%';
+    }
+    if (!img.style.height || img.style.height !== 'auto') {
+      // Only set to auto if height wasn't explicitly set to a specific value
+      // (though we want auto for responsiveness, so we'll override)
+      img.style.height = 'auto';
+    }
+  });
+}
+
 // Initialize editor when component mounts
 onMounted(() => {
   nextTick(() => {
     if (editorRef.value) {
       // Ensure the editor is properly initialized
       const quill = editorRef.value.quill;
-      if (quill && props.modelValue) {
-        quill.root.innerHTML = props.modelValue;
-        editorContent.value = props.modelValue;
-        htmlContent.value = props.modelValue;
+      if (quill) {
+        if (props.modelValue) {
+          quill.root.innerHTML = props.modelValue;
+          editorContent.value = props.modelValue;
+          htmlContent.value = props.modelValue;
+        }
+        
+        // Ensure all existing images are responsive
+        ensureImagesAreResponsive();
+        
+        // Watch for new images being added and make them responsive
+        const observer = new MutationObserver(() => {
+          ensureImagesAreResponsive();
+        });
+        
+        observer.observe(quill.root, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'width', 'height']
+        });
       }
     }
   });
@@ -754,6 +1077,19 @@ watch(() => props.modelValue, (newValue) => {
   background-color: #e5e7eb;
 }
 
+.ql-custom-image-config {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-image-config:hover {
+  background-color: #e5e7eb;
+}
+
 /* Override Quill's default h2 styles for special titles */
 :deep(.ql-editor h2.font-cursive) {
   margin: 0 !important;
@@ -763,5 +1099,353 @@ watch(() => props.modelValue, (newValue) => {
 /* Ensure width and other Tailwind classes work */
 :deep(.ql-editor h2.font-cursive.w-1\/2) {
   width: 50% !important;
+}
+
+/* Make all images responsive - they should scale down if larger than viewport */
+:deep(.ql-editor img) {
+  max-width: 100% !important;
+  height: auto !important;
+}
+</style>
+
+      targetImg = img;
+      // Find the index of this image in the editor
+      const allNodes = editorElement.querySelectorAll('*');
+      let index = 0;
+      for (let i = 0; i < allNodes.length; i++) {
+        if (allNodes[i] === img) {
+          targetIndex = i;
+          break;
+        }
+      }
+      break;
+    }
+  }
+  
+  if (targetImg) {
+    // Always ensure responsive styles are applied
+    targetImg.style.maxWidth = '100%';
+    targetImg.style.height = 'auto';
+    
+    // Update image attributes
+    if (config.width) {
+      const widthValue = config.width.includes('px') || config.width.includes('%') ? config.width : config.width + 'px';
+      targetImg.setAttribute('width', config.width);
+      targetImg.style.width = widthValue;
+      // Ensure max-width is still applied for responsiveness
+      targetImg.style.maxWidth = '100%';
+    } else {
+      targetImg.removeAttribute('width');
+      targetImg.style.width = '';
+    }
+    
+    if (config.height) {
+      const heightValue = config.height.includes('px') || config.height.includes('%') ? config.height : config.height + 'px';
+      targetImg.setAttribute('height', config.height);
+      // Store height in attribute but use auto for actual display to maintain responsiveness
+      // The height attribute helps with aspect ratio calculation
+      targetImg.style.height = 'auto';
+    } else {
+      targetImg.removeAttribute('height');
+      targetImg.style.height = 'auto';
+    }
+    
+    // Handle alignment by applying text-align to the parent block
+    const parent = targetImg.parentElement;
+    if (config.align) {
+      // Find the block-level parent (p, div, etc.)
+      let blockParent = parent;
+      while (blockParent && blockParent !== editorElement && 
+             !['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(blockParent.tagName)) {
+        blockParent = blockParent.parentElement;
+      }
+      
+      if (blockParent && blockParent !== editorElement) {
+        blockParent.style.textAlign = config.align;
+      } else {
+        // If no block parent found, wrap in a div
+        if (parent && parent.tagName !== 'DIV') {
+          const wrapper = document.createElement('div');
+          wrapper.style.textAlign = config.align;
+          wrapper.style.display = 'block';
+          parent.insertBefore(wrapper, targetImg);
+          wrapper.appendChild(targetImg);
+        } else if (parent) {
+          parent.style.textAlign = config.align;
+          parent.style.display = 'block';
+        }
+      }
+    } else {
+      // Remove alignment
+      let blockParent = parent;
+      while (blockParent && blockParent !== editorElement && 
+             !['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(blockParent.tagName)) {
+        blockParent = blockParent.parentElement;
+      }
+      
+      if (blockParent && blockParent !== editorElement) {
+        blockParent.style.textAlign = '';
+      }
+      
+      // If image is wrapped in a div just for alignment, unwrap it
+      if (parent && parent.tagName === 'DIV' && parent.style.textAlign && 
+          parent.children.length === 1 && parent.children[0] === targetImg) {
+        const grandParent = parent.parentElement;
+        if (grandParent) {
+          grandParent.insertBefore(targetImg, parent);
+          grandParent.removeChild(parent);
+        }
+      }
+    }
+    
+    // Trigger content update
+    nextTick(() => {
+      handleTextChange();
+    });
+  }
+  
+  imageConfigVisible.value = false;
+}
+
+// Toggle HTML view
+function toggleHtml() {
+  showHtml.value = !showHtml.value;
+  
+  // Sync editor content to HTML when opening HTML mode
+  if (showHtml.value && editorRef.value?.quill) {
+    // Only sync from Quill if htmlContent is empty or significantly different
+    // Otherwise, preserve the existing htmlContent (which may have custom classes)
+    if (!htmlContent.value || htmlContent.value.length < 10) {
+      const currentHtml = editorRef.value.quill.root.innerHTML;
+      htmlContent.value = currentHtml;
+    }
+    // Preserve existing htmlContent - it may have custom classes that Quill normalized
+  } else if (!showHtml.value && editorRef.value?.quill) {
+    // When switching back to visual mode, update Quill with the HTML content
+    nextTick(() => {
+      if (editorRef.value?.quill) {
+        isInternalUpdate.value = true;
+        const quill = editorRef.value.quill;
+        quill.root.innerHTML = htmlContent.value;
+        const afterHtml = quill.root.innerHTML;
+        editorContent.value = afterHtml;
+        emit('update:modelValue', afterHtml);
+        isInternalUpdate.value = false;
+      }
+    });
+  }
+}
+
+// Update editor content from HTML textarea - uses debouncing to avoid excessive updates
+let updateTimeout = null;
+function updateFromHtml() {
+  // Don't update if this is an internal update from handleTextChange
+  // This prevents infinite loops when visual editor updates htmlContent
+  if (isInternalUpdate.value) {
+    return;
+  }
+  
+  // Clear any pending update
+  if (updateTimeout) {
+    clearTimeout(updateTimeout);
+  }
+  
+  // Only update visual editor when textarea loses focus (user stops editing)
+  // This prevents Quill from normalizing HTML while user is actively typing
+  if (isHtmlTextareaFocused.value) {
+    return; // Don't update visual editor while user is typing in HTML mode
+  }
+  
+  // Update visual editor when textarea loses focus
+  updateTimeout = setTimeout(() => {
+    if (editorRef.value && editorRef.value.quill) {
+      isInternalUpdate.value = true;
+      isUpdatingFromHtml.value = true; // Set flag to prevent handleTextChange from overwriting htmlContent
+      const quill = editorRef.value.quill;
+      
+      // Directly set innerHTML - Quill will normalize it, but we preserve the user's HTML in htmlContent
+      // The flag prevents handleTextChange from overwriting htmlContent with normalized HTML
+      quill.root.innerHTML = htmlContent.value;
+      const afterHtml = quill.root.innerHTML;
+      
+      // Update editorContent with normalized HTML (for visual display)
+      // But emit the ORIGINAL htmlContent to preserve classes and attributes
+      editorContent.value = afterHtml;
+      emit('update:modelValue', htmlContent.value); // Emit original HTML to preserve classes
+      
+      // Reset flags after a short delay to allow any pending text-change events to complete
+      setTimeout(() => {
+        isInternalUpdate.value = false;
+        isUpdatingFromHtml.value = false;
+      }, 100);
+    }
+  }, 100); // Short delay for blur event
+}
+
+// Handle HTML textarea focus - don't update visual editor while user is typing
+function onHtmlTextareaFocus() {
+  isHtmlTextareaFocused.value = true;
+  // Clear any pending updates
+  if (updateTimeout) {
+    clearTimeout(updateTimeout);
+    updateTimeout = null;
+  }
+}
+
+// Handle HTML textarea blur - update visual editor when user stops editing
+function onHtmlTextareaBlur() {
+  isHtmlTextareaFocused.value = false;
+  // Trigger update to visual editor now that user stopped editing
+  if (editorRef.value && editorRef.value.quill && !isInternalUpdate.value) {
+    updateFromHtml();
+  }
+}
+
+// Function to ensure all images in editor are responsive
+function ensureImagesAreResponsive() {
+  if (!editorRef.value?.quill) return;
+  
+  const editorElement = editorRef.value.quill.root;
+  const images = editorElement.querySelectorAll('img');
+  
+  images.forEach(img => {
+    // Always ensure responsive styles are applied
+    if (!img.style.maxWidth || img.style.maxWidth !== '100%') {
+      img.style.maxWidth = '100%';
+    }
+    if (!img.style.height || img.style.height !== 'auto') {
+      // Only set to auto if height wasn't explicitly set to a specific value
+      // (though we want auto for responsiveness, so we'll override)
+      img.style.height = 'auto';
+    }
+  });
+}
+
+// Initialize editor when component mounts
+onMounted(() => {
+  nextTick(() => {
+    if (editorRef.value) {
+      // Ensure the editor is properly initialized
+      const quill = editorRef.value.quill;
+      if (quill) {
+        if (props.modelValue) {
+          quill.root.innerHTML = props.modelValue;
+          editorContent.value = props.modelValue;
+          htmlContent.value = props.modelValue;
+        }
+        
+        // Ensure all existing images are responsive
+        ensureImagesAreResponsive();
+        
+        // Watch for new images being added and make them responsive
+        const observer = new MutationObserver(() => {
+          ensureImagesAreResponsive();
+        });
+        
+        observer.observe(quill.root, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'width', 'height']
+        });
+      }
+    }
+  });
+});
+
+// Watch for external changes to modelValue
+watch(() => props.modelValue, (newValue) => {
+  if (!isInternalUpdate.value && newValue !== editorContent.value) {
+    isInternalUpdate.value = true;
+    editorContent.value = newValue || '';
+    htmlContent.value = newValue || '';
+    
+    nextTick(() => {
+      if (editorRef.value && editorRef.value.quill) {
+        const quill = editorRef.value.quill;
+        quill.root.innerHTML = newValue || '';
+      }
+      isInternalUpdate.value = false;
+    });
+  }
+});
+</script>
+
+<style scoped>
+.rich-text-editor {
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+}
+
+.ql-toolbar {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #d1d5db;
+  background-color: #f9fafb;
+}
+
+.ql-editor {
+  min-height: 200px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Custom button styles */
+.ql-custom-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-button:hover {
+  background-color: #e5e7eb;
+}
+
+.ql-custom-image {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-image:hover {
+  background-color: #e5e7eb;
+}
+
+.ql-custom-image-config {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-image-config:hover {
+  background-color: #e5e7eb;
+}
+
+/* Override Quill's default h2 styles for special titles */
+:deep(.ql-editor h2.font-cursive) {
+  margin: 0 !important;
+  padding: 2.5rem !important; /* p-40 */
+}
+
+/* Ensure width and other Tailwind classes work */
+:deep(.ql-editor h2.font-cursive.w-1\/2) {
+  width: 50% !important;
+}
+
+/* Make all images responsive - they should scale down if larger than viewport */
+:deep(.ql-editor img) {
+  max-width: 100% !important;
+  height: auto !important;
 }
 </style>

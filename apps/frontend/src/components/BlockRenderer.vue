@@ -103,4 +103,16 @@ function getContent(block) {
   max-width: 100%;
   height: auto;
 }
+
+/* Make all images in rich text content responsive */
+:deep(.ql-editor img) {
+  max-width: 100% !important;
+  height: auto !important;
+}
+</style>
+
+:deep(.ql-editor img) {
+  max-width: 100% !important;
+  height: auto !important;
+}
 </style>

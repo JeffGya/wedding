@@ -299,6 +299,14 @@ input, textarea {
 .template-modern .signature {
   margin-top: 2rem;
   padding-top: 1rem;
+}
+
+/* Make all images in rich text content responsive */
+.ql-editor img,
+.template-elegant img,
+.template-modern img {
+  max-width: 100% !important;
+  height: auto !important;
   border-top: 2px solid var(--acc-base);
   font-weight: 600;
   color: var(--int-base);
@@ -404,6 +412,15 @@ hr {
 .block-renderer__block .ql-font-sans { font-family: 'Open Sans', sans-serif; }
 .block-renderer__block .ql-font-monospace { font-family: monospace; }
 .block-renderer__block .ql-font-cursive { font-family: 'Great Vibes', cursive; }
+
+.block-renderer__block .ql-size-small { font-size: 0.875rem; } /* ~14px (theme sm) */
+.block-renderer__block .ql-size-large { font-size: 1.125rem; }   /* ~24px (theme 2xl) */
+.block-renderer__block .ql-size-huge { font-size: 1.5rem; }   /* ~36px (theme 4xl) */
+
+.block-renderer__block .ql-align-center { text-align: center; }
+.block-renderer__block .ql-align-right { text-align: right; }
+.block-renderer__block .ql-align-justify { text-align: justify; }
+
 
 .block-renderer__block .ql-size-small { font-size: 0.875rem; } /* ~14px (theme sm) */
 .block-renderer__block .ql-size-large { font-size: 1.125rem; }   /* ~24px (theme 2xl) */
