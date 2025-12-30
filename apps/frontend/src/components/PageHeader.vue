@@ -51,7 +51,7 @@ const headerStyle = computed(() => {
 }
 
 .page-title {
-  @apply font-cursive text-4xl md:text-5xl lg:text-6xl text-center;
+  @apply font-cursive text-4xl md:text-5xl lg:text-6xl text-center tracking-tight;
   color: var(--int-base);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }

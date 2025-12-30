@@ -160,6 +160,9 @@ body  {
   --p-menubar-border-radius:                  0;
   --p-menubar-item-color:                     var(--int-base);
 
+  /* PrimeVue ProgressSpinner Overrides */
+  --p-progressspinner-stroke:                 var(--acc-base) !important;
+
 }
 
 p, li {
@@ -421,6 +424,11 @@ hr {
 .block-renderer__block .ql-align-right { text-align: right; }
 .block-renderer__block .ql-align-justify { text-align: justify; }
 
+/* ProgressSpinner using design tokens */
+.p-progressspinner svg circle {
+  stroke: var(--acc-base) !important;
+}
+
 
 .block-renderer__block .ql-size-small { font-size: 0.875rem; } /* ~14px (theme sm) */
 .block-renderer__block .ql-size-large { font-size: 1.125rem; }   /* ~24px (theme 2xl) */
@@ -429,3 +437,8 @@ hr {
 .block-renderer__block .ql-align-center { text-align: center; }
 .block-renderer__block .ql-align-right { text-align: right; }
 .block-renderer__block .ql-align-justify { text-align: justify; }
+
+/* ProgressSpinner using design tokens */
+.p-progressspinner svg circle {
+  stroke: var(--acc-base) !important;
+}
