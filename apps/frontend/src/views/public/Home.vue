@@ -111,7 +111,7 @@
             class="w-full h-fit object-cover"
             :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
           > -->
-          <video :src="uploadsUrl + '/sunset-kiss.mp4'" class="w-full h-fit object-cover" :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }" muted loop autoplay></video>
+          <video :src="uploadsUrl + '/sunset-kiss.mp4'" class="w-full h-fit object-cover" :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }" muted loop autoplay playsinline></video>
         </div>
       </div>
       
