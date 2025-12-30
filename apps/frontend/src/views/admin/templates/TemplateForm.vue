@@ -49,48 +49,33 @@
                 </div>
               </div>
 
-              <!-- Template Category -->
-              <div>
-                <FloatLabel variant="in">
-                  <Select
-                    id="template_category"
-                    v-model="form.category"
-                    :options="categoryOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    class="w-full"
-                    placeholder="Select a category"
-                  />
-                  <label for="template_category">Category</label>
-                </FloatLabel>
-              </div>
-
-              <!-- Template Description -->
-              <div>
-                <FloatLabel variant="in">
-                  <Textarea
-                    id="template_description"
-                    v-model="form.description"
-                    class="w-full"
-                    placeholder="Describe what this template is used for"
-                    rows="3"
-                  />
-                  <label for="template_description">Description</label>
-                </FloatLabel>
-              </div>
-
-              <!-- Subject -->
-              <div>
-                <FloatLabel variant="in">
-                  <InputText
-                    id="template_subject"
-                    v-model="form.subject"
-                    class="w-full"
-                    placeholder="Enter email subject"
-                    required
-                  />
-                  <label for="template_subject">Subject</label>
-                </FloatLabel>
+              <!-- Subject Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <FloatLabel variant="in">
+                    <InputText
+                      id="template_subject_en"
+                      v-model="form.subject_en"
+                      class="w-full"
+                      placeholder="Enter email subject (English)"
+                      required
+                    />
+                    <label for="template_subject_en">Subject (English)</label>
+                  </FloatLabel>
+                </div>
+                
+                <div>
+                  <FloatLabel variant="in">
+                    <InputText
+                      id="template_subject_lt"
+                      v-model="form.subject_lt"
+                      class="w-full"
+                      placeholder="Enter email subject (Lithuanian)"
+                      required
+                    />
+                    <label for="template_subject_lt">Subject (Lithuanian)</label>
+                  </FloatLabel>
+                </div>
               </div>
 
               <!-- Language Tabs -->
@@ -142,7 +127,7 @@
                 <Button
                   type="submit"
                   :loading="saving"
-                  :disabled="!form.name || !form.subject || !form.body_en || !form.body_lt"
+                  :disabled="!form.name || !form.subject_en || !form.subject_lt || !form.body_en || !form.body_lt"
                 >
                   {{ isEditMode ? 'Update Template' : 'Create Template' }}
                 </Button>
@@ -225,16 +210,6 @@ const saving = ref(false)
 const activeTab = ref('en')
 const availableStyles = ref([]);
 
-const categoryOptions = [
-  { label: 'Welcome', value: 'welcome' },
-  { label: 'RSVP', value: 'rsvp' },
-  { label: 'Reminder', value: 'reminder' },
-  { label: 'Update', value: 'update' },
-  { label: 'Thank You', value: 'thank-you' },
-  { label: 'Travel', value: 'travel' },
-  { label: 'Custom', value: 'custom' }
-]
-
 const styleOptions = ref([])
 
 const languageOptions = [
@@ -244,12 +219,11 @@ const languageOptions = [
 
 const form = ref({
   name: '',
-  subject: '',
+  subject_en: '',
+  subject_lt: '',
   body_en: '',
   body_lt: '',
-  style: 'elegant',
-  category: '',
-  description: ''
+  style: 'elegant'
 })
 
 async function loadTemplate() {
@@ -261,12 +235,11 @@ async function loadTemplate() {
     
     form.value = {
       name: template.name,
-      subject: template.subject,
+      subject_en: template.subject_en || template.subject || '',
+      subject_lt: template.subject_lt || template.subject || '',
       body_en: template.body_en,
       body_lt: template.body_lt,
-      style: template.style || 'elegant',
-      category: template.category || '',
-      description: template.description || ''
+      style: template.style || 'elegant'
     }
   } catch (error) {
     console.error('Error loading template:', error)
@@ -280,7 +253,8 @@ async function saveTemplate() {
   try {
     const templateData = {
       name: form.value.name,
-      subject: form.value.subject,
+      subject_en: form.value.subject_en,
+      subject_lt: form.value.subject_lt,
       body_en: form.value.body_en,
       body_lt: form.value.body_lt,
       style: form.value.style

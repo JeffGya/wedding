@@ -42,91 +42,99 @@
       </Banner>
     </div>
 
-    <div class="space-y-8">
-      <Field name="dietary">
-        <label for="dietary" class="text-txt font-medium block mb-8">
-          {{ $t('rsvp.dietaryLabel') }}
-        </label>
-        <InputText 
-          id="dietary" 
-          type="text"
-          class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-          v-model="form.dietary" 
-        />
-      </Field>
-      <Banner v-if="errors.dietary" type="error" :closable="false" class="text-sm">
-        {{ errors.dietary }}
-      </Banner>
-    </div>
-
-    <div class="space-y-8">
-      <Field name="notes">
-        <label for="notes" class="text-txt font-medium block mb-8">
-          {{ $t('rsvp.notesLabel') }}
-        </label>
-        <Textarea
-          id="notes" 
-          class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus min-h-48"
-          v-model="form.notes" 
-        />
-      </Field>
-      <Banner v-if="errors.notes" type="error" :closable="false" class="text-sm">
-        {{ errors.notes }}
-      </Banner>
-    </div>
-
-    <div v-if="props.guest.can_bring_plus_one" class="space-y-8">
-      <p class="text-txt font-medium">
-        {{ $t('rsvp.plusOneLabel') }}
-      </p>
-      <div class="flex items-center gap-16">
-        <ToggleSwitch 
-          inputId="add-plus-one" 
-          v-model="form.add_plus_one" 
-          class="text-btn-primary-base"
-        />
-        <label for="add-plus-one" class="text-txt font-medium">
-          {{ form.add_plus_one ? $t('rsvp.yes') : $t('rsvp.no') }}
-        </label>
-      </div>
-    </div>
-
-    <div 
-      v-if="props.guest.can_bring_plus_one && form.add_plus_one"
-      class="plus-one p-16 rounded-md space-y-16 border border-bg-glass-border"
-    >
-      <div class="space-y-8">
-        <Field name="plus_one_name">
-          <label for="plus_one_name" class="text-txt font-medium block mb-8">
-            {{ $t('rsvp.plusOneNameLabel') }}
-          </label>
-          <InputText
-            id="plus_one_name"
-            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-            v-model="form.plus_one_name"
-          />
-        </Field>
-        <Banner v-if="errors.plus_one_name" type="error" :closable="false" class="text-sm">
-          {{ errors.plus_one_name }}
-        </Banner>
-      </div>
-      
-      <div class="space-y-8">
-        <Field name="plus_one_dietary">
-          <label for="plus_one_dietary" class="text-txt font-medium block mb-8">
-            {{ $t('rsvp.plusOneDietaryLabel') }}
+    <Transition name="fade">
+      <div v-if="form.attending" class="space-y-8">
+        <Field name="dietary">
+          <label for="dietary" class="text-txt font-medium block mb-8">
+            {{ $t('rsvp.dietaryLabel') }}
           </label>
           <InputText 
-            id="plus_one_dietary" 
+            id="dietary" 
+            type="text"
             class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-            v-model="form.plus_one_dietary" 
+            v-model="form.dietary" 
           />
         </Field>
-        <Banner v-if="errors.plus_one_dietary" type="error" :closable="false" class="text-sm">
-          {{ errors.plus_one_dietary }}
+        <Banner v-if="errors.dietary" type="error" :closable="false" class="text-sm">
+          {{ errors.dietary }}
         </Banner>
       </div>
-    </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div v-if="form.attending" class="space-y-8">
+        <Field name="notes">
+          <label for="notes" class="text-txt font-medium block mb-8">
+            {{ $t('rsvp.notesLabel') }}
+          </label>
+          <Textarea
+            id="notes" 
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus min-h-48"
+            v-model="form.notes" 
+          />
+        </Field>
+        <Banner v-if="errors.notes" type="error" :closable="false" class="text-sm">
+          {{ errors.notes }}
+        </Banner>
+      </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div v-if="form.attending && props.guest.can_bring_plus_one" class="space-y-8">
+        <p class="text-txt font-medium">
+          {{ $t('rsvp.plusOneLabel') }}
+        </p>
+        <div class="flex items-center gap-16">
+          <ToggleSwitch 
+            inputId="add-plus-one" 
+            v-model="form.add_plus_one" 
+            class="text-btn-primary-base"
+          />
+          <label for="add-plus-one" class="text-txt font-medium">
+            {{ form.add_plus_one ? $t('rsvp.yes') : $t('rsvp.no') }}
+          </label>
+        </div>
+      </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div 
+        v-if="form.attending && props.guest.can_bring_plus_one && form.add_plus_one"
+        class="plus-one p-16 rounded-md space-y-16 border border-bg-glass-border"
+      >
+        <div class="space-y-8">
+          <Field name="plus_one_name">
+            <label for="plus_one_name" class="text-txt font-medium block mb-8">
+              {{ $t('rsvp.plusOneNameLabel') }}
+            </label>
+            <InputText
+              id="plus_one_name"
+              class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+              v-model="form.plus_one_name"
+            />
+          </Field>
+          <Banner v-if="errors.plus_one_name" type="error" :closable="false" class="text-sm">
+            {{ errors.plus_one_name }}
+          </Banner>
+        </div>
+        
+        <div class="space-y-8">
+          <Field name="plus_one_dietary">
+            <label for="plus_one_dietary" class="text-txt font-medium block mb-8">
+              {{ $t('rsvp.plusOneDietaryLabel') }}
+            </label>
+            <InputText 
+              id="plus_one_dietary" 
+              class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+              v-model="form.plus_one_dietary" 
+            />
+          </Field>
+          <Banner v-if="errors.plus_one_dietary" type="error" :closable="false" class="text-sm">
+            {{ errors.plus_one_dietary }}
+          </Banner>
+        </div>
+      </div>
+    </Transition>
 
     <Button
       type="submit"
@@ -169,22 +177,39 @@ const validationSchema = computed(() =>
   createRsvpSchema({ plusOneAllowed: props.guest.can_bring_plus_one })
 );
 
-const initialValues = computed(() => ({
-  attending: Boolean(props.guest.attending),
-  dietary: props.guest.dietary || '',
-  notes: props.guest.notes || '',
-  add_plus_one: Boolean(props.guest.plus_one_name), // auto-enable toggle if name exists
-  plus_one_name: props.guest.plus_one_name || '',
-  plus_one_dietary: props.guest.plus_one_dietary || ''
-}));
+// Check if this is a returning guest (has already submitted an RSVP)
+const isReturningGuest = computed(() => props.guest.attending !== null && props.guest.attending !== undefined);
+
+const initialValues = computed(() => {
+  // Only pre-select values for returning guests
+  if (isReturningGuest.value) {
+    return {
+      attending: Boolean(props.guest.attending),
+      dietary: props.guest.dietary || '',
+      notes: props.guest.notes || '',
+      add_plus_one: Boolean(props.guest.plus_one_name), // auto-enable toggle if name exists
+      plus_one_name: props.guest.plus_one_name || '',
+      plus_one_dietary: props.guest.plus_one_dietary || ''
+    };
+  }
+  // New guests: no pre-selection
+  return {
+    attending: null,
+    dietary: '',
+    notes: '',
+    add_plus_one: false,
+    plus_one_name: '',
+    plus_one_dietary: ''
+  };
+});
 
 const form = reactive({
-  attending: Boolean(props.guest.attending),
-  dietary: props.guest.dietary || '',
-  notes: props.guest.notes || '',
-  add_plus_one: Boolean(props.guest.plus_one_name),
-  plus_one_name: props.guest.plus_one_name || '',
-  plus_one_dietary: props.guest.plus_one_dietary || ''
+  attending: isReturningGuest.value ? Boolean(props.guest.attending) : null,
+  dietary: isReturningGuest.value ? (props.guest.dietary || '') : '',
+  notes: isReturningGuest.value ? (props.guest.notes || '') : '',
+  add_plus_one: isReturningGuest.value ? Boolean(props.guest.plus_one_name) : false,
+  plus_one_name: isReturningGuest.value ? (props.guest.plus_one_name || '') : '',
+  plus_one_dietary: isReturningGuest.value ? (props.guest.plus_one_dietary || '') : ''
 });
 
 watch(form, (newVal) => {
@@ -233,6 +258,45 @@ async function onSubmit(values) {
 .plus-one {
   background-image: var(--bg-glass);
   border: 1px solid var(--bg-glass-border);
+}
+
+/* Fade and collapse animation for form fields */
+.fade-enter-active {
+  transition: opacity 300ms ease-in, max-height 300ms ease-in, margin-top 300ms ease-in, margin-bottom 300ms ease-in, padding-top 300ms ease-in, padding-bottom 300ms ease-in;
+  overflow: hidden;
+}
+
+.fade-leave-active {
+  transition: opacity 300ms ease-out, max-height 300ms ease-out, margin-top 300ms ease-out, margin-bottom 300ms ease-out, padding-top 300ms ease-out, padding-bottom 300ms ease-out;
+  overflow: hidden;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+  max-height: 2000px;
+}
+
+.fade-leave-from {
+  opacity: 1;
+  max-height: 2000px;
+}
+
+.fade-leave-to {
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* Responsive adjustments */

@@ -26,6 +26,41 @@ if (process.env.DB_TYPE === 'mysql') {
 const requireAuth = require('../middleware/auth');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
+
+// Helper function to detect template schema version (shared with templates.js logic)
+let schemaVersionCache = null;
+async function detectTemplateSchema() {
+  if (schemaVersionCache !== null) return schemaVersionCache;
+  
+  try {
+    // Try to fetch a template and check which columns exist
+    const testTemplate = await dbGet('SELECT * FROM templates LIMIT 1', []);
+    
+    if (testTemplate) {
+      const hasSubjectEn = 'subject_en' in testTemplate;
+      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
+      return schemaVersionCache;
+    } else {
+      // No templates exist, check schema directly
+      let checkSql;
+      if (process.env.DB_TYPE === 'mysql') {
+        checkSql = `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'templates' AND COLUMN_NAME = 'subject_en'`;
+      } else {
+        checkSql = `SELECT COUNT(*) as count FROM pragma_table_info('templates') WHERE name = 'subject_en'`;
+      }
+      
+      const result = await dbGet(checkSql, []);
+      const hasSubjectEn = (result?.count || 0) > 0;
+      
+      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
+      return schemaVersionCache;
+    }
+  } catch (error) {
+    // Default to old schema if detection fails
+    schemaVersionCache = 'old';
+    return schemaVersionCache;
+  }
+}
 // Use Luxon for robust timezone handling
 const { DateTime } = require('luxon');
 const logger = require('../helpers/logger');
@@ -319,15 +354,33 @@ router.get('/', async (req, res) => {
  */
 // Create a new template
 router.post('/templates', async (req, res) => {
-  const { name, subject, body_en, body_lt } = req.body;
-  if (!name || !subject || !body_en || !body_lt) {
-    return res.status(400).json({ success: false, error: 'All fields are required' });
+  const { name, subject, subject_en, subject_lt, body_en, body_lt } = req.body;
+  
+  // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
+  const finalSubjectEn = subject_en || subject || '';
+  const finalSubjectLt = subject_lt || subject || '';
+  
+  if (!name || !finalSubjectEn || !body_en || !body_lt) {
+    return res.status(400).json({ success: false, error: 'Name, subject (or subject_en), body_en, and body_lt are required.' });
   }
+  
   try {
-    const insertResult = await dbRun(
-      `INSERT INTO templates (name, subject, body_en, body_lt) VALUES (?, ?, ?, ?)`,
-      [name, subject, body_en, body_lt]
-    );
+    // Detect schema version
+    const schemaVersion = await detectTemplateSchema();
+    
+    let sql, params;
+    if (schemaVersion === 'new') {
+      // New schema: separate subject_en and subject_lt columns
+      sql = `INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt) VALUES (?, ?, ?, ?, ?)`;
+      params = [name, finalSubjectEn, finalSubjectLt, body_en, body_lt];
+    } else {
+      // Old schema: single subject column with JSON
+      const subjectJson = JSON.stringify({ en: finalSubjectEn, lt: finalSubjectLt });
+      sql = `INSERT INTO templates (name, subject, body_en, body_lt) VALUES (?, ?, ?, ?)`;
+      params = [name, subjectJson, body_en, body_lt];
+    }
+    
+    const insertResult = await dbRun(sql, params);
     const id = insertResult.insertId || insertResult.lastID;
     res.json({ success: true, id });
   } catch (err) {
@@ -446,15 +499,34 @@ router.get('/templates/:id', async (req, res) => {
  */
 // Update a template
 router.put('/templates/:id', async (req, res) => {
-  const { name, subject, body_en, body_lt } = req.body;
-  if (!name || !subject || !body_en || !body_lt) {
-    return res.status(400).json({ success: false, error: 'All fields are required' });
+  const { name, subject, subject_en, subject_lt, body_en, body_lt } = req.body;
+  
+  // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
+  const finalSubjectEn = subject_en || subject || '';
+  const finalSubjectLt = subject_lt || subject || '';
+  
+  if (!name || !finalSubjectEn || !body_en || !body_lt) {
+    return res.status(400).json({ success: false, error: 'Name, subject (or subject_en), body_en, and body_lt are required.' });
   }
+  
   try {
-    const result = await dbRun(
-      `UPDATE templates SET name = ?, subject = ?, body_en = ?, body_lt = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-      [name, subject, body_en, body_lt, req.params.id]
-    );
+    // Detect schema version
+    const schemaVersion = await detectTemplateSchema();
+    
+    let sql, params;
+    if (schemaVersion === 'new') {
+      // New schema: separate subject_en and subject_lt columns
+      sql = `UPDATE templates SET name = ?, subject_en = ?, subject_lt = ?, body_en = ?, body_lt = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+      params = [name, finalSubjectEn, finalSubjectLt, body_en, body_lt, req.params.id];
+    } else {
+      // Old schema: single subject column with JSON
+      const subjectJson = JSON.stringify({ en: finalSubjectEn, lt: finalSubjectLt });
+      sql = `UPDATE templates SET name = ?, subject = ?, body_en = ?, body_lt = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+      params = [name, subjectJson, body_en, body_lt, req.params.id];
+    }
+    
+    const result = await dbRun(sql, params);
+    
     if ((result.affectedRows !== undefined && result.affectedRows === 0) ||
         (result.changes !== undefined && result.changes === 0)) {
       return res.status(404).json({ success: false, error: 'Template not found' });
@@ -1294,7 +1366,9 @@ router.post('/preview-template/:templateId', async (req, res) => {
     // Replace variables in template
     const body_en = replaceTemplateVars(template.body_en, variables);
     const body_lt = replaceTemplateVars(template.body_lt, variables);
-    const subject = replaceTemplateVars(template.subject, variables);
+    // Use language-specific subject, with fallback for backward compatibility
+    const subjectTemplate = lang === 'lt' ? (template.subject_lt || template.subject || '') : (template.subject_en || template.subject || '');
+    const subject = replaceTemplateVars(subjectTemplate, variables);
 
     const body = lang === 'lt' ? body_lt : body_en;
 

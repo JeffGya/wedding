@@ -1,11 +1,11 @@
 {
-  "home.hero.subtitle": "The big celebration, in Vilnius. The way only we can do!",
+  "home.hero.subtitle": "Our big celebration, in Vilnius. The way only we can do it!",
   "home.hero.cta": "RSVP",
   "home.hero.deadline": "RSVP by {deadline}",
-  "home.rsvpClosed": "RSVP's are not open yet. We will send out invitations with RSVP codes in the coming months.",
+  "home.rsvpClosed": "RSVP's are not open yet. Invitations are not sent out yet.",
 
-  "home.ourWedding.title": "The Wedding",
-  "home.ourWedding.description": "On November 18, 2025 we decided to spend our lives together and that moment deserves a celebration. We come from completly different cultures and backgrounds, and our wedding will reflect that. We will the share the best of both our worlds. This is why we are excited to celebrate this with you in Vilnius Lithuania. We can't wait to see you there!",
+  "home.ourWedding.title": "Our Wedding",
+  "home.ourWedding.description": "On November 18, 2025 we decided to spend the rest of our lives together and that moment deserves a celebration. We come from completly different cultures and backgrounds, and the celebartion will reflect that. We will the share the best of both our worlds. This is why we are excited to celebrate this with you in Vilnius Lithuania.",
   "home.ourWedding.cta": "All About the Wedding",
 
   "home.eventDetails.title": "The Details",
@@ -21,11 +21,11 @@
   "home.eventDetails.venue": "Keliautojų Namai",
 
   "home.travel.title": "Travel & Stay",
-  "home.travel.description": "For the wedding weekend we have your stay covered. If you plan to arrive in Vilnius earlier or simply want some practical advice for traveling and staying in the city, this is the place to look. Here you’ll find all the information you need.",
+  "home.travel.description": "For the wedding weekend we have your stay covered. If you plan to arrive in Vilnius earlier or simply want some practical advice for traveling and staying in the city, we have a bunch of tips for you. Here you’ll find all the information you need.",
   "home.travel.cta": "Essential travel information",
 
   "home.tips.title": "Vilnius Recommendations",
-  "home.tips.description": "We recommend arriving a few days earlier to enjoy the beautiful city of Vilnius. There might even be a little surprise event before the wedding. Here you’ll find our recommendations to make the most of your stay in the city. Food, drinks, music, and experiences. we’ve got it covered!",
+  "home.tips.description": "We recommend arriving a few days earlier to enjoy the beautiful city of Vilnius. There might even be a little surprise event before the wedding. Here you’ll find our recommendations to make the most of your stay in the city. Food, drinks, music, and experiences.",
   "home.tips.cta": "Our best recommendations",
 
   "home.contact.title": "Another RSVP Reminder",
@@ -34,16 +34,16 @@
 
   "home.backToTop": "Back to top",
 
-  "home.countdown.label": "Until the big day!",
+  "home.countdown.label": "left until the celebration!",
   "home.countdown.months": "Month(s)",
   "home.countdown.days": "Day(s)",
   "rsvp.lookupTitle": "Enter your RSVP code",
   "rsvp.lookupLabel": "RSVP code",
-  "rsvp.lookupButton": "Find my RSVP",
-  "rsvp.title": "So Are you coming?",
+  "rsvp.lookupButton": "Confirm RSVP code",
+  "rsvp.title": "RVSP response form",
   "rsvp.loading": "Loading...",
-  "rsvp.errorFetch": "This code does not match with our guest codes. Please check your code and try again.",
-  "rsvp.errorSubmit": "There was an error submitting your RSVP. Please try again later. Probably some technical error, contact us if it keeps happening.",
+  "rsvp.errorFetch": "This code is not valid. Please check your code and try again.",
+  "rsvp.errorSubmit": "There was an error submitting your RSVP. Please try again later. Probably some technical error, contact Jeffrey if it keeps happening.",
   "rsvp.success": "Your RSVP was successfully submitted.",
   "rsvp.attendingLabel": "Will you be attending our wedding?",
   "rsvp.attendingYes": "Yes, I will be there",
@@ -51,7 +51,7 @@
   "rsvp.attend": "Please let us know if you will attend our wedding",
   "rsvp.dietaryLabel": "Do you have any dietary restrictions?",
   "rsvp.notesLabel": "Any additional notes or messages for us?",
-  "rsvp.plusOneLabel": "Will you bring a plus one?",
+  "rsvp.plusOneLabel": "Will you bring a plus one? (optional)",
   "rsvp.plusOneNameLabel": "What is the name of your plus one?",
   "rsvp.plusOneDietaryLabel": "Any dietary restrictions for your plus one?",
   "rsvp.addPlusOneLabel": "Add a plus one",
@@ -99,12 +99,12 @@
   "rsvpGate.pendingRSVP": "You haven't completed your RSVP yet. Please complete it to access this page.",
   "rsvpGate.completeRSVP": "Complete My RSVP",
   "rsvpGate.accessDenied": "Access Denied",
-  "rsvpGate.accessDeniedMessage": "This page requires you to have RSVP'd as attending. Please complete your RSVP to continue.",
+  "rsvpGate.accessDeniedMessage": "This page requires you to have RSVP'd as attending.",
   "home.scrollHint": "Scroll to next section",
 
   "footer.date": "August 1st, 2026",
   "footer.madeWith": "Made with ❤️ for our big celebration.",
-  "footer.copyright": "© 2025-2026 Brigita & Jeffrey. All rights reserved.",
+  "footer.copyright": "© 2026 Brigita & Jeffrey. All rights reserved.",
 
   "footer.nav.rsvp": "RSVP",
   "footer.nav.contact": "Contact Us",

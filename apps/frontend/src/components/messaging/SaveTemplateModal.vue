@@ -145,12 +145,17 @@ async function handleSave() {
   saving.value = true
 
   try {
+    // Use separate subject_en/subject_lt if provided, otherwise use single subject for both
+    const subjectEn = props.subjectEn || props.subject || '';
+    const subjectLt = props.subjectLt || props.subject || '';
+    
     const templateData = {
       name: mode.value === 'new' ? templateName.value : props.templates.find(t => t.id === selectedId.value)?.name,
-      subject: props.subject,
+      subject_en: subjectEn,
+      subject_lt: subjectLt,
       body_en: props.bodyEn,
       body_lt: props.bodyLt,
-      style: props.style || 'elegant' // Include style
+      style: props.style || 'elegant'
     }
 
     if (mode.value === 'new') {

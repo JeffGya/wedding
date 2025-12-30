@@ -31,16 +31,8 @@
     </div>
 
     <div v-else class="space-y-8">
-      <!-- Category Filter -->
-      <div class="category-filter-section">
-        <TemplateCategoryFilter 
-          :templates="templates"
-          v-model:selectedCategory="selectedCategory"
-        />
-      </div>
-
       <!-- Pre-built Templates Section -->
-      <div class="prebuilt-templates" v-if="selectedCategory === 'all' || isPrebuiltCategory">
+      <div class="prebuilt-templates">
         <div class="flex items-center justify-between mb-6">
           <div>
             <h2 class="text-2xl font-bold text-gray-900">Pre-built Templates</h2>
@@ -56,9 +48,9 @@
           />
         </div>
 
-        <div v-if="filteredPrebuiltTemplates.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="prebuiltTemplates.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card
-            v-for="template in filteredPrebuiltTemplates"
+            v-for="template in prebuiltTemplates"
             :key="template.id"
             class="template-card hover:shadow-lg transition-shadow cursor-pointer"
             @click="useTemplate(template)"
@@ -67,13 +59,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900">{{ template.name }}</h3>
-                  <p class="text-sm text-gray-600 mt-1">{{ getTemplateCategory(template.name) }}</p>
                 </div>
-                <Tag 
-                  :value="getTemplateCategory(template.name)" 
-                  :severity="getCategorySeverity(template.name)"
-                  class="text-xs"
-                />
               </div>
             </template>
             
@@ -91,28 +77,29 @@
                   </div>
                 </div>
 
-                <div class="flex gap-2 pt-2">
-                  <Button 
-                    label="Use Template" 
-                    icon="i-solar-copy-bold-duotone" 
-                    size="normal"
-                    @click.stop="useTemplate(template)"
-                  />
-                  <Button 
-                    label="Preview" 
-                    icon="i-solar-eye-bold-duotone" 
-                    size="normal"
-                    severity="secondary"
-                    text
-                    @click.stop="previewTemplate(template)"
-                  />
+                <div class="pt-2">
+                  <ButtonGroup>
+                    <Button 
+                      label="Use" 
+                      icon="i-solar-copy-bold-duotone" 
+                      size="small"
+                      @click.stop="useTemplate(template)"
+                    />
+                    <Button 
+                      label="Preview" 
+                      icon="i-solar-eye-bold-duotone" 
+                      size="small"
+                      severity="secondary"
+                      @click.stop="previewTemplate(template)"
+                    />
+                  </ButtonGroup>
                 </div>
               </div>
             </template>
           </Card>
         </div>
 
-        <div v-else-if="selectedCategory === 'all'" class="text-center py-8 bg-gray-50 rounded-lg">
+        <div v-else class="text-center py-8 bg-gray-50 rounded-lg">
           <div class="text-gray-500 mb-4">
             <i class="pi pi-file-edit text-4xl mb-2"></i>
             <p class="text-lg">No pre-built templates</p>
@@ -122,7 +109,7 @@
       </div>
 
       <!-- Custom Templates Section -->
-      <div class="custom-templates" v-if="selectedCategory === 'all' || selectedCategory === 'Custom'">
+      <div class="custom-templates">
         <div class="flex items-center justify-between mb-6">
           <div>
             <h2 class="text-2xl font-bold text-gray-900">Custom Templates</h2>
@@ -130,7 +117,7 @@
           </div>
         </div>
 
-        <div v-if="filteredCustomTemplates.length === 0" class="text-center py-8">
+        <div v-if="customTemplates.length === 0" class="text-center py-8">
           <div class="text-gray-500 mb-4">
             <i class="pi pi-file-edit text-4xl mb-2"></i>
             <p class="text-lg">No custom templates</p>
@@ -144,58 +131,81 @@
           />
         </div>
 
-        <div v-else class="space-y-4">
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card
-            v-for="template in filteredCustomTemplates"
+            v-for="template in customTemplates"
             :key="template.id"
-            class="template-card"
+            class="template-card hover:shadow-lg transition-shadow cursor-pointer"
+            @click="useTemplate(template)"
           >
             <template #title>
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-lg font-semibold">{{ template.name }}</h3>
-                  <p class="text-sm text-gray-600">{{ template.subject }}</p>
-                </div>
-                <div class="flex gap-2">
-                  <Button 
-                    icon="i-solar-pen-bold-duotone" 
-                    severity="secondary" 
-                    text
-                    @click="$router.push(`/admin/templates/${template.id}/edit`)"
-                    v-tooltip.top="'Edit Template'"
-                  />
-                  <Button 
-                    icon="i-solar-eye-bold-duotone" 
-                    severity="info" 
-                    text
-                    @click="previewTemplate(template)"
-                    v-tooltip.top="'Preview Template'"
-                  />
-                  <Button 
-                    icon="i-solar-trash-bin-trash-bold-duotone" 
-                    severity="danger" 
-                    text
-                    @click="deleteTemplate(template.id)"
-                    v-tooltip.top="'Delete Template'"
-                  />
+                  <h3 class="text-lg font-semibold text-gray-900">{{ template.name }}</h3>
                 </div>
               </div>
             </template>
             
             <template #content>
-              <div class="space-y-4">
+              <div class="space-y-3">
+                <!-- English Subject -->
                 <div>
-                  <h4 class="font-semibold text-sm text-gray-700 mb-2">English Content</h4>
-                  <div class="bg-gray-50 border rounded p-3 text-sm">
-                    <div v-html="template.body_en" class="prose prose-sm max-w-none"></div>
+                  <h4 class="font-medium text-sm text-gray-700 mb-1">Subject (English)</h4>
+                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject_en || template.subject || 'N/A' }}</p>
+                </div>
+                
+                <!-- Lithuanian Subject -->
+                <div>
+                  <h4 class="font-medium text-sm text-gray-700 mb-1">Subject (Lithuanian)</h4>
+                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject_lt || template.subject || 'N/A' }}</p>
+                </div>
+                
+                <!-- English Preview -->
+                <div>
+                  <h4 class="font-medium text-sm text-gray-700 mb-1">Preview (English)</h4>
+                  <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded max-h-20 overflow-hidden">
+                    {{ getTemplatePreview(template.body_en) }}
                   </div>
                 </div>
                 
+                <!-- Lithuanian Preview -->
                 <div>
-                  <h4 class="font-semibold text-sm text-gray-700 mb-2">Lithuanian Content</h4>
-                  <div class="bg-gray-50 border rounded p-3 text-sm">
-                    <div v-html="template.body_lt" class="prose prose-sm max-w-none"></div>
+                  <h4 class="font-medium text-sm text-gray-700 mb-1">Preview (Lithuanian)</h4>
+                  <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded max-h-20 overflow-hidden">
+                    {{ getTemplatePreview(template.body_lt) }}
                   </div>
+                </div>
+
+                <div class="pt-2">
+                  <ButtonGroup>
+                    <Button 
+                      label="Use" 
+                      icon="i-solar-copy-bold-duotone" 
+                      size="small"
+                      @click.stop="useTemplate(template)"
+                    />
+                    <Button 
+                      label="Preview" 
+                      icon="i-solar-eye-bold-duotone" 
+                      size="small"
+                      severity="secondary"
+                      @click.stop="previewTemplate(template)"
+                    />
+                    <Button 
+                      label="Edit" 
+                      icon="i-solar-pen-bold-duotone" 
+                      severity="contrast"
+                      size="small"
+                      @click.stop="$router.push(`/admin/templates/${template.id}/edit`)"
+                    />
+                    <Button 
+                      label="Delete" 
+                      icon="i-solar-trash-bin-trash-bold-duotone" 
+                      severity="danger"
+                      size="small"
+                      @click.stop="deleteTemplate(template.id)"
+                    />
+                  </ButtonGroup>
                 </div>
               </div>
             </template>
@@ -222,15 +232,9 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfirm } from 'primevue/useconfirm'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
-import TemplateCategoryFilter from '@/components/templates/TemplateCategoryFilter.vue'
 import { fetchTemplates, deleteTemplate as deleteTemplateApi, seedTemplates as seedTemplatesApi } from '@/api/templates'
 import { getTemplatePreviewWithSample } from '@/utils/htmlTemplates'
 import TemplatePreview from '@/components/templates/TemplatePreview.vue'
-import { 
-  getTemplateCategory, 
-  getCategorySeverity, 
-  filterTemplatesByCategory 
-} from '@/utils/templateCategories'
 import { useToastService } from '@/utils/toastService'
 
 const router = useRouter()
@@ -240,7 +244,6 @@ const { showSuccess, showError, showWarning } = useToastService()
 const templates = ref([])
 const loading = ref(true)
 const seeding = ref(false)
-const selectedCategory = ref('all')
 
 // Preview dialog state
 const previewDialog = ref({
@@ -261,23 +264,6 @@ const customTemplates = computed(() => {
   )
 })
 
-const filteredPrebuiltTemplates = computed(() => {
-  if (selectedCategory.value === 'all') {
-    return prebuiltTemplates.value
-  }
-  return filterTemplatesByCategory(prebuiltTemplates.value, selectedCategory.value)
-})
-
-const filteredCustomTemplates = computed(() => {
-  if (selectedCategory.value === 'all') {
-    return customTemplates.value
-  }
-  return filterTemplatesByCategory(customTemplates.value, selectedCategory.value)
-})
-
-const isPrebuiltCategory = computed(() => {
-  return selectedCategory.value !== 'Custom' && selectedCategory.value !== 'all'
-})
 
 function isCustomTemplate(templateName) {
   const prebuiltNames = [

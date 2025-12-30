@@ -30,6 +30,42 @@ const requireAuth = require('../middleware/auth');
 const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
 const logger = require('../helpers/logger');
 
+// Helper function to detect template schema version
+let schemaVersionCache = null;
+async function detectTemplateSchema() {
+  if (schemaVersionCache !== null) return schemaVersionCache;
+  
+  try {
+    // Try to fetch a template and check which columns exist
+    // This is more reliable than querying INFORMATION_SCHEMA
+    const testTemplate = await dbGet('SELECT * FROM templates LIMIT 1', []);
+    
+    if (testTemplate) {
+      const hasSubjectEn = 'subject_en' in testTemplate;
+      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
+      return schemaVersionCache;
+    } else {
+      // No templates exist, check schema directly
+      let checkSql;
+      if (process.env.DB_TYPE === 'mysql') {
+        checkSql = `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'templates' AND COLUMN_NAME = 'subject_en'`;
+      } else {
+        checkSql = `SELECT COUNT(*) as count FROM pragma_table_info('templates') WHERE name = 'subject_en'`;
+      }
+      
+      const result = await dbGet(checkSql, []);
+      const hasSubjectEn = (result?.count || 0) > 0;
+      
+      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
+      return schemaVersionCache;
+    }
+  } catch (error) {
+    // Default to old schema if detection fails
+    schemaVersionCache = 'old';
+    return schemaVersionCache;
+  }
+}
+
 // Protect all routes
 router.use(requireAuth);
 
@@ -68,7 +104,39 @@ router.get('/', async (req, res) => {
   const sql = `SELECT * FROM templates ORDER BY created_at DESC`;
   try {
     const rows = await dbAll(sql, []);
-    res.json({ success: true, templates: rows });
+    
+    // Detect schema version once
+    const schemaVersion = await detectTemplateSchema();
+    
+    // Parse subject based on schema version
+    const templates = rows.map(row => {
+      let subjectEn = '';
+      let subjectLt = '';
+      if (schemaVersion === 'new') {
+        // New schema: direct columns
+        subjectEn = row.subject_en || '';
+        subjectLt = row.subject_lt || '';
+      } else {
+        // Old schema: JSON in subject column
+        try {
+          const subjectData = JSON.parse(row.subject || '{}');
+          subjectEn = subjectData.en || row.subject || '';
+          subjectLt = subjectData.lt || row.subject || '';
+        } catch (e) {
+          // Backward compatibility: if subject is not JSON, use it for both
+          subjectEn = row.subject || '';
+          subjectLt = row.subject || '';
+        }
+      }
+      
+      return {
+        ...row,
+        subject: subjectEn, // Keep backward compatibility with 'subject' field
+        subject_en: subjectEn,
+        subject_lt: subjectLt
+      };
+    });
+    res.json({ success: true, templates });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
@@ -170,7 +238,37 @@ router.get('/:id', async (req, res) => {
   try {
     const row = await dbGet(sql, [req.params.id]);
     if (!row) return res.status(404).json({ success: false, error: 'Template not found' });
-    res.json({ success: true, template: row });
+    
+    // Detect schema version
+    const schemaVersion = await detectTemplateSchema();
+    
+    // Parse subject based on schema version
+    let subjectEn = '';
+    let subjectLt = '';
+    if (schemaVersion === 'new') {
+      // New schema: direct columns
+      subjectEn = row.subject_en || '';
+      subjectLt = row.subject_lt || '';
+    } else {
+      // Old schema: JSON in subject column
+      try {
+        const subjectData = JSON.parse(row.subject || '{}');
+        subjectEn = subjectData.en || row.subject || '';
+        subjectLt = subjectData.lt || row.subject || '';
+      } catch (e) {
+        // Backward compatibility: if subject is not JSON, use it for both
+        subjectEn = row.subject || '';
+        subjectLt = row.subject || '';
+      }
+    }
+    
+    const template = {
+      ...row,
+      subject: subjectEn, // Keep backward compatibility with 'subject' field
+      subject_en: subjectEn,
+      subject_lt: subjectLt
+    };
+    res.json({ success: true, template });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
@@ -209,7 +307,7 @@ router.get('/:id', async (req, res) => {
 // Create a new template
 router.post('/', async (req, res) => {
   try {
-    const { name, subject, body_en, body_lt, style } = req.body;
+    const { name, subject, subject_en, subject_lt, body_en, body_lt, style } = req.body;
     
     // Validate style if provided
     if (style) {
@@ -224,17 +322,33 @@ router.post('/', async (req, res) => {
       }
     }
     
-    logger.debug('Creating template with data:', { name, subject, body_en: body_en?.substring(0, 50), body_lt: body_lt?.substring(0, 50), style });
+    // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
+    const finalSubjectEn = subject_en || subject || '';
+    const finalSubjectLt = subject_lt || subject || '';
     
-    if (!name || !subject || !body_en || !body_lt) {
+    logger.debug('Creating template with data:', { name, subject_en: finalSubjectEn, subject_lt: finalSubjectLt, body_en: body_en?.substring(0, 50), body_lt: body_lt?.substring(0, 50), style });
+    
+    if (!name || !finalSubjectEn || !body_en || !body_lt) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Name, subject, body_en, and body_lt are required.' 
+        error: 'Name, subject (or subject_en), body_en, and body_lt are required.' 
       });
     }
 
-    const sql = `INSERT INTO templates (name, subject, body_en, body_lt, style) VALUES (?, ?, ?, ?, ?)`;
-    const params = [name, subject, body_en, body_lt, style];
+    // Detect schema version
+    const schemaVersion = await detectTemplateSchema();
+    
+    let sql, params;
+    if (schemaVersion === 'new') {
+      // New schema: separate subject_en and subject_lt columns
+      sql = `INSERT INTO templates (name, subject_en, subject_lt, body_en, body_lt, style) VALUES (?, ?, ?, ?, ?, ?)`;
+      params = [name, finalSubjectEn, finalSubjectLt, body_en, body_lt, style];
+    } else {
+      // Old schema: single subject column with JSON
+      const subjectJson = JSON.stringify({ en: finalSubjectEn, lt: finalSubjectLt });
+      sql = `INSERT INTO templates (name, subject, body_en, body_lt, style) VALUES (?, ?, ?, ?, ?)`;
+      params = [name, subjectJson, body_en, body_lt, style];
+    }
     
     logger.debug('Inserting template with SQL:', sql);
     logger.debug('Parameters:', params);
@@ -245,7 +359,34 @@ router.post('/', async (req, res) => {
     logger.debug('Template created with ID:', templateId);
 
     // Fetch the created template
-    const template = await dbGet('SELECT * FROM templates WHERE id = ?', [templateId]);
+    const templateRow = await dbGet('SELECT * FROM templates WHERE id = ?', [templateId]);
+    
+    // Parse subject based on schema version
+    let subjectEn = '';
+    let subjectLt = '';
+    if (schemaVersion === 'new') {
+      // New schema: direct columns
+      subjectEn = templateRow.subject_en || '';
+      subjectLt = templateRow.subject_lt || '';
+    } else {
+      // Old schema: JSON in subject column
+      try {
+        const subjectData = JSON.parse(templateRow.subject || '{}');
+        subjectEn = subjectData.en || templateRow.subject || '';
+        subjectLt = subjectData.lt || templateRow.subject || '';
+      } catch (e) {
+        // Backward compatibility: if subject is not JSON, use it for both
+        subjectEn = templateRow.subject || '';
+        subjectLt = templateRow.subject || '';
+      }
+    }
+    
+    const template = {
+      ...templateRow,
+      subject: subjectEn, // Keep backward compatibility with 'subject' field
+      subject_en: subjectEn,
+      subject_lt: subjectLt
+    };
     
     res.status(201).json({ 
       success: true, 
@@ -307,17 +448,33 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, subject, body_en, body_lt, style = 'elegant' } = req.body;
+    const { name, subject, subject_en, subject_lt, body_en, body_lt, style = 'elegant' } = req.body;
     
-    if (!name || !subject || !body_en || !body_lt) {
+    // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
+    const finalSubjectEn = subject_en || subject || '';
+    const finalSubjectLt = subject_lt || subject || '';
+    
+    if (!name || !finalSubjectEn || !body_en || !body_lt) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Name, subject, body_en, and body_lt are required.' 
+        error: 'Name, subject (or subject_en), body_en, and body_lt are required.' 
       });
     }
 
-    const sql = `UPDATE templates SET name = ?, subject = ?, body_en = ?, body_lt = ?, style = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
-    const params = [name, subject, body_en, body_lt, style, id];
+    // Detect schema version
+    const schemaVersion = await detectTemplateSchema();
+    
+    let sql, params;
+    if (schemaVersion === 'new') {
+      // New schema: separate subject_en and subject_lt columns
+      sql = `UPDATE templates SET name = ?, subject_en = ?, subject_lt = ?, body_en = ?, body_lt = ?, style = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+      params = [name, finalSubjectEn, finalSubjectLt, body_en, body_lt, style, id];
+    } else {
+      // Old schema: single subject column with JSON
+      const subjectJson = JSON.stringify({ en: finalSubjectEn, lt: finalSubjectLt });
+      sql = `UPDATE templates SET name = ?, subject = ?, body_en = ?, body_lt = ?, style = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+      params = [name, subjectJson, body_en, body_lt, style, id];
+    }
     
     const result = await dbRun(sql, params);
     const changes = result.affectedRows !== undefined ? result.affectedRows : result.changes;
@@ -330,7 +487,34 @@ router.put('/:id', async (req, res) => {
     }
 
     // Fetch the updated template
-    const template = await dbGet('SELECT * FROM templates WHERE id = ?', [id]);
+    const templateRow = await dbGet('SELECT * FROM templates WHERE id = ?', [id]);
+    
+    // Parse subject based on schema version
+    let subjectEn = '';
+    let subjectLt = '';
+    if (schemaVersion === 'new') {
+      // New schema: direct columns
+      subjectEn = templateRow.subject_en || '';
+      subjectLt = templateRow.subject_lt || '';
+    } else {
+      // Old schema: JSON in subject column
+      try {
+        const subjectData = JSON.parse(templateRow.subject || '{}');
+        subjectEn = subjectData.en || templateRow.subject || '';
+        subjectLt = subjectData.lt || templateRow.subject || '';
+      } catch (e) {
+        // Backward compatibility: if subject is not JSON, use it for both
+        subjectEn = templateRow.subject || '';
+        subjectLt = templateRow.subject || '';
+      }
+    }
+    
+    const template = {
+      ...templateRow,
+      subject: subjectEn, // Keep backward compatibility with 'subject' field
+      subject_en: subjectEn,
+      subject_lt: subjectLt
+    };
     
     res.json({ 
       success: true, 
@@ -338,9 +522,10 @@ router.put('/:id', async (req, res) => {
     });
   } catch (error) {
     logger.error('Error updating template:', error);
+    logger.error('Error details:', { message: error.message, stack: error.stack, name: error.name });
     res.status(500).json({ 
       success: false, 
-      error: 'Failed to update template' 
+      error: 'Failed to update template: ' + error.message 
     });
   }
 });
@@ -427,13 +612,44 @@ router.get('/:id/preview', async (req, res) => {
     
     logger.debug('Preview request:', { id, guestId });
     
-    const template = await dbGet('SELECT * FROM templates WHERE id = ?', [id]);
-    if (!template) {
+    const templateRow = await dbGet('SELECT * FROM templates WHERE id = ?', [id]);
+    if (!templateRow) {
       logger.debug('Template not found for ID:', id);
       return res.status(404).json({ success: false, error: 'Template not found' });
     }
 
-    logger.debug('Template found:', template.name);
+    logger.debug('Template found:', templateRow.name);
+    
+    // Detect schema version
+    const schemaVersion = await detectTemplateSchema();
+    
+    // Parse subject based on schema version
+    let subjectEn = '';
+    let subjectLt = '';
+    if (schemaVersion === 'new') {
+      // New schema: direct columns
+      subjectEn = templateRow.subject_en || '';
+      subjectLt = templateRow.subject_lt || '';
+    } else {
+      // Old schema: JSON in subject column
+      try {
+        const subjectData = JSON.parse(templateRow.subject || '{}');
+        subjectEn = subjectData.en || templateRow.subject || '';
+        subjectLt = subjectData.lt || templateRow.subject || '';
+      } catch (e) {
+        // Backward compatibility: if subject is not JSON, use it for both
+        subjectEn = templateRow.subject || '';
+        subjectLt = templateRow.subject || '';
+      }
+    }
+    
+    // Create normalized template object
+    const template = {
+      ...templateRow,
+      subject: subjectEn, // Keep backward compatibility with 'subject' field
+      subject_en: subjectEn,
+      subject_lt: subjectLt
+    };
 
     // Get sample guests for preview with all necessary fields
     const sampleGuests = await dbAll(`
@@ -552,10 +768,12 @@ router.get('/:id/preview', async (req, res) => {
     // Replace variables in template content
     const bodyEn = replaceTemplateVars(template.body_en || '', variables);
     const bodyLt = replaceTemplateVars(template.body_lt || '', variables);
-    const subject = replaceTemplateVars(template.subject || '', variables);
+    // Use subject_en for English, fallback to subject_lt or empty string
+    const subject = replaceTemplateVars(template.subject_en || template.subject_lt || '', variables);
 
     logger.debug('Variable replacement results:');
-    logger.debug('Original subject:', template.subject);
+    logger.debug('Original subject_en:', template.subject_en);
+    logger.debug('Original subject_lt:', template.subject_lt);
     logger.debug('Replaced subject:', subject);
     logger.debug('Original body_en length:', template.body_en?.length);
     logger.debug('Replaced body_en length:', bodyEn?.length);

@@ -187,6 +187,7 @@ async function getTemplateVariables(guest, template = null) {
     code: guest.code,
     rsvpLink: `${SITE_URL}/${guest.preferred_language}/rsvp/${guest.code}`,
     plusOneName: plusOneName,
+    plus_one_name: plusOneName, // Alias for template compatibility (snake_case)
     rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline),
     email: guest.email,
     preferredLanguage: guest.preferred_language,
@@ -199,6 +200,7 @@ async function getTemplateVariables(guest, template = null) {
     
     // Conditional Flags
     hasPlusOne: hasPlusOne,
+    has_plus_one: hasPlusOne, // Alias for template compatibility (snake_case)
     isPlusOne: isPlusOne,
     hasResponded,
     isAttending,
