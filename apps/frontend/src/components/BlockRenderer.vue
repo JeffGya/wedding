@@ -9,7 +9,7 @@
       <div v-else-if="block.type === 'image'">
         <img :src="getContent(block).src" :alt="getContent(block).alt || ''" class="block-renderer__image" />
       </div>
-      <div v-else-if="block.type === 'video' || block.type === 'map'" v-html="getContent(block).embed"></div>
+      <div v-else-if="block.type === 'video' || block.type === 'map'" class="flex justify-center" v-html="getContent(block).embed"></div>
       <hr v-else-if="block.type === 'divider'"/>
       <div v-else-if="block.type === 'survey' && withSurveys">
         <SurveyForm :survey="block" />
@@ -105,12 +105,6 @@ function getContent(block) {
 }
 
 /* Make all images in rich text content responsive */
-:deep(.ql-editor img) {
-  max-width: 100% !important;
-  height: auto !important;
-}
-</style>
-
 :deep(.ql-editor img) {
   max-width: 100% !important;
   height: auto !important;

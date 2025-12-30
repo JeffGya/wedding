@@ -20,6 +20,7 @@
               type="error" 
               />
             <Form @submit="submitLookup" class="space-y-8">
+                <p class="-mt-4">You have received an email with your RSVP code. Please enter it below to continue. If you have not received an email, please contact us as soon as possible.</p>
               <FloatLabel variant="in">
                 <InputText
                   id="lookup-code"

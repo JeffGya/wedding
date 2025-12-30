@@ -1,5 +1,5 @@
 <template>
-  <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto">
+  <main class="md:w-1/2 mx-16 md:mx-auto lg:mx-auto mb-40 lg:mb-80">
     <Banner
       v-if="!settingsLoading && isClosed()"
       :message="$t('rsvp.closed')"

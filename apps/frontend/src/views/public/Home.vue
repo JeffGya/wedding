@@ -44,7 +44,6 @@
         />
         <Message v-else 
           severity="contrast"
-          variant="outlined" 
           size="normal" 
           icon="i-solar:alarm-sleep-bold"
           class="w-full md:w-fit m-auto">
@@ -106,12 +105,13 @@
       <!-- Left side: Image/placeholder -->
       <div class="section-visual section-visual-left">
         <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <img 
-            :src="uploadsUrl + '/KissingAtDoor.JPG'" 
+         <!-- <img 
+            :src="uploadsUrl + '/sunset-kiss.mp4'" 
             alt="Brigita and Jeffrey in a restaurant, after their engagement on table mountain in cape town, south africa"
             class="w-full h-fit object-cover"
             :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
-          >
+          > -->
+          <video :src="uploadsUrl + '/sunset-kiss.mp4'" class="w-full h-fit object-cover" :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }" muted loop autoplay></video>
         </div>
       </div>
       
