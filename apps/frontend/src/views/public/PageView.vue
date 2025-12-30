@@ -160,8 +160,9 @@ watch(locale, loadPage);
 }
 
 :deep(.block-renderer__block p:first-child) {
-  @apply mt-16 font-semibold text-lg/7;
+  @apply mt-16;
 }
+
 :deep(.block-renderer__block p) {
   @apply font-sans text-base/6 text-txt;
 }

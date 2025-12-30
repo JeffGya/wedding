@@ -540,9 +540,9 @@ function startHeadingVariations() {
   // Escape ampersands for typed.js
   const headingStrings = [
     "\u200B", // Zero-width space - maintains cursor position
-    "The Gyamfi's",
+    t('home.hero.typed.gyamfis'),
     "\u200B",
-    "The wedding",
+    t('home.hero.typed.wedding'),
     "\u200B",
     "Brigita & Jeffrey".replace(/&/g, '&amp;')
   ]

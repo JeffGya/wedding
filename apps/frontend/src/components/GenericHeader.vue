@@ -84,6 +84,7 @@ import { fetchNavigation } from '@/api/navigation';
 import { fetchRSVPSession } from '@/api/rsvp';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import Menubar from 'primevue/menubar';
+import { getCurrentDarkMode, savePreference } from '@/utils/darkMode';
 // NOTE: Language/menu reactivity patch
 // We make the header refresh its navigation whenever the route language changes
 // and build RouterLink targets using named routes + params so they always use
@@ -104,15 +105,25 @@ export default {
   },
   data() {
     return {
-      darkMode: false, // Default mode
+      darkMode: false, // Will be initialized in created()
       menuItems: [],
       appTitle: import.meta.env.VITE_APP_TITLE || 'Brigita + Jeffrey',
     };
   },
   methods: {
     toggleDarkMode() {
+      // v-model already updated this.darkMode, so use that value
+      // Apply it to DOM and save to localStorage
       const element = document.getElementById('mode');
-      element.classList.toggle('dark-mode');
+      if (element) {
+        if (this.darkMode) {
+          element.classList.add('dark-mode');
+        } else {
+          element.classList.remove('dark-mode');
+        }
+        // Save preference to localStorage
+        savePreference(this.darkMode ? 'dark' : 'light');
+      }
     },
     goToHome() {
       const lang = this.$route.params.lang || 'en';
@@ -159,6 +170,9 @@ export default {
     },
   },
   async created() {
+    // Initialize dark mode state from current DOM state
+    this.darkMode = getCurrentDarkMode();
+    
     // Initial menu load with current route language.
     const lang = this.$route.params.lang || 'en';
     await this.loadMenu(lang);
@@ -172,6 +186,33 @@ export default {
         this.loadMenu(lang);
       },
     },
+  },
+  mounted() {
+    // Watch for external changes to dark mode (e.g., from early initialization)
+    // and sync the toggle state
+    const modeElement = document.getElementById('mode');
+    if (modeElement) {
+      const syncToggle = () => {
+        this.darkMode = modeElement.classList.contains('dark-mode');
+      };
+      
+      // Initial sync
+      syncToggle();
+      
+      // Watch for class changes
+      this._darkModeObserver = new MutationObserver(syncToggle);
+      this._darkModeObserver.observe(modeElement, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+  },
+  beforeUnmount() {
+    // Clean up observer on unmount
+    if (this._darkModeObserver) {
+      this._darkModeObserver.disconnect();
+      this._darkModeObserver = null;
+    }
   },
 };
 </script>
