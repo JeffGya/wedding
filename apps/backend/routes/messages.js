@@ -855,10 +855,18 @@ router.post('/:id/send', async (req, res, next) => {
         const body_lt = replaceTemplateVars(message.body_lt, variables);
         const subject = replaceTemplateVars(message.subject, variables);
         
+        // Prepare email template options from settings
+        const emailOptions = {
+          siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
+          title: variables.brideName && variables.groomName 
+            ? `${variables.brideName} & ${variables.groomName}`
+            : undefined
+        };
+        
         // Apply shared email template system for consistent, inline-styled HTML
         const styleKey = message.style || 'elegant';
-        const emailHtmlEn = generateEmailHTML(body_en, styleKey, {});
-        const emailHtmlLt = generateEmailHTML(body_lt, styleKey, {});
+        const emailHtmlEn = generateEmailHTML(body_en, styleKey, emailOptions);
+        const emailHtmlLt = generateEmailHTML(body_lt, styleKey, emailOptions);
         
         // Send email using Resend
         const emailData = {
@@ -1140,9 +1148,19 @@ router.post('/preview', async (req, res) => {
     const body_lt = replaceTemplateVars(tpl.body_lt, variables);
     const subject = replaceTemplateVars(tpl.subject, variables);
 
+    // Prepare email template options from settings
+    const emailOptions = {
+      buttonText: null,
+      buttonUrl: null,
+      siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
+      title: variables.brideName && variables.groomName 
+        ? `${variables.brideName} & ${variables.groomName}`
+        : undefined
+    };
+
     // Generate email HTML for both languages without action button
-    const email_html_en = generateEmailHTML(body_en, style, { buttonText: null, buttonUrl: null });
-    const email_html_lt = generateEmailHTML(body_lt, style, { buttonText: null, buttonUrl: null });
+    const email_html_en = generateEmailHTML(body_en, style, emailOptions);
+    const email_html_lt = generateEmailHTML(body_lt, style, emailOptions);
 
     return res.json({
       success: true,
@@ -1226,18 +1244,33 @@ router.post('/:id/resend', async (req, res, next) => {
           results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
           return;
         }
-        const name = guest.group_label || guest.name;
         const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-        const body = (lang === 'lt' ? message.body_lt : message.body_en)
-          .replace(/{{\s*name\s*}}/g, name)
-          .replace(/{{\s*groupLabel\s*}}/g, guest.group_label || '')
-          .replace(/{{\s*code\s*}}/g, guest.code)
-          .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.SITE_URL}/rsvp/${guest.code}`);
+        
+        // Get enhanced variables for this guest
+        const variables = await getTemplateVariables(guest, message);
+        
+        // Replace variables in message content
+        const body_en = replaceTemplateVars(message.body_en, variables);
+        const body_lt = replaceTemplateVars(message.body_lt, variables);
+        const subject = replaceTemplateVars(message.subject, variables);
+        
+        // Prepare email template options from settings
+        const emailOptions = {
+          siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
+          title: variables.brideName && variables.groomName 
+            ? `${variables.brideName} & ${variables.groomName}`
+            : undefined
+        };
+        
+        // Apply shared email template system for consistent, inline-styled HTML
+        const styleKey = message.style || 'elegant';
+        const emailHtml = generateEmailHTML(lang === 'lt' ? body_lt : body_en, styleKey, emailOptions);
+        
         const emailData = {
           from: senderInfo,
           to: guest.email,
-          subject: message.subject,
-          html: body,
+          subject: subject,
+          html: emailHtml,
         };
         let retries = 0;
         const maxRetries = 3;

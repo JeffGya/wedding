@@ -145,9 +145,17 @@ async function sendConfirmationEmail(db, guestData) {
     const subject = replaceTemplateVars(subjectTemplate, variables);
     const body = replaceTemplateVars(bodyTemplate, variables);
     
+    // Prepare email template options from settings
+    const emailOptions = {
+      siteUrl: variables.websiteUrl || variables.siteUrl || process.env.SITE_URL || 'http://localhost:5001',
+      title: variables.brideName && variables.groomName 
+        ? `${variables.brideName} & ${variables.groomName}`
+        : undefined
+    };
+    
     // Apply email template styling
     const styleKey = template.style || 'elegant';
-    const emailHtml = generateEmailHTML(body, styleKey, {});
+    const emailHtml = generateEmailHTML(body, styleKey, emailOptions);
     
     // Send via Resend
     const response = await axios.post("https://api.resend.com/emails", {

@@ -189,7 +189,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
           
           <!-- Header -->
           <tr>
-            <td class="mobile-header" style="padding: 30px 25px; background: ${config.header.background}; border: ${config.header.border}; border-radius: 12px 12px 0 0; text-align: center;">
+            <td class="mobile-header" style="padding: 30px 25px; background: ${config.header.background}; border: ${config.header.border}; border-radius: 8px 8px 0 0; text-align: center;">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="text-align: center;">
@@ -235,7 +235,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
           
           <!-- Footer -->
           <tr>
-            <td class="mobile-footer" style="padding: 25px; background: ${config.footer.background}; border: ${config.footer.border}; border-radius: 0 0 12px 12px; text-align: center;">
+            <td class="mobile-footer" style="padding: 25px; background: ${config.footer.background}; border: ${config.footer.border}; border-radius: 0 0 8px 8px; text-align: center;">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td class="mobile-text" style="font-family: ${config.footer.font}; font-size: ${config.footer.fontSize}; color: #442727; line-height: 1.6;">
@@ -243,7 +243,7 @@ function generateEmailHTML(content, style = 'elegant', options = {}) {
                       ${footerText}
                     </p>
                     <p style="margin: 0 0 15px 0; font-weight: bold;">
-                      Brigita & Jeffrey
+                      ${title}
                     </p>
                     <p style="margin: 0; font-size: 14px;">
                       <a href="${siteUrl}" style="color: #DAA520; text-decoration: none;">

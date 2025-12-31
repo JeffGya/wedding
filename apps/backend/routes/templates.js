@@ -692,9 +692,16 @@ router.get('/:id/preview', async (req, res) => {
       }
     } catch (error) {
       logger.error('Error getting variables:', error);
-      // Create basic variables as fallback
+      // Create basic variables as fallback using actual settings
       if (sampleGuests.length > 0) {
         selectedGuest = sampleGuests[0];
+        
+        // Get actual settings for fallback
+        const { getSystemSettings } = require('../utils/templateVariables');
+        const getDbConnection = require('../db/connection');
+        const db = getDbConnection();
+        const settings = await getSystemSettings(db);
+        const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
         
         // Determine if guest is a plus one based on group label
         const isPlusOne = selectedGuest.group_label && selectedGuest.group_label.toLowerCase().includes('plus one');
@@ -702,13 +709,23 @@ router.get('/:id/preview', async (req, res) => {
         // Determine if guest can bring plus one (not a plus one themselves and has permission)
         const canBringPlusOne = !isPlusOne && selectedGuest.can_bring_plus_one;
         
+        // Format date helper
+        const formatDate = (dateStr) => {
+          if (!dateStr) return '';
+          return new Date(dateStr).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        };
+        
         variables = {
           guestName: selectedGuest.name || 'Guest',
           groupLabel: selectedGuest.group_label || 'Guest',
           code: selectedGuest.code || 'ABC123',
-          rsvpLink: 'https://your-wedding-site.com/en/rsvp/ABC123',
-          plusOneName: '', // Plus one name would be stored separately or in notes
-          rsvpDeadline: 'December 1, 2025',
+          rsvpLink: `${settings.website_url || SITE_URL}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
+          plusOneName: '',
+          rsvpDeadline: selectedGuest.rsvp_deadline ? formatDate(selectedGuest.rsvp_deadline) : '',
           email: selectedGuest.email || 'guest@example.com',
           preferredLanguage: selectedGuest.preferred_language || 'en',
           attending: selectedGuest.attending || false,
@@ -717,8 +734,8 @@ router.get('/:id/preview', async (req, res) => {
           can_bring_plus_one: canBringPlusOne,
           dietary: selectedGuest.dietary || '',
           notes: selectedGuest.notes || '',
-          hasPlusOne: false, // This would be determined by checking if they've added a plus one
-          isPlusOne: isPlusOne, // New variable to indicate if this guest is a plus one
+          hasPlusOne: false,
+          isPlusOne: isPlusOne,
           hasResponded: !!selectedGuest.responded_at,
           isAttending: selectedGuest.rsvp_status === 'attending',
           isNotAttending: selectedGuest.rsvp_status === 'not_attending',
@@ -727,27 +744,28 @@ router.get('/:id/preview', async (req, res) => {
           isGroomFamily: selectedGuest.group_label === 'Groom\'s Family',
           isEnglishSpeaker: selectedGuest.preferred_language === 'en',
           isLithuanianSpeaker: selectedGuest.preferred_language === 'lt',
-          siteUrl: process.env.SITE_URL || 'http://localhost:5001',
-          weddingDate: 'June 25, 2025',
-          venueName: 'Grand Hall',
-          venueAddress: '123 Main Street, Vilnius',
-          eventStartDate: 'June 25, 2025',
-          eventEndDate: 'June 25, 2025',
-          eventTime: '5:00 PM',
-          brideName: 'Brigtia',
-          groomName: 'Jeffrey',
-          contactEmail: 'contact@wedding.com',
-          contactPhone: '+370 123 45678',
-          rsvpDeadlineDate: 'December 1, 2025',
-          eventType: 'Wedding',
-          dressCode: 'Semi-formal',
-          specialInstructions: '',
-          websiteUrl: 'https://your-wedding-site.com',
-          appTitle: 'Wedding Site',
-          senderName: 'Brigtia & Jeffrey',
-          senderEmail: 'noreply@wedding.com',
+          siteUrl: SITE_URL,
+          weddingDate: settings.wedding_date ? formatDate(settings.wedding_date) : '',
+          venueName: settings.venue_name || '',
+          venueAddress: settings.venue_address || '',
+          eventStartDate: settings.event_start_date ? formatDate(settings.event_start_date) : '',
+          eventEndDate: settings.event_end_date ? formatDate(settings.event_end_date) : '',
+          eventTime: settings.event_time || '',
+          brideName: settings.bride_name || '',
+          groomName: settings.groom_name || '',
+          contactEmail: settings.contact_email || '',
+          contactPhone: settings.contact_phone || '',
+          rsvpDeadlineDate: settings.rsvp_deadline ? formatDate(settings.rsvp_deadline) : '',
+          eventType: settings.event_type || '',
+          dressCode: settings.dress_code || '',
+          specialInstructions: settings.special_instructions || '',
+          websiteUrl: settings.website_url || SITE_URL,
+          appTitle: settings.app_title || 'Wedding Site',
+          senderName: '',
+          senderEmail: '',
           currentDate: new Date().toLocaleDateString(),
-          daysUntilWedding: '180 days'
+          daysUntilWedding: settings.wedding_date ? 
+            Math.ceil((new Date(settings.wedding_date) - new Date()) / (1000 * 60 * 60 * 24)) + ' days' : ''
         };
       } else {
         variables = {};
@@ -783,11 +801,13 @@ router.get('/:id/preview', async (req, res) => {
     
     const style = template.style || 'elegant';
     const previewOptions = {
-      title: 'Brigtia & Jeffrey',
+      title: variables.brideName && variables.groomName 
+        ? `${variables.brideName} & ${variables.groomName}`
+        : 'Brigita & Jeffrey',
       buttonText: 'Visit Our Website',
-      buttonUrl: 'https://your-wedding-site.com',
+      buttonUrl: variables.websiteUrl || variables.siteUrl || 'https://your-wedding-site.com',
       footerText: 'With love and joy,',
-      siteUrl: 'https://your-wedding-site.com'
+      siteUrl: variables.websiteUrl || variables.siteUrl || 'https://your-wedding-site.com'
     };
 
     // Generate full email HTML for both languages

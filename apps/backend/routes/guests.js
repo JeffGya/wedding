@@ -48,6 +48,12 @@ router.use(requireAuth);
 
 async function sendConfirmationEmail(db, guestData) {
   try {
+    // Check if guest has email
+    if (!guestData.email) {
+      logger.warn(`Guest ${guestData.code} has no email, skipping confirmation email`);
+      return;
+    }
+    
     // Fetch sender info
     const senderInfo = await getSenderInfo(db);
     
@@ -69,43 +75,60 @@ async function sendConfirmationEmail(db, guestData) {
       return;
     }
     
+    // Get enhanced template variables for this guest
+    const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+    const variables = await getTemplateVariables(guestData, template);
+    
     // Determine language
     const lang = guestData.preferred_language === 'lt' ? 'lt' : 'en';
-    const subject = lang === 'lt' ? template.subject_lt : template.subject_en;
+    let subjectTemplate = lang === 'lt' ? template.subject_lt : template.subject_en;
     const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
     
-    // Replace placeholders with enhanced data
-    const html = bodyTemplate
-      .replace(/{{\s*guestName\s*}}/g, guestData.name)
-      .replace(/{{\s*name\s*}}/g, guestData.name)
-      .replace(/{{\s*groupLabel\s*}}/g, guestData.group_label || '')
-      .replace(/{{\s*code\s*}}/g, guestData.code || '')
-      .replace(/{{\s*rsvpLink\s*}}/g, `${process.env.CORS_ORIGINS}/rsvp/${guestData.code}`)
-      .replace(/{{\s*brideName\s*}}/g, 'Brigita')
-      .replace(/{{\s*groomName\s*}}/g, 'Jeffrey')
-      .replace(/{{\s*eventStartDate\s*}}/g, 'Your Wedding Date')
-      .replace(/{{\s*venueName\s*}}/g, 'Your Venue')
-      .replace(/{{\s*eventStartTime\s*}}/g, 'Your Event Time')
-      .replace(/{{\s*plusOneName\s*}}/g, guestData.plus_one_name || '')
-      .replace(/{{\s*dietary\s*}}/g, guestData.dietary || '')
-      .replace(/{{\s*notes\s*}}/g, guestData.notes || '')
-      // Handle conditional blocks (simple version)
-      .replace(/\{\{#if plusOneName\}\}(.*?)\{\{\/if\}\}/gs, (match, content) => {
-        return guestData.plus_one_name ? content : '';
-      })
-      .replace(/\{\{#if dietary\}\}(.*?)\{\{\/if\}\}/gs, (match, content) => {
-        return guestData.dietary ? content : '';
-      })
-      .replace(/\{\{#if notes\}\}(.*?)\{\{\/if\}\}/gs, (match, content) => {
-        return guestData.notes ? content : '';
-      });
+    // Fallback 1: Check for old schema with single 'subject' column
+    if ((!subjectTemplate || subjectTemplate.trim() === '') && template.subject) {
+      subjectTemplate = template.subject;
+      logger.info(`Template "${templateName}" using legacy 'subject' column`);
+    }
+    
+    // Fallback 2: If still missing, use a default based on RSVP status
+    if (!subjectTemplate || subjectTemplate.trim() === '') {
+      if (guestData.rsvp_status === 'attending') {
+        subjectTemplate = lang === 'lt' 
+          ? 'Ačiū už jūsų RSVP, {{guestName}}!' 
+          : 'Thank you for your RSVP, {{guestName}}!';
+      } else if (guestData.rsvp_status === 'not_attending') {
+        subjectTemplate = lang === 'lt'
+          ? 'Ačiū už jūsų RSVP, {{guestName}}'
+          : 'Thank you for your RSVP, {{guestName}}';
+      } else {
+        subjectTemplate = lang === 'lt'
+          ? 'Ačiū už jūsų RSVP, {{guestName}}!'
+          : 'Thank you for your RSVP, {{guestName}}!';
+      }
+      logger.warn(`Template "${templateName}" missing subject_${lang}, using fallback`);
+    }
+    
+    // Replace variables in template content
+    const subject = replaceTemplateVars(subjectTemplate, variables);
+    const body = replaceTemplateVars(bodyTemplate, variables);
+    
+    // Apply email template styling
+    const { generateEmailHTML } = require('../utils/emailTemplates');
+    const styleKey = template.style || 'elegant';
+    const emailOptions = {
+      siteUrl: variables.websiteUrl || variables.siteUrl || process.env.SITE_URL || 'http://localhost:5001',
+      title: variables.brideName && variables.groomName 
+        ? `${variables.brideName} & ${variables.groomName}`
+        : undefined
+    };
+    const emailHtml = generateEmailHTML(body, styleKey, emailOptions);
     
     // Send via Resend
     const response = await axios.post("https://api.resend.com/emails", {
       from: senderInfo,
       to: guestData.email,
-      subject,
-      html
+      subject: subject,
+      html: emailHtml
     }, {
       headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
     });
@@ -113,6 +136,7 @@ async function sendConfirmationEmail(db, guestData) {
     logger.info("Confirmation email sent:", response.data);
   } catch (e) {
     logger.error("Error in sendConfirmationEmail:", e);
+    // Don't throw - email failure shouldn't block guest operations
   }
 }
 

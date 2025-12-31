@@ -154,7 +154,21 @@ async function getTemplateVariables(guest, template = null) {
   
   // Get system settings
   const settings = await getSystemSettings(db);
-  const senderInfo = await getSenderInfo(db);
+  const senderInfoString = await getSenderInfo(db);
+  
+  // Parse senderInfo string (format: "Name <email@example.com>")
+  let senderName = '';
+  let senderEmail = '';
+  if (senderInfoString) {
+    const match = senderInfoString.match(/^(.+?)\s*<(.+?)>$/);
+    if (match) {
+      senderName = match[1].trim();
+      senderEmail = match[2].trim();
+    } else {
+      // Fallback: if no angle brackets, treat entire string as name
+      senderName = senderInfoString.trim();
+    }
+  }
   
   // Determine if guest is a plus one based on group label
   const isPlusOne = guest.group_label && guest.group_label.toLowerCase().includes('plus one');
@@ -229,8 +243,8 @@ async function getTemplateVariables(guest, template = null) {
     specialInstructions: settings.special_instructions || '',
     websiteUrl: settings.website_url || SITE_URL,
     appTitle: settings.app_title || 'Wedding Site',
-    senderName: senderInfo.name,
-    senderEmail: senderInfo.email,
+    senderName: senderName,
+    senderEmail: senderEmail,
     currentDate: new Date().toLocaleDateString(),
     daysUntilWedding: daysUntilWedding ? `${daysUntilWedding} days` : '',
     
@@ -376,5 +390,6 @@ module.exports = {
   processConditionalBlocks,
   evaluateCondition,
   checkIfGuestHasPlusOne,
-  getPlusOneName
+  getPlusOneName,
+  getSystemSettings
 }; 

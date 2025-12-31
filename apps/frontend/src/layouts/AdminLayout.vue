@@ -18,7 +18,7 @@
       <!-- Sidebar -->
       <aside 
         :class="[
-          'sidebar bg-card-bg border-r border-form-border transition-transform duration-300 ease-in-out',
+          'sidebar transition-transform duration-300 ease-in-out',
           'fixed md:relative z-50 h-full',
           'w-64 transform',
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
