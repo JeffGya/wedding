@@ -248,4 +248,32 @@ export function validateMainSettings(settings) {
     isValid: errors.length === 0,
     errors
   }
+}
+
+// ============================================================================
+// TEST EMAIL
+// ============================================================================
+
+/**
+ * Send a test email
+ * @param {Object} testEmailData - Test email data
+ * @param {Object} testEmailData.guestData - Guest data object
+ * @param {number} testEmailData.templateId - Template ID
+ * @param {string} testEmailData.templateStyle - Template style (elegant, modern, friendly)
+ * @param {string} testEmailData.sendMode - Send mode ('immediate' or 'scheduled')
+ * @param {string} testEmailData.recipientEmail - Recipient email address
+ * @param {string} testEmailData.testLanguage - Test language ('en', 'lt', or 'both')
+ * @param {boolean} testEmailData.healthCheckMode - Enable health check mode
+ * @returns {Promise<{success: boolean, emailHtml: string, emailHtmlEn: string, emailHtmlLt: string, variables: Object, healthCheck: Object, message: string}>}
+ */
+export async function sendTestEmail(testEmailData) {
+  try {
+    const { data } = await api.post('/settings/email/test', testEmailData, {
+      meta: { showLoader: true }
+    })
+    return data
+  } catch (error) {
+    console.error('Failed to send test email:', error)
+    throw error
+  }
 } 

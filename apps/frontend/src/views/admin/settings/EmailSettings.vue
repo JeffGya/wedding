@@ -129,13 +129,21 @@
         </form>
       </template>
     </Card>
+
+    <!-- Test Email Modal -->
+    <TestEmailModal
+      v-model:visible="showTestEmailModal"
+      @close="showTestEmailModal = false"
+    />
   </AdminPageWrapper>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import { fetchEmailSettings, updateEmailSettings, validateEmailSettings } from '@/api/settings'
 import { useToastService } from '@/utils/toastService'
+import TestEmailModal from '@/components/TestEmailModal.vue'
 
 const { showSuccess, showError, showWarning, showInfo } = useToastService()
 
@@ -156,6 +164,7 @@ const providerOptions = [
 const saving = ref(false)
 const testing = ref(false)
 const loading = ref(true)
+const showTestEmailModal = ref(false)
 
 onMounted(async () => {
   await loadSettings()
@@ -214,16 +223,7 @@ async function saveSettings() {
 }
 
 async function testConfiguration() {
-  try {
-    testing.value = true
-    // Note: This would require a test endpoint in the backend
-    // await testEmailConfiguration(form.value)
-    showInfo('Info', 'Test email functionality not yet implemented', 5000)
-  } catch (error) {
-    showError('Error', 'Failed to test email configuration', 5000)
-  } finally {
-    testing.value = false
-  }
+  showTestEmailModal.value = true
 }
 </script>
 

@@ -676,14 +676,17 @@ router.put('/:id', async (req, res) => {
       [subject, body_en, body_lt, newStatus, scheduled_for, req.params.id]
     );
     // Update recipients if provided
-    if (Array.isArray(recipients)) {
+    if (Array.isArray(recipients) && recipients.length > 0) {
       await dbRun(`DELETE FROM message_recipients WHERE message_id = ?`, [req.params.id]);
-      const insertSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status) VALUES (?, ?, 'pending')`;
-      for (const guestId of recipients) {
+      // Fetch guest details to get email and language
+      const guestSql = `SELECT id, email, preferred_language FROM guests WHERE id IN (${recipients.map(() => '?').join(',')})`;
+      const guests = await dbAll(guestSql, recipients);
+      const insertSql = `INSERT INTO message_recipients (message_id, guest_id, email, language, delivery_status) VALUES (?, ?, ?, ?, 'pending')`;
+      for (const guest of guests) {
         try {
-          await dbRun(insertSql, [req.params.id, guestId]);
+          await dbRun(insertSql, [req.params.id, guest.id, guest.email, guest.preferred_language || 'en']);
         } catch (err) {
-          logger.error('❌ Failed to insert recipient:', guestId, err.message);
+          logger.error('❌ Failed to insert recipient:', guest.id, err.message);
         }
       }
     }

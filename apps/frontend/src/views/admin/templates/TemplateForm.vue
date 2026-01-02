@@ -152,8 +152,10 @@
                 <h4 class="font-semibold text-sm text-gray-700 mb-2">Guest Information</h4>
                 <div class="space-y-1">
                   <div class="text-xs text-gray-600">&#123;&#123;guestName&#125;&#125; - Guest's name</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;guestEmail&#125;&#125; - Guest's email</div>
+                  <div class="text-xs text-gray-600">&#123;&#123;email&#125;&#125; - Guest's email</div>
                   <div class="text-xs text-gray-600">&#123;&#123;groupLabel&#125;&#125; - Guest's group</div>
+                  <div class="text-xs text-gray-600">&#123;&#123;code&#125;&#125; or &#123;&#123;rsvpCode&#125;&#125; - RSVP code</div>
+                  <div class="text-xs text-gray-600">&#123;&#123;rsvpLink&#125;&#125; - RSVP link (uses website_url from settings)</div>
                   <div class="text-xs text-gray-600">&#123;&#123;plus_one_name&#125;&#125; - Plus one's name</div>
                 </div>
               </div>
@@ -164,7 +166,7 @@
                   <div class="text-xs text-gray-600">&#123;&#123;venueName&#125;&#125; - Venue name</div>
                   <div class="text-xs text-gray-600">&#123;&#123;venueAddress&#125;&#125; - Venue address</div>
                   <div class="text-xs text-gray-600">&#123;&#123;eventStartDate&#125;&#125; - Event date</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;eventStartTime&#125;&#125; - Event time</div>
+                  <div class="text-xs text-gray-600">&#123;&#123;eventTime&#125;&#125; - Event time</div>
                   <div class="text-xs text-gray-600">&#123;&#123;rsvpDeadline&#125;&#125; - RSVP deadline</div>
                 </div>
               </div>

@@ -22,15 +22,19 @@ export async function fetchGuestByCode(code) {
  * @returns {Promise<Object>} response data
  */
 export async function submitGuestRSVP(payload) {
-  const { data } = await api.post(
-    '/rsvp',
-    payload,
-    {
-      meta: { showLoader: true },
-      withCredentials: true
-    }
-  );
-  return data.success;
+  try {
+    const { data } = await api.post(
+      '/rsvp',
+      payload,
+      {
+        meta: { showLoader: true },
+        withCredentials: true
+      }
+    );
+    return data.success;
+  } catch (err) {
+    throw err;
+  }
 }
 
 /**

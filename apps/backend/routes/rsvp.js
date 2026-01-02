@@ -71,107 +71,11 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 
 const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
 
 // Replace the old getInlineStyles function with new template system
 function applyEmailTemplate(content, style = 'elegant', options = {}) {
   return generateEmailHTML(content, style, options);
-}
-
-/**
- * Send RSVP confirmation email using template system
- */
-async function sendConfirmationEmail(db, guestData) {
-  try {
-    // Check if guest has email
-    if (!guestData.email) {
-      logger.warn(`Guest ${guestData.code} has no email, skipping confirmation email`);
-      return;
-    }
-    
-    // Fetch sender info
-    const senderInfo = await getSenderInfo(db);
-    
-    // Determine which template to use based on RSVP status
-    let templateName;
-    if (guestData.rsvp_status === 'attending') {
-      templateName = 'Thank You - Attending';
-    } else if (guestData.rsvp_status === 'not_attending') {
-      templateName = 'Thank You - Not Attending';
-    } else {
-      // Fallback for pending status
-      templateName = 'Thank You - Attending';
-    }
-    
-    // Fetch the appropriate template
-    const template = await dbGet("SELECT * FROM templates WHERE name = ?", [templateName]);
-    if (!template) {
-      logger.error(`Failed to load template: ${templateName}`);
-      return;
-    }
-    
-    // Get enhanced template variables for this guest
-    const variables = await getTemplateVariables(guestData, template);
-    
-    // Determine language
-    const lang = guestData.preferred_language === 'lt' ? 'lt' : 'en';
-    let subjectTemplate = lang === 'lt' ? template.subject_lt : template.subject_en;
-    const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
-    
-    // Fallback 1: Check for old schema with single 'subject' column
-    if ((!subjectTemplate || subjectTemplate.trim() === '') && template.subject) {
-      subjectTemplate = template.subject;
-      logger.info(`Template "${templateName}" using legacy 'subject' column`);
-    }
-    
-    // Fallback 2: If still missing, use a default based on RSVP status
-    if (!subjectTemplate || subjectTemplate.trim() === '') {
-      if (guestData.rsvp_status === 'attending') {
-        subjectTemplate = lang === 'lt' 
-          ? 'Ačiū už jūsų RSVP, {{guestName}}!' 
-          : 'Thank you for your RSVP, {{guestName}}!';
-      } else if (guestData.rsvp_status === 'not_attending') {
-        subjectTemplate = lang === 'lt'
-          ? 'Ačiū už jūsų RSVP, {{guestName}}'
-          : 'Thank you for your RSVP, {{guestName}}';
-      } else {
-        subjectTemplate = lang === 'lt'
-          ? 'Ačiū už jūsų RSVP, {{guestName}}!'
-          : 'Thank you for your RSVP, {{guestName}}!';
-      }
-      logger.warn(`Template "${templateName}" missing subject_${lang}, using fallback`);
-    }
-    
-    // Replace variables in template content
-    const subject = replaceTemplateVars(subjectTemplate, variables);
-    const body = replaceTemplateVars(bodyTemplate, variables);
-    
-    // Prepare email template options from settings
-    const emailOptions = {
-      siteUrl: variables.websiteUrl || variables.siteUrl || process.env.SITE_URL || 'http://localhost:5001',
-      title: variables.brideName && variables.groomName 
-        ? `${variables.brideName} & ${variables.groomName}`
-        : undefined
-    };
-    
-    // Apply email template styling
-    const styleKey = template.style || 'elegant';
-    const emailHtml = generateEmailHTML(body, styleKey, emailOptions);
-    
-    // Send via Resend
-    const response = await axios.post("https://api.resend.com/emails", {
-      from: senderInfo,
-      to: guestData.email,
-      subject: subject,
-      html: emailHtml
-    }, {
-      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
-    });
-    
-    logger.info("RSVP confirmation email sent:", response.data);
-  } catch (e) {
-    logger.error("Error in sendConfirmationEmail:", e);
-    // Don't throw - email failure shouldn't block RSVP submission
-  }
 }
 
 /**
@@ -322,9 +226,10 @@ router.get('/:code', lookupRateLimit, async (req, res) => {
 // Public: submit RSVP by code
 // POST /api/rsvp
 router.post('/', async (req, res) => {
-  logger.debug('req.body →', req.body);
-  const { code, attending, plus_one_name, dietary, notes, plus_one_dietary } = req.body;
-  if (!code) return res.status(400).json({ error: 'Code is required' });
+  const { code, attending, plus_one_name, dietary, notes, plus_one_dietary, send_email } = req.body;
+  if (!code) {
+    return res.status(400).json({ error: 'Code is required' });
+  }
   // Input type validation
   if (typeof attending === 'undefined') {
     return res.status(400).json({ error: 'attending is required' });
@@ -347,7 +252,9 @@ router.post('/', async (req, res) => {
 
   try {
     const row = await dbGet('SELECT * FROM guests WHERE code = ?', [code]);
-    if (!row) return res.status(404).json({ error: 'Guest not found' });
+    if (!row) {
+      return res.status(404).json({ error: 'Guest not found' });
+    }
 
     // Validation: plus_one_name only if allowed
     if (plus_one_name && !row.can_bring_plus_one) {
@@ -390,6 +297,10 @@ router.post('/', async (req, res) => {
       [row.group_id]
     );
 
+    // Clear dietary and notes when not attending
+    // Preserve empty strings as empty strings (not null) when attending is true
+    const finalDietary = attendingValue === false ? null : (dietary !== undefined && dietary !== null ? dietary : null);
+    const finalNotes = attendingValue === false ? null : (notes !== undefined && notes !== null ? notes : null);
     await dbRun(`
       UPDATE guests SET
         attending = ?,
@@ -399,11 +310,15 @@ router.post('/', async (req, res) => {
         responded_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
       WHERE code = ?
-    `, [attendingValue, rsvpStatusVal, dietary || null, notes || null, code]);
+    `, [attendingValue, rsvpStatusVal, finalDietary, finalNotes, code]);
 
     // Handle plus one logic
     if (existingPlusOne && (plus_one_name === null || plus_one_name === '')) {
-      // Delete the plus one
+      // Delete the plus one - first delete related message_recipients to avoid foreign key constraint
+      const messageRecipients = await dbAll('SELECT id FROM message_recipients WHERE guest_id = ?', [existingPlusOne.id]);
+      if (messageRecipients.length > 0) {
+        await dbRun('DELETE FROM message_recipients WHERE guest_id = ?', [existingPlusOne.id]);
+      }
       await dbRun('DELETE FROM guests WHERE id = ?', [existingPlusOne.id]);
     } else if (plus_one_name) {
       if (existingPlusOne) {
@@ -460,15 +375,27 @@ router.post('/', async (req, res) => {
       plus_one_name: plus_one_name || null
     };
 
-    // Send email first (before response)
-    await sendConfirmationEmail(db, guestDataForEmail);
+    // Send email only if send_email is not explicitly false
+    // Default to true for public users (backward compatibility), but respect false from admin
+    // Handle both boolean false and string "false" for robustness
+    const shouldSendEmail = send_email !== false && send_email !== 'false' && send_email !== 0;
+    logger.info(`RSVP email decision: send_email=${send_email} (type: ${typeof send_email}), shouldSendEmail=${shouldSendEmail}, code=${code}`);
+    if (shouldSendEmail) {
+      try {
+        await sendConfirmationEmail(db, guestDataForEmail);
+      } catch (emailErr) {
+        logger.error('Error in sendConfirmationEmail', emailErr);
+        // Don't fail the whole request if email fails, just log it
+      }
+    }
     
     // Then send response
     res.json({ success: true });
   } catch (err) {
+    logger.error('Error in POST /rsvp handler', err);
     // Only send error response if headers haven't been sent
     if (!res.headersSent) {
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(500).json({ error: 'Database error', details: err.message });
     }
   }
 });

@@ -292,6 +292,7 @@ export function getSampleVariables() {
     guestName: 'John Doe',
     groupLabel: 'Bride\'s Family',
     code: 'ABC123',
+    rsvpCode: 'ABC123', // Alias for code
     rsvpLink: 'https://example.com/rsvp/ABC123',
     plusOneName: 'Jane Doe',
     rsvpDeadline: 'December 1, 2024',
@@ -317,7 +318,8 @@ export function getSampleVariables() {
     isLithuanianSpeaker: false,
     
     // System Properties
-    siteUrl: 'https://example.com',
+    siteUrl: 'https://ourwedding.com', // Uses website_url from settings, falls back to SITE_URL env var
+    websiteUrl: 'https://ourwedding.com', // Alias for siteUrl (uses website_url from settings, falls back to SITE_URL env var)
     weddingDate: 'December 15, 2024',
     venueName: 'Beautiful Gardens',
     venueAddress: '123 Wedding Lane, City, State',
@@ -332,7 +334,6 @@ export function getSampleVariables() {
     eventType: 'Wedding Ceremony & Reception',
     dressCode: 'Semi-Formal',
     specialInstructions: 'Please arrive 30 minutes early',
-    websiteUrl: 'https://ourwedding.com',
     appTitle: 'Brigita & Jeffrey\'s Wedding',
     senderName: 'Brigita & Jeffrey',
     senderEmail: 'hello@ourwedding.com',

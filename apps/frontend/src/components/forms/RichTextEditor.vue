@@ -117,6 +117,28 @@
             </button>
           </span>
           
+          <!-- Email Header Elements (email context only) -->
+          <span v-if="context === 'email'" class="ql-formats">
+            <button
+              type="button"
+              class="ql-custom-header-image"
+              @mousedown.prevent
+              @click="openHeaderImagePicker"
+              title="Insert Header Image"
+            >
+              <i class="i-solar:panorama-bold"></i>
+            </button>
+            <button
+              type="button"
+              class="ql-custom-email-title"
+              @mousedown.prevent
+              @click="openEmailTitleDialog"
+              title="Set Email Title"
+            >
+              <i class="i-solar:text-field-bold"></i>
+            </button>
+          </span>
+          
           <!-- HTML toggle -->
           <span class="ql-formats">
             <button type="button" @mousedown.prevent @click="toggleHtml" title="Toggle HTML">
@@ -131,6 +153,12 @@
       :visible="pickerVisible"
       @update:visible="pickerVisible = $event"
       @select="insertImage"
+    />
+    
+    <ImagePicker
+      :visible="headerImagePickerVisible"
+      @update:visible="headerImagePickerVisible = $event"
+      @select="insertHeaderImage"
     />
     
     <ButtonConfigModal
@@ -148,6 +176,44 @@
       @close="imageConfigVisible = false"
       @apply="handleImageConfigApply"
     />
+    
+    <!-- Email Title Dialog -->
+    <Dialog
+      v-model:visible="emailTitleDialogVisible"
+      header="Set Email Title"
+      :modal="true"
+      :draggable="false"
+      :closable="true"
+      class="w-full max-w-md"
+      :pt="{
+        root: { class: 'bg-bg-glass border border-bg-glass-border rounded-xl shadow-lg' },
+        header: { class: 'text-int-base font-cursive text-xl pb-2' },
+        content: { class: 'p-4' }
+      }"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Title Text</label>
+          <InputText
+            v-model="emailTitleInput"
+            placeholder="e.g., You're Invited!"
+            class="w-full"
+          />
+          <p class="text-xs text-int-secondary mt-1">This title will appear under the logo in the email.</p>
+        </div>
+        <div class="flex justify-end gap-2 mt-2">
+          <Button
+            label="Cancel"
+            severity="secondary"
+            @click="emailTitleDialogVisible = false"
+          />
+          <Button
+            label="Apply"
+            @click="insertEmailTitle"
+          />
+        </div>
+      </div>
+    </Dialog>
     
     <div v-if="showHtml" class="mt-2">
       <textarea 
@@ -387,6 +453,9 @@ const formats = [
 const editorRef = ref(null);
 const showHtml = ref(false);
 const pickerVisible = ref(false);
+const headerImagePickerVisible = ref(false); // For header image insertion
+const emailTitleDialogVisible = ref(false); // For email title input
+const emailTitleInput = ref(''); // Current email title input value
 const buttonConfigVisible = ref(false);
 const imageConfigVisible = ref(false);
 const selectedImageSrc = ref('');
@@ -395,6 +464,50 @@ const selectedImageHeight = ref('');
 const selectedImageAlign = ref('');
 const selectedImageIndex = ref(null);
 const isHtmlTextareaFocused = ref(false); // Track if HTML textarea has focus
+
+// Store email markers separately (Quill strips HTML comments)
+const storedHeaderImageUrl = ref(null);
+const storedEmailTitle = ref(null);
+
+// Extract markers from initial content
+function extractMarkersFromContent(content) {
+  if (!content) return { headerImage: null, emailTitle: null, cleanedContent: content };
+  
+  let cleanedContent = content;
+  let headerImage = null;
+  let emailTitle = null;
+  
+  const headerMatch = content.match(/<!--HEADER_IMAGE:(.*?)-->/);
+  if (headerMatch) {
+    headerImage = headerMatch[1].trim();
+    cleanedContent = cleanedContent.replace(headerMatch[0], '').trim();
+  }
+  
+  const titleMatch = cleanedContent.match(/<!--EMAIL_TITLE:(.*?)-->/);
+  if (titleMatch) {
+    emailTitle = titleMatch[1].trim();
+    cleanedContent = cleanedContent.replace(titleMatch[0], '').trim();
+  }
+  
+  return { headerImage, emailTitle, cleanedContent };
+}
+
+// Inject markers back into content for saving
+function injectMarkersIntoContent(content) {
+  if (props.context !== 'email') return content;
+  
+  let result = content || '';
+  
+  // Prepend markers in order: header image first, then title
+  if (storedEmailTitle.value) {
+    result = `<!--EMAIL_TITLE:${storedEmailTitle.value}-->\n` + result;
+  }
+  if (storedHeaderImageUrl.value) {
+    result = `<!--HEADER_IMAGE:${storedHeaderImageUrl.value}-->\n` + result;
+  }
+  
+  return result;
+}
 
 // Use Quill's built-in icons directly for custom buttons
 const quillImageIcon = QuillIcons.image || '<svg viewBox="0 0 18 18"><rect class="ql-stroke" height="10" width="12" x="3" y="4"></rect><circle class="ql-fill" cx="6" cy="7" r="1"></circle><polyline class="ql-even ql-fill" points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline></svg>';
@@ -411,16 +524,25 @@ function convertButtonMarkersToHtml(content) {
     // Page buttons are already HTML, no conversion needed
     return processedContent;
   } else {
-    // Convert email button markers to table structure with URLs
+    // Convert email button markers to table structure with accessible gold-filled styling
+    // This matches the definitive email template CTA button style
     processedContent = processedContent.replace(
       /\[BUTTON:([^|]+)\|([^\]]+)\]/g,
       (match, buttonText, buttonUrl) => `
-        <table cellpadding="0" cellspacing="0" border="0" style="margin: 20px auto;">
+        <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin: 24px auto;">
           <tr>
-            <td style="background: #442727; border-radius: 8px; padding: 12px 24px; text-align: center;">
-              <a href="${buttonUrl}" style="font-family: 'Open Sans', sans-serif; font-size: 16px; font-weight: 600; color: #DAA520; text-decoration: none; display: inline-block;">
+            <td style="background-color: #DAA520; border: 2px solid #442727; border-radius: 6px; padding: 14px 28px; text-align: center; mso-padding-alt: 0;">
+              <!--[if mso]>
+              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${buttonUrl}" style="height:48px;v-text-anchor:middle;width:200px;" arcsize="13%" strokecolor="#442727" strokeweight="2px" fillcolor="#DAA520">
+                <w:anchorlock/>
+                <center style="color:#442727;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">${buttonText}</center>
+              </v:roundrect>
+              <![endif]-->
+              <!--[if !mso]><!-->
+              <a href="${buttonUrl}" style="font-family: 'Open Sans', Arial, sans-serif; font-size: 16px; font-weight: 700; color: #442727; text-decoration: none; display: inline-block; line-height: 1;">
                 ${buttonText}
               </a>
+              <!--<![endif]-->
             </td>
           </tr>
         </table>
@@ -440,13 +562,16 @@ function handleTextChange(delta, oldDelta, source) {
     // Convert button markers to proper HTML
     const processedContent = convertButtonMarkersToHtml(newContent);
     
+    // Inject stored markers back into content for email context
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
     // Only update htmlContent if we're NOT updating from HTML mode
     // This prevents Quill's normalization from overwriting the user's HTML edits
     if (!isUpdatingFromHtml.value) {
-      htmlContent.value = processedContent;
+      htmlContent.value = contentWithMarkers;
     }
-    editorContent.value = processedContent;
-    emit('update:modelValue', processedContent);
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
     isInternalUpdate.value = false;
   }
 }
@@ -669,6 +794,61 @@ function insertButtonAlternative() {
 // Open image picker
 function openImagePicker() {
   pickerVisible.value = true;
+}
+
+// Open header image picker (for email templates)
+function openHeaderImagePicker() {
+  headerImagePickerVisible.value = true;
+}
+
+// Insert header image marker at the beginning of content
+function insertHeaderImage(imageUrl) {
+  // Store the header image URL (Quill strips HTML comments, so we store separately)
+  storedHeaderImageUrl.value = imageUrl;
+  
+  // Trigger content update to emit the new content with marker
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    htmlContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  headerImagePickerVisible.value = false;
+}
+
+// Open email title dialog
+function openEmailTitleDialog() {
+  // Pre-fill the input with stored title value
+  emailTitleInput.value = storedEmailTitle.value || '';
+  emailTitleDialogVisible.value = true;
+}
+
+// Insert email title marker at the beginning of content (after header image if present)
+function insertEmailTitle() {
+  if (!emailTitleInput.value.trim()) {
+    emailTitleDialogVisible.value = false;
+    return;
+  }
+  
+  // Store the email title (Quill strips HTML comments, so we store separately)
+  storedEmailTitle.value = emailTitleInput.value.trim();
+  
+  // Trigger content update to emit the new content with marker
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    htmlContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  emailTitleDialogVisible.value = false;
 }
 
 // Insert image from picker
@@ -987,8 +1167,14 @@ onMounted(() => {
       const quill = editorRef.value.quill;
       if (quill) {
         if (props.modelValue) {
-          quill.root.innerHTML = props.modelValue;
-          editorContent.value = props.modelValue;
+          // Extract markers from initial content (Quill would strip them)
+          const { headerImage, emailTitle, cleanedContent } = extractMarkersFromContent(props.modelValue);
+          storedHeaderImageUrl.value = headerImage;
+          storedEmailTitle.value = emailTitle;
+          
+          // Set cleaned content to Quill (without markers)
+          quill.root.innerHTML = cleanedContent;
+          editorContent.value = props.modelValue; // Keep full content with markers
           htmlContent.value = props.modelValue;
         }
         
@@ -1015,13 +1201,20 @@ onMounted(() => {
 watch(() => props.modelValue, (newValue) => {
   if (!isInternalUpdate.value && newValue !== editorContent.value) {
     isInternalUpdate.value = true;
+    
+    // Extract markers from new content
+    const { headerImage, emailTitle, cleanedContent } = extractMarkersFromContent(newValue);
+    storedHeaderImageUrl.value = headerImage;
+    storedEmailTitle.value = emailTitle;
+    
     editorContent.value = newValue || '';
     htmlContent.value = newValue || '';
     
     nextTick(() => {
       if (editorRef.value && editorRef.value.quill) {
         const quill = editorRef.value.quill;
-        quill.root.innerHTML = newValue || '';
+        // Set cleaned content (without markers) to Quill
+        quill.root.innerHTML = cleanedContent || '';
       }
       isInternalUpdate.value = false;
     });
@@ -1087,6 +1280,19 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .ql-custom-image-config:hover {
+  background-color: #e5e7eb;
+}
+
+.ql-custom-header-image {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-header-image:hover {
   background-color: #e5e7eb;
 }
 

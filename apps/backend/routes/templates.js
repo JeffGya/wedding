@@ -450,6 +450,19 @@ router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { name, subject, subject_en, subject_lt, body_en, body_lt, style = 'elegant' } = req.body;
     
+    // Validate style if provided
+    if (style) {
+      const availableStyles = getAvailableStyles();
+      const validStyle = availableStyles.find(s => s.key === style);
+      if (!validStyle) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid template style',
+          availableStyles: availableStyles.map(s => ({ key: s.key, name: s.name }))
+        });
+      }
+    }
+    
     // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
     const finalSubjectEn = subject_en || subject || '';
     const finalSubjectLt = subject_lt || subject || '';

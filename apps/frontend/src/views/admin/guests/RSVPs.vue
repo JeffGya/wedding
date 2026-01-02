@@ -82,7 +82,19 @@
           responsiveLayout="scroll"
           class="w-full"
         >
-          <Column field="name" header="Guest Name" sortable />
+          <Column field="name" header="Guest Name" sortable>
+            <template #body="slotProps">
+              <div class="flex items-center gap-2">
+                <span>{{ slotProps.data.name }}</span>
+                <Tag 
+                  v-if="!slotProps.data.is_primary" 
+                  value="+1" 
+                  severity="info" 
+                  class="text-xs"
+                />
+              </div>
+            </template>
+          </Column>
           <Column field="group_label" header="Group" sortable />
           <Column field="code" header="Code" sortable style="width: 8rem">
             <template #body="slotProps">
@@ -145,6 +157,7 @@ import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
 import FloatLabel from 'primevue/floatlabel';
+import { useToastService } from '@/utils/toastService';
 
 const guests = ref([]);
 const totalGuests = ref(0);
@@ -323,6 +336,8 @@ const exportToCSV = async () => {
   }
 };
 
+const { showSuccess, showError } = useToastService();
+
 const showEditModal = ref(false);
 const currentGuest = ref(null);
 
@@ -341,8 +356,10 @@ const onRSVPFormSubmit = async (payload) => {
     await submitGuestRSVP(payload);
     await fetchGuests();
     closeEditModal();
+    showSuccess('Success', 'RSVP updated successfully');
   } catch (error) {
     console.error('Error updating RSVP:', error);
+    showError('Error', error.response?.data?.error || 'Failed to update RSVP');
   }
 };
 </script>

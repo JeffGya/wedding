@@ -84,8 +84,8 @@ async function onSubmit(payload) {
   try {
     await submitGuestRSVP(payload)
     router.push({ name: 'public-rsvp-success', params: { lang: route.params.lang, code: route.params.code } })
-  } catch {
-    error.value = t('rsvp.errorSubmit')
+  } catch (err) {
+    error.value = err.response?.data?.message || err.message || t('rsvp.errorSubmit')
   }
 }
 </script>

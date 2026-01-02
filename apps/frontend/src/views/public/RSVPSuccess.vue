@@ -8,11 +8,13 @@
           <p class="mt-0">{{ successMessage }}</p>
           <div class="mb-16" v-if="guest">
             <p class="m-0 my-4"><span class="font-600">{{ $t('rsvp.labelGuest') }}:</span> {{ guest.name }}</p>
-            <p class="m-0 my-4"><span class="font-bold">{{ $t('rsvp.labelDietary') }}:</span> {{ guest.dietary || $t('rsvp.notAvailable') }}</p>
-            <p class="m-0 my-4"><span class="font-medium">{{ $t('rsvp.labelNotes') }}:</span> {{ guest.notes || $t('rsvp.notAvailable') }}</p>
-            <br v-if="guest.plus_one_name" />
-            <p class="m-0 my-4" v-if="guest.plus_one_name"><span class="font-medium">{{ $t('rsvp.labelPlusOne') }}:</span> {{ guest.plus_one_name }}</p>
-            <p class="m-0 my-4" v-if="guest.plus_one_name"><span class="font-medium">{{ $t('rsvp.labelPlusOneDietary') }}:</span> {{ guest.plus_one_dietary || $t('rsvp.notAvailable') }}</p>
+            <template v-if="guest.attending">
+              <p class="m-0 my-4"><span class="font-bold">{{ $t('rsvp.labelDietary') }}:</span> {{ guest.dietary || $t('rsvp.notAvailable') }}</p>
+              <p class="m-0 my-4"><span class="font-medium">{{ $t('rsvp.labelNotes') }}:</span> {{ guest.notes || $t('rsvp.notAvailable') }}</p>
+              <br v-if="guest.plus_one_name" />
+              <p class="m-0 my-4" v-if="guest.plus_one_name"><span class="font-medium">{{ $t('rsvp.labelPlusOne') }}:</span> {{ guest.plus_one_name }}</p>
+              <p class="m-0 my-4" v-if="guest.plus_one_name"><span class="font-medium">{{ $t('rsvp.labelPlusOneDietary') }}:</span> {{ guest.plus_one_dietary || $t('rsvp.notAvailable') }}</p>
+            </template>
           </div>
           
           <Button
@@ -43,13 +45,10 @@
   
 onMounted(async () => {
   try {
-    console.log('➡️ Attempting to fetch guest data with code:', route.params.code)
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/rsvp/${encodeURIComponent(route.params.code)}`)
-    console.log('📦 Full response:', JSON.stringify(response.data, null, 2))
     guest.value = response.data?.guest
-    console.log('✅ Guest data fetched:', JSON.stringify(guest.value, null, 2))
   } catch (err) {
-    console.error('❌ Error fetching guest data for code:', route.params.code, err)
+    console.error('Error fetching guest data:', err)
   }
 })
   

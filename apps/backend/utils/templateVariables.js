@@ -194,12 +194,16 @@ async function getTemplateVariables(guest, template = null) {
   const daysUntilWedding = settings.wedding_date ? 
     Math.ceil((new Date(settings.wedding_date) - new Date()) / (1000 * 60 * 60 * 24)) : null;
   
+  // Get the site URL from settings, fallback to environment variable
+  const siteUrl = settings.website_url || SITE_URL;
+  
   const variables = {
     // Guest Properties
     guestName: guest.name,
     groupLabel: guest.group_label || '',
     code: guest.code,
-    rsvpLink: `${SITE_URL}/${guest.preferred_language}/rsvp/${guest.code}`,
+    rsvpCode: guest.code, // Alias for clarity
+    rsvpLink: `${siteUrl}/${guest.preferred_language}/rsvp/${guest.code}`,
     plusOneName: plusOneName,
     plus_one_name: plusOneName, // Alias for template compatibility (snake_case)
     rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline),
@@ -226,7 +230,8 @@ async function getTemplateVariables(guest, template = null) {
     isLithuanianSpeaker,
     
     // System Properties
-    siteUrl: SITE_URL,
+    siteUrl: siteUrl, // Uses website_url from settings, falls back to SITE_URL env var
+    websiteUrl: siteUrl, // Alias for siteUrl (uses website_url from settings, falls back to SITE_URL env var)
     weddingDate: settings.wedding_date ? formatDate(settings.wedding_date) : '',
     venueName: settings.venue_name || '',
     venueAddress: settings.venue_address || '',
@@ -241,18 +246,14 @@ async function getTemplateVariables(guest, template = null) {
     eventType: settings.event_type || '',
     dressCode: settings.dress_code || '',
     specialInstructions: settings.special_instructions || '',
-    websiteUrl: settings.website_url || SITE_URL,
     appTitle: settings.app_title || 'Wedding Site',
     senderName: senderName,
     senderEmail: senderEmail,
     currentDate: new Date().toLocaleDateString(),
     daysUntilWedding: daysUntilWedding ? `${daysUntilWedding} days` : '',
     
-    // Legacy variables for backward compatibility
-    name: guest.name,
-    groupLabel: guest.group_label || '',
-    code: guest.code,
-    rsvpLink: `${SITE_URL}/${guest.preferred_language}/rsvp/${guest.code}`
+    // Legacy variables for backward compatibility (only variables not already in main section)
+    name: guest.name // Alias for guestName
   };
   
   return variables;
@@ -335,7 +336,8 @@ function getAvailableVariables() {
     guestName: "Guest's full name",
     groupLabel: "Group label (e.g., 'Bride's Family')",
     code: "Unique RSVP code",
-    rsvpLink: "Full RSVP URL with language",
+    rsvpCode: "Unique RSVP code (alias for code)",
+    rsvpLink: "Full RSVP URL with language (uses website_url from settings)",
     plusOneName: "Plus one's name (if applicable)",
     rsvpDeadline: "Formatted deadline date",
     email: "Guest's email address",
@@ -359,7 +361,8 @@ function getAvailableVariables() {
     isLithuanianSpeaker: "Boolean: true if guest prefers Lithuanian",
     
     // System Properties
-    siteUrl: "Base site URL",
+    siteUrl: "Base site URL (uses website_url from settings, falls back to SITE_URL env var)",
+    websiteUrl: "Website URL (alias for siteUrl, uses website_url from settings, falls back to SITE_URL env var)",
     weddingDate: "Wedding date from settings",
     venueName: "Venue name",
     venueAddress: "Full venue address",
@@ -374,7 +377,6 @@ function getAvailableVariables() {
     eventType: "Type of event",
     dressCode: "Dress code",
     specialInstructions: "Special instructions for guests",
-    websiteUrl: "Website URL",
     appTitle: "App title",
     senderName: "Sender name from email settings",
     senderEmail: "Sender email from email settings",

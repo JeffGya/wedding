@@ -233,7 +233,6 @@ const fetchMessages = async () => {
   loading.value = true
   try {
     const response = await api.get('/messages')
-    console.log('Messages API response:', response.data) // Debug log
     
     // Check if response has the expected structure
     if (response.data && response.data.success && response.data.messages) {
