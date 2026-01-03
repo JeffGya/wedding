@@ -3,9 +3,8 @@
  * Consolidated helper function for sending confirmation emails to guests
  */
 
-const resendClient = require('./resendClient');
 const logger = require('./logger');
-const getSenderInfo = require('./getSenderInfo');
+const { sendEmail } = require('./emailService');
 const { generateEmailHTML } = require('../utils/emailTemplates');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 
@@ -18,16 +17,13 @@ async function sendConfirmationEmail(db, guestData) {
   try {
     // Check if guest has email
     if (!guestData.email) {
-      logger.warn(`Guest ${guestData.code} has no email, skipping confirmation email`);
+      logger.warn(`[SEND_CONFIRMATION_EMAIL] Guest ${guestData.code} has no email, skipping`);
       return;
     }
     
     // Create dbGet helper function
     const { createDbHelpers } = require('../db/queryHelpers');
     const { dbGet } = createDbHelpers(db);
-    
-    // Fetch sender info
-    const senderInfo = await getSenderInfo(db);
     
     // Determine which template to use based on RSVP status
     let templateName;
@@ -95,17 +91,21 @@ async function sendConfirmationEmail(db, guestData) {
     const styleKey = template.style || 'elegant';
     const emailHtml = generateEmailHTML(body, styleKey, emailOptions);
     
-    // Send via Resend
-    const response = await resendClient.emails.send({
-      from: senderInfo,
+    // Send via unified email service
+    const result = await sendEmail({
       to: guestData.email,
       subject: subject,
-      html: emailHtml
+      html: emailHtml,
+      db
     });
     
-    logger.info("RSVP confirmation email sent:", response.data);
+    if (result.success) {
+      logger.info("[SEND_CONFIRMATION_EMAIL] Sent", { guestCode: guestData.code, messageId: result.messageId });
+    } else {
+      logger.error("[SEND_CONFIRMATION_EMAIL] Failed", { guestCode: guestData.code, error: result.error });
+    }
   } catch (e) {
-    logger.error("Error in sendConfirmationEmail:", e);
+    logger.error("[SEND_CONFIRMATION_EMAIL] Error", { guestCode: guestData.code, error: e.message });
     // Don't throw - email failure shouldn't block RSVP submission
   }
 }

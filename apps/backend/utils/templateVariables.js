@@ -5,6 +5,88 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 const logger = require('../helpers/logger');
 
 /**
+ * System settings cache with TTL (5 minutes)
+ */
+const SETTINGS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
+let settingsCache = {
+  data: null,
+  timestamp: null,
+  senderInfo: null,
+  senderInfoTimestamp: null
+};
+
+/**
+ * Clear the system settings cache
+ * Call this when settings are updated
+ */
+function clearSettingsCache() {
+  settingsCache = {
+    data: null,
+    timestamp: null,
+    senderInfo: null,
+    senderInfoTimestamp: null
+  };
+}
+
+/**
+ * Get system settings from cache or database
+ * @param {Object} db - Database connection
+ * @returns {Promise<Object>} System settings object
+ */
+async function getSystemSettings(db) {
+  const now = Date.now();
+  
+  // Check if cache is valid
+  if (settingsCache.data && settingsCache.timestamp && (now - settingsCache.timestamp) < SETTINGS_CACHE_TTL) {
+    return settingsCache.data;
+  }
+  
+  try {
+    const { dbGet } = createDbHelpers(db);
+    const settings = await dbGet('SELECT * FROM settings LIMIT 1') || {};
+    const guestSettings = await dbGet('SELECT * FROM guest_settings LIMIT 1') || {};
+    
+    const mergedSettings = {
+      ...settings,
+      rsvp_deadline: guestSettings.rsvp_deadline
+    };
+    
+    // Update cache
+    settingsCache.data = mergedSettings;
+    settingsCache.timestamp = now;
+    
+    return mergedSettings;
+  } catch (err) {
+    logger.error('Error fetching system settings:', err);
+    return {};
+  }
+}
+
+/**
+ * Get sender info from cache or database
+ * @param {Object} db - Database connection
+ * @returns {Promise<string>} Sender info string
+ */
+async function getCachedSenderInfo(db) {
+  const now = Date.now();
+  
+  // Check if cache is valid
+  if (settingsCache.senderInfo !== null && settingsCache.senderInfoTimestamp && (now - settingsCache.senderInfoTimestamp) < SETTINGS_CACHE_TTL) {
+    return settingsCache.senderInfo;
+  }
+  
+  try {
+    const senderInfoString = await getSenderInfo(db);
+    settingsCache.senderInfo = senderInfoString;
+    settingsCache.senderInfoTimestamp = now;
+    return senderInfoString;
+  } catch (err) {
+    logger.error('Error fetching sender info:', err);
+    return '';
+  }
+}
+
+/**
  * Enhanced template variable replacement with conditional logic
  */
 function replaceTemplateVars(template, vars) {
@@ -20,70 +102,116 @@ function replaceTemplateVars(template, vars) {
 }
 
 /**
- * Process conditional blocks like {{#if condition}}...{{/if}}
+ * Parse condition string into operator and operands
+ * @param {string} condition - Condition string to parse
+ * @returns {Object|null} Parsed condition object or null if invalid
  */
-function processConditionalBlocks(template, vars) {
-  // Handle {{#if condition}}...{{/if}} blocks
-  template = template.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, content) => {
-    return evaluateCondition(condition, vars) ? content : '';
-  });
+function parseCondition(condition) {
+  const trimmed = condition.trim();
   
-  // Handle {{#if condition}}...{{else}}...{{/if}} blocks
-  template = template.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, ifContent, elseContent) => {
-    return evaluateCondition(condition, vars) ? ifContent : elseContent;
-  });
+  // Try strict equality operators first (===, !==)
+  if (trimmed.includes('===')) {
+    const parts = trimmed.split('===').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '===', left: parts[0], right: parts[1] };
+    }
+  }
   
-  return template;
+  if (trimmed.includes('!==')) {
+    const parts = trimmed.split('!==').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '!==', left: parts[0], right: parts[1] };
+    }
+  }
+  
+  // Try loose equality operators (==, !=)
+  if (trimmed.includes('==')) {
+    const parts = trimmed.split('==').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '==', left: parts[0], right: parts[1] };
+    }
+  }
+  
+  if (trimmed.includes('!=')) {
+    const parts = trimmed.split('!=').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '!=', left: parts[0], right: parts[1] };
+    }
+  }
+  
+  // Simple truthy check (no operator)
+  return { operator: 'truthy', left: trimmed, right: null };
 }
 
 /**
  * Evaluate conditional expressions with enhanced logic
+ * @param {string} condition - Condition string to evaluate
+ * @param {Object} vars - Template variables
+ * @returns {boolean} Evaluation result
  */
 function evaluateCondition(condition, vars) {
-  // Handle simple boolean checks
-  if (condition.includes('===')) {
-    const [key, value] = condition.split('===').map(s => s.trim().replace(/['"]/g, ''));
-    return vars[key] === value;
+  const parsed = parseCondition(condition);
+  
+  if (!parsed) {
+    logger.warn('Invalid condition format in template', { condition });
+    return false;
   }
   
-  if (condition.includes('!==')) {
-    const [key, value] = condition.split('!==').map(s => s.trim().replace(/['"]/g, ''));
-    return vars[key] !== value;
+  try {
+    if (parsed.operator === '===') {
+      return vars[parsed.left] === parsed.right;
+    } else if (parsed.operator === '!==') {
+      return vars[parsed.left] !== parsed.right;
+    } else if (parsed.operator === '==') {
+      return vars[parsed.left] == parsed.right; // Loose equality for type coercion
+    } else if (parsed.operator === '!=') {
+      return vars[parsed.left] != parsed.right; // Loose equality for type coercion
+    } else if (parsed.operator === 'truthy') {
+      const value = vars[parsed.left];
+      
+      // Handle different types of values
+      if (typeof value === 'boolean') {
+        return value;
+      } else if (typeof value === 'string') {
+        return value.length > 0 && value !== 'null' && value !== 'undefined';
+      } else if (typeof value === 'number') {
+        return value !== 0;
+      } else if (Array.isArray(value)) {
+        return value.length > 0;
+      } else {
+        return !!value; // Default truthy check
+      }
+    }
+    
+    return false;
+  } catch (error) {
+    logger.warn('Error evaluating condition in template', { condition, error: error.message });
+    return false;
   }
+}
+
+/**
+ * Process conditional blocks like {{#if condition}}...{{/if}}
+ * @param {string} template - Template content
+ * @param {Object} vars - Template variables
+ * @returns {string} Processed template with conditionals evaluated
+ */
+function processConditionalBlocks(template, vars) {
+  if (!template) return '';
   
-  if (condition.includes('==')) {
-    const [key, value] = condition.split('==').map(s => s.trim().replace(/['"]/g, ''));
-    return vars[key] == value; // Use loose equality for type coercion
-  }
+  let processed = template;
   
-  if (condition.includes('!=')) {
-    const [key, value] = condition.split('!=').map(s => s.trim().replace(/['"]/g, ''));
-    return vars[key] != value; // Use loose equality for type coercion
-  }
+  // Handle {{#if condition}}...{{else}}...{{/if}} blocks first (more specific)
+  processed = processed.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, ifContent, elseContent) => {
+    return evaluateCondition(condition, vars) ? ifContent : elseContent;
+  });
   
-  // Handle simple truthy checks with better logic
-  const key = condition.trim();
-  const value = vars[key];
+  // Handle {{#if condition}}...{{/if}} blocks (no else)
+  processed = processed.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, content) => {
+    return evaluateCondition(condition, vars) ? content : '';
+  });
   
-  // Handle different types of values
-  if (typeof value === 'boolean') {
-    return value;
-  }
-  
-  if (typeof value === 'string') {
-    return value.length > 0 && value !== 'null' && value !== 'undefined';
-  }
-  
-  if (typeof value === 'number') {
-    return value !== 0;
-  }
-  
-  if (Array.isArray(value)) {
-    return value.length > 0;
-  }
-  
-  // Default truthy check
-  return !!value;
+  return processed;
 }
 
 /**
@@ -121,15 +249,30 @@ async function getPlusOneName(db, guestId) {
 }
 
 /**
+ * Check if template content uses plus-one variables
+ * @param {string} templateContent - Template content to check
+ * @returns {boolean} True if template uses plus-one variables
+ */
+function templateUsesPlusOneVars(templateContent) {
+  if (!templateContent) return false;
+  const plusOneVars = ['plusOneName', 'plus_one_name', 'hasPlusOne', 'has_plus_one'];
+  return plusOneVars.some(varName => templateContent.includes(`{{${varName}}}`) || templateContent.includes(`{{#if ${varName}}}`));
+}
+
+/**
  * Get comprehensive template variables for a guest
  */
 async function getTemplateVariables(guest, template = null) {
   const db = getDbConnection();
   const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
   
-  // Get system settings
+  // Get system settings from cache
   const settings = await getSystemSettings(db);
-  const senderInfoString = await getSenderInfo(db);
+  const senderInfoString = await getCachedSenderInfo(db);
+  
+  // Check if we need plus-one data (lazy loading)
+  const templateContent = template ? (template.body_en || template.body_lt || template.body || '') : '';
+  const needsPlusOneData = templateUsesPlusOneVars(templateContent);
   
   // Parse senderInfo string (format: "Name <email@example.com>")
   let senderName = '';
@@ -151,9 +294,14 @@ async function getTemplateVariables(guest, template = null) {
   // Determine if guest can bring plus one (not a plus one themselves and has permission)
   const canBringPlusOne = !isPlusOne && guest.can_bring_plus_one;
   
-  // Get plus one information
-  const hasPlusOne = await checkIfGuestHasPlusOne(db, guest.id);
-  const plusOneName = await getPlusOneName(db, guest.id);
+  // Get plus one information (lazy load - only if needed)
+  let hasPlusOne = false;
+  let plusOneName = '';
+  
+  if (needsPlusOneData) {
+    hasPlusOne = await checkIfGuestHasPlusOne(db, guest.id);
+    plusOneName = await getPlusOneName(db, guest.id);
+  }
   
   // Calculate derived values
   const hasResponded = guest.responded_at !== null;
@@ -234,24 +382,6 @@ async function getTemplateVariables(guest, template = null) {
   return variables;
 }
 
-/**
- * Get system settings from database
- */
-async function getSystemSettings(db) {
-  try {
-    const { dbGet } = createDbHelpers(db);
-    const settings = await dbGet('SELECT * FROM settings LIMIT 1') || {};
-    const guestSettings = await dbGet('SELECT * FROM guest_settings LIMIT 1') || {};
-    
-    return {
-      ...settings,
-      rsvp_deadline: guestSettings.rsvp_deadline
-    };
-  } catch (err) {
-    logger.error('Error fetching system settings:', err);
-    return {};
-  }
-}
 
 /**
  * Format RSVP deadline date
@@ -343,5 +473,6 @@ module.exports = {
   evaluateCondition,
   checkIfGuestHasPlusOne,
   getPlusOneName,
-  getSystemSettings
+  getSystemSettings,
+  clearSettingsCache
 }; 

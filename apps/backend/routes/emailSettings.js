@@ -5,10 +5,10 @@ const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
-const resendClient = require('../helpers/resendClient');
+const { sendEmail } = require('../helpers/emailService');
+const getSenderInfo = require('../helpers/getSenderInfo');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { generateEmailHTML } = require('../utils/emailTemplates');
-const getSenderInfo = require('../helpers/getSenderInfo');
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -18,6 +18,7 @@ const router = express.Router();
  */
 async function sendTestConfirmationEmail(tempGuest, recipientEmail, testLanguage) {
   try {
+
     // Determine which template to use based on RSVP status
     let templateName;
     if (tempGuest.rsvp_status === 'attending') {
@@ -31,7 +32,7 @@ async function sendTestConfirmationEmail(tempGuest, recipientEmail, testLanguage
     // Fetch the appropriate template
     const rawTemplate = await dbGet("SELECT * FROM templates WHERE name = ?", [templateName]);
     if (!rawTemplate) {
-      logger.error('RSVP confirmation template not found:', templateName);
+      logger.error('[EMAIL_SETTINGS] RSVP confirmation template not found:', templateName);
       return { success: false, error: `Template "${templateName}" not found` };
     }
     
@@ -84,25 +85,31 @@ async function sendTestConfirmationEmail(tempGuest, recipientEmail, testLanguage
       title: 'Brigita & Jeffrey'
     });
     
-    // Get sender info
-    const senderInfo = await getSenderInfo(db);
-    
-    // Send via Resend
-    const response = await resendClient.emails.send({
-      from: senderInfo,
+    // Send via unified email service
+    const result = await sendEmail({
       to: recipientEmail,
       subject: subject,
-      html: emailHtml
+      html: emailHtml,
+      db
     });
     
-    return { 
-      success: true, 
-      messageId: response.data?.id,
-      templateName,
-      subject
-    };
+    if (result.success) {
+      logger.info('[EMAIL_SETTINGS] Test email sent', { recipientEmail, messageId: result.messageId });
+      return { 
+        success: true, 
+        messageId: result.messageId,
+        templateName,
+        subject
+      };
+    } else {
+      logger.error('[EMAIL_SETTINGS] Test email failed', { recipientEmail, error: result.error });
+      return { 
+        success: false, 
+        error: result.error || 'Failed to send test email'
+      };
+    }
   } catch (err) {
-    logger.error('RSVP confirmation email failed:', err.message);
+    logger.error('[EMAIL_SETTINGS] Error', { recipientEmail, error: err.message });
     return { success: false, error: err.message };
   }
 }
@@ -213,6 +220,9 @@ router.post('/', requireAuth, async (req, res) => {
         enabled ? 1 : 0,
       ];
       const result = await dbRun(query, values);
+      // Clear template variables cache since sender info changed
+      const { clearSettingsCache } = require('../utils/templateVariables');
+      clearSettingsCache();
       res.json({ success: true, updated: result.affectedRows || result.changes || 0 });
     } else {
       // Create new settings
@@ -230,6 +240,9 @@ router.post('/', requireAuth, async (req, res) => {
         enabled ? 1 : 0,
       ];
       const result = await dbRun(query, values);
+      // Clear template variables cache since sender info changed
+      const { clearSettingsCache } = require('../utils/templateVariables');
+      clearSettingsCache();
       res.json({ success: true, created: result.insertId || result.lastID || 1 });
     }
   } catch (err) {
@@ -702,18 +715,23 @@ router.post('/test', requireAuth, async (req, res) => {
     // Send email or schedule
     if (sendMode === 'immediate') {
       try {
-        const emailResult = await resendClient.emails.send({
+        const emailResult = await sendEmail({
           from: `${fromName} <${fromEmail}>`,
           to: recipientEmail,
           subject: subject,
-          html: emailHtml
+          html: emailHtml,
+          db
         });
         
-        healthCheck.emailProvider.messageId = emailResult.data?.id || null;
-        healthCheck.emailProvider.message = 'Email sent successfully';
-        sentAt = new Date().toISOString();
+        if (emailResult.success) {
+          healthCheck.emailProvider.messageId = emailResult.messageId || null;
+          healthCheck.emailProvider.message = 'Email sent successfully';
+          sentAt = new Date().toISOString();
+        } else {
+          throw new Error(emailResult.error || 'Email send failed');
+        }
       } catch (err) {
-        logger.error('Email send failed:', err.message);
+        logger.error('[EMAIL_SETTINGS] Email send failed', { recipientEmail, error: err.message });
         healthCheck.emailProvider.error = {
           type: 'send_error',
           message: err.message,

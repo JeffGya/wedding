@@ -6,7 +6,7 @@ const logger = require('../helpers/logger');
 
 
 function startScheduler() {
-  // Schedule to run every 30 minutes
+  // Schedule to run every hour
   cron.schedule('0 * * * *', async () => {
     logger.debug('⏰ Scheduler triggered: Checking for scheduled messages...');
     try {

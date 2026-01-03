@@ -1,11 +1,13 @@
 const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const logger = require('./logger');
-const getSenderInfo = require('./getSenderInfo');
-const resend = require('./resendClient'); // Assuming resendClient is already configured
+const { sendEmail } = require('./emailService');
+const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+const { generateEmailHTML } = require('../utils/emailTemplates');
 
 const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
+const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
 
 /**
  * Send all scheduled messages that are due.
@@ -51,54 +53,82 @@ async function sendScheduledMessages() {
         continue;
       }
 
-      logger.debug('📬 Attempting to get sender info...');
-      let senderInfo;
-      try {
-        senderInfo = await getSenderInfo(db);
-      } catch (error) {
-        logger.error('⚠️ Could not retrieve sender info. Skipping sending.', error);
-        continue;
-      }
-      logger.debug('Sender info:', senderInfo);
-      if (!senderInfo) {
-        logger.error('⚠️ Could not retrieve sender info. Skipping sending.');
-        continue;
-      }
 
       const sendResults = [];
 
       for (const recipient of recipients) {
         try {
-          const htmlContent = recipient.language === 'lt' ? message.body_lt : message.body_en;
+          // Get guest data for template variables
+          const guest = await dbGet('SELECT * FROM guests WHERE id = ?', [recipient.guest_id]);
+          if (!guest) {
+            logger.warn('[SCHEDULED_MESSAGES] Guest not found', { recipientId: recipient.id, guestId: recipient.guest_id });
+            await dbRun(
+              `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+              ['failed', 'Guest not found', recipient.id]
+            );
+            sendResults.push({ recipientId: recipient.id, status: 'failed' });
+            globalFailed++;
+            continue;
+          }
 
-          const sendResult = await resend.emails.send({
-            from: senderInfo,
+          // Check for missing email
+          if (!recipient.email) {
+            logger.warn('[SCHEDULED_MESSAGES] Missing email', { recipientId: recipient.id });
+            await dbRun(
+              `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+              ['failed', 'Missing email address', recipient.id]
+            );
+            sendResults.push({ recipientId: recipient.id, status: 'failed' });
+            globalFailed++;
+            continue;
+          }
+
+          const lang = recipient.language === 'lt' ? 'lt' : 'en';
+          
+          // Get enhanced variables for this guest
+          const variables = await getTemplateVariables(guest, message);
+          
+          // Replace variables in message content
+          const body_en = replaceTemplateVars(message.body_en, variables);
+          const body_lt = replaceTemplateVars(message.body_lt, variables);
+          const subject = replaceTemplateVars(message.subject, variables);
+          
+          // Prepare email template options from settings
+          const emailOptions = {
+            siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
+            title: variables.brideName && variables.groomName 
+              ? `${variables.brideName} & ${variables.groomName}`
+              : undefined
+          };
+          
+          // Apply shared email template system for consistent, inline-styled HTML
+          const styleKey = message.style || 'elegant';
+          const emailHtml = generateEmailHTML(lang === 'lt' ? body_lt : body_en, styleKey, emailOptions);
+
+          // Send via unified email service
+          const result = await sendEmail({
             to: recipient.email,
-            subject: message.subject,
-            html: htmlContent,
+            subject: subject,
+            html: emailHtml,
+            db
           });
 
-          // Check if the send result has data (success) or error (failure)
-          if (sendResult && sendResult.data) {
-            logger.info(`Email successfully sent to ${recipient.email}`);
+          if (result.success) {
+            logger.info('[SCHEDULED_MESSAGES] Sent', { to: recipient.email, messageId: result.messageId });
             // Update the status to 'sent' and store the message ID
             await dbRun(
-              `UPDATE message_recipients SET delivery_status = ?, resend_message_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-              ['sent', sendResult.data.id, recipient.id]
+              `UPDATE message_recipients SET delivery_status = ?, resend_message_id = ?, sent_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+              ['sent', result.messageId, recipient.id]
             );
             sendResults.push({ recipientId: recipient.id, status: 'sent' });
             globalSent++;
           } else {
-            // Handle failure
-            const errorMessage = sendResult && sendResult.error ? sendResult.error.message : 'Unknown error';
-            logger.error(`Failed to send email to ${recipient.email}. Status: ${sendResult ? sendResult.status : 'undefined'}`);
-            logger.error('Send result:', sendResult);
+            logger.error('[SCHEDULED_MESSAGES] Failed', { to: recipient.email, error: result.error });
             // Store the error in the database
             await dbRun(
               `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-              ['failed', errorMessage, recipient.id]
+              ['failed', result.error || 'Unknown error', recipient.id]
             );
-
             sendResults.push({ recipientId: recipient.id, status: 'failed' });
             globalFailed++;
           }
@@ -107,10 +137,10 @@ async function sendScheduledMessages() {
           await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
 
         } catch (sendError) {
-          logger.error('⚠️ Send failed for recipient', recipient.id, sendError);
+          logger.error('[SCHEDULED_MESSAGES] Send failed', { recipientId: recipient.id, error: sendError.message });
           await dbRun(
             `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-            ['failed', JSON.stringify(sendError), recipient.id]
+            ['failed', sendError.message || JSON.stringify(sendError), recipient.id]
           );
           sendResults.push({ recipientId: recipient.id, status: 'failed' });
           globalFailed++;

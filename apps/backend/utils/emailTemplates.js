@@ -5,37 +5,52 @@
 
 const fs = require('fs');
 const path = require('path');
+const logger = require('../helpers/logger');
 
-// Try PNG logo first (most reliable), fallback to sized SVG
-let logoHtml = '';
+// Cache for loaded logo HTML
+let logoHtmlCache = null;
 
-try {
-  // First try to load the PNG logo for maximum email compatibility
-  const pngPath = path.join(__dirname, 'Logo.png');
-  if (fs.existsSync(pngPath)) {
-    const pngBuffer = fs.readFileSync(pngPath);
-    const base64Png = pngBuffer.toString('base64');
-    logoHtml = `<img src="data:image/png;base64,${base64Png}" alt="Wedding Logo" style="max-width: 80px; max-height: 80px; display: block; margin: 0 auto;">`;
-  } else {
-    throw new Error('PNG logo not found');
+/**
+ * Load logo HTML with fallback chain: PNG → SVG → text
+ * This is lazy-loaded when needed, not at module load time
+ * @returns {string} HTML string for the logo
+ */
+function loadLogoHtml() {
+  // Return cached value if available
+  if (logoHtmlCache !== null) {
+    return logoHtmlCache;
   }
-} catch (error) {
+
   try {
-    // Fallback to SVG with proper sizing (similar to PNG dimensions)
-    const rawSvg = fs.readFileSync(
-      path.join(__dirname, 'wedding-logo.svg'), 
-      'utf8'
-    );
-    // Size the SVG to match the PNG dimensions (120x116)
-    logoHtml = rawSvg.replace(
-      '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01">',
-      '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01" width="80 " height="80" style="max-width: 80px; max-height: 80px;">'
-    );
-  } catch (svgError) {
-    // Final fallback to text logo
-    const logger = require('../helpers/logger');
-    logger.warn('Warning: Could not load any logo, using text fallback');
-    logoHtml = '<div style="font-family: \'Great Vibes\', cursive; font-size: 32px; color: #442727; margin-bottom: 20px;">Brigita & Jeffrey</div>';
+    // First try to load the PNG logo for maximum email compatibility
+    const pngPath = path.join(__dirname, 'Logo.png');
+    if (fs.existsSync(pngPath)) {
+      const pngBuffer = fs.readFileSync(pngPath);
+      const base64Png = pngBuffer.toString('base64');
+      logoHtmlCache = `<img src="data:image/png;base64,${base64Png}" alt="Wedding Logo" style="max-width: 80px; max-height: 80px; display: block; margin: 0 auto;">`;
+      return logoHtmlCache;
+    } else {
+      throw new Error('PNG logo not found');
+    }
+  } catch (error) {
+    try {
+      // Fallback to SVG with proper sizing (similar to PNG dimensions)
+      const rawSvg = fs.readFileSync(
+        path.join(__dirname, 'wedding-logo.svg'), 
+        'utf8'
+      );
+      // Size the SVG to match the PNG dimensions (120x116)
+      logoHtmlCache = rawSvg.replace(
+        '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01">',
+        '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01" width="80 " height="80" style="max-width: 80px; max-height: 80px;">'
+      );
+      return logoHtmlCache;
+    } catch (svgError) {
+      // Final fallback to text logo
+      logger.warn('Could not load any logo, using text fallback');
+      logoHtmlCache = '<div style="font-family: \'Great Vibes\', cursive; font-size: 32px; color: #442727; margin-bottom: 20px;">Brigita & Jeffrey</div>';
+      return logoHtmlCache;
+    }
   }
 }
 
@@ -188,6 +203,28 @@ function extractEmailTitle(content) {
 }
 
 /**
+ * Calculate dynamic font size for title based on title length
+ * @param {string} title - The title text
+ * @returns {number} Calculated font size in pixels
+ */
+function calculateTitleFontSize(title) {
+  const titleLength = title.length;
+  const availableWidth = 600; // Full container width
+  const minSize = 64; // Minimum size for very long titles
+  const maxSize = 100; // Maximum size for very short titles
+  
+  // Estimate character width for cursive font Great Vibes
+  // Great Vibes is a flowing cursive font that takes significantly more horizontal space
+  // Target: text should be ~125% of available width to ensure visible clipping
+  const targetWidth = availableWidth * 1.25; // 125% of width for proper clipping
+  const estimatedCharWidth = 0.70; // Increased to 0.70 to account for Great Vibes very wide rendering
+  const calculatedSize = Math.floor((targetWidth / titleLength) / estimatedCharWidth);
+  
+  // Use the calculated size directly, only clamp to reasonable bounds
+  return Math.max(minSize, Math.min(maxSize, calculatedSize));
+}
+
+/**
  * Generate the definitive email template with optional header image and signature footer
  */
 function generateDefinitiveEmailHTML(content, options = {}) {
@@ -209,25 +246,8 @@ function generateDefinitiveEmailHTML(content, options = {}) {
   // Use custom title from marker, or fall back to options title
   const displayTitle = customTitle || title;
   
-  // Calculate dynamic font size based on title length and available width
-  // Available width: 600px container - 32px border padding - 32px side clipping (16px each) = 536px
-  // We want text to be large enough to extend beyond bounds for visible clipping
-  // Reference: Footer signature uses 88px for "Brigita & Jeffrey" (19 chars) = ~4.6px/char
-  const titleLength = displayTitle.length;
-  const availableWidth = 600; // Full container width (no padding in new approach)
-  const minSize = 64; // Minimum size for very long titles
-  const maxSize = 100; // Maximum size for very short titles
-  
-  // Estimate character width for cursive font Great Vibes
-  // Great Vibes is a flowing cursive font that takes significantly more horizontal space
-  // After testing: need to account for the actual rendered width being much larger than font size
-  // Target: text should be ~125% of available width to ensure visible clipping
-  const targetWidth = availableWidth * 1.25; // 125% of width for proper clipping
-  const estimatedCharWidth = 0.70; // Increased to 0.70 to account for Great Vibes very wide rendering
-  const calculatedSize = Math.floor((targetWidth / titleLength) / estimatedCharWidth);
-  
-  // Use the calculated size directly, only clamp to reasonable bounds
-  let titleFontSize = Math.max(minSize, Math.min(maxSize, calculatedSize));
+  // Calculate dynamic font size using helper function
+  const titleFontSize = calculateTitleFontSize(displayTitle);
   
   // Check if button markers exist in content (user explicitly added button via rich text editor)
   // Buttons should ONLY show when explicitly added via button markers in content, never from options
@@ -503,7 +523,7 @@ function generateDefinitiveEmailHTML(content, options = {}) {
                     </div>
                     <!-- Logo below title -->
                     <div style="margin-top: 16px; margin-bottom: 16px;">
-                      ${logoHtml}
+                      ${loadLogoHtml()}
                     </div>
                   </td>
                 </tr>
@@ -545,7 +565,7 @@ function generateDefinitiveEmailHTML(content, options = {}) {
                 <!-- Logo in footer (only if header image exists) -->
                 <tr>
                   <td style="text-align: center; padding-bottom: 16px;">
-                    ${logoHtml}
+                    ${loadLogoHtml()}
                   </td>
                 </tr>
                 ` : ''}
@@ -584,132 +604,12 @@ function generateDefinitiveEmailHTML(content, options = {}) {
 
 /**
  * Generate complete email HTML with header, content, and footer
+ * Unified function that handles all styles through the definitive template
  */
 function generateEmailHTML(content, style = 'elegant', options = {}) {
-  // Use the definitive template for the 'elegant' style (our new premium design)
-  if (style === 'elegant') {
-    return generateDefinitiveEmailHTML(content, options);
-  }
-
-  const config = EMAIL_TEMPLATES[style] || EMAIL_TEMPLATES.elegant;
-  const {
-    title = 'Brigita & Jeffrey',
-    buttonText,
-    buttonUrl,
-    footerText = 'With love and joy,',
-    siteUrl = 'https://your-wedding-site.com'
-  } = options;
-
-  // Check if buttonText or buttonUrl are explicitly set to null/undefined/false
-  const shouldShowButton = buttonText && buttonUrl && buttonText !== null && buttonUrl !== null;
-
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wedding Invitation</title>
-  <style>
-    @media screen and (max-width: 600px) {
-      .email-container { width: 100% !important; max-width: 100% !important; }
-      .mobile-padding { padding: 15px !important; }
-      .mobile-text { font-size: 14px !important; }
-      .mobile-button { padding: 10px 20px !important; }
-      .mobile-header { padding: 20px 15px !important; }
-      .mobile-content { padding: 30px 20px !important; }
-      .mobile-footer { padding: 20px 15px !important; }
-      .mobile-title { font-size: 28px !important; }
-      .mobile-logo { width: 80px !important; height: 77px !important; }
-    }
-  </style>
-</head>
-<body style="margin: 0; padding: 0; background-color: #F1EFE8; font-family: Arial, Helvetica, sans-serif;">
-  
-  <!-- Main Container Table -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F1EFE8;">
-    <tr>
-      <td align="center" style="padding: 20px;">
-        
-        <!-- Email Content Table -->
-        <table width="600" cellpadding="0" cellspacing="0" border="0" class="email-container" style="max-width: 600px; background-color: #F1EFE8;">
-          
-          <!-- Header -->
-          <tr>
-            <td class="mobile-header" style="padding: 30px 25px; background: ${config.header.background}; border: ${config.header.border}; border-radius: 8px 8px 0 0; text-align: center;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="text-align: center;">
-                    <div style="margin-bottom: 20px;">
-                      ${logoHtml}
-                    </div>
-                    <h1 class="mobile-title" style="margin: 0; font-family: ${config.header.titleFont}; font-size: ${config.header.titleSize}; color: ${config.header.titleColor}; font-weight: normal;">
-                      ${title}
-                    </h1>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          
-          <!-- Content -->
-          <tr>
-            <td class="mobile-content" style="padding: 40px 30px; background: ${config.content.background}; box-shadow: ${config.content.boxShadow};">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td class="mobile-text" style="font-family: ${config.content.bodyFont}; font-size: ${config.content.bodySize}; line-height: ${config.content.lineHeight}; color: #442727;">
-                    ${content}
-                  </td>
-                </tr>
-                ${shouldShowButton ? `
-                <tr>
-                  <td style="text-align: center; padding-top: 30px;">
-                    <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
-                      <tr>
-                        <td class="mobile-button" style="background: ${config.button.background}; border-radius: ${config.button.borderRadius}; padding: ${config.button.padding}; text-align: center;">
-                          <a href="${buttonUrl}" style="font-family: ${config.button.font}; font-size: ${config.button.fontSize}; font-weight: ${config.button.fontWeight}; color: ${config.button.textColor}; text-decoration: none; display: inline-block;">
-                            ${buttonText}
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                ` : ''}
-              </table>
-            </td>
-          </tr>
-          
-          <!-- Footer -->
-          <tr>
-            <td class="mobile-footer" style="padding: 25px; background: ${config.footer.background}; border: ${config.footer.border}; border-radius: 0 0 8px 8px; text-align: center;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td class="mobile-text" style="font-family: ${config.footer.font}; font-size: ${config.footer.fontSize}; color: #442727; line-height: 1.6;">
-                    <p style="margin: 0 0 10px 0;">
-                      ${footerText}
-                    </p>
-                    <p style="margin: 0 0 15px 0; font-weight: bold;">
-                      ${title}
-                    </p>
-                    <p style="margin: 0; font-size: 14px;">
-                      <a href="${siteUrl}" style="color: #DAA520; text-decoration: none;">
-                        ${siteUrl}
-                      </a>
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          
-        </table>
-        
-      </td>
-    </tr>
-  </table>
-  
-</body>
-</html>`;
+  // All styles now use the definitive template (elegant style)
+  // The style parameter is kept for backward compatibility but all styles render the same
+  return generateDefinitiveEmailHTML(content, options);
 }
 
 /**
@@ -752,6 +652,8 @@ module.exports = {
   generateButtonHTML,
   extractHeaderImage,
   extractEmailTitle,
+  calculateTitleFontSize,
+  loadLogoHtml,
   getAvailableStyles,
   getTemplateConfig,
   EMAIL_TEMPLATES

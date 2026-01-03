@@ -5,8 +5,7 @@ const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
-const getSenderInfo = require('../helpers/getSenderInfo');
-const resendClient = require('../helpers/resendClient');
+const { sendBatchEmails } = require('../helpers/emailService');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
 
 // Helper function to detect template schema version (shared with templates.js logic)
@@ -778,16 +777,11 @@ router.post('/:id/send', async (req, res, next) => {
     ? req.body.guestIds
     : null;
   // Debug: preparing to send message
-  logger.debug('➡️ Preparing to send messageId:', messageId, 'with guestIds:', guestIds);
-  // Get sender info from settings
-  let senderInfo;
-  try {
-    senderInfo = await getSenderInfo(db);
-    logger.debug('📫 Sender info:', senderInfo);
-  } catch (err) {
-    logger.error('❌ Failed to fetch sender info:', err);
-    return res.status(500).json({ success: false, error: 'Failed to fetch sender settings' });
-  }
+  logger.debug('[MESSAGES] Preparing to send message', {
+    messageId,
+    hasGuestIds: !!(guestIds && guestIds.length),
+    guestIdsCount: guestIds ? guestIds.length : 0
+  });
   try {
     // Load the message
     const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
@@ -815,21 +809,19 @@ router.post('/:id/send', async (req, res, next) => {
       guestParams = [];
     }
     const guests = await dbAll(guestSql, guestParams);
-    const results = [];
-    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    const BATCH_SIZE = 1;
-    const BATCH_DELAY = 2000;
-    for (let i = 0; i < guests.length; i += BATCH_SIZE) {
-      const batch = guests.slice(i, i + BATCH_SIZE);
-      const batchPromises = batch.map(async (guest) => {
-        await delay(300);
-        // Check for missing email before sending
+    
+    logger.debug('[MESSAGES] Preparing batch send', { messageId, guestCount: guests.length });
+    
+    // Prepare email options for each guest
+    const emailOptionsPromises = guests
+      .filter(guest => {
         if (!guest.email) {
-          logger.warn('⚠️ Guest missing email, skipping:', guest.id);
-          results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
-          return;
+          logger.warn('[MESSAGES] Guest missing email, skipping', { guestId: guest.id });
+          return false;
         }
-        const name = guest.group_label || guest.name;
+        return true;
+      })
+      .map(async (guest) => {
         const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
         
         // Get enhanced variables for this guest
@@ -841,7 +833,7 @@ router.post('/:id/send', async (req, res, next) => {
         const subject = replaceTemplateVars(message.subject, variables);
         
         // Prepare email template options from settings
-        const emailOptions = {
+        const templateOptions = {
           siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
           title: variables.brideName && variables.groomName 
             ? `${variables.brideName} & ${variables.groomName}`
@@ -850,74 +842,36 @@ router.post('/:id/send', async (req, res, next) => {
         
         // Apply shared email template system for consistent, inline-styled HTML
         const styleKey = message.style || 'elegant';
-        const emailHtmlEn = generateEmailHTML(body_en, styleKey, emailOptions);
-        const emailHtmlLt = generateEmailHTML(body_lt, styleKey, emailOptions);
+        const emailHtmlEn = generateEmailHTML(body_en, styleKey, templateOptions);
+        const emailHtmlLt = generateEmailHTML(body_lt, styleKey, templateOptions);
         
-        // Send email using Resend
-        const emailData = {
-          from: senderInfo,
+        return {
           to: guest.email,
           subject: subject,
-          html: guest.language === 'lt' ? emailHtmlLt : emailHtmlEn
+          html: lang === 'lt' ? emailHtmlLt : emailHtmlEn,
+          guestId: guest.id,
+          language: lang
         };
-        let retries = 0;
-        const maxRetries = 3;
-        const backoff = [0, 2000, 4000];
-        while (retries <= maxRetries) {
-          try {
-            // Log email data before sending
-            logger.debug('📤 Email data to send:', emailData);
-            const response = await resendClient.emails.send(emailData);
-            // Log the full response from Resend
-            logger.debug('✅ Resend response:', {
-              data: response.data,
-            });
-            
-            // Check if Resend accepted the email for delivery
-            if (response && response.data && response.data.id) {
-              // Resend accepted the email - mark as sent
-              logger.info('✅ Email accepted by Resend for delivery:', response.data.id);
-              const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status, resend_message_id) VALUES (?, ?, 'sent', ?, 'sent', ?)`;
-              // Format timestamp for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
-              const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
-              logger.debug('🧰 [messages.js] Formatted sentAt for MySQL:', sentAt);
-              await dbRun(logSql, [messageId, guest.id, sentAt, response.data.id]);
-              results.push({ guest_id: guest.id, status: 'sent', resendId: response.data.id });
-            } else {
-              // Resend didn't accept the email - mark as failed
-              logger.error('❌ Resend didn\'t accept email for delivery:', response);
-              const errorMsg = 'Resend API did not accept email for delivery';
-              const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
-              await dbRun(logSql, [messageId, guest.id, errorMsg]);
-              results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
-            }
-            break;
-          } catch (err) {
-            // Check for rate limiting (429) - Resend SDK may throw errors with status property
-            const isRateLimit = err.status === 429 || err.response?.status === 429 || (err.error && err.error.status === 429);
-            if (isRateLimit && retries < maxRetries) {
-              retries++;
-              await delay(backoff[retries]);
-            } else {
-              const errorMsg = err.error?.message || (err.response?.data ? JSON.stringify(err.response.data) : err.message);
-              logger.error('❌ Resend error:', errorMsg);
-              const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
-              await dbRun(logSql, [messageId, guest.id, errorMsg]);
-              results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
-              break;
-            }
-          }
-        }
       });
-      await Promise.all(batchPromises);
-      if (i + BATCH_SIZE < guests.length) {
-        await delay(BATCH_DELAY);
-      }
-    }
     
-    // Calculate results before updating message status
-    const sentCount = results.filter(r => r.status === 'sent').length;
-    const failedCount = results.filter(r => r.status === 'failed').length;
+    const emailOptions = await Promise.all(emailOptionsPromises);
+    
+    // Send batch emails using unified service
+    const batchResult = await sendBatchEmails({
+      emails: emailOptions,
+      db,
+      batchSize: 1,
+      batchDelay: 2000,
+      emailDelay: 300,
+      getTrackingInfo: (emailOpts) => ({
+        messageId,
+        guestId: emailOpts.guestId
+      })
+    });
+    
+    const results = batchResult.results;
+    const sentCount = batchResult.sentCount;
+    const failedCount = batchResult.failedCount;
     
     // Only mark message as sent if at least some emails were sent successfully
     if (sentCount > 0) {
@@ -1200,7 +1154,6 @@ router.post('/preview', async (req, res) => {
 router.post('/:id/resend', async (req, res, next) => {
   const messageId = req.params.id;
   try {
-    const senderInfo = await getSenderInfo(db);
     const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
     if (!message) return res.status(404).json({ success: false, error: 'Message not found' });
     // Load failed recipients only
@@ -1208,19 +1161,18 @@ router.post('/:id/resend', async (req, res, next) => {
       `SELECT g.* FROM message_recipients mr JOIN guests g ON g.id = mr.guest_id WHERE mr.message_id = ? AND mr.delivery_status = 'failed'`,
       [messageId]
     );
-    const results = [];
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-    const BATCH_SIZE = 1;
-    const BATCH_DELAY = 2000;
-    for (let i = 0; i < guests.length; i += BATCH_SIZE) {
-      const batch = guests.slice(i, i + BATCH_SIZE);
-      const batchPromises = batch.map(async (guest) => {
-        // Check for missing email before sending
+    
+    
+    // Prepare email options for each guest
+    const emailOptionsPromises = guests
+      .filter(guest => {
         if (!guest.email) {
-          logger.warn('⚠️ Guest missing email, skipping:', guest.id);
-          results.push({ guest_id: guest.id, status: 'failed', error: 'Missing email address' });
-          return;
+          logger.warn('[MESSAGES] Guest missing email, skipping resend', { guestId: guest.id });
+          return false;
         }
+        return true;
+      })
+      .map(async (guest) => {
         const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
         
         // Get enhanced variables for this guest
@@ -1232,7 +1184,7 @@ router.post('/:id/resend', async (req, res, next) => {
         const subject = replaceTemplateVars(message.subject, variables);
         
         // Prepare email template options from settings
-        const emailOptions = {
+        const templateOptions = {
           siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
           title: variables.brideName && variables.groomName 
             ? `${variables.brideName} & ${variables.groomName}`
@@ -1241,61 +1193,58 @@ router.post('/:id/resend', async (req, res, next) => {
         
         // Apply shared email template system for consistent, inline-styled HTML
         const styleKey = message.style || 'elegant';
-        const emailHtml = generateEmailHTML(lang === 'lt' ? body_lt : body_en, styleKey, emailOptions);
+        const emailHtml = generateEmailHTML(lang === 'lt' ? body_lt : body_en, styleKey, templateOptions);
         
-        const emailData = {
-          from: senderInfo,
+        return {
           to: guest.email,
           subject: subject,
           html: emailHtml,
+          guestId: guest.id,
+          language: lang
         };
-        let retries = 0;
-        const maxRetries = 3;
-        const backoff = [0, 2000, 4000];
-        while (retries <= maxRetries) {
-          try {
-            const response = await resendClient.emails.send(emailData);
-
-            logger.debug('✅ Resend response:', {
-              data: response.data,
-            });
-
-            // Format sentAt for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
-            const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
-            logger.debug('🧰 [messages.js] Resend formatted sentAt:', sentAt);
-
-            const logSql = `UPDATE message_recipients
-              SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL, resend_message_id = ?
-              WHERE message_id = ? AND guest_id = ?`;
-            await dbRun(logSql, [sentAt, response.data?.id || null, messageId, guest.id]);
-            results.push({ guest_id: guest.id, status: 'sent', resendId: response.data?.id });
-            break;
-          } catch (err) {
-            // Check for rate limiting (429) - Resend SDK may throw errors with status property
-            const isRateLimit = err.status === 429 || err.response?.status === 429 || (err.error && err.error.status === 429);
-            if (isRateLimit && retries < maxRetries) {
-              retries++;
-              await delay(backoff[retries]);
-            } else {
-              const errorMsg = err.error?.message || (err.response?.data ? JSON.stringify(err.response.data) : err.message);
-              logger.error('❌ Resend error:', errorMsg);
-              const logSql = `UPDATE message_recipients
-                SET delivery_status = 'failed', error_message = ?
-                WHERE message_id = ? AND guest_id = ?`;
-              await dbRun(logSql, [errorMsg, messageId, guest.id]);
-              results.push({ guest_id: guest.id, status: 'failed', error: errorMsg });
-              break;
-            }
-          }
-        }
       });
-      await Promise.all(batchPromises);
-      if (i + BATCH_SIZE < guests.length) {
-        await delay(BATCH_DELAY);
-      }
-    }
-    const sentCount = results.filter(r => r.status === 'sent').length;
-    const failedCount = results.filter(r => r.status === 'failed').length;
+    
+    const emailOptions = await Promise.all(emailOptionsPromises);
+    
+    // Send batch emails using unified service with custom tracking for updates
+    const batchResult = await sendBatchEmails({
+      emails: emailOptions,
+      db,
+      batchSize: 1,
+      batchDelay: 2000,
+      emailDelay: 300,
+      getTrackingInfo: (emailOpts) => ({
+        messageId,
+        guestId: emailOpts.guestId,
+        onSuccess: async (result, db, msgId, gId) => {
+          // Update existing record instead of inserting
+          const { createDbHelpers } = require('../db/queryHelpers');
+          const { dbRun } = createDbHelpers(db);
+          const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
+            await dbRun(
+              `UPDATE message_recipients
+               SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL, resend_message_id = ?
+               WHERE message_id = ? AND guest_id = ?`,
+              [sentAt, result.messageId, msgId, gId]
+            );
+        },
+        onFailure: async (error, db, msgId, gId) => {
+          // Update existing record with new error
+          const { createDbHelpers } = require('../db/queryHelpers');
+          const { dbRun } = createDbHelpers(db);
+            await dbRun(
+              `UPDATE message_recipients
+               SET delivery_status = 'failed', error_message = ?
+               WHERE message_id = ? AND guest_id = ?`,
+              [error, msgId, gId]
+            );
+        }
+      })
+    });
+    
+    const results = batchResult.results;
+    const sentCount = batchResult.sentCount;
+    const failedCount = batchResult.failedCount;
     res.json({ success: true, results, sentCount, failedCount });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });

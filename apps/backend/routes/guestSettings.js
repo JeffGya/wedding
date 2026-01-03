@@ -120,6 +120,9 @@ router.post('/', async (req, res) => {
     }
     // Bulk update guest deadlines
     await dbRun('UPDATE guests SET rsvp_deadline = ?', [rsvp_deadline]);
+    // Clear template variables cache since guest settings changed
+    const { clearSettingsCache } = require('../utils/templateVariables');
+    clearSettingsCache();
     return res.json({ rsvp_open, rsvp_deadline });
   } catch (err) {
     logger.error('Error saving guest settings or updating deadlines:', err);

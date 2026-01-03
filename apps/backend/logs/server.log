@@ -1,297 +1,473 @@
-[2026-01-03T19:50:24.221Z] [DEBUG] [RSVP_STATUS] convertAttendingToRsvpStatus called {"input":{"attending":true,"currentRsvpStatus":"not_attending","attendingProvided":true}}
-[2026-01-03T19:50:24.221Z] [DEBUG] [RSVP_STATUS] Conversion result {"input":true,"normalized":true,"result":"attending"}
-[2026-01-03T19:50:24.221Z] [DEBUG] [RSVP_STATUS] POST /rsvp conversion: {"attendingValue":true,"currentStatus":"not_attending","attendingProvided":true,"result":"attending"}
-[2026-01-03T19:50:24.221Z] [DEBUG] [RSVP_STATUS] Normalized attending value {"original":true,"normalized":true}
-[2026-01-03T19:50:24.221Z] [INFO] RSVP PUBLIC UPDATE: code=kd5bgqam {"attending":true,"rsvp_status":"attending","plus_one_name":null,"dietary":"Vegan","notes":"All the love"}
-[2026-01-03T19:50:24.240Z] [INFO] RSVP email decision: send_email=false (type: boolean), shouldSendEmail=false, code=kd5bgqam
-[2026-01-03T19:50:55.623Z] [DEBUG] [RSVP_STATUS] convertAttendingToRsvpStatus called {"input":{"attending":false,"currentRsvpStatus":"attending","attendingProvided":true}}
-[2026-01-03T19:50:55.624Z] [DEBUG] [RSVP_STATUS] Normalized attending value {"original":false,"normalized":false}
-[2026-01-03T19:50:55.625Z] [DEBUG] [RSVP_STATUS] Conversion result {"input":false,"normalized":false,"result":"not_attending"}
-[2026-01-03T19:50:55.625Z] [DEBUG] [RSVP_STATUS] POST /rsvp conversion: {"attendingValue":false,"currentStatus":"attending","attendingProvided":true,"result":"not_attending"}
-[2026-01-03T19:50:55.625Z] [INFO] RSVP PUBLIC UPDATE: code=kd5bgqam {"attending":false,"rsvp_status":"not_attending","plus_one_name":null,"dietary":"Vegan","notes":"All the love"}
-[2026-01-03T19:50:55.632Z] [INFO] RSVP email decision: send_email=false (type: boolean), shouldSendEmail=false, code=kd5bgqam
-[2026-01-03T19:52:03.008Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T19:52:03.008Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T19:52:03.008Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T19:52:03.008Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T19:52:03.008Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T19:52:03.017Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T19:52:03.017Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T19:52:03.017Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T19:52:03.017Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T19:52:03.017Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T19:52:03.030Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T19:52:03.055Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T19:52:03.058Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T19:52:03.073Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T19:52:03.075Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T19:52:03.075Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T19:52:03.076Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T19:52:03.076Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T19:52:03.080Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T19:52:03.080Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T19:52:08.402Z] [DEBUG] [guestSession] Setting session for guestId=34
-[2026-01-03T19:52:08.461Z] [DEBUG] [guestSession] Setting session for guestId=34
-[2026-01-03T19:52:11.549Z] [DEBUG] [RSVP_STATUS] convertAttendingToRsvpStatus called {"input":{"attending":false,"currentRsvpStatus":"not_attending","attendingProvided":true}}
-[2026-01-03T19:52:11.549Z] [DEBUG] [RSVP_STATUS] Normalized attending value {"original":false,"normalized":false}
-[2026-01-03T19:52:11.549Z] [DEBUG] [RSVP_STATUS] POST /rsvp conversion: {"attendingValue":false,"currentStatus":"not_attending","attendingProvided":true,"result":"not_attending"}
-[2026-01-03T19:52:11.549Z] [INFO] RSVP PUBLIC UPDATE: code=mma355jd {"attending":false,"rsvp_status":"not_attending","plus_one_name":null,"dietary":null,"notes":null}
-[2026-01-03T19:52:11.549Z] [DEBUG] [RSVP_STATUS] Conversion result {"input":false,"normalized":false,"result":"not_attending"}
-[2026-01-03T19:52:11.554Z] [INFO] RSVP email decision: send_email=undefined (type: undefined), shouldSendEmail=true, code=mma355jd
-[2026-01-03T19:52:11.564Z] [INFO] Template "Thank You - Not Attending" using legacy 'subject' column
-[2026-01-03T19:52:11.963Z] [INFO] RSVP confirmation email sent: {"id":"42ef9e44-7073-4588-9e03-512ad471df97"}
-[2026-01-03T19:52:11.993Z] [DEBUG] [guestSession] Setting session for guestId=34
-[2026-01-03T19:52:13.697Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T19:52:13.697Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T19:52:13.697Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T19:52:13.697Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T19:52:13.697Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T19:52:13.699Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T19:52:13.700Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T19:52:13.701Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T19:52:13.701Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T19:52:13.701Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T19:54:33.311Z] [DEBUG] [RSVP_STATUS] Conversion result {"input":true,"normalized":true,"result":"attending"}
-[2026-01-03T19:54:33.311Z] [DEBUG] [RSVP_STATUS] convertAttendingToRsvpStatus called {"input":{"attending":true,"currentRsvpStatus":"not_attending","attendingProvided":true}}
-[2026-01-03T19:54:33.311Z] [DEBUG] [RSVP_STATUS] Normalized attending value {"original":true,"normalized":true}
-[2026-01-03T19:54:33.311Z] [INFO] RSVP PUBLIC UPDATE: code=w4g5zk0t {"attending":true,"rsvp_status":"attending","plus_one_name":null,"dietary":"No nuts","notes":"Love to you guys"}
-[2026-01-03T19:54:33.311Z] [DEBUG] [RSVP_STATUS] POST /rsvp conversion: {"attendingValue":true,"currentStatus":"not_attending","attendingProvided":true,"result":"attending"}
-[2026-01-03T19:54:33.322Z] [INFO] RSVP email decision: send_email=false (type: boolean), shouldSendEmail=false, code=w4g5zk0t
-[2026-01-03T19:56:07.655Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T19:56:07.657Z] [INFO] Server is running on port 5001
-[2026-01-03T19:56:07.667Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T19:56:09.287Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T19:56:09.288Z] [INFO] Server is running on port 5001
-[2026-01-03T19:56:09.301Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T19:56:12.920Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T19:56:12.922Z] [INFO] Server is running on port 5001
-[2026-01-03T19:56:12.929Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T19:56:14.047Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T19:56:14.049Z] [INFO] Server is running on port 5001
-[2026-01-03T19:56:14.056Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T19:56:15.257Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T19:56:15.259Z] [INFO] Server is running on port 5001
-[2026-01-03T19:56:15.266Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T19:56:27.256Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T19:56:27.258Z] [INFO] Server is running on port 5001
-[2026-01-03T19:56:27.266Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:00:00.554Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
-[2026-01-03T20:00:00.558Z] [DEBUG] 📨 Starting scheduled message check...
-[2026-01-03T20:00:00.571Z] [DEBUG] ✅ Scheduled message check completed.
-[2026-01-03T20:00:00.571Z] [DEBUG] ✅ No scheduled messages ready to send.
-[2026-01-03T20:21:42.273Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:21:42.275Z] [INFO] Server is running on port 5001
-[2026-01-03T20:21:42.285Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:21:44.979Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:21:44.981Z] [INFO] Server is running on port 5001
-[2026-01-03T20:21:44.990Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:21:50.359Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:21:50.360Z] [INFO] Server is running on port 5001
-[2026-01-03T20:21:50.367Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:21:53.938Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:21:53.940Z] [INFO] Server is running on port 5001
-[2026-01-03T20:21:53.947Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:21:56.811Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:21:56.813Z] [INFO] Server is running on port 5001
-[2026-01-03T20:21:56.821Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:22:04.416Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:22:04.417Z] [INFO] Server is running on port 5001
-[2026-01-03T20:22:04.424Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:22:32.608Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:22:32.610Z] [INFO] Server is running on port 5001
-[2026-01-03T20:22:32.619Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:25:15.983Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:25:15.983Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:25:15.983Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:25:15.983Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:25:15.983Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:25:15.984Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:25:15.986Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:25:15.986Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:25:15.986Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:25:15.986Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:25:15.986Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:25:15.986Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:25:15.991Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:25:15.991Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:25:15.991Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:25:15.991Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:25:15.991Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:25:15.991Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:25:15.992Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:25:15.992Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:25:23.180Z] [DEBUG] [guestSession] Setting session for guestId=34
-[2026-01-03T20:25:26.970Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:25:26.970Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:25:26.970Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:25:26.970Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:25:26.970Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:25:26.971Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:25:26.972Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:25:26.973Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:25:26.973Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:25:26.973Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:25:47.563Z] [DEBUG] [guestSession] Setting session for guestId=37
-[2026-01-03T20:25:47.598Z] [DEBUG] [guestSession] Setting session for guestId=37
-[2026-01-03T20:25:51.173Z] [INFO] RSVP PUBLIC UPDATE: code=9wha1bi7 {"attending":false,"rsvp_status":"not_attending","plus_one_name":null,"dietary":null,"notes":null}
-[2026-01-03T20:25:51.178Z] [DEBUG] [RSVP] Calling handlePlusOne service {"code":"9wha1bi7","groupId":7,"plusOneName":null,"plusOneDietary":null}
-[2026-01-03T20:25:51.178Z] [DEBUG] [PLUS_ONE] handlePlusOne called {"operation":"handlePlusOne","groupId":7,"groupLabel":"Sofia & Mateo","plusOneName":null,"hasPlusOneDietary":false}
-[2026-01-03T20:25:51.179Z] [DEBUG] [PLUS_ONE] Existing plus-one lookup {"operation":"lookup","groupId":7,"found":true,"existingPlusOneId":38}
-[2026-01-03T20:25:51.179Z] [DEBUG] [PLUS_ONE] Deleting plus-one {"operation":"delete","groupId":7,"plusOneId":38,"plusOneName":"Mateo"}
-[2026-01-03T20:25:51.180Z] [DEBUG] [PLUS_ONE] Message recipients cleanup {"operation":"delete","plusOneId":38,"messageRecipientsCount":0}
-[2026-01-03T20:25:51.182Z] [DEBUG] [PLUS_ONE] Plus-one deleted successfully {"operation":"delete","groupId":7,"plusOneId":38}
-[2026-01-03T20:25:51.182Z] [INFO] RSVP email decision: send_email=undefined (type: undefined), shouldSendEmail=true, code=9wha1bi7
-[2026-01-03T20:25:51.192Z] [INFO] Template "Thank You - Not Attending" using legacy 'subject' column
-[2026-01-03T20:25:51.584Z] [INFO] RSVP confirmation email sent: {"id":"219bb0f9-2f92-4d40-81c4-527fcefdfe8c"}
-[2026-01-03T20:25:51.615Z] [DEBUG] [guestSession] Setting session for guestId=37
-[2026-01-03T20:25:54.999Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:25:54.999Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:25:54.999Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:25:54.999Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:25:54.999Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:25:55.000Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:25:55.001Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:25:55.003Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:25:55.003Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:25:55.003Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:27:41.703Z] [DEBUG] [guestSession] Setting session for guestId=41
-[2026-01-03T20:27:41.736Z] [DEBUG] [guestSession] Setting session for guestId=41
-[2026-01-03T20:28:12.523Z] [DEBUG] [guestSession] Setting session for guestId=40
-[2026-01-03T20:28:12.551Z] [DEBUG] [guestSession] Setting session for guestId=40
-[2026-01-03T20:28:18.065Z] [INFO] RSVP PUBLIC UPDATE: code=3TMJ8Z {"attending":true,"rsvp_status":"attending","plus_one_name":"Sara","dietary":"Vegan","notes":"Much love"}
-[2026-01-03T20:28:18.069Z] [DEBUG] [RSVP] Calling handlePlusOne service {"code":"3TMJ8Z","groupId":40,"plusOneName":"Sara","plusOneDietary":"Vegan"}
-[2026-01-03T20:28:18.069Z] [DEBUG] [PLUS_ONE] handlePlusOne called {"operation":"handlePlusOne","groupId":40,"groupLabel":"Faissel & Riya","plusOneName":"Sara","hasPlusOneDietary":true}
-[2026-01-03T20:28:18.070Z] [DEBUG] [PLUS_ONE] Existing plus-one lookup {"operation":"lookup","groupId":40,"found":true,"existingPlusOneId":46}
-[2026-01-03T20:28:18.070Z] [DEBUG] [PLUS_ONE] Updating existing plus-one {"operation":"update","groupId":40,"plusOneId":46,"oldName":"Brigita","newName":"Sara","oldDietary":"Vegan","newDietary":"Vegan"}
-[2026-01-03T20:28:18.071Z] [DEBUG] [PLUS_ONE] Plus-one updated successfully {"operation":"update","groupId":40,"plusOneId":46}
-[2026-01-03T20:28:18.071Z] [DEBUG] [PLUS_ONE] syncPlusOneAttendingStatus called {"operation":"sync","groupId":40,"isAttending":true}
-[2026-01-03T20:28:18.071Z] [DEBUG] [RSVP] Syncing plus-one attending status {"code":"3TMJ8Z","groupId":40,"attending":true}
-[2026-01-03T20:28:18.074Z] [DEBUG] [PLUS_ONE] Syncing plus-one attending status {"operation":"sync","groupId":40,"plusOneId":46,"plusOneName":"Sara","currentAttending":1,"currentRsvpStatus":"attending","newAttending":1,"newRsvpStatus":"attending"}
-[2026-01-03T20:28:18.075Z] [DEBUG] [PLUS_ONE] Plus-one status synced successfully {"operation":"sync","groupId":40,"plusOneId":46}
-[2026-01-03T20:28:18.075Z] [INFO] RSVP email decision: send_email=undefined (type: undefined), shouldSendEmail=true, code=3TMJ8Z
-[2026-01-03T20:28:18.081Z] [INFO] Template "Thank You - Attending" using legacy 'subject' column
-[2026-01-03T20:28:18.453Z] [INFO] RSVP confirmation email sent: {"id":"0233df9f-05e6-496d-91ee-bd48675cd6f1"}
-[2026-01-03T20:28:18.473Z] [DEBUG] [guestSession] Setting session for guestId=40
-[2026-01-03T20:28:50.575Z] [DEBUG] [guestSession] Setting session for guestId=40
-[2026-01-03T20:28:55.841Z] [INFO] RSVP PUBLIC UPDATE: code=3TMJ8Z {"attending":true,"rsvp_status":"attending","plus_one_name":"","dietary":"Vegan","notes":"Much love"}
-[2026-01-03T20:28:55.846Z] [DEBUG] [RSVP] Calling handlePlusOne service {"code":"3TMJ8Z","groupId":40,"plusOneName":null,"plusOneDietary":null}
-[2026-01-03T20:28:55.846Z] [DEBUG] [PLUS_ONE] handlePlusOne called {"operation":"handlePlusOne","groupId":40,"groupLabel":"Faissel & Riya","plusOneName":null,"hasPlusOneDietary":false}
-[2026-01-03T20:28:55.848Z] [DEBUG] [PLUS_ONE] Existing plus-one lookup {"operation":"lookup","groupId":40,"found":true,"existingPlusOneId":46}
-[2026-01-03T20:28:55.848Z] [DEBUG] [PLUS_ONE] Deleting plus-one {"operation":"delete","groupId":40,"plusOneId":46,"plusOneName":"Sara"}
-[2026-01-03T20:28:55.849Z] [DEBUG] [PLUS_ONE] Message recipients cleanup {"operation":"delete","plusOneId":46,"messageRecipientsCount":0}
-[2026-01-03T20:28:55.850Z] [DEBUG] [PLUS_ONE] Plus-one deleted successfully {"operation":"delete","groupId":40,"plusOneId":46}
-[2026-01-03T20:28:55.850Z] [DEBUG] [RSVP] Syncing plus-one attending status {"code":"3TMJ8Z","groupId":40,"attending":true}
-[2026-01-03T20:28:55.850Z] [DEBUG] [PLUS_ONE] syncPlusOneAttendingStatus called {"operation":"sync","groupId":40,"isAttending":true}
-[2026-01-03T20:28:55.850Z] [DEBUG] [PLUS_ONE] No plus-one to sync {"operation":"sync","groupId":40,"plusOneExists":false}
-[2026-01-03T20:28:55.850Z] [INFO] RSVP email decision: send_email=undefined (type: undefined), shouldSendEmail=true, code=3TMJ8Z
-[2026-01-03T20:28:55.857Z] [INFO] Template "Thank You - Attending" using legacy 'subject' column
-[2026-01-03T20:28:56.136Z] [INFO] RSVP confirmation email sent: {"id":"b84c3d47-e493-44c1-98ed-94dd8766e0e1"}
-[2026-01-03T20:28:58.665Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:28:58.664Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:28:58.665Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:28:58.665Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:28:58.665Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:28:58.666Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:28:58.667Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:28:58.668Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:28:58.668Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:28:58.668Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:34:14.315Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:34:14.317Z] [INFO] Server is running on port 5001
-[2026-01-03T20:34:14.326Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:34:17.356Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:34:17.357Z] [INFO] Server is running on port 5001
-[2026-01-03T20:34:17.365Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:34:18.951Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:34:18.952Z] [INFO] Server is running on port 5001
-[2026-01-03T20:34:18.962Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:34:20.523Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:34:20.525Z] [INFO] Server is running on port 5001
-[2026-01-03T20:34:20.534Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:34:21.664Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:34:21.666Z] [INFO] Server is running on port 5001
-[2026-01-03T20:34:21.674Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:34:30.973Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:34:30.975Z] [INFO] Server is running on port 5001
-[2026-01-03T20:34:30.983Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:35:53.263Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:35:53.265Z] [INFO] Server is running on port 5001
-[2026-01-03T20:35:53.274Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:35:55.114Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:35:55.115Z] [INFO] Server is running on port 5001
-[2026-01-03T20:35:55.123Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:35:57.316Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:35:57.318Z] [INFO] Server is running on port 5001
-[2026-01-03T20:35:57.325Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:35:58.545Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:35:58.547Z] [INFO] Server is running on port 5001
-[2026-01-03T20:35:58.554Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:02.006Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:02.008Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:02.016Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:07.487Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:07.489Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:07.499Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:09.958Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:09.961Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:09.971Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:30.391Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:30.393Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:30.404Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:32.199Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:32.200Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:32.207Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:39.944Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:39.946Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:39.953Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:42.697Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:42.699Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:42.706Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:44.081Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:44.083Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:44.093Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:57.022Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:57.024Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:57.035Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:36:59.920Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:36:59.921Z] [INFO] Server is running on port 5001
-[2026-01-03T20:36:59.928Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:37:02.119Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:37:02.121Z] [INFO] Server is running on port 5001
-[2026-01-03T20:37:02.128Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:37:05.681Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:37:05.683Z] [INFO] Server is running on port 5001
-[2026-01-03T20:37:05.689Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:37:36.105Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
-[2026-01-03T20:37:36.107Z] [INFO] Server is running on port 5001
-[2026-01-03T20:37:36.157Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-03T20:38:22.371Z] [DEBUG] 🧭 Route hit: GET /api/messages
-[2026-01-03T20:38:26.352Z] [DEBUG] 🧭 Route hit: DELETE /api/messages/8
-[2026-01-03T20:38:28.417Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
-[2026-01-03T20:38:28.419Z] [DEBUG] [GET /api/pages] Returning 3 of 3
-[2026-01-03T20:39:46.046Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:39:46.046Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:39:46.046Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:39:46.046Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:39:46.047Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:39:46.046Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:39:46.050Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
-[2026-01-03T20:39:46.050Z] [DEBUG] [NAV][DEBUG] typeof Page: object
-[2026-01-03T20:39:46.050Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
-[2026-01-03T20:39:46.050Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
-[2026-01-03T20:39:46.050Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
-[2026-01-03T20:39:46.053Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
-[2026-01-03T20:39:46.053Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:39:46.053Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:39:46.054Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:39:46.054Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:39:46.055Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
-[2026-01-03T20:39:46.055Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
-[2026-01-03T20:39:46.055Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
-[2026-01-03T20:39:46.055Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
-[2026-01-03T20:39:48.991Z] [DEBUG] [PUBLIC PAGE] slug="our-story" locale="en" guestId=40
-[2026-01-03T20:39:49.025Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "our-story" (en)
-[2026-01-03T20:39:50.968Z] [DEBUG] [PUBLIC PAGE] slug="all-blocks" locale="en" guestId=40
-[2026-01-03T20:39:50.997Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "all-blocks" (en)
-[2026-01-03T20:39:52.673Z] [DEBUG] [PUBLIC PAGE] slug="event-details" locale="en" guestId=40
-[2026-01-03T20:39:52.682Z] [DEBUG] [PUBLIC PAGE] ✅ Served page "event-details" (en)
+[2026-01-03T22:43:24.683Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2026-01-03T22:43:36.069Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2026-01-03T22:43:39.079Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/5/preview
+[2026-01-03T22:43:39.081Z] [DEBUG] Preview request: {"id":"5"}
+[2026-01-03T22:43:39.082Z] [DEBUG] Template found: RSVP Reminder
+[2026-01-03T22:43:39.084Z] [DEBUG] Sample guests found: 5
+[2026-01-03T22:43:39.084Z] [DEBUG] [VAR_RESOLVE] System settings cache miss - fetching from database
+[2026-01-03T22:43:39.084Z] [DEBUG] Getting variables for first sample guest
+[2026-01-03T22:43:39.084Z] [DEBUG] [VAR_RESOLVE] Getting template variables {"guestId":31,"guestName":"Alice","hasTemplate":false}
+[2026-01-03T22:43:39.088Z] [DEBUG] [VAR_RESOLVE] System settings cached {"keys":["id","enable_global_countdown","wedding_date","venue_name","venue_address","event_start_date","event_end_date","event_time","bride_name","groom_name","contact_email","contact_phone","event_type","dress_code","special_instructions","website_url","app_title","created_at","updated_at","rsvp_deadline"]}
+[2026-01-03T22:43:39.088Z] [DEBUG] [VAR_RESOLVE] Sender info cache miss - fetching from database
+[2026-01-03T22:43:39.090Z] [DEBUG] [VAR_RESOLVE] Sender info cached
+[2026-01-03T22:43:39.090Z] [DEBUG] [VAR_RESOLVE] Plus-one data check {"needsPlusOneData":false,"templateContentLength":0}
+[2026-01-03T22:43:39.090Z] [DEBUG] [VAR_RESOLVE] Skipping plus-one data (not needed)
+[2026-01-03T22:43:39.139Z] [DEBUG] [VAR_RESOLVE] Template variables resolved {"variableCount":49,"hasPlusOne":false,"isAttending":false,"hasResponded":true}
+[2026-01-03T22:43:39.139Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpCode","rsvpLink","plusOneName","plus_one_name","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","has_plus_one","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","websiteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2026-01-03T22:43:39.139Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2026-01-03T22:43:39.139Z] [DEBUG] Selected guest for preview: Alice
+[2026-01-03T22:43:39.140Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":371,"variableCount":49}
+[2026-01-03T22:43:39.140Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":371}
+[2026-01-03T22:43:39.140Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:39.140Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":371,"resultLength":347}
+[2026-01-03T22:43:39.140Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":276,"variableCount":49}
+[2026-01-03T22:43:39.140Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:39.140Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":276,"resultLength":252}
+[2026-01-03T22:43:39.140Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":45}
+[2026-01-03T22:43:39.140Z] [DEBUG] Variable replacement results:
+[2026-01-03T22:43:39.140Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":276}
+[2026-01-03T22:43:39.140Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":45,"resultLength":37}
+[2026-01-03T22:43:39.140Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":45,"variableCount":49}
+[2026-01-03T22:43:39.140Z] [DEBUG] Original subject_en: Please RSVP for our wedding en, {{guestName}}
+[2026-01-03T22:43:39.140Z] [DEBUG] Original body_en length: 371
+[2026-01-03T22:43:39.140Z] [DEBUG] Original subject_lt: Please RSVP for our wedding lt, {{guestName}}
+[2026-01-03T22:43:39.140Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:39.140Z] [DEBUG] Replaced body_en length: 347
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"modern","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":347,"hasHeaderImage":true,"hasCustomTitle":true}
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Header image extracted {"url":"http://localhost:5001/uploads/peeps-avatar.png..."}
+[2026-01-03T22:43:39.140Z] [DEBUG] Replaced subject: Please RSVP for our wedding en, Alice
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"RSVP Reminder","isCustom":true}
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":13,"titleFontSize":82}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Loading logo (PNG → SVG → text fallback)
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Custom email title extracted {"title":"RSVP Reminder"}
+[2026-01-03T22:43:39.141Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":true,"titleFontSize":82,"displayTitle":"RSVP Reminder"}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Logo loaded: PNG (base64)
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"modern","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"modern","contentLength":347}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":252,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"modern","contentLength":252}
+[2026-01-03T22:43:39.142Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:39.142Z] [DEBUG] Preview response prepared with style: modern
+[2026-01-03T22:43:45.655Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/6/preview
+[2026-01-03T22:43:45.656Z] [DEBUG] Preview request: {"id":"6"}
+[2026-01-03T22:43:45.656Z] [DEBUG] Template found: Wedding Update
+[2026-01-03T22:43:45.658Z] [DEBUG] Sample guests found: 5
+[2026-01-03T22:43:45.658Z] [DEBUG] Getting variables for first sample guest
+[2026-01-03T22:43:45.658Z] [DEBUG] [VAR_RESOLVE] Getting template variables {"guestId":31,"guestName":"Alice","hasTemplate":false}
+[2026-01-03T22:43:45.658Z] [DEBUG] [VAR_RESOLVE] System settings cache hit
+[2026-01-03T22:43:45.658Z] [DEBUG] [VAR_RESOLVE] Sender info cache hit
+[2026-01-03T22:43:45.658Z] [DEBUG] [VAR_RESOLVE] Plus-one data check {"needsPlusOneData":false,"templateContentLength":0}
+[2026-01-03T22:43:45.660Z] [DEBUG] Selected guest for preview: Alice
+[2026-01-03T22:43:45.660Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpCode","rsvpLink","plusOneName","plus_one_name","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","has_plus_one","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","websiteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2026-01-03T22:43:45.658Z] [DEBUG] [VAR_RESOLVE] Skipping plus-one data (not needed)
+[2026-01-03T22:43:45.660Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2026-01-03T22:43:45.659Z] [DEBUG] [VAR_RESOLVE] Template variables resolved {"variableCount":49,"hasPlusOne":false,"isAttending":false,"hasResponded":true}
+[2026-01-03T22:43:45.660Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":370}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Variable not found {"key":"updateDetails"}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":370,"resultLength":345}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":241,"variableCount":49}
+[2026-01-03T22:43:45.660Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":241}
+[2026-01-03T22:43:45.660Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:45.660Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Variable not found {"key":"updateDetails"}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":370,"variableCount":49}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":241,"resultLength":216}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":39,"variableCount":49}
+[2026-01-03T22:43:45.660Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":39}
+[2026-01-03T22:43:45.660Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:45.660Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":39,"resultLength":31}
+[2026-01-03T22:43:45.660Z] [DEBUG] Variable replacement results:
+[2026-01-03T22:43:45.660Z] [DEBUG] Original subject_en: Important wedding update, {{guestName}}
+[2026-01-03T22:43:45.660Z] [DEBUG] Original subject_lt: Important wedding update, {{guestName}}
+[2026-01-03T22:43:45.660Z] [DEBUG] Replaced subject: Important wedding update, Alice
+[2026-01-03T22:43:45.660Z] [DEBUG] Original body_en length: 370
+[2026-01-03T22:43:45.660Z] [DEBUG] Replaced body_en length: 345
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":345,"hasHeaderImage":true,"hasCustomTitle":true}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Header image extracted {"url":"http://localhost:5001/uploads/peeps-avatar.png..."}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Custom email title extracted {"title":"Wedding update"}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Wedding update","isCustom":true}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":14,"titleFontSize":76}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":true,"titleFontSize":76,"displayTitle":"Wedding update"}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":345}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":216,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:43:45.660Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:43:45.661Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:43:45.661Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":216}
+[2026-01-03T22:43:45.661Z] [DEBUG] Preview response prepared with style: elegant
+[2026-01-03T22:43:45.661Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:54.083Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/9/preview
+[2026-01-03T22:43:54.083Z] [DEBUG] Preview request: {"id":"9"}
+[2026-01-03T22:43:54.085Z] [DEBUG] Template found: Group-Specific Welcome
+[2026-01-03T22:43:54.086Z] [DEBUG] Sample guests found: 5
+[2026-01-03T22:43:54.086Z] [DEBUG] [VAR_RESOLVE] Sender info cache hit
+[2026-01-03T22:43:54.086Z] [DEBUG] [VAR_RESOLVE] Getting template variables {"guestId":31,"guestName":"Alice","hasTemplate":false}
+[2026-01-03T22:43:54.086Z] [DEBUG] Getting variables for first sample guest
+[2026-01-03T22:43:54.086Z] [DEBUG] [VAR_RESOLVE] Plus-one data check {"needsPlusOneData":false,"templateContentLength":0}
+[2026-01-03T22:43:54.086Z] [DEBUG] [VAR_RESOLVE] System settings cache hit
+[2026-01-03T22:43:54.086Z] [DEBUG] [VAR_RESOLVE] Template variables resolved {"variableCount":49,"hasPlusOne":false,"isAttending":false,"hasResponded":true}
+[2026-01-03T22:43:54.087Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2026-01-03T22:43:54.086Z] [DEBUG] [VAR_RESOLVE] Skipping plus-one data (not needed)
+[2026-01-03T22:43:54.087Z] [DEBUG] Selected guest for preview: Alice
+[2026-01-03T22:43:54.087Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpCode","rsvpLink","plusOneName","plus_one_name","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","has_plus_one","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","websiteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2026-01-03T22:43:54.087Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":828,"variableCount":49}
+[2026-01-03T22:43:54.087Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":828}
+[2026-01-03T22:43:54.087Z] [DEBUG] [CONDITIONAL] Evaluating condition {"condition":"groupLabel === 'Bride\\'s Family'"}
+[2026-01-03T22:43:54.087Z] [DEBUG] [CONDITIONAL] Processed if/else block {"condition":"groupLabel === 'Bride\\'s Family'","result":false,"blockNumber":1}
+[2026-01-03T22:43:54.087Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":331,"resultLength":305}
+[2026-01-03T22:43:54.088Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":819,"variableCount":49}
+[2026-01-03T22:43:54.087Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":1}
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":819}
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Evaluating condition {"condition":"groupLabel === 'Bride\\'s Family'"}
+[2026-01-03T22:43:54.087Z] [DEBUG] [CONDITIONAL] Condition evaluated {"condition":"groupLabel === 'Bride\\'s Family'","result":false,"operator":"==="}
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Processed if/else block {"condition":"groupLabel === 'Bride\\'s Family'","result":false,"blockNumber":1}
+[2026-01-03T22:43:54.088Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":50,"variableCount":49}
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Condition evaluated {"condition":"groupLabel === 'Bride\\'s Family'","result":false,"operator":"==="}
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":50}
+[2026-01-03T22:43:54.088Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":50,"resultLength":33}
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":1}
+[2026-01-03T22:43:54.088Z] [DEBUG] Variable replacement results:
+[2026-01-03T22:43:54.088Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:54.088Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":322,"resultLength":296}
+[2026-01-03T22:43:54.088Z] [DEBUG] Original subject_en: Special welcome for {{groupLabel}}, {{guestName}}!
+[2026-01-03T22:43:54.088Z] [DEBUG] Replaced subject: Special welcome for Alice, Alice!
+[2026-01-03T22:43:54.088Z] [DEBUG] Original body_en length: 828
+[2026-01-03T22:43:54.088Z] [DEBUG] Replaced body_en length: 305
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":305,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:43:54.088Z] [DEBUG] Original subject_lt: Special welcome for {{groupLabel}}, {{guestName}}!
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"friendly","contentLength":305}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"friendly","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":296,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"friendly","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"friendly","contentLength":296}
+[2026-01-03T22:43:54.088Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:43:54.088Z] [DEBUG] Preview response prepared with style: friendly
+[2026-01-03T22:43:58.521Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/8/preview
+[2026-01-03T22:43:58.521Z] [DEBUG] Preview request: {"id":"8"}
+[2026-01-03T22:43:58.522Z] [DEBUG] Template found: Thank You - Not Attending
+[2026-01-03T22:43:58.523Z] [DEBUG] Sample guests found: 5
+[2026-01-03T22:43:58.523Z] [DEBUG] Getting variables for first sample guest
+[2026-01-03T22:43:58.523Z] [DEBUG] [VAR_RESOLVE] Sender info cache hit
+[2026-01-03T22:43:58.523Z] [DEBUG] [VAR_RESOLVE] System settings cache hit
+[2026-01-03T22:43:58.523Z] [DEBUG] [VAR_RESOLVE] Getting template variables {"guestId":31,"guestName":"Alice","hasTemplate":false}
+[2026-01-03T22:43:58.523Z] [DEBUG] [VAR_RESOLVE] Plus-one data check {"needsPlusOneData":false,"templateContentLength":0}
+[2026-01-03T22:43:58.523Z] [DEBUG] [VAR_RESOLVE] Skipping plus-one data (not needed)
+[2026-01-03T22:43:58.524Z] [DEBUG] Selected guest for preview: Alice
+[2026-01-03T22:43:58.524Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":236,"variableCount":49}
+[2026-01-03T22:43:58.524Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2026-01-03T22:43:58.524Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":236}
+[2026-01-03T22:43:58.524Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpCode","rsvpLink","plusOneName","plus_one_name","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","has_plus_one","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","websiteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2026-01-03T22:43:58.523Z] [DEBUG] [VAR_RESOLVE] Template variables resolved {"variableCount":49,"hasPlusOne":false,"isAttending":false,"hasResponded":true}
+[2026-01-03T22:43:58.524Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":236,"resultLength":228}
+[2026-01-03T22:43:58.524Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:58.524Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":263,"variableCount":49}
+[2026-01-03T22:43:58.524Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":263}
+[2026-01-03T22:43:58.524Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:58.524Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":38,"variableCount":49}
+[2026-01-03T22:43:58.524Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":263,"resultLength":255}
+[2026-01-03T22:43:58.524Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":38}
+[2026-01-03T22:43:58.524Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":38,"resultLength":30}
+[2026-01-03T22:43:58.524Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:43:58.524Z] [DEBUG] Variable replacement results:
+[2026-01-03T22:43:58.524Z] [DEBUG] Original subject_en: Thank you for your RSVP, {{guestName}}
+[2026-01-03T22:43:58.524Z] [DEBUG] Original subject_lt: Thank you for your RSVP, {{guestName}}
+[2026-01-03T22:43:58.524Z] [DEBUG] Original body_en length: 236
+[2026-01-03T22:43:58.524Z] [DEBUG] Replaced body_en length: 228
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":228,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:43:58.524Z] [DEBUG] Replaced subject: Thank you for your RSVP, Alice
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":228}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":255,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:43:58.524Z] [DEBUG] Preview response prepared with style: elegant
+[2026-01-03T22:43:58.524Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":255}
+[2026-01-03T22:44:05.534Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/4/preview
+[2026-01-03T22:44:05.534Z] [DEBUG] Preview request: {"id":"4"}
+[2026-01-03T22:44:05.535Z] [DEBUG] Template found: Welcome Message
+[2026-01-03T22:44:05.536Z] [DEBUG] Sample guests found: 5
+[2026-01-03T22:44:05.536Z] [DEBUG] [VAR_RESOLVE] Getting template variables {"guestId":31,"guestName":"Alice","hasTemplate":false}
+[2026-01-03T22:44:05.536Z] [DEBUG] Getting variables for first sample guest
+[2026-01-03T22:44:05.536Z] [DEBUG] [VAR_RESOLVE] System settings cache hit
+[2026-01-03T22:44:05.536Z] [DEBUG] [VAR_RESOLVE] Sender info cache hit
+[2026-01-03T22:44:05.536Z] [DEBUG] [VAR_RESOLVE] Skipping plus-one data (not needed)
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Template variables resolved {"variableCount":49,"hasPlusOne":false,"isAttending":false,"hasResponded":true}
+[2026-01-03T22:44:05.536Z] [DEBUG] [VAR_RESOLVE] Plus-one data check {"needsPlusOneData":false,"templateContentLength":0}
+[2026-01-03T22:44:05.537Z] [DEBUG] Variables prepared: ["guestName","groupLabel","code","rsvpCode","rsvpLink","plusOneName","plus_one_name","rsvpDeadline","email","preferredLanguage","attending","rsvp_status","responded_at","can_bring_plus_one","dietary","notes","hasPlusOne","has_plus_one","isPlusOne","hasResponded","isAttending","isNotAttending","isPending","isBrideFamily","isGroomFamily","isEnglishSpeaker","isLithuanianSpeaker","siteUrl","websiteUrl","weddingDate","venueName","venueAddress","eventStartDate","eventEndDate","eventTime","brideName","groomName","contactEmail","contactPhone","rsvpDeadlineDate","eventType","dressCode","specialInstructions","appTitle","senderName","senderEmail","currentDate","daysUntilWedding","name"]
+[2026-01-03T22:44:05.537Z] [DEBUG] Sample variables: {"guestName":"Alice","groupLabel":"Alice","rsvp_status":"not_attending","isPlusOne":false,"canBringPlusOne":1,"isAttending":false}
+[2026-01-03T22:44:05.537Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:44:05.537Z] [DEBUG] Selected guest for preview: Alice
+[2026-01-03T22:44:05.537Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":282}
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":282,"variableCount":49}
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":282,"resultLength":261}
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":274,"variableCount":49}
+[2026-01-03T22:44:05.537Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":274}
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Variable not found {"key":"eventStartTime"}
+[2026-01-03T22:44:05.537Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":50}
+[2026-01-03T22:44:05.537Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:44:05.537Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":50,"variableCount":49}
+[2026-01-03T22:44:05.537Z] [DEBUG] Variable replacement results:
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":274,"resultLength":235}
+[2026-01-03T22:44:05.537Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":50,"resultLength":42}
+[2026-01-03T22:44:05.537Z] [DEBUG] Original subject_en: Welcome to our wedding celebration, {{guestName}}!
+[2026-01-03T22:44:05.537Z] [DEBUG] Original subject_lt: Welcome to our wedding celebration lt, {{guestName}}!
+[2026-01-03T22:44:05.537Z] [DEBUG] Replaced subject: Welcome to our wedding celebration, Alice!
+[2026-01-03T22:44:05.537Z] [DEBUG] Replaced body_en length: 261
+[2026-01-03T22:44:05.537Z] [DEBUG] Original body_en length: 282
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":261,"hasHeaderImage":false,"hasCustomTitle":true}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Welcome to our wedding","isCustom":true}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Custom email title extracted {"title":"Welcome to our wedding"}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Welcome to our wedding"}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":261}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":235,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":235}
+[2026-01-03T22:44:05.537Z] [DEBUG] Preview response prepared with style: elegant
+[2026-01-03T22:44:05.537Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":22,"titleFontSize":64}
+[2026-01-03T22:44:12.730Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2026-01-03T22:44:14.887Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates/styles
+[2026-01-03T22:44:14.888Z] [DEBUG] 📤 Sending response
+[2026-01-03T22:44:14.888Z] [DEBUG] 🔍 Fetching template styles...
+[2026-01-03T22:44:14.888Z] [DEBUG] 📋 Available styles: [
+  {
+    "key": "elegant",
+    "name": "Elegant",
+    "description": "Premium design with cursive titles, sans body, optional header image, and signature footer",
+    "header": {
+      "background": "#E9E7D9",
+      "border": "2px solid #D2C6B2",
+      "titleFont": "'Great Vibes', Georgia, serif",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#E9E7D9",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', Arial, sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.7"
+    },
+    "button": {
+      "background": "#DAA520",
+      "textColor": "#442727",
+      "border": "2px solid #442727",
+      "font": "'Open Sans', Arial, Helvetica, sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "700",
+      "borderRadius": "6px",
+      "padding": "14px 28px"
+    },
+    "footer": {
+      "background": "#E9E7D9",
+      "border": "2px solid #D2C6B2",
+      "font": "'Lora', Georgia, 'Times New Roman', serif",
+      "fontSize": "16px",
+      "signatureFont": "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
+      "signatureSize": "88px"
+    }
+  },
+  {
+    "key": "modern",
+    "name": "Modern",
+    "description": "Clean, minimalist design with sans-serif fonts",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#442727"
+    },
+    "content": {
+      "background": "#F1EFE8",
+      "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.5"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  },
+  {
+    "key": "friendly",
+    "name": "Friendly",
+    "description": "Warm, approachable design with glass effects",
+    "header": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "titleFont": "'Great Vibes', cursive",
+      "titleSize": "42px",
+      "titleColor": "#DAA520"
+    },
+    "content": {
+      "background": "linear-gradient(to right bottom, #E9E7D980, #D2C6B260)",
+      "boxShadow": "none",
+      "bodyFont": "'Open Sans', sans-serif",
+      "bodySize": "16px",
+      "lineHeight": "1.6"
+    },
+    "button": {
+      "background": "#442727",
+      "textColor": "#DAA520",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "borderRadius": "8px",
+      "padding": "12px 24px"
+    },
+    "footer": {
+      "background": "linear-gradient(135deg, #DAA52080 0%, #E3B13F60 50%, #DAA52080 100%)",
+      "border": "1px solid #E3B13F20",
+      "font": "'Open Sans', sans-serif",
+      "fontSize": "16px"
+    }
+  }
+]
+[2026-01-03T22:44:14.888Z] [DEBUG] ✅ Response sent successfully
+[2026-01-03T22:44:14.889Z] [DEBUG] ✅ Auth passed, hitting template route: GET /api/templates
+[2026-01-03T22:44:41.405Z] [DEBUG] 🧭 Route hit: POST /api/messages
+[2026-01-03T22:44:41.405Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<!--EMAIL_TITLE:Welcome to our wedding-->\n<p>Dear {{guestName}},</p><p>We are thrilled to invite you to our special day!</p><h2>Event Details:</h2><p><strong>Date: </strong>{{eventStartDate}}</p><p><strong>Venue:</strong> {{venueName}}</p><p>We can't wait to celebrate with you!</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","style":"elegant","status":"draft","scheduledAt":null,"recipients":[49]}
+[2026-01-03T22:44:41.405Z] [DEBUG] 🧰 [messages.js] POST /messages hit with body: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<!--EMAIL_TITLE:Welcome to our wedding-->\n<p>Dear {{guestName}},</p><p>We are thrilled to invite you to our special day!</p><h2>Event Details:</h2><p><strong>Date: </strong>{{eventStartDate}}</p><p><strong>Venue:</strong> {{venueName}}</p><p>We can't wait to celebrate with you!</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","style":"elegant","status":"draft","scheduledAt":null,"recipients":[49]}
+[2026-01-03T22:44:41.405Z] [DEBUG] 🧰 [messages.js] POST /api/messages hit with headers: {"host":"localhost:5001","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0","accept":"application/json, text/plain, */*","accept-language":"en-US,en;q=0.5","accept-encoding":"gzip, deflate, br, zstd","content-type":"application/json","content-length":"751","origin":"http://localhost:5173","sec-gpc":"1","connection":"keep-alive","referer":"http://localhost:5173/","cookie":"session_id=s%3A5.84tR7u6yeO1YnIy76a%2BdCNpAPdIJXYiw6plq6DnBjkM; rsvp_session=s%3Aj%3A%7B%22guestId%22%3A40%2C%22code%22%3A%223TMJ8Z%22%7D.hEhkdMMjEHhlPUiUchkqr%2FTjqsIUGq9h5eemNjnU8LY","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-site","priority":"u=0"}
+[2026-01-03T22:44:41.405Z] [DEBUG] 🧰 [messages.js] Extracted fields: {"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<!--EMAIL_TITLE:Welcome to our wedding-->\n<p>Dear {{guestName}},</p><p>We are thrilled to invite you to our special day!</p><h2>Event Details:</h2><p><strong>Date: </strong>{{eventStartDate}}</p><p><strong>Venue:</strong> {{venueName}}</p><p>We can't wait to celebrate with you!</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduledAt":null,"recipients":[49],"style":"elegant"}
+[2026-01-03T22:44:41.405Z] [DEBUG] 🧰 [messages.js] Inserting message with params: ["Welcome to our wedding celebration, {{guestName}}!","<!--EMAIL_TITLE:Welcome to our wedding-->\n<p>Dear {{guestName}},</p><p>We are thrilled to invite you to our special day!</p><h2>Event Details:</h2><p><strong>Date: </strong>{{eventStartDate}}</p><p><strong>Venue:</strong> {{venueName}}</p><p>We can't wait to celebrate with you!</p>","<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","draft",null,"elegant"]
+[2026-01-03T22:44:41.421Z] [DEBUG] 🧰 [messages.js] Inserted messageId: 12
+[2026-01-03T22:44:41.421Z] [DEBUG] 🧰 [messages.js] Recipients provided: [49]
+[2026-01-03T22:44:41.421Z] [DEBUG] 🧰 [messages.js] Inserting recipient for guest: {"id":49,"email":"omaridj@jgyamfi.nl","preferred_language":"en"}
+[2026-01-03T22:44:41.421Z] [DEBUG] 🧰 [messages.js] Guests fetched for recipients: [{"id":49,"email":"omaridj@jgyamfi.nl","preferred_language":"en"}]
+[2026-01-03T22:44:41.452Z] [DEBUG] 🧭 Route hit: POST /api/messages/12/send
+[2026-01-03T22:44:41.452Z] [DEBUG] ✅ Route hit: POST /:id/send — messageId: 12
+[2026-01-03T22:44:41.452Z] [DEBUG] [MESSAGES] Preparing to send message {"messageId":"12","hasGuestIds":true,"guestIdsCount":1}
+[2026-01-03T22:44:41.454Z] [DEBUG] 📦 Loaded message: {"id":12,"subject":"Welcome to our wedding celebration, {{guestName}}!","body_en":"<!--EMAIL_TITLE:Welcome to our wedding-->\n<p>Dear {{guestName}},</p><p>We are thrilled to invite you to our special day!</p><h2>Event Details:</h2><p><strong>Date: </strong>{{eventStartDate}}</p><p><strong>Venue:</strong> {{venueName}}</p><p>We can't wait to celebrate with you!</p>","body_lt":"<p>Brangus {{guestName}},\n\nMums džiaugiamės kviesdami jus į mūsų ypatingą dieną!\n\n**Renginio informacija:**\n- **Data:** {{eventStartDate}}\n- **Vieta:** {{venueName}}\n- **Laikas:** {{eventStartTime}}\n\nNekantriai laukiame švęsti su jumis!\n\nSu meile,\n{{brideName}} &amp; {{groomName}}</p>","status":"draft","scheduled_for":null,"style":"elegant","created_at":"2026-01-03T22:44:41.000Z","updated_at":"2026-01-03T22:44:41.000Z"}
+[2026-01-03T22:44:41.468Z] [DEBUG] [MESSAGES] Preparing batch send {"messageId":"12","guestCount":1}
+[2026-01-03T22:44:41.469Z] [DEBUG] [VAR_RESOLVE] System settings cache hit
+[2026-01-03T22:44:41.469Z] [DEBUG] [VAR_RESOLVE] Sender info cache hit
+[2026-01-03T22:44:41.469Z] [DEBUG] [VAR_RESOLVE] Plus-one data check {"needsPlusOneData":false,"templateContentLength":282}
+[2026-01-03T22:44:41.468Z] [DEBUG] [VAR_RESOLVE] Getting template variables {"guestId":49,"guestName":"Lamar","hasTemplate":true}
+[2026-01-03T22:44:41.469Z] [DEBUG] [VAR_RESOLVE] Skipping plus-one data (not needed)
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Template variables resolved {"variableCount":49,"hasPlusOne":false,"isAttending":false,"hasResponded":false}
+[2026-01-03T22:44:41.470Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:44:41.470Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":282}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":282,"resultLength":261}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":285,"variableCount":49}
+[2026-01-03T22:44:41.470Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":285}
+[2026-01-03T22:44:41.470Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Variable not found {"key":"eventStartTime"}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":285,"resultLength":246}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":50,"variableCount":49}
+[2026-01-03T22:44:41.470Z] [DEBUG] [CONDITIONAL] Processing conditional blocks {"templateLength":50}
+[2026-01-03T22:44:41.470Z] [DEBUG] [CONDITIONAL] Conditional blocks processed {"blockCount":0}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Template variables replaced {"originalLength":50,"resultLength":42}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":261,"hasHeaderImage":false,"hasCustomTitle":true}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Custom email title extracted {"title":"Welcome to our wedding"}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Welcome to our wedding","isCustom":true}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Welcome to our wedding"}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":261}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Generating email HTML {"style":"elegant","hasContent":true,"hasOptions":true}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Starting definitive email HTML generation {"contentLength":246,"hasHeaderImage":false,"hasCustomTitle":false}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Title resolved {"displayTitle":"Brigita-local & Jeffrey-local","isCustom":false}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":29,"titleFontSize":64}
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Template generation complete {"hasHeaderImage":false,"titleFontSize":64,"displayTitle":"Brigita-local & Jeffrey-local"}
+[2026-01-03T22:44:41.471Z] [DEBUG] [TEMPLATE_GEN] Logo loaded from cache
+[2026-01-03T22:44:41.470Z] [DEBUG] [TEMPLATE_GEN] Title font size calculated {"titleLength":22,"titleFontSize":64}
+[2026-01-03T22:44:41.470Z] [DEBUG] [VAR_RESOLVE] Replacing template variables {"templateLength":282,"variableCount":49}
+[2026-01-03T22:44:41.471Z] [DEBUG] [EMAIL_SERVICE] Batch sending {"emailCount":1,"batchSize":1}
+[2026-01-03T22:44:41.471Z] [DEBUG] [TEMPLATE_GEN] Email HTML generated successfully {"style":"elegant","contentLength":246}
+[2026-01-03T22:44:41.772Z] [DEBUG] [EMAIL_SERVICE] Sending email {"to":"omaridj@jgyamfi.nl","subject":"Welcome to our wedding celebration, Lamar!"}
+[2026-01-03T22:44:42.196Z] [INFO] [EMAIL_SERVICE] Email sent {"to":"omaridj@jgyamfi.nl","messageId":"55242ed2-6614-42c6-afbd-d40c8763d06e"}
+[2026-01-03T22:44:42.200Z] [INFO] [EMAIL_SERVICE] Batch completed {"sentCount":1,"failedCount":0,"total":1}
+[2026-01-03T22:44:42.200Z] [INFO] ✅ Marking message as sent - 1 emails sent successfully
+[2026-01-03T22:44:46.851Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2026-01-03T22:53:46.027Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:53:46.029Z] [INFO] Server is running on port 5001
+[2026-01-03T22:53:46.040Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:53:47.791Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:53:47.792Z] [INFO] Server is running on port 5001
+[2026-01-03T22:53:47.803Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:53:49.798Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:53:49.800Z] [INFO] Server is running on port 5001
+[2026-01-03T22:53:49.809Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:53:51.753Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:53:51.755Z] [INFO] Server is running on port 5001
+[2026-01-03T22:53:51.763Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:53:54.864Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:53:54.866Z] [INFO] Server is running on port 5001
+[2026-01-03T22:53:54.882Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:53:57.886Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:53:57.889Z] [INFO] Server is running on port 5001
+[2026-01-03T22:53:57.901Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:00.577Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:00.579Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:00.596Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:02.589Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:02.590Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:02.597Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:04.517Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:04.520Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:04.529Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:06.245Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:06.247Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:06.256Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:08.567Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:08.569Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:08.577Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:12.707Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:12.709Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:12.719Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:17.099Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:17.101Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:17.109Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:20.599Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:20.601Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:20.611Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:22.210Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:22.212Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:22.219Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:23.770Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:23.773Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:23.780Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T22:54:35.490Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T22:54:35.492Z] [INFO] Server is running on port 5001
+[2026-01-03T22:54:35.501Z] [INFO] ✅ Connected to MySQL database.

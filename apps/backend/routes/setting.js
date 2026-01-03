@@ -320,6 +320,9 @@ router.put(
     ];
     try {
       await dbRun(sql, values);
+      // Clear template variables cache since settings changed
+      const { clearSettingsCache } = require('../utils/templateVariables');
+      clearSettingsCache();
       return res.json({ success: true });
     } catch (err) {
       logger.error(err);
