@@ -3,7 +3,7 @@
  * Consolidated helper function for sending confirmation emails to guests
  */
 
-const axios = require('axios');
+const resendClient = require('./resendClient');
 const logger = require('./logger');
 const getSenderInfo = require('./getSenderInfo');
 const { generateEmailHTML } = require('../utils/emailTemplates');
@@ -105,13 +105,11 @@ async function sendConfirmationEmail(db, guestData) {
     const emailHtml = generateEmailHTML(body, styleKey, emailOptions);
     
     // Send via Resend
-    const response = await axios.post("https://api.resend.com/emails", {
+    const response = await resendClient.emails.send({
       from: senderInfo,
       to: guestData.email,
       subject: subject,
       html: emailHtml
-    }, {
-      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` }
     });
     
     logger.info("RSVP confirmation email sent:", response.data);

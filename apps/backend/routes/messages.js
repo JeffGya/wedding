@@ -25,6 +25,7 @@ if (process.env.DB_TYPE === 'mysql') {
 }
 const requireAuth = require('../middleware/auth');
 const getSenderInfo = require('../helpers/getSenderInfo');
+const resendClient = require('../helpers/resendClient');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
 
 // Helper function to detect template schema version (shared with templates.js logic)
@@ -883,24 +884,16 @@ router.post('/:id/send', async (req, res, next) => {
         const backoff = [0, 2000, 4000];
         while (retries <= maxRetries) {
           try {
-            const axios = require('axios');
-            const { RESEND_API_KEY } = process.env;
             // Log email data before sending
             logger.debug('📤 Email data to send:', emailData);
-            const response = await axios.post('https://api.resend.com/emails', emailData, {
-              headers: {
-                Authorization: `Bearer ${RESEND_API_KEY}`,
-                'Content-Type': 'application/json',
-              },
-            });
+            const response = await resendClient.emails.send(emailData);
             // Log the full response from Resend
             logger.debug('✅ Resend response:', {
-              status: response.status,
               data: response.data,
             });
             
             // Check if Resend accepted the email for delivery
-            if (response.status === 200 && response.data && response.data.id) {
+            if (response && response.data && response.data.id) {
               // Resend accepted the email - mark as sent
               logger.info('✅ Email accepted by Resend for delivery:', response.data.id);
               const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status, resend_message_id) VALUES (?, ?, 'sent', ?, 'sent', ?)`;
@@ -911,7 +904,7 @@ router.post('/:id/send', async (req, res, next) => {
               results.push({ guest_id: guest.id, status: 'sent', resendId: response.data.id });
             } else {
               // Resend didn't accept the email - mark as failed
-              logger.error('❌ Resend didn\'t accept email for delivery:', response.data);
+              logger.error('❌ Resend didn\'t accept email for delivery:', response);
               const errorMsg = 'Resend API did not accept email for delivery';
               const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
               await dbRun(logSql, [messageId, guest.id, errorMsg]);
@@ -919,13 +912,13 @@ router.post('/:id/send', async (req, res, next) => {
             }
             break;
           } catch (err) {
-            if (err.response?.status === 429 && retries < maxRetries) {
+            // Check for rate limiting (429) - Resend SDK may throw errors with status property
+            const isRateLimit = err.status === 429 || err.response?.status === 429 || (err.error && err.error.status === 429);
+            if (isRateLimit && retries < maxRetries) {
               retries++;
               await delay(backoff[retries]);
             } else {
-              const errorMsg = err.response?.data
-                ? JSON.stringify(err.response.data)
-                : err.message;
+              const errorMsg = err.error?.message || (err.response?.data ? JSON.stringify(err.response.data) : err.message);
               logger.error('❌ Resend error:', errorMsg);
               const logSql = `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) VALUES (?, ?, 'failed', ?)`;
               await dbRun(logSql, [messageId, guest.id, errorMsg]);
@@ -1280,17 +1273,9 @@ router.post('/:id/resend', async (req, res, next) => {
         const backoff = [0, 2000, 4000];
         while (retries <= maxRetries) {
           try {
-            const axios = require('axios');
-            const { RESEND_API_KEY } = process.env;
-            const response = await axios.post('https://api.resend.com/emails', emailData, {
-              headers: {
-                Authorization: `Bearer ${RESEND_API_KEY}`,
-                'Content-Type': 'application/json',
-              },
-            });
+            const response = await resendClient.emails.send(emailData);
 
             logger.debug('✅ Resend response:', {
-              status: response.status,
               data: response.data,
             });
 
@@ -1299,17 +1284,19 @@ router.post('/:id/resend', async (req, res, next) => {
             logger.debug('🧰 [messages.js] Resend formatted sentAt:', sentAt);
 
             const logSql = `UPDATE message_recipients
-              SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL
+              SET delivery_status = 'sent', sent_at = ?, status = 'sent', error_message = NULL, resend_message_id = ?
               WHERE message_id = ? AND guest_id = ?`;
-            await dbRun(logSql, [sentAt, messageId, guest.id]);
-            results.push({ guest_id: guest.id, status: 'sent' });
+            await dbRun(logSql, [sentAt, response.data?.id || null, messageId, guest.id]);
+            results.push({ guest_id: guest.id, status: 'sent', resendId: response.data?.id });
             break;
           } catch (err) {
-            if (err.response?.status === 429 && retries < maxRetries) {
+            // Check for rate limiting (429) - Resend SDK may throw errors with status property
+            const isRateLimit = err.status === 429 || err.response?.status === 429 || (err.error && err.error.status === 429);
+            if (isRateLimit && retries < maxRetries) {
               retries++;
               await delay(backoff[retries]);
             } else {
-              const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : err.message;
+              const errorMsg = err.error?.message || (err.response?.data ? JSON.stringify(err.response.data) : err.message);
               logger.error('❌ Resend error:', errorMsg);
               const logSql = `UPDATE message_recipients
                 SET delivery_status = 'failed', error_message = ?
