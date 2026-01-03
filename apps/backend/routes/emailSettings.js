@@ -9,6 +9,7 @@ const { sendEmail } = require('../helpers/emailService');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { generateEmailHTML } = require('../utils/emailTemplates');
+const { sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -155,7 +156,7 @@ router.get('/', requireAuth, async (req, res) => {
     res.json(row);
   } catch (err) {
     logger.error('Error retrieving email settings:', err);
-    return res.status(500).json({ error: 'Failed to retrieve email settings' });
+    return sendInternalError(res, err, 'GET /email-settings');
   }
 });
 
@@ -617,7 +618,7 @@ router.post('/test', requireAuth, async (req, res) => {
     // Fetch template
     const rawTemplate = await dbGet('SELECT * FROM templates WHERE id = ?', [templateId]);
     if (!rawTemplate) {
-      return res.status(404).json({ success: false, error: 'Template not found' });
+      return sendNotFound(res, 'Template', templateId);
     }
     
     // Parse subject field (may be JSON or separate columns)
@@ -829,12 +830,7 @@ router.post('/test', requireAuth, async (req, res) => {
     });
   } catch (err) {
     logger.error('Error in test email endpoint:', err.message);
-    res.status(500).json({
-      success: false,
-      error: err.message,
-      healthCheck,
-      message: 'Failed to send test email'
-    });
+    return sendInternalError(res, err, 'POST /email-settings/test');
   }
 });
 

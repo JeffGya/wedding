@@ -9,6 +9,7 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
 const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
 const { handlePlusOne, syncPlusOneAttendingStatus } = require('../helpers/plusOneService');
+const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 
 const logger = require('../helpers/logger');
 
@@ -137,7 +138,7 @@ router.get('/', async (req, res) => {
     res.json({ guests: rows, total: rows.length });
   } catch (err) {
     logger.error('Error fetching guests:', err);
-    return res.status(500).json({ error: 'Database error' });
+    return sendInternalError(res, err, 'GET /guests');
   }
 });
 
@@ -264,7 +265,7 @@ router.get('/analytics', async (req, res) => {
     });
   } catch (err) {
     logger.error('Error fetching RSVP analytics:', err);
-    return res.status(500).json({ error: 'Database error' });
+    return sendInternalError(res, err, 'GET /guests');
   }
 });
 
@@ -295,7 +296,7 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return res.status(404).json({ error: 'Guest not found' });
+    if (!row) return sendNotFound(res, 'Guest', req.params.id);
     if (row.rsvp_deadline) {
       row.rsvp_deadline = new Date(row.rsvp_deadline).toISOString();
     }
@@ -304,7 +305,7 @@ router.get('/:id', async (req, res) => {
     }
     res.json(row);
   } catch (err) {
-    return res.status(500).json({ error: 'Database error' });
+    return sendInternalError(res, err, 'GET /guests');
   }
 });
 
@@ -353,12 +354,12 @@ router.post('/', async (req, res) => {
   if (!code) return res.status(400).json({ error: 'code is required' });
   // Email format validation
   if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-    return res.status(400).json({ error: 'Invalid email format' });
+    return sendBadRequest(res, 'Invalid email format');
   }
   // Boolean validation for can_bring_plus_one
   if (typeof can_bring_plus_one !== 'undefined' &&
       can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
-    return res.status(400).json({ error: 'can_bring_plus_one must be a boolean or 0/1' });
+    return sendBadRequest(res, 'can_bring_plus_one must be a boolean or 0/1');
   }
   try {
     const result = await dbRun(
@@ -378,7 +379,7 @@ router.post('/', async (req, res) => {
     );
     res.status(201).json({ id: result.insertId });
   } catch (err) {
-    return res.status(500).json({ error: 'Failed to create guest' });
+    return sendInternalError(res, err, 'POST /guests');
   }
 });
 
@@ -433,29 +434,29 @@ router.put('/:id', async (req, res) => {
   } = req.body;
 
   // Basic validation
-  if (!group_label) return res.status(400).json({ error: 'group_label is required' });
-  if (!name) return res.status(400).json({ error: 'name is required' });
-  if (!code) return res.status(400).json({ error: 'code is required' });
+  if (!group_label) return sendBadRequest(res, 'group_label is required');
+  if (!name) return sendBadRequest(res, 'name is required');
+  if (!code) return sendBadRequest(res, 'code is required');
   if (preferred_language && !['en', 'lt'].includes(preferred_language)) {
-    return res.status(400).json({ error: 'preferred_language must be either "en" or "lt"' });
+    return sendBadRequest(res, 'preferred_language must be either "en" or "lt"');
   }
   // Email format validation
   if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-    return res.status(400).json({ error: 'Invalid email format' });
+    return sendBadRequest(res, 'Invalid email format');
   }
   // Boolean validation for can_bring_plus_one
   if (typeof can_bring_plus_one !== 'undefined' &&
       can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
-    return res.status(400).json({ error: 'can_bring_plus_one must be a boolean or 0/1' });
+    return sendBadRequest(res, 'can_bring_plus_one must be a boolean or 0/1');
   }
   // RSVP deadline validation
   if (rsvp_deadline && isNaN(Date.parse(rsvp_deadline))) {
-    return res.status(400).json({ error: 'rsvp_deadline must be a valid datetime string' });
+    return sendBadRequest(res, 'rsvp_deadline must be a valid datetime string');
   }
 
   try {
     const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return res.status(404).json({ error: 'Guest not found' });
+    if (!row) return sendNotFound(res, 'Guest', req.params.id);
     const isPrimaryValue = typeof is_primary !== 'undefined' ? is_primary : row.is_primary;
     const attendingValue = typeof attending !== 'undefined' ? attending : null;
     const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, typeof attending !== 'undefined');
@@ -486,7 +487,7 @@ router.put('/:id', async (req, res) => {
     );
     res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ error: 'Failed to update guest' });
+    return sendInternalError(res, err, 'PUT /guests/:id');
   }
 });
 
@@ -524,7 +525,7 @@ router.delete('/:id', async (req, res) => {
     await dbRun('DELETE FROM guests WHERE id = ?', [id]);
     res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ error: 'Failed to delete guest' });
+    return sendInternalError(res, err, 'DELETE /guests/:id');
   }
 });
 
@@ -559,16 +560,16 @@ router.delete('/:id', async (req, res) => {
 router.post('/rsvp', async (req, res) => {
   const { id, attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
   if (!id) {
-    return res.status(400).json({ error: 'Missing required field: id' });
+    return sendBadRequest(res, 'Missing required field: id');
   }
   try {
     const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return res.status(404).json({ error: 'Guest not found' });
+    if (!row) return sendNotFound(res, 'Guest', req.params.id);
     if (plus_one_name && !row.can_bring_plus_one) {
-      return res.status(400).json({ error: 'This guest is not allowed a plus one' });
+      return sendBadRequest(res, 'This guest is not allowed a plus one');
     }
     if (plus_one_dietary !== undefined && typeof plus_one_dietary !== 'string') {
-      return res.status(400).json({ error: 'plus_one_dietary must be a string' });
+      return sendBadRequest(res, 'plus_one_dietary must be a string');
     }
     const attendingProvided = typeof attending !== 'undefined';
     const attendingValue = attendingProvided ? attending : row.attending;
@@ -622,7 +623,7 @@ router.post('/rsvp', async (req, res) => {
       }
     }
   } catch (err) {
-    return res.status(500).json({ error: 'Failed to update RSVP' });
+    return sendInternalError(res, err, 'PUT /guests/:id/rsvp');
   }
 });
 
@@ -680,18 +681,18 @@ router.put('/:id/rsvp', async (req, res) => {
   const { attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
 
   if (!id) {
-    return res.status(400).json({ error: 'Missing required field: id' });
+    return sendBadRequest(res, 'Missing required field: id');
   }
 
   try {
     const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return res.status(404).json({ error: 'Guest not found' });
+    if (!row) return sendNotFound(res, 'Guest', req.params.id);
 
     if (plus_one_name && !row.can_bring_plus_one) {
-      return res.status(400).json({ error: 'This guest is not allowed a plus one' });
+      return sendBadRequest(res, 'This guest is not allowed a plus one');
     }
     if (plus_one_dietary !== undefined && typeof plus_one_dietary !== 'string') {
-      return res.status(400).json({ error: 'plus_one_dietary must be a string' });
+      return sendBadRequest(res, 'plus_one_dietary must be a string');
     }
 
     const attendingProvided = typeof attending !== 'undefined';
@@ -752,7 +753,7 @@ router.put('/:id/rsvp', async (req, res) => {
       }
     }
   } catch (err) {
-    return res.status(500).json({ error: 'Failed to update RSVP' });
+    return sendInternalError(res, err, 'PUT /guests/:id/rsvp');
   }
 });
 

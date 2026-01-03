@@ -32,6 +32,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const logger = require('../helpers/logger');
+const { sendNotFound, sendInternalError } = require('../utils/errorHandler');
 
 /**
  * Sanitize filenames by replacing unsafe characters with underscores
@@ -194,7 +195,7 @@ router.put('/:id', async (req, res, next) => {
     // Fetch existing record
     const image = await dbGet('SELECT * FROM images WHERE id = ?', [id]);
     if (!image) {
-      return res.status(404).json({ error: 'Image not found' });
+      return sendNotFound(res, 'Image', req.params.id);
     }
     let filename = image.filename;
     // Rename file if new filename provided
@@ -238,7 +239,7 @@ router.delete('/:id', async (req, res, next) => {
     const { id } = req.params;
     const image = await dbGet('SELECT * FROM images WHERE id = ?', [id]);
     if (!image) {
-      return res.status(404).json({ error: 'Image not found' });
+      return sendNotFound(res, 'Image', req.params.id);
     }
 
     // Delete file from disk using promises

@@ -28,7 +28,7 @@ function rateLimit(windowMs = 15 * 60 * 1000, max = 10) {
       return next();
     }
     if (bucket.count >= max) {
-      return res.status(429).json({ error: 'Too many requests. Try again later.' });
+      return res.status(429).json({ error: { message: 'Too many requests. Try again later.', code: 'RATE_LIMITED' }, message: 'Too many requests. Try again later.' });
     }
     bucket.count++;
     next();
@@ -54,6 +54,7 @@ const { getTemplateVariables, replaceTemplateVars } = require('../utils/template
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
 const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
 const { handlePlusOne, syncPlusOneAttendingStatus } = require('../helpers/plusOneService');
+const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 
 // Replace the old getInlineStyles function with new template system
 function applyEmailTemplate(content, style = 'elegant', options = {}) {
@@ -140,7 +141,7 @@ router.get('/session', (req, res) => {
 // GET /api/rsvp/:code
 router.get('/:code', lookupRateLimit, async (req, res) => {
   const { code } = req.params;
-  if (!code) return res.status(400).json({ error: 'Code is required' });
+  if (!code) return sendBadRequest(res, 'Code is required');
   try {
     const rows = await dbAll(
       `SELECT id, group_label, name, email, code, is_primary, can_bring_plus_one, dietary, notes, attending, rsvp_status, rsvp_deadline 
@@ -154,7 +155,7 @@ router.get('/:code', lookupRateLimit, async (req, res) => {
         row.rsvp_deadline = new Date(row.rsvp_deadline).toISOString();
       }
     });
-    if (!rows || rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
+    if (!rows || rows.length === 0) return sendNotFound(res, 'Guest', code);
     const primaryGuest = rows.find(row => row.is_primary);
     const plusOne = rows.find(row => !row.is_primary);
     const guestData = {
@@ -171,7 +172,7 @@ router.get('/:code', lookupRateLimit, async (req, res) => {
     };
     return res.json({ success: true, guest: guestData, auth });
   } catch (err) {
-    return res.status(500).json({ error: 'Database error' });
+    return sendInternalError(res, err, 'GET /rsvp/lookup');
   }
 });
 
@@ -214,33 +215,33 @@ router.post('/', async (req, res) => {
   }
   // Input type validation
   if (typeof attending === 'undefined') {
-    return res.status(400).json({ error: 'attending is required' });
+    return sendBadRequest(res, 'attending is required');
   }
   if (typeof attending !== 'boolean') {
-    return res.status(400).json({ error: 'attending must be a boolean' });
+    return sendBadRequest(res, 'attending must be a boolean');
   }
   if (plus_one_name !== undefined && plus_one_name !== null && typeof plus_one_name !== 'string') {
-    return res.status(400).json({ error: 'plus_one_name must be a string' });
+    return sendBadRequest(res, 'plus_one_name must be a string');
   }
   if (dietary !== undefined && dietary !== null && typeof dietary !== 'string') {
-    return res.status(400).json({ error: 'dietary must be a string' });
+    return sendBadRequest(res, 'dietary must be a string');
   }
   if (notes !== undefined && notes !== null && typeof notes !== 'string') {
-    return res.status(400).json({ error: 'notes must be a string' });
+    return sendBadRequest(res, 'notes must be a string');
   }
   if (plus_one_dietary !== undefined && plus_one_dietary !== null && typeof plus_one_dietary !== 'string') {
-    return res.status(400).json({ error: 'plus_one_dietary must be a string' });
+    return sendBadRequest(res, 'plus_one_dietary must be a string');
   }
 
   try {
     const row = await dbGet('SELECT * FROM guests WHERE code = ?', [code]);
     if (!row) {
-      return res.status(404).json({ error: 'Guest not found' });
+      return sendNotFound(res, 'Guest', code);
     }
 
     // Validation: plus_one_name only if allowed
     if (plus_one_name && !row.can_bring_plus_one) {
-      return res.status(400).json({ error: 'This guest is not allowed a plus one' });
+      return sendBadRequest(res, 'This guest is not allowed a plus one');
     }
 
     // Enforce RSVP deadline
@@ -321,7 +322,7 @@ router.post('/', async (req, res) => {
     logger.error('Error in POST /rsvp handler', err);
     // Only send error response if headers haven't been sent
     if (!res.headersSent) {
-      return res.status(500).json({ error: 'Database error', details: err.message });
+      return sendInternalError(res, err, 'POST /rsvp');
     }
   }
 });
@@ -358,7 +359,7 @@ router.get('/template-styles', (req, res) => {
     res.json({ success: true, styles });
   } catch (error) {
     logger.error('Error getting template styles:', error);
-    res.status(500).json({ success: false, error: 'Failed to get template styles' });
+    return sendInternalError(res, error, 'GET /rsvp/template-styles');
   }
 });
 

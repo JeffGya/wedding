@@ -11,6 +11,7 @@
 const express = require('express');
 
 const SurveyResponse = require('../db/models/surveyResponse');
+const { sendBadRequest, sendInternalError } = require('../utils/errorHandler');
 
 const getDbConnection = require('../db/connection');
 const db = getDbConnection();
@@ -89,10 +90,7 @@ router.get('/', async (req, res) => {
   const rawId = req.params.id;
   const surveyId = Number(rawId);
   if (!Number.isInteger(surveyId) || surveyId <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   const filter = (req.query.filter || 'all').toLowerCase();
@@ -150,10 +148,7 @@ router.get('/', async (req, res) => {
   } catch (err) {
     const logger = require('../helpers/logger');
     logger.error(`[GET /api/admin/surveys/${surveyId}/responses] Error:`, err.message || err);
-    res.status(500).json({
-      error: { message: 'Failed to fetch responses' },
-      message: 'Failed to fetch responses'
-    });
+    return sendInternalError(res, err, 'GET /admin/surveys/:id/responses');
   }
 });
 
@@ -195,10 +190,7 @@ router.delete('/', async (req, res) => {
   const rawId = req.params.id;
   const surveyId = Number(rawId);
   if (!Number.isInteger(surveyId) || surveyId <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   try {
@@ -207,10 +199,7 @@ router.delete('/', async (req, res) => {
   } catch (err) {
     const logger = require('../helpers/logger');
     logger.error(`[DELETE /api/admin/surveys/${surveyId}/responses] Error:`, err.message || err);
-    res.status(500).json({
-      error: { message: 'Failed to delete responses' },
-      message: 'Failed to delete responses'
-    });
+    return sendInternalError(res, err, 'DELETE /admin/surveys/:id/responses');
   }
 });
 

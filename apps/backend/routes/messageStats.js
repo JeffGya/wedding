@@ -3,6 +3,7 @@ const router = express.Router();
 const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const logger = require('../helpers/logger');
+const { sendInternalError } = require('../utils/errorHandler');
 const db = getDbConnection();
 const { dbGet, dbAll } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
@@ -57,7 +58,7 @@ router.get('/:id/stats', async (req, res) => {
     res.json({ success: true, ...row });
   } catch (err) {
     logger.error('📉 Failed to fetch delivery stats:', err.message);
-    return res.status(500).json({ success: false, error: 'Failed to get delivery stats' });
+    return sendInternalError(res, err, 'GET /messages/:id/stats');
   }
 });
 
@@ -100,7 +101,7 @@ router.get('/latest-delivery', async (req, res) => {
     const latest = await dbGet(sql, []);
     if (!latest) {
       logger.error('📉 Failed to find latest message ID');
-      return res.status(500).json({ success: false, error: 'Failed to get latest message' });
+      return sendInternalError(res, err, 'GET /messages/stats/latest');
     }
     const statsSql = `
       SELECT 
@@ -114,7 +115,7 @@ router.get('/latest-delivery', async (req, res) => {
     res.json({ success: true, message_id: latest.message_id, ...row });
   } catch (err) {
     logger.error('📉 Failed to fetch latest delivery stats:', err.message);
-    return res.status(500).json({ success: false, error: 'Failed to get latest delivery stats' });
+    return sendInternalError(res, err, 'GET /messages/stats/latest-delivery');
   }
 });
 

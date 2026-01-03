@@ -471,3 +471,1026 @@
 [2026-01-03T22:54:35.490Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
 [2026-01-03T22:54:35.492Z] [INFO] Server is running on port 5001
 [2026-01-03T22:54:35.501Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:00:00.901Z] [DEBUG] ⏰ Scheduler triggered: Checking for scheduled messages...
+[2026-01-03T23:00:00.903Z] [DEBUG] 📨 Starting scheduled message check...
+[2026-01-03T23:00:00.910Z] [DEBUG] ✅ Scheduled message check completed.
+[2026-01-03T23:00:00.910Z] [DEBUG] ✅ No scheduled messages ready to send.
+[2026-01-03T23:18:43.166Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:18:43.168Z] [INFO] Server is running on port 5001
+[2026-01-03T23:18:43.179Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:18:45.801Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:18:45.803Z] [INFO] Server is running on port 5001
+[2026-01-03T23:18:45.810Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:18:54.046Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:18:54.048Z] [INFO] Server is running on port 5001
+[2026-01-03T23:18:54.055Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:18:55.997Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:18:55.999Z] [INFO] Server is running on port 5001
+[2026-01-03T23:18:56.008Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:18:57.244Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:18:57.246Z] [INFO] Server is running on port 5001
+[2026-01-03T23:18:57.253Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:18:58.695Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:18:58.696Z] [INFO] Server is running on port 5001
+[2026-01-03T23:18:58.704Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:06.048Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:06.050Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:06.058Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:07.320Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:07.322Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:07.330Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:08.782Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:08.783Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:08.790Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:10.615Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:10.617Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:10.624Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:12.073Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:12.074Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:12.083Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:21.551Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:21.553Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:21.563Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:23.063Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:23.065Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:23.073Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:24.551Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:24.553Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:24.562Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:26.756Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:26.757Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:26.766Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:28.468Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:28.470Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:28.477Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:33.476Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:33.477Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:33.485Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:35.248Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:35.249Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:35.256Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:37.116Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:37.117Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:37.124Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:38.632Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:38.634Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:38.640Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:40.159Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:40.160Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:40.168Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:41.754Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:41.756Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:41.763Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:43.438Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:43.440Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:43.446Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:44.989Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:44.990Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:44.998Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:47.250Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:47.252Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:47.265Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:48.804Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:48.806Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:48.813Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:50.378Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:50.379Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:50.387Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:52.261Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:52.263Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:52.270Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:53.873Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:53.875Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:53.883Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:55.722Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:55.724Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:55.731Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:19:59.787Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:19:59.789Z] [INFO] Server is running on port 5001
+[2026-01-03T23:19:59.796Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:01.466Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:01.468Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:01.475Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:06.036Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:06.037Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:06.044Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:15.113Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:15.115Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:15.122Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:23.963Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:23.964Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:23.972Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:26.278Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:26.280Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:26.288Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:27.858Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:27.859Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:27.867Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:31.999Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:20:32.001Z] [INFO] Server is running on port 5001
+[2026-01-03T23:20:32.008Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:34.455Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:380
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:34.462Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:36.290Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:380
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:36.297Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:38.308Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:380
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:38.316Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:39.855Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:380
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:39.863Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:41.523Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:380
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:41.531Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:43.242Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:380
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:43.249Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:20:48.343Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:20:48.352Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:00.895Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:01.059Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:02.821Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:02.828Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:04.445Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:04.453Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:06.255Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:06.262Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:09.087Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:09.095Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:10.700Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:10.707Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:13.200Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:13.208Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:14.859Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:14.867Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:16.602Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:16.609Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:23.432Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:23.439Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:29.616Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:29.624Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:32.737Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:32.745Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:40.880Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:40.888Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:43.325Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:43.333Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:45.270Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:45.277Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:21:57.535Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:21:57.544Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:07.174Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:07.189Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:09.481Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:09.490Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:11.647Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:11.655Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:15.141Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:15.149Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:17.779Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:17.789Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:20.016Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:20.023Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:23.956Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:23.963Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:26.464Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:26.473Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:28.894Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:28.903Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:30.934Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:30.941Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:34.571Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:34.579Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:38.107Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:38.117Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:40.206Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:40.213Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:22:43.344Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:22:43.352Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:05.186Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:05.196Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:06.790Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:06.801Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:08.733Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:08.740Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:11.787Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:11.795Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:14.212Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:14.221Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:16.224Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:16.232Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:27.210Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:27.223Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:29.447Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:29.456Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:32.291Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:32.300Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:36.262Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:36.271Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:39.918Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:39.927Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:43.224Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:43.233Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:51.574Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:51.583Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:23:54.001Z] [ERROR] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/templates.js:376
+    });
+     ^
+
+SyntaxError: Unexpected token ')'
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/index.js:181:24)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-03T23:23:54.010Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:34:19.825Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:34:19.829Z] [INFO] Server is running on port 5001
+[2026-01-03T23:34:19.851Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:34:41.341Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:34:41.357Z] [INFO] Server is running on port 5001
+[2026-01-03T23:34:41.581Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:34:48.385Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:34:48.391Z] [INFO] Server is running on port 5001
+[2026-01-03T23:34:48.435Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:34:50.523Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-03T23:34:50.523Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-03T23:34:50.523Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-03T23:34:50.523Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-03T23:34:50.523Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-03T23:34:50.528Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-03T23:34:50.536Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-03T23:34:50.536Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-03T23:34:50.536Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-03T23:34:50.536Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-03T23:34:50.536Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-03T23:34:50.539Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-03T23:34:50.564Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-03T23:34:50.565Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-03T23:34:50.564Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-03T23:34:50.565Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-03T23:34:50.566Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-03T23:34:50.566Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-03T23:34:50.568Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-03T23:34:50.568Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-03T23:35:37.248Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-03T23:35:37.248Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-03T23:35:37.248Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-03T23:35:37.248Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-03T23:35:37.248Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-03T23:35:37.249Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-03T23:35:37.251Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-03T23:35:37.251Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-03T23:35:37.251Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-03T23:35:37.251Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-03T23:35:37.251Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-03T23:35:37.251Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-03T23:35:37.252Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-03T23:35:37.252Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-03T23:35:37.252Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-03T23:35:37.252Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-03T23:35:37.253Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-03T23:35:37.253Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-03T23:35:37.253Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-03T23:35:37.253Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-03T23:35:39.317Z] [DEBUG] [guestSession] Setting session for guestId=40
+[2026-01-03T23:35:59.005Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-03T23:35:59.005Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-03T23:35:59.005Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-03T23:35:59.005Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-03T23:35:59.005Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-03T23:35:59.022Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-03T23:35:59.024Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-03T23:35:59.024Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-03T23:35:59.025Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-03T23:35:59.025Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-03T23:35:59.026Z] [DEBUG] [guestSession] Setting session for guestId=40
+[2026-01-03T23:36:12.423Z] [DEBUG] [guestSession] Setting session for guestId=49
+[2026-01-03T23:36:12.456Z] [DEBUG] [guestSession] Setting session for guestId=49
+[2026-01-03T23:37:32.039Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2026-01-03T23:37:32.042Z] [DEBUG] [GET /api/pages] Returning 3 of 3
+[2026-01-03T23:37:32.956Z] [DEBUG] [GET /api/pages] Fetching all pages with pagination & filters (route-level)...
+[2026-01-03T23:37:32.958Z] [DEBUG] [GET /api/pages] Returning 3 of 3
+[2026-01-03T23:37:38.002Z] [DEBUG] 🧭 Route hit: GET /api/messages
+[2026-01-03T23:37:57.032Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:37:57.034Z] [INFO] Server is running on port 5001
+[2026-01-03T23:37:57.044Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:37:58.575Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:37:58.576Z] [INFO] Server is running on port 5001
+[2026-01-03T23:37:58.585Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:38:00.590Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:38:00.592Z] [INFO] Server is running on port 5001
+[2026-01-03T23:38:00.603Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:38:03.428Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:38:03.430Z] [INFO] Server is running on port 5001
+[2026-01-03T23:38:03.438Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:38:05.721Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:38:05.723Z] [INFO] Server is running on port 5001
+[2026-01-03T23:38:05.732Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:38:07.786Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:38:07.788Z] [INFO] Server is running on port 5001
+[2026-01-03T23:38:07.796Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-03T23:38:21.102Z] [DEBUG] 📅 Scheduler started successfully (currently set to run every hour).
+[2026-01-03T23:38:21.105Z] [INFO] Server is running on port 5001
+[2026-01-03T23:38:21.119Z] [INFO] ✅ Connected to MySQL database.

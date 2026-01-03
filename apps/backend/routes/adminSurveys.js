@@ -10,6 +10,7 @@ const express = require('express');
 const logger = require('../helpers/logger');
 const SurveyBlock = require('../db/models/surveyBlock');
 const SurveyResponse = require('../db/models/surveyResponse');
+const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -161,10 +162,7 @@ router.get('/', async (req, res) => {
     res.json({ data: paged, meta });
   } catch (err) {
     logger.error('[GET /api/admin/surveys] Error:', err && err.message, err && err.stack || err);
-    res.status(500).json({
-      error: { message: 'Failed to fetch surveys' },
-      message: 'Failed to fetch surveys'
-    });
+    return sendInternalError(res, err, 'GET /admin/surveys');
   }
 });
 
@@ -226,10 +224,7 @@ router.post('/', async (req, res) => {
 
     const errors = validateSurveyPayload(payload, false);
     if (errors.length) {
-      return res.status(400).json({
-        error: { message: errors.join(', '), code: 'INVALID_SURVEY' },
-        message: errors.join(', ')
-      });
+      return sendBadRequest(res, errors.join(', '), 'INVALID_SURVEY');
     }
 
     const {
@@ -257,10 +252,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(created);
   } catch (err) {
     logger.error('[POST /api/admin/surveys] Error:', err);
-    res.status(500).json({
-      error: { message: 'Failed to create survey' },
-      message: 'Failed to create survey'
-    });
+    return sendInternalError(res, err, 'POST /admin/surveys');
   }
 });
 
@@ -297,24 +289,18 @@ router.get('/:id', async (req, res) => {
   const rawId = req.params.id;
   const id = Number(rawId);
   if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   try {
     const survey = await SurveyBlock.getById(id, { includeDeleted: true });
     if (!survey) {
-      return res.status(404).json({ error: { message: 'Survey not found' }, message: 'Survey not found' });
+      return sendNotFound(res, 'Survey', id);
     }
     res.json(survey);
   } catch (err) {
     logger.error(`[GET /api/admin/surveys/${id}] Error:`, err);
-    res.status(500).json({
-      error: { message: 'Failed to fetch survey' },
-      message: 'Failed to fetch survey'
-    });
+    return sendInternalError(res, err, 'GET /admin/surveys/:id');
   }
 });
 
@@ -378,25 +364,19 @@ router.put('/:id', async (req, res) => {
   const rawId = req.params.id;
   const id = Number(rawId);
   if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   try {
     const existing = await SurveyBlock.getById(id, { includeDeleted: true });
     if (!existing) {
-      return res.status(404).json({ error: { message: 'Survey not found' }, message: 'Survey not found' });
+      return sendNotFound(res, 'Survey', id);
     }
 
     const payload = req.body;
     const errors = validateSurveyPayload(payload, true);
     if (errors.length) {
-      return res.status(400).json({
-        error: { message: errors.join(', '), code: 'INVALID_SURVEY' },
-        message: errors.join(', ')
-      });
+      return sendBadRequest(res, errors.join(', '), 'INVALID_SURVEY');
     }
 
     const updateData = {};
@@ -415,10 +395,7 @@ router.put('/:id', async (req, res) => {
     res.json(updated);
   } catch (err) {
     logger.error(`[PUT /api/admin/surveys/${id}] Error:`, err);
-    res.status(500).json({
-      error: { message: 'Failed to update survey' },
-      message: 'Failed to update survey'
-    });
+    return sendInternalError(res, err, 'PUT /admin/surveys/:id');
   }
 });
 
@@ -456,10 +433,7 @@ router.delete('/:id', async (req, res) => {
   const rawId = req.params.id;
   const id = Number(rawId);
   if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   try {
@@ -467,10 +441,7 @@ router.delete('/:id', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     logger.error(`[DELETE /api/admin/surveys/${id}] Error:`, err);
-    res.status(500).json({
-      error: { message: 'Failed to delete survey' },
-      message: 'Failed to delete survey'
-    });
+    return sendInternalError(res, err, 'DELETE /admin/surveys/:id');
   }
 });
 
@@ -505,10 +476,7 @@ router.put('/:id/restore', async (req, res) => {
   const rawId = req.params.id;
   const id = Number(rawId);
   if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   try {
@@ -517,10 +485,7 @@ router.put('/:id/restore', async (req, res) => {
     res.json(restored);
   } catch (err) {
     logger.error(`[PUT /api/admin/surveys/${id}/restore] Error:`, err);
-    res.status(500).json({
-      error: { message: 'Failed to restore survey' },
-      message: 'Failed to restore survey'
-    });
+    return sendInternalError(res, err, 'POST /admin/surveys/:id/restore');
   }
 });
 
@@ -558,10 +523,7 @@ router.delete('/:id/destroy', async (req, res) => {
   const rawId = req.params.id;
   const id = Number(rawId);
   if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({
-      error: { message: 'Invalid survey id', code: 'INVALID_ID' },
-      message: 'Invalid survey id'
-    });
+    return sendBadRequest(res, 'Invalid survey id', 'INVALID_ID');
   }
 
   try {
@@ -573,10 +535,7 @@ router.delete('/:id/destroy', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     logger.error(`[DELETE /api/admin/surveys/${id}/destroy] Error:`, err);
-    res.status(500).json({
-      error: { message: 'Failed to destroy survey' },
-      message: 'Failed to destroy survey'
-    });
+    return sendInternalError(res, err, 'DELETE /admin/surveys/:id/destroy');
   }
 });
 

@@ -3,6 +3,7 @@ const logger = require('../helpers/logger');
 const bcrypt = require('bcryptjs');
 const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
+const { sendBadRequest, sendUnauthorized, sendInternalError } = require('../utils/errorHandler');
 const db = getDbConnection();
 const { dbGet } = createDbHelpers(db);
 
@@ -50,13 +51,13 @@ router.post('/login', async (req, res) => {
   logger.debug('Login request received:');
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
+    return sendBadRequest(res, 'Email and password are required.');
   }
   try {
     const user = await dbGet('SELECT * FROM users WHERE email = ?', [email]);
-    if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
+    if (!user) return sendUnauthorized(res, 'Invalid credentials.');
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!passwordMatch) return res.status(401).json({ error: 'Invalid credentials.' });
+    if (!passwordMatch) return sendUnauthorized(res, 'Invalid credentials.');
     res.cookie('session_id', user.id, {
       httpOnly: true,
       sameSite: 'strict',
@@ -67,7 +68,7 @@ router.post('/login', async (req, res) => {
     return res.json({ success: true, name: user.name });
   } catch (err) {
     logger.error(err);
-    return res.status(500).json({ error: 'Database error.' });
+    return sendInternalError(res, err, 'POST /auth/login');
   }
 });
 
@@ -98,15 +99,15 @@ router.post('/login', async (req, res) => {
 router.get('/me', async (req, res) => {
   const sessionId = req.signedCookies?.session_id;
   if (!sessionId) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return sendUnauthorized(res);
   }
   try {
     const user = await dbGet('SELECT id, name, email FROM users WHERE id = ?', [sessionId]);
-    if (!user) return res.status(401).json({ error: 'Invalid session.' });
+    if (!user) return sendUnauthorized(res, 'Invalid session.');
     return res.json({ id: user.id, name: user.name, email: user.email });
   } catch (err) {
     logger.error(err);
-    return res.status(500).json({ error: 'Database error.' });
+    return sendInternalError(res, err, 'POST /auth/login');
   }
 });
 

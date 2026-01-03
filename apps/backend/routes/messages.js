@@ -6,6 +6,7 @@ const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
 const { sendBatchEmails } = require('../helpers/emailService');
+const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
 
 // Helper function to detect template schema version (shared with templates.js logic)
@@ -185,22 +186,22 @@ router.post('/', async (req, res) => {
   logger.debug('🧰 [messages.js] Extracted fields:', { subject, body_en, body_lt, status, scheduledAt, recipients, style });
   // Validate required fields
   if (!subject || !body_en || !body_lt || !status) {
-    return res.status(400).json({ success: false, error: 'Subject, body_en, body_lt, and status are required.' });
+    return sendBadRequest(res, 'Subject, body_en, body_lt, and status are required.');
   }
   // Special validation for scheduled messages
   let scheduledForFinal = null;
   if (status === 'scheduled') {
     logger.debug('🧰 [messages.js] Status is scheduled; scheduledAt:', scheduledAt);
     if (!scheduledAt) {
-      return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages.' });
+      return sendBadRequest(res, 'Scheduled time is required for scheduled messages.');
     }
     // Parse local Amsterdam time and convert to UTC
     let dt = DateTime.fromISO(scheduledAt, { zone: 'Europe/Amsterdam' });
     if (!dt.isValid) {
-      return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime.' });
+      return sendBadRequest(res, 'Scheduled time must be a valid datetime.');
     }
     if (dt < DateTime.utc()) {
-      return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
+      return sendBadRequest(res, 'Scheduled time must be in the future.');
     }
     // Format scheduledForFinal for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
     scheduledForFinal = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
@@ -231,9 +232,7 @@ router.post('/', async (req, res) => {
     }
     res.json({ success: true, messageId });
   } catch (err) {
-    logger.error('❌ [messages.js] Error creating message:', err);
-    logger.error(err.stack);
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'POST /messages');
   }
 });
 
@@ -299,7 +298,7 @@ router.get('/', async (req, res) => {
     });
     res.json({ success: true, messages });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -342,7 +341,7 @@ router.post('/templates', async (req, res) => {
   const finalSubjectLt = subject_lt || subject || '';
   
   if (!name || !finalSubjectEn || !body_en || !body_lt) {
-    return res.status(400).json({ success: false, error: 'Name, subject (or subject_en), body_en, and body_lt are required.' });
+    return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
   }
   
   try {
@@ -365,7 +364,7 @@ router.post('/templates', async (req, res) => {
     const id = insertResult.insertId || insertResult.lastID;
     res.json({ success: true, id });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -401,7 +400,7 @@ router.delete('/templates/:id', async (req, res) => {
     await dbRun(`DELETE FROM templates WHERE id = ?`, [req.params.id]);
     res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -437,10 +436,10 @@ router.delete('/templates/:id', async (req, res) => {
 router.get('/templates/:id', async (req, res) => {
   try {
     const row = await dbGet(`SELECT * FROM templates WHERE id = ?`, [req.params.id]);
-    if (!row) return res.status(404).json({ success: false, error: 'Template not found' });
+    if (!row) return sendNotFound(res, 'Template', req.params.id);
     res.json({ success: true, template: row });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -487,7 +486,7 @@ router.put('/templates/:id', async (req, res) => {
   const finalSubjectLt = subject_lt || subject || '';
   
   if (!name || !finalSubjectEn || !body_en || !body_lt) {
-    return res.status(400).json({ success: false, error: 'Name, subject (or subject_en), body_en, and body_lt are required.' });
+    return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
   }
   
   try {
@@ -514,7 +513,7 @@ router.put('/templates/:id', async (req, res) => {
     }
     res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -559,7 +558,7 @@ router.put('/templates/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const row = await dbGet(`SELECT * FROM messages WHERE id = ?`, [req.params.id]);
-    if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (!row) return sendNotFound(res, 'Message', req.params.id);
     if (row.scheduled_for) {
       const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
       row.scheduled_for = local.toISO({ suppressMilliseconds: true });
@@ -582,7 +581,7 @@ router.get('/:id', async (req, res) => {
     const failedCount = recipients.filter(r => r.delivery_status === 'failed').length;
     res.json({ success: true, message: { ...row, recipients: recipientIds, sentCount, failedCount } });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -623,29 +622,29 @@ router.put('/:id', async (req, res) => {
   const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
   // Basic validation
   if (!subject || !body_en || !body_lt) {
-    return res.status(400).json({ success: false, error: 'subject, body_en, and body_lt are required' });
+    return sendBadRequest(res, 'subject, body_en, and body_lt are required');
   }
   try {
     // First, check if message exists and is a draft
     const row = await dbGet(`SELECT * FROM messages WHERE id = ?`, [req.params.id]);
-    if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (!row) return sendNotFound(res, 'Message', req.params.id);
     if (row.status === 'sent') {
-      return res.status(400).json({ success: false, error: 'Sent messages cannot be updated' });
+      return sendBadRequest(res, 'Sent messages cannot be updated');
     }
     // Validate status change
     const newStatus = status === 'scheduled' ? 'scheduled' : 'draft';
     let scheduled_for = null;
     if (newStatus === 'scheduled') {
       if (!scheduledAt) {
-        return res.status(400).json({ success: false, error: 'Scheduled time is required for scheduled messages' });
+        return sendBadRequest(res, 'Scheduled time is required for scheduled messages');
       }
       // Parse local Amsterdam time and convert to UTC
       let dt = DateTime.fromISO(scheduledAt, { zone: 'Europe/Amsterdam' });
       if (!dt.isValid) {
-        return res.status(400).json({ success: false, error: 'Scheduled time must be a valid datetime.' });
+        return sendBadRequest(res, 'Scheduled time must be a valid datetime.');
       }
       if (dt < DateTime.utc()) {
-        return res.status(400).json({ success: false, error: 'Scheduled time must be in the future.' });
+        return sendBadRequest(res, 'Scheduled time must be in the future.');
       }
       // Format scheduled_for for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
       scheduled_for = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
@@ -678,7 +677,7 @@ router.put('/:id', async (req, res) => {
     const recipientIds = recips.map(r => r.guest_id);
     res.json({ success: true, message: { ...updatedRow, recipients: recipientIds } });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -715,15 +714,15 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const row = await dbGet(`SELECT status FROM messages WHERE id = ?`, [req.params.id]);
-    if (!row) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (!row) return sendNotFound(res, 'Message', req.params.id);
     if (row.status === 'sent') {
-      return res.status(400).json({ success: false, error: 'Sent messages cannot be deleted' });
+      return sendBadRequest(res, 'Sent messages cannot be deleted');
     }
     await dbRun('DELETE FROM message_recipients WHERE message_id = ?', [req.params.id]);
     await dbRun(`DELETE FROM messages WHERE id = ? AND status IN ('draft','scheduled')`, [req.params.id]);
     res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -787,15 +786,15 @@ router.post('/:id/send', async (req, res, next) => {
     const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
     if (!message) {
       logger.error('❌ No message found for ID:', messageId);
-      return res.status(404).json({ success: false, error: 'Message not found' });
+      return sendNotFound(res, 'Message', messageId);
     }
     logger.debug('📦 Loaded message:', message);
     if ((!message.body_en || message.body_en.trim() === '') && (!message.body_lt || message.body_lt.trim() === '')) {
       logger.error('❌ Cannot send email: message body is empty.');
-      return res.status(400).json({ success: false, error: 'Cannot send email: message body is empty.' });
+      return sendBadRequest(res, 'Cannot send email: message body is empty.');
     }
     if (message.status !== 'draft') {
-      return res.status(400).json({ success: false, error: 'Only draft messages can be sent' });
+      return sendBadRequest(res, 'Only draft messages can be sent');
     }
     // 💡 Clear any previous logs for this message ID
     await dbRun(`DELETE FROM message_recipients WHERE message_id = ?`, [messageId]);
@@ -884,7 +883,7 @@ router.post('/:id/send', async (req, res, next) => {
     
     res.json({ success: true, results, sentCount, failedCount });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -932,14 +931,14 @@ router.post('/:id/schedule', async (req, res) => {
   const messageId = req.params.id;
   const { scheduled_for } = req.body;
   if (!scheduled_for) {
-    return res.status(400).json({ success: false, error: 'scheduled_for field is required' });
+    return sendBadRequest(res, 'scheduled_for field is required');
   }
   const dt = DateTime.fromISO(scheduled_for, { zone: 'Europe/Amsterdam' });
   if (!dt.isValid) {
-    return res.status(400).json({ success: false, error: 'scheduled_for must be a valid datetime' });
+    return sendBadRequest(res, 'scheduled_for must be a valid datetime');
   }
   if (dt < DateTime.utc()) {
-    return res.status(400).json({ success: false, error: 'scheduled_for must be in the future' });
+    return sendBadRequest(res, 'scheduled_for must be in the future');
   }
   try {
     // Format scheduled_for for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
@@ -947,7 +946,7 @@ router.post('/:id/schedule', async (req, res) => {
     await dbRun(`UPDATE messages SET scheduled_for = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [formattedScheduled, messageId]);
     res.json({ success: true, scheduled_for: formattedScheduled });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -997,7 +996,7 @@ router.get('/:id/logs', async (req, res) => {
     });
     res.json({ success: true, logs: rows });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -1114,7 +1113,7 @@ router.post('/preview', async (req, res) => {
     });
   } catch (error) {
     logger.error('Failed to preview message:', error);
-    return res.status(500).json({ success: false, error: 'Failed to preview message: ' + error.message });
+    return sendInternalError(res, error, 'GET /messages/:id/preview');
   }
 });
 
@@ -1155,7 +1154,7 @@ router.post('/:id/resend', async (req, res, next) => {
   const messageId = req.params.id;
   try {
     const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
-    if (!message) return res.status(404).json({ success: false, error: 'Message not found' });
+    if (!message) return sendNotFound(res, 'Message', messageId);
     // Load failed recipients only
     const guests = await dbAll(
       `SELECT g.* FROM message_recipients mr JOIN guests g ON g.id = mr.guest_id WHERE mr.message_id = ? AND mr.delivery_status = 'failed'`,
@@ -1247,7 +1246,7 @@ router.post('/:id/resend', async (req, res, next) => {
     const failedCount = batchResult.failedCount;
     res.json({ success: true, results, sentCount, failedCount });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages');
   }
 });
 
@@ -1303,13 +1302,13 @@ router.post('/preview-template/:templateId', async (req, res) => {
     // Get template
     const template = await dbGet('SELECT * FROM templates WHERE id = ?', [templateId]);
     if (!template) {
-      return res.status(404).json({ success: false, error: 'Template not found' });
+      return sendNotFound(res, 'Template', req.params.templateId);
     }
 
     // Get guest
     const guest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
     if (!guest) {
-      return res.status(404).json({ success: false, error: 'Guest not found' });
+      return sendNotFound(res, 'Guest', req.params.guestId);
     }
 
     // Get enhanced variables
@@ -1332,8 +1331,7 @@ router.post('/preview-template/:templateId', async (req, res) => {
       variables,
     });
   } catch (err) {
-    logger.error('Error previewing template:', err);
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages/preview-template/:templateId/:guestId');
   }
 });
 
@@ -1373,8 +1371,7 @@ router.get('/template-variables', async (req, res) => {
       }
     });
   } catch (err) {
-    logger.error('Error getting template variables:', err);
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /messages/preview-variables');
   }
 });
 

@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('../helpers/logger');
 const fs = require('fs');
 const path = require('path');
+const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const router = express.Router();
 
 const Page = require('../db/models/pages');
@@ -171,7 +172,7 @@ router.get('/', async (req, res) => {
     res.json({ data: paged, meta });
   } catch (err) {
     logger.error('[GET /api/pages] Error:', err.message, err.stack);
-    res.status(500).json({ error: `Failed to fetch pages: ${err.message}` });
+    return sendInternalError(res, err, 'GET /admin/pages');
   }
 });
 
@@ -221,10 +222,7 @@ router.get('/:id', async (req, res) => {
     const rawId = req.params.id;
     const id = Number(rawId);
     if (!Number.isInteger(id) || id <= 0) {
-      return res.status(400).json({
-        error: { message: 'Invalid page id', code: 'INVALID_ID' },
-        message: 'Invalid page id'
-      });
+      return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
     logger.debug(`[GET /api/pages/${id}] Fetching page and translations...`);
     const page = await Page.getById(id, { includeDeleted: true });
@@ -232,7 +230,7 @@ router.get('/:id', async (req, res) => {
     res.json({ ...page, translations });
   } catch (err) {
     logger.error(`[GET /api/pages/${req.params.id}] Error:`, err.message, err.stack);
-    res.status(500).json({ error: `Failed to fetch page: ${err.message}` });
+    return sendInternalError(res, err, 'GET /admin/pages/:id');
   }
 });
 
@@ -316,10 +314,7 @@ router.post('/', async (req, res) => {
       if (!locale || typeof content === 'undefined') {
         const msg = `Invalid translation payload (locale/content missing)`;
         logger.warn('[POST /api/pages]', msg, translation);
-        return res.status(400).json({
-          error: { message: msg, code: 'INVALID_TRANSLATION' },
-          message: msg
-        });
+        return sendBadRequest(res, msg, 'INVALID_TRANSLATION');
       }
 
       // Validate & sanitize blocks
@@ -332,10 +327,7 @@ router.post('/', async (req, res) => {
         processedBlocks = blocks;
       } catch (ve) {
         logger.error('[POST /api/pages] Block validation error:', ve.message);
-        return res.status(400).json({
-          error: { message: ve.message, code: 'INVALID_BLOCK' },
-          message: ve.message
-        });
+        return sendBadRequest(res, ve.message, 'INVALID_BLOCK');
       }
 
       // Verify survey block IDs exist
@@ -346,10 +338,7 @@ router.post('/', async (req, res) => {
           if (!sb) {
             const msg = `Survey block id ${sid} does not exist.`;
             logger.error('[POST /api/pages] ' + msg);
-            return res.status(400).json({
-              error: { message: msg, code: 'SURVEY_NOT_FOUND' },
-              message: msg
-            });
+            return sendBadRequest(res, msg, 'SURVEY_NOT_FOUND');
           }
         }
       }
@@ -377,12 +366,9 @@ router.post('/', async (req, res) => {
     } catch (createErr) {
       logger.error('[POST /api/pages] Error creating page:', createErr.message);
       if (createErr.message.includes('UNIQUE constraint failed') || createErr.message.includes('duplicate key')) {
-        return res.status(400).json({
-          error: { message: 'Slug already exists. Please use a unique slug.', code: 'DUPLICATE_SLUG' },
-          message: 'Slug already exists. Please use a unique slug.'
-        });
+        return sendBadRequest(res, 'Slug already exists. Please use a unique slug.', 'DUPLICATE_SLUG');
       }
-      return res.status(500).json({ error: { message: `Failed to create page: ${createErr.message}` }, message: `Failed to create page: ${createErr.message}` });
+      return sendInternalError(res, createErr, 'POST /admin/pages');
     }
 
     logger.debug('[POST /api/pages] Created page:', newPage);
@@ -424,19 +410,16 @@ router.post('/', async (req, res) => {
       } catch (cleanupErr) {
         logger.error('[POST /api/pages] Cleanup failed:', cleanupErr.message);
       }
-      return res.status(500).json({
-        error: { message: 'Failed to save translations', code: 'TRANSLATION_SAVE_FAILED' },
-        message: 'Failed to save translations'
-      });
+      return sendInternalError(res, err, 'POST /admin/pages (translations)');
     }
 
     return res.status(201).json({ ...newPage, translations: createdTranslations });
   } catch (err) {
     logger.error('[POST /api/pages] Error creating page:', err.message, err.stack);
     if (err.message.includes('UNIQUE constraint failed') || err.message.includes('duplicate key')) {
-      return res.status(400).json({ error: 'Slug already exists. Please use a unique slug.' });
+      return sendBadRequest(res, 'Slug already exists. Please use a unique slug.', 'DUPLICATE_SLUG');
     }
-    res.status(500).json({ error: `Failed to create page: ${err.message}` });
+    return sendInternalError(res, err, 'POST /admin/pages');
   }
 });
 
@@ -502,10 +485,7 @@ router.put('/:id', async (req, res) => {
     const rawId = req.params.id;
     const id = Number(rawId);
     if (!Number.isInteger(id) || id <= 0) {
-      return res.status(400).json({
-        error: { message: 'Invalid page id', code: 'INVALID_ID' },
-        message: 'Invalid page id'
-      });
+      return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
     const {
       slug,
@@ -523,7 +503,7 @@ router.put('/:id', async (req, res) => {
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
       logger.warn(`[PUT /api/pages/${id}] Page not found.`);
-      return res.status(404).json({ error: 'Page not found' });
+      return sendNotFound(res, 'Page', id);
     }
 
     // --------------------------------------------------
@@ -537,10 +517,7 @@ router.put('/:id', async (req, res) => {
       if (!locale || typeof content === 'undefined') {
         const msg = `Invalid translation payload (locale/content missing)`;
         logger.warn(`[PUT /api/pages/${id}]`, msg, translation);
-        return res.status(400).json({
-          error: { message: msg, code: 'INVALID_TRANSLATION' },
-          message: msg
-        });
+        return sendBadRequest(res, msg, 'INVALID_TRANSLATION');
       }
 
       // Process & validate blocks
@@ -553,10 +530,7 @@ router.put('/:id', async (req, res) => {
         processedBlocks = blocks;
       } catch (ve) {
         logger.error(`[PUT /api/pages/${id}] Block validation error (${locale}):`, ve.message);
-        return res.status(400).json({
-          error: { message: ve.message, code: 'INVALID_BLOCK' },
-          message: ve.message
-        });
+        return sendBadRequest(res, ve.message, 'INVALID_BLOCK');
       }
 
       // Verify survey IDs
@@ -567,10 +541,7 @@ router.put('/:id', async (req, res) => {
           if (!sb) {
             const msg = `Survey block id ${sid} does not exist.`;
             logger.error(`[PUT /api/pages/${id}] ` + msg);
-            return res.status(400).json({
-              error: { message: msg, code: 'SURVEY_NOT_FOUND' },
-              message: msg
-            });
+            return sendBadRequest(res, msg, 'SURVEY_NOT_FOUND');
           }
         }
       }
@@ -639,7 +610,7 @@ router.put('/:id', async (req, res) => {
     return res.json({ ...updatedPage, translations: updatedTranslations });
   } catch (err) {
     logger.error(`[PUT /api/pages/${req.params.id}] Error:`, err.message, err.stack);
-    res.status(500).json({ error: `Failed to update page: ${err.message}` });
+    return sendInternalError(res, err, 'PUT /admin/pages/:id');
   }
 });
 
@@ -678,10 +649,7 @@ router.delete('/:id', async (req, res) => {
     const rawId = req.params.id;
     const id = Number(rawId);
     if (!Number.isInteger(id) || id <= 0) {
-      return res.status(400).json({
-        error: { message: 'Invalid page id', code: 'INVALID_ID' },
-        message: 'Invalid page id'
-      });
+      return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
     logger.debug(`[DELETE /api/pages/${id}] Deleting page and translations...`);
     // Soft delete translations then page
@@ -693,7 +661,7 @@ router.delete('/:id', async (req, res) => {
     res.status(200).json({ success: true });
   } catch (err) {
     logger.error(`[DELETE /api/pages/${req.params.id}] Error:`, err.message, err.stack);
-    res.status(500).json({ error: `Failed to delete page: ${err.message}` });
+    return sendInternalError(res, err, 'DELETE /admin/pages/:id');
   }
 });
 
@@ -739,16 +707,13 @@ router.put('/:id/restore', async (req, res) => {
   const id = Number(rawId);
   try {
     if (!Number.isInteger(id) || id <= 0) {
-      return res.status(400).json({
-        error: { message: 'Invalid page id', code: 'INVALID_ID' },
-        message: 'Invalid page id'
-      });
+      return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
     logger.debug(`[RESTORE /api/pages/${id}] Restoring page and translations...`);
 
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
-      return res.status(404).json({ error: 'Page not found' });
+      return sendNotFound(res, 'Page', id);
     }
 
     // Restore page
@@ -768,7 +733,7 @@ router.put('/:id/restore', async (req, res) => {
     res.json({ ...restoredPage, translations: restoredTranslations });
   } catch (err) {
     logger.error(`[RESTORE /api/pages/${id}] Error:`, err.message, err.stack);
-    res.status(500).json({ error: `Failed to restore page: ${err.message}` });
+    return sendInternalError(res, err, 'POST /admin/pages/:id/restore');
   }
 });
 
@@ -809,16 +774,13 @@ router.delete('/:id/destroy', async (req, res) => {
   const id = Number(rawId);
   try {
     if (!Number.isInteger(id) || id <= 0) {
-      return res.status(400).json({
-        error: { message: 'Invalid page id', code: 'INVALID_ID' },
-        message: 'Invalid page id'
-      });
+      return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
     logger.debug(`[DESTROY /api/pages/${id}] Hard deleting page and translations...`);
 
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
-      return res.status(404).json({ error: 'Page not found' });
+      return sendNotFound(res, 'Page', id);
     }
 
     const translations = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
@@ -830,7 +792,7 @@ router.delete('/:id/destroy', async (req, res) => {
     res.status(200).json({ success: true });
   } catch (err) {
     logger.error(`[DESTROY /api/pages/${id}] Error:`, err.message, err.stack);
-    res.status(500).json({ error: `Failed to permanently delete page: ${err.message}` });
+    return sendInternalError(res, err, 'DELETE /admin/pages/:id/destroy');
   }
 });
 

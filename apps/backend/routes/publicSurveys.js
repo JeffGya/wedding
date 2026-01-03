@@ -14,6 +14,7 @@ const express = require('express');
 const SurveyBlock = require('../db/models/surveyBlock');
 const SurveyResponse = require('../db/models/surveyResponse');
 const Page = require('../db/models/pages'); // only used if we fallback to page gating
+const { sendBadRequest, sendNotFound, sendForbidden, sendUnauthorized, sendInternalError } = require('../utils/errorHandler');
 // req.guest is injected globally by parseGuestSession in index.js
 
 const router = express.Router();
@@ -47,7 +48,7 @@ const respondLimiter = rl();
 
 // ---------------- Helpers ----------------
 function badRequest(res, msg, code = 'INVALID_RESPONSE') {
-  return res.status(400).json({ error: { message: msg, code }, message: msg });
+  return sendBadRequest(res, msg, code);
 }
 
 function isStringArray(arr) {
@@ -116,7 +117,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
   try {
     const survey = await SurveyBlock.getById(id, { includeDeleted: false });
     if (!survey) {
-      return res.status(404).json({ error: { message: 'Survey not found' }, message: 'Survey not found' });
+      return sendNotFound(res, 'Survey', id);
     }
 
     // RSVP gating
@@ -128,10 +129,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
         guest.attending === 1 || guest.attending === true
       );
       if (!attending) {
-        return res.status(403).json({
-          error: { message: 'RSVP required to respond to this survey', code: 'RSVP_REQUIRED' },
-          message: 'RSVP required to respond to this survey'
-        });
+        return sendForbidden(res, 'RSVP required to respond to this survey');
       }
     } else if (survey.page_id) {
       // Fallback: if survey is attached to a page that is gated, respect it
@@ -211,10 +209,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     let guestId = null;
     if (!survey.is_anonymous) {
       if (!req.guest || !req.guestId) {
-        return res.status(401).json({
-          error: { message: 'This survey is for attending guests. An attending RSVP required to respond to this survey', code: 'AUTH_REQUIRED' },
-          message: 'This survey is for attending guests. An attending RSVP required to respond to this survey'
-        });
+        return sendUnauthorized(res, 'This survey is for attending guests. An attending RSVP required to respond to this survey');
       }
       guestId = req.guestId;
     }
@@ -235,10 +230,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
   } catch (err) {
     const logger = require('../helpers/logger');
     logger.error(`[POST /api/surveys/${rawId}/respond] Error:`, err);
-    return res.status(500).json({
-      error: { message: 'Failed to save response' },
-      message: 'It looks like something went wrong on our end. Please try again later.'
-    });
+    return sendInternalError(res, err, 'POST /surveys/:id/respond');
   }
 });
 

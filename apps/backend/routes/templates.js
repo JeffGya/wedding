@@ -8,6 +8,7 @@ const { getTemplateVariables, replaceTemplateVars } = require('../utils/template
 
 const requireAuth = require('../middleware/auth');
 const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
+const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const logger = require('../helpers/logger');
 
 // Helper function to detect template schema version
@@ -118,7 +119,7 @@ router.get('/', async (req, res) => {
     });
     res.json({ success: true, templates });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /templates');
   }
 });
 
@@ -143,10 +144,7 @@ router.get('/styles', async (req, res) => {
   } catch (error) {
     logger.error('❌ Error fetching template styles:', error);
     logger.error('Error stack:', error.stack);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to fetch template styles: ' + error.message 
-    });
+    return sendInternalError(res, error, 'GET /templates/styles');
   }
 });
 
@@ -217,7 +215,7 @@ router.get('/:id', async (req, res) => {
   const sql = `SELECT * FROM templates WHERE id = ?`;
   try {
     const row = await dbGet(sql, [req.params.id]);
-    if (!row) return res.status(404).json({ success: false, error: 'Template not found' });
+    if (!row) return sendNotFound(res, 'Template', req.params.id);
     
     // Detect schema version
     const schemaVersion = await detectTemplateSchema();
@@ -250,7 +248,7 @@ router.get('/:id', async (req, res) => {
     };
     res.json({ success: true, template });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /templates');
   }
 });
 
@@ -294,11 +292,7 @@ router.post('/', async (req, res) => {
       const availableStyles = getAvailableStyles();
       const validStyle = availableStyles.find(s => s.key === style);
       if (!validStyle) {
-        return res.status(400).json({ 
-          success: false, 
-          error: 'Invalid template style',
-          availableStyles: availableStyles.map(s => ({ key: s.key, name: s.name }))
-        });
+        return sendBadRequest(res, 'Invalid template style');
       }
     }
     
@@ -309,10 +303,7 @@ router.post('/', async (req, res) => {
     logger.debug('Creating template with data:', { name, subject_en: finalSubjectEn, subject_lt: finalSubjectLt, body_en: body_en?.substring(0, 50), body_lt: body_lt?.substring(0, 50), style });
     
     if (!name || !finalSubjectEn || !body_en || !body_lt) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Name, subject (or subject_en), body_en, and body_lt are required.' 
-      });
+      return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
     }
 
     // Detect schema version
@@ -380,11 +371,7 @@ router.post('/', async (req, res) => {
       sqlMessage: error.sqlMessage,
       sqlState: error.sqlState
     });
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to create template',
-      details: error.message
-    });
+    return sendInternalError(res, error, 'POST /templates');
   }
 });
 
@@ -435,11 +422,7 @@ router.put('/:id', async (req, res) => {
       const availableStyles = getAvailableStyles();
       const validStyle = availableStyles.find(s => s.key === style);
       if (!validStyle) {
-        return res.status(400).json({ 
-          success: false, 
-          error: 'Invalid template style',
-          availableStyles: availableStyles.map(s => ({ key: s.key, name: s.name }))
-        });
+        return sendBadRequest(res, 'Invalid template style');
       }
     }
     
@@ -448,10 +431,7 @@ router.put('/:id', async (req, res) => {
     const finalSubjectLt = subject_lt || subject || '';
     
     if (!name || !finalSubjectEn || !body_en || !body_lt) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Name, subject (or subject_en), body_en, and body_lt are required.' 
-      });
+      return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
     }
 
     // Detect schema version
@@ -473,10 +453,7 @@ router.put('/:id', async (req, res) => {
     const changes = result.affectedRows !== undefined ? result.affectedRows : result.changes;
     
     if (changes === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Template not found' 
-      });
+      return sendNotFound(res, 'Template', req.params.id);
     }
 
     // Fetch the updated template
@@ -516,10 +493,7 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     logger.error('Error updating template:', error);
     logger.error('Error details:', { message: error.message, stack: error.stack, name: error.name });
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to update template: ' + error.message 
-    });
+    return sendInternalError(res, error, 'PUT /templates/:id');
   }
 });
 
@@ -556,7 +530,7 @@ router.delete('/:id', async (req, res) => {
     await dbRun(sql, [req.params.id]);
     res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendInternalError(res, err, 'GET /templates');
   }
 });
 
@@ -608,7 +582,7 @@ router.get('/:id/preview', async (req, res) => {
     const templateRow = await dbGet('SELECT * FROM templates WHERE id = ?', [id]);
     if (!templateRow) {
       logger.debug('Template not found for ID:', id);
-      return res.status(404).json({ success: false, error: 'Template not found' });
+      return sendNotFound(res, 'Template', id);
     }
 
     logger.debug('Template found:', templateRow.name);
@@ -828,7 +802,7 @@ router.get('/:id/preview', async (req, res) => {
   } catch (error) {
     logger.error('Error previewing template:', error);
     logger.error('Error stack:', error.stack);
-    res.status(500).json({ success: false, error: 'Failed to preview template: ' + error.message });
+    return sendInternalError(res, error, 'GET /templates/:id/preview');
   }
 });
 
@@ -896,7 +870,7 @@ router.post('/seed', async (req, res) => {
     res.json({ success: true, message: 'Templates seeded successfully' });
   } catch (error) {
     logger.error('Error seeding templates:', error);
-    res.status(500).json({ success: false, error: 'Failed to seed templates' });
+    return sendInternalError(res, error, 'POST /templates/seed');
   }
 });
 

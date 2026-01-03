@@ -4,6 +4,7 @@ const getDbConnection = require('../db/connection');
 const requireAuth = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 const logger = require('../helpers/logger');
+const { sendValidationError, sendInternalError } = require('../utils/errorHandler');
 
 // Initialize database connection and helper methods for SQLite or MySQL
 const db = getDbConnection();
@@ -36,8 +37,7 @@ router.get('/email', requireAuth, async (req, res) => {
     const row = await dbGet('SELECT * FROM email_settings WHERE id = ?', [1]);
     res.json(row);
   } catch (err) {
-    logger.error(err);
-    return res.status(500).json({ error: 'Failed to fetch email settings' });
+    return sendInternalError(res, err, 'GET /setting/email');
   }
 });
 
@@ -80,8 +80,7 @@ router.put('/email', requireAuth, async (req, res) => {
     await dbRun(sql, values);
     res.json({ success: true });
   } catch (err) {
-    logger.error(err);
-    return res.status(500).json({ error: 'Failed to update email settings' });
+    return sendInternalError(res, err, 'PUT /setting/email');
   }
 });
 
@@ -159,8 +158,7 @@ router.get('/', async (req, res) => {
       appTitle: row?.app_title || ''
     });
   } catch (err) {
-    logger.error(err);
-    return res.status(500).json({ error: 'Failed to fetch main settings' });
+    return sendInternalError(res, err, 'GET /setting');
   }
 });
 router.use(requireAuth);
@@ -219,7 +217,7 @@ router.put(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return sendValidationError(res, errors);
     }
     const { 
       enable_global_countdown, 
@@ -325,8 +323,7 @@ router.put(
       clearSettingsCache();
       return res.json({ success: true });
     } catch (err) {
-      logger.error(err);
-      return res.status(500).json({ error: 'Failed to update main settings' });
+      return sendInternalError(res, err, 'PUT /setting');
     }
   }
 );

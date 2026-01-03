@@ -10,6 +10,7 @@ const { processBlocks } = require('../utils/blockSchema');
 const SurveyBlock = require('../db/models/surveyBlock');
 const SurveyResponse = require('../db/models/surveyResponse');
 const logger = require('../helpers/logger');
+const { sendNotFound, sendForbidden, sendInternalError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -50,7 +51,7 @@ router.get('/navigation', async (req, res) => {
     return res.json(nav);
   } catch (err) {
     logger.error('[NAV] error fetching navigation:', err, err && err.stack);
-    return res.status(500).json({ error: 'Could not load navigation' });
+    return sendInternalError(res, err, 'GET /pages/navigation');
   }
 });
 
@@ -133,10 +134,7 @@ router.get('/:slug', async (req, res) => {
     // 1. Fetch page by slug
     const page = await Page.getBySlug(slug);
     if (!page || !page.is_published) {
-      return res.status(404).json({
-        error: 'Page not found or unpublished',
-        message: 'Page "' + slug + '" not found or unpublished.'
-      });
+      return sendNotFound(res, 'Page', slug);
     }
 
     // 2. RSVP gating (allow ONLY guests who are attending)
@@ -161,11 +159,7 @@ router.get('/:slug', async (req, res) => {
           reason = 'not_attending'; // fallback for any other status
         }
         
-        return res.status(403).json({ 
-          error: 'Not allowed to access this page', 
-          reason,
-          message: 'This page requires you to have RSVP\'d as attending'
-        });
+        return sendForbidden(res, 'Not allowed to access this page');
       }
     }
 
@@ -177,18 +171,12 @@ router.get('/:slug', async (req, res) => {
     }
 
     if (!translation) {
-      return res.status(404).json({
-        error: 'Page not found or unpublished',
-        message: 'Translation for locale "' + requestedLocale + '" not found on page "' + slug + '".'
-      });
+      return sendNotFound(res, 'Page translation', `${slug} (${requestedLocale})`);
     }
 
     if (!translation.content) {
       logger.error('[PUBLIC PAGE] Missing content in translation.');
-      return res.status(500).json({
-        error: 'Invalid block data',
-        message: 'Translation content is missing or invalid for page "' + slug + '" locale "' + translation.locale + '".'
-      });
+      return sendInternalError(res, new Error('Invalid block data'), 'GET /pages/:slug');
     }
 
     // translation.content is parsed in the model; sanitize & drop invalid blocks for public output
@@ -201,10 +189,7 @@ router.get('/:slug', async (req, res) => {
       content = blocks;
     } catch (ve) {
       logger.error('[PUBLIC PAGE] Block processing error:', ve.message);
-      return res.status(500).json({
-        error: 'Invalid block data',
-        message: 'Failed to process page content: ' + ve.message
-      });
+      return sendInternalError(res, new Error('Invalid block data'), 'GET /pages/:slug');
     }
 
     // 4. Optionally preload survey configs inline
