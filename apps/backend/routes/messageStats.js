@@ -1,24 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
+const { createDbHelpers } = require('../db/queryHelpers');
 const logger = require('../helpers/logger');
 const db = getDbConnection();
-let dbGet, dbAll;
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbAll = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows;
-  };
-} else {
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-  dbAll = util.promisify(db.all.bind(db));
-}
+const { dbGet, dbAll } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
 
 // Require authentication for this route

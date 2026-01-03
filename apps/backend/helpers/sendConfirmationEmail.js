@@ -22,18 +22,9 @@ async function sendConfirmationEmail(db, guestData) {
       return;
     }
     
-    // Create dbGet helper function using the same pattern as route files
-    let dbGet;
-    if (process.env.DB_TYPE === 'mysql') {
-      dbGet = async (sql, params) => {
-        const [rows] = await db.query(sql, params);
-        return rows[0];
-      };
-    } else {
-      const sqlite3 = require('sqlite3').verbose();
-      const util = require('util');
-      dbGet = util.promisify(db.get.bind(db));
-    }
+    // Create dbGet helper function
+    const { createDbHelpers } = require('../db/queryHelpers');
+    const { dbGet } = createDbHelpers(db);
     
     // Fetch sender info
     const senderInfo = await getSenderInfo(db);

@@ -704,6 +704,7 @@ import { Form } from '@primevue/forms'
 import { fetchTemplates } from '@/api/templates'
 import { sendTestEmail as sendTestEmailApi } from '@/api/settings'
 import { useToastService } from '@/utils/toastService'
+import { convertAttendingToRsvpStatus } from '@/utils/rsvpStatus'
 
 const props = defineProps({
   visible: {
@@ -764,7 +765,7 @@ const testGuestObject = computed(() => {
     notes: rsvpForm.notes || null,
     plus_one_name: rsvpForm.add_plus_one ? rsvpForm.plus_one_name : null,
     plus_one_dietary: rsvpForm.add_plus_one ? rsvpForm.plus_one_dietary : null,
-    rsvp_status: rsvpForm.attending === true ? 'attending' : rsvpForm.attending === false ? 'not_attending' : 'pending'
+    rsvp_status: convertAttendingToRsvpStatus(rsvpForm.attending)
   }
 })
 
@@ -1019,7 +1020,7 @@ async function sendTestEmail(previewOnly = false) {
       guestData: {
         ...guestData.value,
         ...rsvpData.value,
-        rsvp_status: rsvpData.value?.attending === true ? 'attending' : rsvpData.value?.attending === false ? 'not_attending' : 'pending'
+        rsvp_status: convertAttendingToRsvpStatus(rsvpData.value?.attending)
       },
       templateId: selectedTemplateId.value,
       templateStyle: selectedTemplateStyle.value,

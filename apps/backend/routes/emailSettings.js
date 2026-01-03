@@ -2,32 +2,13 @@ const express = require('express');
 const { DateTime } = require('luxon');
 const logger = require('../helpers/logger');
 const getDbConnection = require('../db/connection');
+const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
+const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const resendClient = require('../helpers/resendClient');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { generateEmailHTML } = require('../utils/emailTemplates');
 const getSenderInfo = require('../helpers/getSenderInfo');
-let dbGet, dbRun, dbAll;
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbRun = async (sql, params) => {
-    const [result] = await db.query(sql, params);
-    return result;
-  };
-  dbAll = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows;
-  };
-} else {
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-  dbRun = util.promisify(db.run.bind(db));
-  dbAll = util.promisify(db.all.bind(db));
-}
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();

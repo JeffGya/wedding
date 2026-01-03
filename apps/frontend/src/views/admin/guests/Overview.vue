@@ -91,16 +91,40 @@
             </Column>
             
             <Column field="group_label" header="Group" sortable />
-            <Column field="name" header="Name" sortable />
+            <Column field="name" header="Name" sortable>
+              <template #body="slotProps">
+                <div class="flex items-center gap-2">
+                  <span>{{ slotProps.data.name }}</span>
+                  <Tag 
+                    v-if="!slotProps.data.is_primary" 
+                    value="+1" 
+                    severity="info" 
+                    class="text-xs"
+                  />
+                </div>
+              </template>
+            </Column>
             <Column field="email" header="Email" sortable />
             <Column field="preferred_language" header="Language" sortable />
             
             <Column header="RSVP" sortField="attending" sortable style="width: 8rem">
               <template #body="slotProps">
                 <Tag 
-                  :value="getRSVPStatus(slotProps.data.attending)"
+                  :value="getRSVPStatusLabel(slotProps.data.attending)"
                   :severity="getRSVPSeverity(slotProps.data.attending)"
                 />
+              </template>
+            </Column>
+            
+            <Column header="Plus One" sortable style="width: 8rem">
+              <template #body="slotProps">
+                <span v-if="slotProps.data.is_primary">
+                  <Tag 
+                    :value="hasPlusOne(slotProps.data) ? 'Yes' : 'No'"
+                    :severity="hasPlusOne(slotProps.data) ? 'success' : 'secondary'"
+                  />
+                </span>
+                <span v-else class="text-muted">—</span>
               </template>
             </Column>
             
@@ -169,6 +193,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
+import { getRSVPStatusLabel, getRSVPSeverity } from '@/utils/rsvpStatus';
 
 const guests = ref([])
 const loading = ref(true)
@@ -179,18 +204,6 @@ const deliveryStats = ref({ sent: 0, failed: 0 })
 
 const sortKey = ref('');
 const sortAsc = ref(true);
-
-const getRSVPStatus = (attending) => {
-  if (attending === true || attending === 1) return 'Yes';
-  if (attending === false || attending === 0) return 'No';
-  return 'Pending';
-};
-
-const getRSVPSeverity = (attending) => {
-  if (attending === true || attending === 1) return 'success';
-  if (attending === false || attending === 0) return 'danger';
-  return 'warning';
-};
 
 const sortedGuests = computed(() => {
   const list = [...guests.value];
@@ -281,6 +294,14 @@ const plusOneItems = computed(() => {
     { label: 'No +1', value: noPlusOne }
   ];
 });
+
+// Check if a primary guest has a plus-one
+const hasPlusOne = (guest) => {
+  if (!guest.is_primary) return false;
+  return guests.value.some(g => 
+    !g.is_primary && g.group_id === guest.group_id
+  );
+};
 
 const horizontalBarOptions = computed(() => ({
   indexAxis: 'y',

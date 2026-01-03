@@ -41,29 +41,9 @@ const lookupRateLimit = rateLimit(WINDOW_MS, MAX_REQ);
 // parse JSON bodies on this router
 router.use(express.json());
 const getDbConnection = require('../db/connection');
+const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
-
-let dbGet, dbAll, dbRun;
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbAll = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows;
-  };
-  dbRun = async (sql, params) => {
-    const [result] = await db.query(sql, params);
-    return result;
-  };
-} else {
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-  dbAll = util.promisify(db.all.bind(db));
-  dbRun = util.promisify(db.run.bind(db));
-}
+const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 
 const axios = require('axios');
 const logger = require('../helpers/logger');
@@ -72,6 +52,8 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
+const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
+const { handlePlusOne, syncPlusOneAttendingStatus } = require('../helpers/plusOneService');
 
 // Replace the old getInlineStyles function with new template system
 function applyEmailTemplate(content, style = 'elegant', options = {}) {
@@ -269,13 +251,7 @@ router.post('/', async (req, res) => {
     // Determine attending and rsvp_status
     const attendingProvided = typeof attending !== 'undefined';
     const attendingValue = attendingProvided ? attending : row.attending;
-    const rsvpStatusVal = attendingProvided
-      ? (attendingValue === true || attendingValue === 'true' || attendingValue === 1
-          ? 'attending'
-          : attendingValue === false || attendingValue === 'false' || attendingValue === 0
-            ? 'not_attending'
-            : 'pending')
-      : row.rsvp_status;
+    const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, attendingProvided);
 
     // Log for debugging
     logger.info(`RSVP PUBLIC UPDATE: code=${code}`, {
@@ -292,11 +268,6 @@ router.post('/', async (req, res) => {
       row.group_id = row.id;
     }
 
-    const existingPlusOne = await dbGet(
-      'SELECT * FROM guests WHERE group_id = ? AND is_primary = 0 LIMIT 1',
-      [row.group_id]
-    );
-
     // Clear dietary and notes when not attending
     // Preserve empty strings as empty strings (not null) when attending is true
     const finalDietary = attendingValue === false ? null : (dietary !== undefined && dietary !== null ? dietary : null);
@@ -312,57 +283,12 @@ router.post('/', async (req, res) => {
       WHERE code = ?
     `, [attendingValue, rsvpStatusVal, finalDietary, finalNotes, code]);
 
-    // Handle plus one logic
-    if (existingPlusOne && (plus_one_name === null || plus_one_name === '')) {
-      // Delete the plus one - first delete related message_recipients to avoid foreign key constraint
-      const messageRecipients = await dbAll('SELECT id FROM message_recipients WHERE guest_id = ?', [existingPlusOne.id]);
-      if (messageRecipients.length > 0) {
-        await dbRun('DELETE FROM message_recipients WHERE guest_id = ?', [existingPlusOne.id]);
-      }
-      await dbRun('DELETE FROM guests WHERE id = ?', [existingPlusOne.id]);
-    } else if (plus_one_name) {
-      if (existingPlusOne) {
-        // Update existing plus one
-        await dbRun(
-          `UPDATE guests SET name = ?, dietary = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-          [plus_one_name, plus_one_dietary || null, existingPlusOne.id]
-        );
-      } else {
-        // Insert new plus one
-        await dbRun(
-          `INSERT INTO guests (
-            group_id, group_label, name, email, code,
-            can_bring_plus_one, is_primary, preferred_language,
-            attending, rsvp_deadline, dietary, notes, rsvp_status
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            row.group_id,
-            row.group_label,
-            plus_one_name,
-            null,
-            null,
-            0,
-            0,
-            row.preferred_language,
-            null,
-            null,
-            plus_one_dietary || null,
-            null,
-            'pending'
-          ]
-        );
-      }
-    }
+    // Handle plus one logic (create, update, or delete)
+    await handlePlusOne(db, row, plus_one_name || null, plus_one_dietary || null);
 
+    // Sync plus-one attending status if primary is attending
     if (attendingValue === true) {
-      await dbRun(
-        `UPDATE guests
-          SET attending = 1,
-              rsvp_status = 'attending',
-              updated_at = CURRENT_TIMESTAMP
-          WHERE group_id = ? AND is_primary = 0`,
-        [row.group_id]
-      );
+      await syncPlusOneAttendingStatus(db, row.group_id, true);
     }
 
     // Prepare guest data for email with updated RSVP status

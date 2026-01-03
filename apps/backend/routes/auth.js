@@ -2,19 +2,9 @@ const express = require('express');
 const logger = require('../helpers/logger');
 const bcrypt = require('bcryptjs');
 const getDbConnection = require('../db/connection');
-// Initialize database connection and helper methods for SQLite or MySQL
+const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
-let dbGet;
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-} else {
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-}
+const { dbGet } = createDbHelpers(db);
 
 const router = express.Router();
 

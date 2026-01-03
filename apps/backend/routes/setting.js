@@ -7,24 +7,8 @@ const logger = require('../helpers/logger');
 
 // Initialize database connection and helper methods for SQLite or MySQL
 const db = getDbConnection();
-let dbGet, dbRun;
-if (process.env.DB_TYPE === 'mysql') {
-  // MySQL: use promise-based pool
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbRun = async (sql, params) => {
-    const [result] = await db.query(sql, params);
-    return result;
-  };
-} else {
-  // SQLite: promisify get and run
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-  dbRun = util.promisify(db.run.bind(db));
-}
+const { createDbHelpers } = require('../db/queryHelpers');
+const { dbGet, dbRun } = createDbHelpers(db);
 
 // Require authentication on all setting routes
 // router.use(requireAuth);

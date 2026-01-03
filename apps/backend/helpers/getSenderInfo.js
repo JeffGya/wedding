@@ -1,15 +1,7 @@
+const { createDbHelpers } = require('../db/queryHelpers');
+
 module.exports = async function getSenderInfo(db) {
-  const util = require('util');
-  let dbGet;
-  if (process.env.DB_TYPE === 'mysql') {
-    dbGet = async (sql, params) => {
-      const [rows] = await db.query(sql, params);
-      return rows[0];
-    };
-  } else {
-    const sqlite3 = require('sqlite3').verbose();
-    dbGet = util.promisify(db.get.bind(db));
-  }
+  const { dbGet } = createDbHelpers(db);
 
   try {
     const row = await dbGet(

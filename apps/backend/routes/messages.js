@@ -1,28 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
+const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
-let dbGet, dbAll, dbRun;
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbAll = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows;
-  };
-  dbRun = async (sql, params) => {
-    const [result] = await db.query(sql, params);
-    return result;
-  };
-} else {
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-  dbAll = util.promisify(db.all.bind(db));
-  dbRun = util.promisify(db.run.bind(db));
-}
+const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const resendClient = require('../helpers/resendClient');

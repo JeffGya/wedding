@@ -2,24 +2,9 @@ const express = require('express');
 const logger = require('../helpers/logger');
 const router = express.Router();
 const getDbConnection = require('../db/connection');
-
+const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
-let dbGet, dbRun;
-if (process.env.DB_TYPE === 'mysql') {
-  dbGet = async (sql, params) => {
-    const [rows] = await db.query(sql, params);
-    return rows[0];
-  };
-  dbRun = async (sql, params) => {
-    const [result] = await db.query(sql, params);
-    return result;
-  };
-} else {
-  const sqlite3 = require('sqlite3').verbose();
-  const util = require('util');
-  dbGet = util.promisify(db.get.bind(db));
-  dbRun = util.promisify(db.run.bind(db));
-}
+const { dbGet, dbRun } = createDbHelpers(db);
 
 /**
  * @openapi

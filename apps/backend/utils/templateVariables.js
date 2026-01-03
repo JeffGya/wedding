@@ -1,5 +1,6 @@
 const { DateTime } = require('luxon');
 const getDbConnection = require('../db/connection');
+const { createDbHelpers } = require('../db/queryHelpers');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const logger = require('../helpers/logger');
 
@@ -90,25 +91,12 @@ function evaluateCondition(condition, vars) {
  */
 async function checkIfGuestHasPlusOne(db, guestId) {
   try {
-    if (process.env.DB_TYPE === 'mysql') {
-      const [rows] = await db.query(
-        'SELECT COUNT(*) as count FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0',
-        [guestId]
-      );
-      return rows[0].count > 0;
-    } else {
-      // SQLite logic
-      return new Promise((resolve, reject) => {
-        db.get(
-          'SELECT COUNT(*) as count FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0',
-          [guestId],
-          (err, row) => {
-            if (err) reject(err);
-            else resolve(row.count > 0);
-          }
-        );
-      });
-    }
+    const { dbGet } = createDbHelpers(db);
+    const row = await dbGet(
+      'SELECT COUNT(*) as count FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0',
+      [guestId]
+    );
+    return row?.count > 0;
   } catch (err) {
     logger.error('Error checking plus one status:', err);
     return false;
@@ -120,25 +108,12 @@ async function checkIfGuestHasPlusOne(db, guestId) {
  */
 async function getPlusOneName(db, guestId) {
   try {
-    if (process.env.DB_TYPE === 'mysql') {
-      const [rows] = await db.query(
-        'SELECT name FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0 LIMIT 1',
-        [guestId]
-      );
-      return rows[0]?.name || '';
-    } else {
-      // SQLite logic
-      return new Promise((resolve, reject) => {
-        db.get(
-          'SELECT name FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0 LIMIT 1',
-          [guestId],
-          (err, row) => {
-            if (err) reject(err);
-            else resolve(row?.name || '');
-          }
-        );
-      });
-    }
+    const { dbGet } = createDbHelpers(db);
+    const row = await dbGet(
+      'SELECT name FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0 LIMIT 1',
+      [guestId]
+    );
+    return row?.name || '';
   } catch (err) {
     logger.error('Error getting plus one name:', err);
     return '';
@@ -264,39 +239,14 @@ async function getTemplateVariables(guest, template = null) {
  */
 async function getSystemSettings(db) {
   try {
-    if (process.env.DB_TYPE === 'mysql') {
-      const [settingsRows] = await db.query('SELECT * FROM settings LIMIT 1');
-      const [guestSettingsRows] = await db.query('SELECT * FROM guest_settings LIMIT 1');
-      
-      const settings = settingsRows[0] || {};
-      const guestSettings = guestSettingsRows[0] || {};
-      
-      return {
-        ...settings,
-        rsvp_deadline: guestSettings.rsvp_deadline
-      };
-    } else {
-      return new Promise((resolve, reject) => {
-        db.get('SELECT * FROM settings LIMIT 1', (err, settingsRow) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          db.get('SELECT * FROM guest_settings LIMIT 1', (err, guestSettingsRow) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            const settings = settingsRow || {};
-            const guestSettings = guestSettingsRow || {};
-            resolve({
-              ...settings,
-              rsvp_deadline: guestSettings.rsvp_deadline
-            });
-          });
-        });
-      });
-    }
+    const { dbGet } = createDbHelpers(db);
+    const settings = await dbGet('SELECT * FROM settings LIMIT 1') || {};
+    const guestSettings = await dbGet('SELECT * FROM guest_settings LIMIT 1') || {};
+    
+    return {
+      ...settings,
+      rsvp_deadline: guestSettings.rsvp_deadline
+    };
   } catch (err) {
     logger.error('Error fetching system settings:', err);
     return {};

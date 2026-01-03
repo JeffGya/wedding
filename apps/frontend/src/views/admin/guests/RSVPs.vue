@@ -105,8 +105,8 @@
           <Column header="Attending" style="width: 8rem">
             <template #body="slotProps">
               <Tag 
-                :value="slotProps.data.attending ? 'Yes' : 'No'"
-                :severity="slotProps.data.attending ? 'success' : 'danger'"
+                :value="getRSVPStatusLabel(slotProps.data.attending)"
+                :severity="getRSVPSeverity(slotProps.data.attending)"
               />
             </template>
           </Column>
@@ -158,6 +158,7 @@ import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
 import FloatLabel from 'primevue/floatlabel';
 import { useToastService } from '@/utils/toastService';
+import { getRSVPStatusLabel, getRSVPSeverity } from '@/utils/rsvpStatus';
 
 const guests = ref([]);
 const totalGuests = ref(0);
