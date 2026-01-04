@@ -257,6 +257,8 @@ import {
   updatePage
 } from '@/api/pages';
 import pageFormSchema from '@/validation/pageForm.schema.js';
+import { useLoading } from '@/composables/useLoading';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 defineExpose({ components: { Dialog, BlockRenderer } });
 
@@ -289,7 +291,8 @@ const saving = ref(false);
 const initialPage = ref(null);
 const initialTranslations = ref(null);
 const initialBlocks = ref(null);
-const loading = ref(false);
+const { loading } = useLoading();
+const { handleError } = useErrorHandler({ showToast: true });
 const previewVisible = ref(false);
 const showImagePicker = ref(false);
 
@@ -406,10 +409,10 @@ onMounted(async () => {
       if (status === 404) {
         router.push({ name: 'NotFound' });
       } else if (status === 403) {
-        toast.add({ severity: 'error', summary: 'Unauthorized', detail: 'You are not authorized to edit this page.' });
+        handleError(err, 'You are not authorized to edit this page.');
         router.push({ name: 'Login' });
       } else {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load page. Please try again.' });
+        handleError(err, 'Failed to load page. Please try again.');
       }
     }
   } else {
@@ -536,12 +539,6 @@ function goBack() {
   router.push({ name: 'admin-pages' });
 }
 
-const toast = {
-  add: (...args) => {
-    // If you have a global event bus or Alert wrapper, trigger it here.
-    // This is just a placeholder to avoid runtime errors if used.
-  }
-};
 </script>
 
 <style scoped>

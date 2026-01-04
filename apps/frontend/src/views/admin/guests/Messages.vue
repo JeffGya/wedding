@@ -148,11 +148,15 @@ import api from '@/api'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
 import { useToastService } from '@/utils/toastService'
+import { formatDateTimeShort } from '@/utils/dateFormatter'
+import { useLoading } from '@/composables/useLoading'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
 const router = useRouter()
 const { showSuccess, showError, showWarning } = useToastService()
+const { loading } = useLoading()
+const { handleError: handleApiError } = useErrorHandler({ showToast: true })
 const messages = ref([])
-const loading = ref(false)
 
 // Stats computation
 const draftCount = computed(() => messages.value.filter(m => m.status === 'draft').length)
@@ -203,30 +207,9 @@ const goToDetail = (id, edit = false) => {
   router.push(edit ? `/admin/guests/messages/${id}/edit` : `/admin/guests/messages/${id}`)
 }
 
+// Use centralized date formatter utility
 const formatDate = (dateValue) => {
-  if (!dateValue) return ''
-  let dateObj
-  if (typeof dateValue === 'string') {
-    let iso = dateValue
-    // Normalize "YYYY-MM-DD HH:mm:ss" to "YYYY-MM-DDTHH:mm:ssZ"
-    if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
-      iso = iso.replace(' ', 'T') + 'Z'
-    }
-    dateObj = new Date(iso)
-  } else if (dateValue instanceof Date) {
-    dateObj = dateValue
-  } else {
-    dateObj = new Date(dateValue)
-  }
-  return new Intl.DateTimeFormat(undefined, {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Amsterdam'
-  }).format(dateObj)
+  return formatDateTimeShort(dateValue)
 }
 
 const fetchMessages = async () => {
@@ -245,9 +228,7 @@ const fetchMessages = async () => {
       messages.value = []
     }
   } catch (error) {
-    console.error('Failed to load messages:', error)
-    console.error('Error response:', error.response?.data)
-    showError('Error', 'Failed to load messages')
+    handleApiError(error, 'Failed to load messages')
     messages.value = []
   } finally {
     loading.value = false
@@ -262,8 +243,7 @@ const deleteMessage = async (id) => {
     messages.value = messages.value.filter(m => m.id !== id)
     showSuccess('Success', 'Message deleted successfully')
   } catch (error) {
-    console.error('Failed to delete message:', error)
-    showError('Error', 'Failed to delete message')
+    handleApiError(error, 'Failed to delete message')
   }
 }
 
@@ -277,8 +257,7 @@ const resendFailed = async (id) => {
     // Refresh messages to update stats
     await fetchMessages()
   } catch (error) {
-    console.error('Failed to resend failed messages:', error)
-    showError('Error', 'Failed to resend failed messages')
+    handleApiError(error, 'Failed to resend failed messages')
   }
 }
 

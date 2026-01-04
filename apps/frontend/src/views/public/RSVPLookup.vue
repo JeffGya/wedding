@@ -59,15 +59,16 @@ import Banner from '@/components/ui/Banner.vue';
 import { useGuestSettings } from '@/hooks/useGuestSettings'
 import FloatLabel from 'primevue/floatlabel';
 import { useToastService } from '@/utils/toastService';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const { loading: settingsLoading, isClosed } = useGuestSettings()
 const { showSuccess } = useToastService();
+const { error, handleError } = useErrorHandler({ showToast: false, showBanner: true });
 
 const code = ref('');
-const error = ref('');
 const submitting = ref(false);
 
 async function submitLookup(event) {
@@ -91,7 +92,7 @@ async function submitLookup(event) {
     if (err.response?.status === 429) {
       error.value = err.response?.data?.message || 'Too many requests. Please try again later.';
     } else {
-      error.value = t('rsvp.errorFetch');
+      handleError(err, t('rsvp.errorFetch'));
     }
   } finally {
     submitting.value = false;

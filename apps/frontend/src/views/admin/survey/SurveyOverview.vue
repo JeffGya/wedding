@@ -104,12 +104,15 @@ import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
 import Tag from 'primevue/tag';
 import { fetchAllSurveys, deleteSurvey } from '@/api/pages';
 import { fetchPages } from '@/api/pages';
+import { useLoading } from '@/composables/useLoading';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const router = useRouter();
 const surveys = ref([]);
-const loading = ref(false);
+const { loading } = useLoading();
+const { loading: pageLoading } = useLoading();
+const { handleError } = useErrorHandler({ showToast: false }); // Silent errors for list
 const pagesMap = ref({});
-const pageLoading = ref(false);
 
 const getTypeSeverity = (type) => {
   switch (type) {
@@ -126,7 +129,7 @@ const fetchData = async () => {
   try {
     surveys.value = await fetchAllSurveys({ limit: 1000 });
   } catch (err) {
-    console.error('Failed to load surveys', err);
+    handleError(err, 'Failed to load surveys');
   } finally {
     loading.value = false;
   }
@@ -141,7 +144,7 @@ const fetchPagesMap = async () => {
       return acc;
     }, {});
   } catch (err) {
-    console.error('Failed to load pages', err);
+    // Silently fail for pages map - not critical
   } finally {
     pageLoading.value = false;
   }
@@ -166,7 +169,7 @@ const deleteSurveyById = async (id) => {
     await deleteSurvey(id);
     await fetchData();
   } catch (err) {
-    console.error('Failed to delete survey', err);
+    handleError(err, 'Failed to delete survey');
   }
 };
 </script>

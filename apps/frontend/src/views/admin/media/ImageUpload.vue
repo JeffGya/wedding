@@ -29,8 +29,10 @@
 <script setup>
 import { uploadImage } from '@/api/images';
 import { useToastService } from '@/utils/toastService';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
-const { showSuccess, showError } = useToastService();
+const { showSuccess } = useToastService();
+const { handleError } = useErrorHandler({ showToast: true });
 const emit = defineEmits(['uploaded']);
 
 async function onFileSelect(event) {
@@ -41,7 +43,7 @@ async function onFileSelect(event) {
     showSuccess('Uploaded', `Image ID ${id}`);
     emit('uploaded');
   } catch (err) {
-    showError('Upload Failed', err.message || err);
+    handleError(err, 'Upload Failed');
   }
 }
 </script>

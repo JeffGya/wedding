@@ -81,7 +81,9 @@ import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
+const { handleError } = useErrorHandler({ showToast: false }) // Silent errors for overview
 const emailsSent = ref(0)
 const stats = ref({ attending: 0, not_attending: 0, pending: 0 })
 
@@ -93,7 +95,7 @@ onMounted(async () => {
     stats.value.not_attending = res.stats.not_attending
     stats.value.pending = res.stats.pending
   } catch (error) {
-    console.error('Failed to load guest analytics', error)
+    // Silently fail for overview - not critical
   }
 })
 </script>

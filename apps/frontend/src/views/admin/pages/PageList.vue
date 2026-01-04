@@ -37,13 +37,13 @@
           
           <Column header="Created At" style="width: 12rem" sortable>
             <template #body="slotProps">
-              {{ new Date(slotProps.data.created_at).toLocaleDateString() }}
+              {{ formatDateWithoutTime(slotProps.data.created_at) }}
             </template>
           </Column>
           
           <Column header="Updated At" style="width: 12rem" sortable>
             <template #body="slotProps">
-              {{ new Date(slotProps.data.updated_at).toLocaleDateString() }}
+              {{ formatDateWithoutTime(slotProps.data.updated_at) }}
             </template>
           </Column>
           
@@ -131,9 +131,13 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import { useRouter } from 'vue-router';
 import { useConfirm } from 'primevue/useconfirm';
+import { formatDateWithoutTime } from '@/utils/dateFormatter';
+import { useLoading } from '@/composables/useLoading';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const pages = ref([]);
-const loading = ref(false);
+const { loading } = useLoading();
+const { handleError } = useErrorHandler({ showToast: false }); // Silent errors for list
 const confirm = useConfirm();
 
 const fetchPages = async () => {
@@ -141,7 +145,7 @@ const fetchPages = async () => {
   try {
     pages.value = await getPages();
   } catch (err) {
-    console.error('Failed to load pages', err);
+    handleError(err, 'Failed to load pages');
   } finally {
     loading.value = false;
   }
@@ -176,7 +180,7 @@ const deletePage = async (id) => {
         await removePage(id);
         await fetchPages();
       } catch (err) {
-        console.error('Failed to delete page', err);
+        handleError(err, 'Failed to delete page');
       }
     }
   });

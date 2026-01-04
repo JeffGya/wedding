@@ -236,13 +236,16 @@ import { fetchTemplates, deleteTemplate as deleteTemplateApi, seedTemplates as s
 import { getTemplatePreviewWithSample } from '@/utils/htmlTemplates'
 import TemplatePreview from '@/components/templates/TemplatePreview.vue'
 import { useToastService } from '@/utils/toastService'
+import { useLoading } from '@/composables/useLoading'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
 const router = useRouter()
 const confirm = useConfirm()
-const { showSuccess, showError, showWarning } = useToastService()
+const { showSuccess, showWarning } = useToastService()
+const { loading } = useLoading()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const templates = ref([])
-const loading = ref(true)
 const seeding = ref(false)
 
 // Preview dialog state
@@ -296,7 +299,7 @@ async function seedTemplates() {
     await loadTemplates() // Reload templates
     showSuccess('Success', 'Templates seeded successfully.', 5000)
   } catch (error) {
-    showError('Error', 'Failed to seed templates.', 5000)
+    handleError(error, 'Failed to seed templates')
   } finally {
     seeding.value = false
   }
@@ -312,7 +315,7 @@ async function loadTemplates() {
     const response = await fetchTemplates()
     templates.value = response.templates
   } catch (error) {
-    showError('Error', 'Failed to load templates.', 5000)
+    handleError(error, 'Failed to load templates')
   } finally {
     loading.value = false
   }
@@ -329,7 +332,7 @@ async function deleteTemplate(id) {
         templates.value = templates.value.filter(t => t.id !== id)
         showSuccess('Success', 'Template deleted successfully.', 5000)
       } catch (error) {
-        showError('Error', 'Failed to delete template.', 5000)
+        handleError(error, 'Failed to delete template')
       }
     }
   })

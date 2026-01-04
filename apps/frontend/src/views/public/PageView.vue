@@ -58,6 +58,7 @@ import { fetchPublicPage } from '@/api/pages';
 import BlockRenderer from '@/components/BlockRenderer.vue';
 import RsvpGate from '@/components/RsvpGate.vue';
 import PageHeader from '@/components/PageHeader.vue';
+import { useLoading } from '@/composables/useLoading';
 
 const route = useRoute();
 const router = useRouter();
@@ -65,7 +66,7 @@ const { locale } = useI18n();
 
 const rsvpGate = ref(null);
 const blocks = ref([]);
-const loading = ref(true);
+const { loading } = useLoading();
 const notFound = ref(false);
 const pageTitle = ref('');
 const headerImageUrl = ref(null);

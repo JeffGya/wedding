@@ -213,10 +213,13 @@ import api from '@/api'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
 import { useToastService } from '@/utils/toastService'
+import { formatDateWithTime, formatDateTimeShort } from '@/utils/dateFormatter'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
 const route = useRoute()
 const router = useRouter()
-const { showSuccess, showError, showWarning } = useToastService()
+const { showSuccess, showWarning } = useToastService()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const message = ref(null)
 const deliveryLogs = ref([])
@@ -265,50 +268,13 @@ const getDeliveryStatusSeverity = (status) => {
   return severities[status] || 'info'
 }
 
+// Use centralized date formatter utilities
 const formatScheduledTime = (dateValue) => {
-  if (!dateValue) return ''
-  let dateObj
-  if (typeof dateValue === 'string') {
-    let iso = dateValue
-    if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
-      iso = iso.replace(' ', 'T') + 'Z'
-    }
-    dateObj = new Date(iso)
-  } else {
-    dateObj = new Date(dateValue)
-  }
-  return new Intl.DateTimeFormat(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Amsterdam'
-  }).format(dateObj)
+  return formatDateWithTime(dateValue)
 }
 
 const formatDate = (dateValue) => {
-  if (!dateValue) return ''
-  let dateObj
-  if (typeof dateValue === 'string') {
-    let iso = dateValue
-    if (!/[Zz]|[+\-]\d{2}:\d{2}$/.test(iso)) {
-      iso = iso.replace(' ', 'T') + 'Z'
-    }
-    dateObj = new Date(iso)
-  } else {
-    dateObj = new Date(dateValue)
-  }
-  return new Intl.DateTimeFormat(undefined, {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Amsterdam'
-  }).format(dateObj)
+  return formatDateTimeShort(dateValue)
 }
 
 const fetchMessage = async () => {
@@ -320,8 +286,7 @@ const fetchMessage = async () => {
     const logsResponse = await api.get(`/messages/${route.params.id}/logs`)
     deliveryLogs.value = logsResponse.data.logs
   } catch (error) {
-    console.error('Failed to load message:', error)
-    showError('Error', 'Failed to load message details')
+    handleError(error, 'Failed to load message details')
   }
 }
 
@@ -333,8 +298,7 @@ const deleteMessage = async (id) => {
     showSuccess('Success', 'Message deleted successfully')
     router.push('/admin/guests/messages')
   } catch (error) {
-    console.error('Failed to delete message:', error)
-    showError('Error', 'Failed to delete message')
+    handleError(error, 'Failed to delete message')
   }
 }
 
@@ -348,8 +312,7 @@ const resendFailed = async () => {
     // Refresh data
     await fetchMessage()
   } catch (error) {
-    console.error('Failed to resend failed messages:', error)
-    showError('Error', 'Failed to resend failed messages')
+    handleError(error, 'Failed to resend failed messages')
   }
 }
 

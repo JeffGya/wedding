@@ -30,15 +30,17 @@ import { fetchGuestByCode, submitGuestRSVP, fetchRSVPSession } from '@/api/rsvp'
 import Banner from '@/components/ui/Banner.vue'
 import RSVPForm from '@/components/forms/RSVPForm.vue'
 import { useGuestSettings } from '@/hooks/useGuestSettings'
+import { useLoading } from '@/composables/useLoading'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
 const { loading: settingsLoading, isClosed } = useGuestSettings()
+const { loading } = useLoading()
+const { error, handleError } = useErrorHandler({ showToast: false, showBanner: true })
 
 const guest = ref(null)
-const loading = ref(true)
-const error = ref('')
 
 // Auto-redirect if a valid RSVP session exists (has a code)
 onMounted(async () => {
@@ -72,8 +74,8 @@ onMounted(async () => {
   }
   try {
     guest.value = await fetchGuestByCode(codeToUse)
-  } catch {
-    error.value = t('rsvp.errorFetch')
+  } catch (err) {
+    handleError(err, t('rsvp.errorFetch'))
   } finally {
     loading.value = false
   }
@@ -85,7 +87,7 @@ async function onSubmit(payload) {
     await submitGuestRSVP(payload)
     router.push({ name: 'public-rsvp-success', params: { lang: route.params.lang, code: route.params.code } })
   } catch (err) {
-    error.value = err.response?.data?.message || err.message || t('rsvp.errorSubmit')
+    handleError(err, t('rsvp.errorSubmit'))
   }
 }
 </script>

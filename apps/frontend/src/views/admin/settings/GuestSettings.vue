@@ -86,8 +86,11 @@
 import { ref, onMounted, watch } from 'vue'
 import { fetchGuestSettings, updateGuestSettings, validateGuestSettings } from '@/api/settings'
 import { useToastService } from '@/utils/toastService'
+import { formatDateWithTime } from '@/utils/dateFormatter'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
-const { showSuccess, showError } = useToastService()
+const { showSuccess } = useToastService()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const form = ref({
   rsvp_open: false,
@@ -119,7 +122,7 @@ async function loadSettings() {
       dateValue.value = null
     }
   } catch (error) {
-    showError('Error', 'Failed to load guest settings', 5000)
+    handleError(error, 'Failed to load guest settings')
   }
 }
 
@@ -127,7 +130,7 @@ async function saveSettings() {
   // Validate settings
   const validation = validateGuestSettings(form.value)
   if (!validation.isValid) {
-    showError('Validation Error', validation.errors.join(', '), 5000)
+    handleError(new Error(validation.errors.join(', ')), 'Validation Error')
     return
   }
 
@@ -136,7 +139,7 @@ async function saveSettings() {
     await updateGuestSettings(form.value)
     showSuccess('Success', 'Guest settings saved successfully', 5000)
   } catch (error) {
-    showError('Error', 'Failed to save guest settings', 5000)
+    handleError(error, 'Failed to save guest settings')
   } finally {
     saving.value = false
   }
@@ -146,13 +149,10 @@ function resetSettings() {
   loadSettings()
 }
 
+// Use centralized date formatter utility
 function formatDeadline(deadline) {
   if (!deadline) return 'Not set'
-  // Parse the backend format "YYYY-MM-DD HH:MM:SS" to display format
-  const [datePart, timePart] = deadline.split(' ')
-  const [year, month, day] = datePart.split('-')
-  const [hours, minutes] = timePart.split(':')
-  return `${year}-${month}-${day} ${hours}:${minutes}`
+  return formatDateWithTime(deadline)
 }
 
 // Watch for date picker changes

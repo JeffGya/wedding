@@ -204,8 +204,13 @@ import { useToastService } from '@/utils/toastService'
 import TestEmailModal from '@/components/TestEmailModal.vue'
 import ProgressBar from 'primevue/progressbar'
 import Card from 'primevue/card'
+import { formatDateWithTime } from '@/utils/dateFormatter'
+import { useLoading } from '@/composables/useLoading'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
-const { showSuccess, showError, showWarning, showInfo } = useToastService()
+const { showSuccess, showWarning, showInfo } = useToastService()
+const { loading } = useLoading()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const form = ref({
   provider: 'resend',
@@ -223,7 +228,6 @@ const providerOptions = [
 
 const saving = ref(false)
 const testing = ref(false)
-const loading = ref(true)
 const showTestEmailModal = ref(false)
 const quotaStatus = ref(null)
 let quotaRefreshInterval = null
@@ -244,11 +248,9 @@ onUnmounted(() => {
 })
 
 async function loadSettings() {
+  loading.value = true
   try {
-    loading.value = true
-    console.log('Loading email settings...')
     const settings = await fetchEmailSettings()
-    console.log('Received settings:', settings)
     
     // Handle both null response and actual settings
     if (settings) {
@@ -261,14 +263,9 @@ async function loadSettings() {
         sender_email: settings.sender_email || '',
         enabled: settings.enabled || false
       }
-      console.log('Form populated with:', form.value)
-    } else {
-      console.log('No settings found, using defaults')
-      // Keep the default values
     }
   } catch (error) {
-    console.error('Error loading settings:', error)
-    showError('Error', 'Failed to load email settings', 5000)
+    handleError(error, 'Failed to load email settings')
   } finally {
     loading.value = false
   }
@@ -278,18 +275,16 @@ async function saveSettings() {
   // Validate settings
   const validation = validateEmailSettings(form.value)
   if (!validation.isValid) {
-    showError('Validation Error', validation.errors.join(', '), 5000)
+    handleError(new Error(validation.errors.join(', ')), 'Validation Error')
     return
   }
 
   try {
     saving.value = true
-    console.log('Saving settings:', form.value)
     await updateEmailSettings(form.value)
     showSuccess('Success', 'Email settings saved successfully', 5000)
   } catch (error) {
-    console.error('Error saving settings:', error)
-    showError('Error', 'Failed to save email settings', 5000)
+    handleError(error, 'Failed to save email settings')
   } finally {
     saving.value = false
   }
@@ -304,8 +299,8 @@ async function loadQuotaStatus() {
     const status = await fetchQuotaStatus()
     quotaStatus.value = status
   } catch (error) {
-    console.error('Error loading quota status:', error)
     // Don't show error toast for quota - it's not critical
+    // Silently fail for quota status
   }
 }
 
@@ -321,18 +316,11 @@ function getQuotaBarClass(quota) {
   return 'bg-green-500'
 }
 
+// Use centralized date formatter utility
 function formatResetTime(isoString) {
   if (!isoString) return 'N/A'
   try {
-    const date = new Date(isoString)
-    return date.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    })
+    return formatDateWithTime(isoString)
   } catch (error) {
     return isoString
   }

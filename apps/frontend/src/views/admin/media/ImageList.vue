@@ -37,7 +37,7 @@
           </Column>
           <Column field="created_at" header="Uploaded" sortable>
             <template #body="slotProps">
-              {{ new Date(slotProps.data.created_at).toLocaleDateString() }}
+              {{ formatDateWithoutTime(slotProps.data.created_at) }}
             </template>
           </Column>
           <Column header="Actions" style="width: 10rem">
@@ -113,11 +113,15 @@ import Card from 'primevue/card';
 import { fetchImages, deleteImage, updateImage } from '@/api/images';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToastService } from '@/utils/toastService';
+import { formatDateWithoutTime } from '@/utils/dateFormatter';
+import { useLoading } from '@/composables/useLoading';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const images = ref([]);
-const loading = ref(false);
+const { loading } = useLoading();
 const confirm = useConfirm();
-const { showSuccess, showError } = useToastService();
+const { showSuccess } = useToastService();
+const { handleError } = useErrorHandler({ showToast: true });
 const editDialog = ref(false);
 const editAltText = ref('');
 const editFilename = ref('');
@@ -129,7 +133,7 @@ const loadImages = async () => {
   try {
     images.value = await fetchImages();
   } catch (err) {
-    showError('Error', err.message);
+    handleError(err, 'Failed to load images');
   } finally {
     loading.value = false;
   }
@@ -153,7 +157,7 @@ const saveEdit = async () => {
     await loadImages();
     showSuccess('Success', 'Image updated successfully');
   } catch (err) {
-    showError('Error', err.message);
+    handleError(err, 'Failed to update image');
   } finally {
     saving.value = false;
   }
@@ -170,7 +174,7 @@ const confirmDelete = (id) => {
         await loadImages();
         showSuccess('Success', 'Image deleted successfully');
       } catch (err) {
-        showError('Error', err.message);
+        handleError(err, 'Failed to delete image');
       }
     }
   });

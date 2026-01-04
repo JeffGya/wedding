@@ -214,7 +214,7 @@
                 
                 <Column header="Submitted" style="width: 12rem">
                   <template #body="slotProps">
-                    {{ new Date(slotProps.data.created_at).toLocaleDateString() }}
+                    {{ formatDateWithoutTime(slotProps.data.created_at) }}
                   </template>
                 </Column>
               </DataTable>
@@ -233,6 +233,9 @@ import AdminPageWrapper from '@/components/AdminPageWrapper.vue';
 import Banner from '@/components/ui/Banner.vue';
 import { fetchSurvey, createSurvey, updateSurvey, fetchSurveyResponses } from '@/api/pages';
 import { fetchPages } from '@/api/pages';
+import { formatDateWithoutTime } from '@/utils/dateFormatter';
+import { useLoading } from '@/composables/useLoading';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const route = useRoute();
 const router = useRouter();
@@ -250,9 +253,9 @@ const survey = ref({
 });
 
 const responses = ref([]);
-const respLoading = ref(false);
+const { loading: respLoading } = useLoading();
 const saving = ref(false);
-const errorMsg = ref('');
+const { error: errorMsg, handleError } = useErrorHandler({ showToast: false, showBanner: true });
 const activeIndex = ref(0);
 const fieldErrors = ref({});
 
@@ -341,8 +344,7 @@ const loadSurvey = async () => {
       const surveyData = await fetchSurvey(surveyId);
       survey.value = normaliseSurveyData(surveyData);
     } catch (err) {
-      console.error('Failed to load survey', err);
-      errorMsg.value = 'Failed to load survey';
+      handleError(err, 'Failed to load survey');
     }
   }
 };
@@ -352,7 +354,7 @@ const loadPages = async () => {
     const pages = await fetchPages({ includeDeleted: false });
     pageOptions.value = pages;
   } catch (err) {
-    console.error('Failed to load pages', err);
+    // Silently fail for pages - not critical
   }
 };
 
@@ -363,7 +365,7 @@ const loadResponses = async () => {
       const responseData = await fetchSurveyResponses(surveyId);
       responses.value = responseData.data || responseData; // Handle both paginated and direct data
     } catch (err) {
-      console.error('Failed to load responses', err);
+      handleError(err, 'Failed to load responses');
     } finally {
       respLoading.value = false;
     }
@@ -422,8 +424,7 @@ const saveSurvey = async () => {
     }
     router.push({ name: 'admin-surveys' });
   } catch (err) {
-    console.error('Failed to save survey', err);
-    errorMsg.value = 'Failed to save survey';
+    handleError(err, 'Failed to save survey');
   } finally {
     saving.value = false;
   }

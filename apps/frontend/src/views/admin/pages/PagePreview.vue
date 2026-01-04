@@ -39,6 +39,7 @@ import { fetchPage } from '@/api/pages';
 import BlockRenderer from '@/components/BlockRenderer.vue';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const localeOptions = [
   { label: 'English', value: 'en' },
@@ -56,6 +57,7 @@ const typeMap = {
 
 const route = useRoute();
 const router = useRouter();
+const { handleError } = useErrorHandler({ showToast: false }); // Silent errors for preview
 const page = ref({});
 const translation = ref(null);
 const currentLocale = ref(route.query.locale || 'en');
@@ -109,8 +111,7 @@ onMounted(async () => {
     page.value = data;
     pageData.value = data;
   } catch (err) {
-    console.error('Error loading preview:', err);
-    // Optionally handle RSVP separately
+    handleError(err, 'Failed to load preview');
     return;
   }
   rebuild();

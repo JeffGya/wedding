@@ -159,6 +159,7 @@ import Select from 'primevue/select';
 import FloatLabel from 'primevue/floatlabel';
 import { useToastService } from '@/utils/toastService';
 import { getRSVPStatusLabel, getRSVPSeverity } from '@/utils/rsvpStatus';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const guests = ref([]);
 const totalGuests = ref(0);
@@ -228,7 +229,7 @@ const fetchGuests = async () => {
     totalGuests.value = response.data.total || 0;
     console.log("Guests data updated:", guests.value);
   } catch (error) {
-    console.error('Error fetching guest data:', error);
+    handleError(error, 'Failed to fetch guest data');
   }
 };
 
@@ -333,11 +334,12 @@ const exportToCSV = async () => {
     a.click();
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Error exporting CSV:', error);
+    handleError(error, 'Failed to export CSV');
   }
 };
 
-const { showSuccess, showError } = useToastService();
+const { showSuccess } = useToastService();
+const { handleError } = useErrorHandler({ showToast: true });
 
 const showEditModal = ref(false);
 const currentGuest = ref(null);
@@ -359,9 +361,7 @@ const onRSVPFormSubmit = async (payload) => {
     closeEditModal();
     showSuccess('Success', 'RSVP updated successfully');
   } catch (error) {
-    console.error('Error updating RSVP:', error);
-    const errorMessage = error.response?.data?.error?.message || error.response?.data?.message || error.response?.data?.error || 'Failed to update RSVP';
-    showError('Error', errorMessage);
+    handleError(error, 'Failed to update RSVP');
   }
 };
 </script>

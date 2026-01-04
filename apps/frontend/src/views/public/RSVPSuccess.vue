@@ -37,9 +37,11 @@
   import { useI18n } from 'vue-i18n'
   import { computed, ref, onMounted } from 'vue'
   import axios from 'axios'
+  import { useErrorHandler } from '@/composables/useErrorHandler'
   
   const route = useRoute()
   const { t } = useI18n()
+  const { handleError } = useErrorHandler({ showToast: false }) // Silent errors for success page
   
   const guest = ref(null)
   
@@ -48,7 +50,7 @@ onMounted(async () => {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/rsvp/${encodeURIComponent(route.params.code)}`)
     guest.value = response.data?.guest
   } catch (err) {
-    console.error('Error fetching guest data:', err)
+    // Silently fail - not critical for success page
   }
 })
   

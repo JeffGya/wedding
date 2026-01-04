@@ -202,10 +202,12 @@ import { createTemplate, updateTemplate, fetchTemplate } from '@/api/templates'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import { getTemplateStyles } from '@/api/templates';
 import { useToastService } from '@/utils/toastService'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
 const route = useRoute()
 const router = useRouter()
-const { showSuccess, showError } = useToastService()
+const { showSuccess } = useToastService()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const isEditMode = computed(() => route.params.id !== undefined)
 const saving = ref(false)
@@ -244,8 +246,7 @@ async function loadTemplate() {
       style: template.style || 'elegant'
     }
   } catch (error) {
-    console.error('Error loading template:', error)
-    showError('Error', 'Failed to load template')
+    handleError(error, 'Failed to load template')
   }
 }
 
@@ -272,8 +273,7 @@ async function saveTemplate() {
     
     router.push('/admin/templates')
   } catch (error) {
-    console.error('Error saving template:', error)
-    showError('Error', 'Failed to save template')
+    handleError(error, 'Failed to save template')
   } finally {
     saving.value = false
   }
@@ -291,7 +291,7 @@ onMounted(async () => {
       await loadTemplate();
     }
   } catch (error) {
-    console.error('Error loading template styles:', error);
+    handleError(error, 'Failed to load template styles');
   }
 });
 </script>

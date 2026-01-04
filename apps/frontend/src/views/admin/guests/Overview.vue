@@ -194,9 +194,12 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import { getRSVPStatusLabel, getRSVPSeverity } from '@/utils/rsvpStatus';
+import { useLoading } from '@/composables/useLoading';
+import { useErrorHandler } from '@/composables/useErrorHandler';
 
 const guests = ref([])
-const loading = ref(true)
+const { loading } = useLoading()
+const { handleError } = useErrorHandler({ showToast: true })
 const showModal = ref(false)
 const isEdit = ref(false)
 const selectedGuest = ref(null)
@@ -332,11 +335,12 @@ const fetchStats = async () => {
       dietary_counts: Object.entries(res.dietary).map(([label, count]) => ({ label, count }))
     };
   } catch (e) {
-    console.error('Failed to load guest analytics', e);
+    handleError(e, 'Failed to load guest analytics');
   }
 };
 
 const fetchGuests = async () => {
+  loading.value = true
   try {
     const res = await api.get('/guests')
     guests.value = res.data.guests || []
@@ -347,10 +351,10 @@ const fetchGuests = async () => {
         failed: statRes.data.failedCount
       }
     } catch (e) {
-      console.error('Failed to load delivery stats', e)
+      // Silently fail for delivery stats - not critical
     }
   } catch (err) {
-    console.error('Failed to load guests:', err)
+    handleError(err, 'Failed to load guests')
   } finally {
     loading.value = false
   }
@@ -363,7 +367,7 @@ const deleteGuest = async (id) => {
     guests.value = guests.value.filter(g => g.id !== id)
     await fetchStats()
   } catch (err) {
-    console.error('Failed to delete guest:', err)
+    handleError(err, 'Failed to delete guest')
   }
 }
 
@@ -395,7 +399,7 @@ const saveGuest = async (guestData) => {
     await fetchStats()
     closeModal()
   } catch (err) {
-    console.error('Failed to save guest:', err)
+    handleError(err, 'Failed to save guest')
   }
 }
 

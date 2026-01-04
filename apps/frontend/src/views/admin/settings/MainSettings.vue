@@ -310,8 +310,11 @@
 import { ref, onMounted, watch } from 'vue'
 import { fetchMainSettings, updateMainSettings, validateMainSettings } from '@/api/settings'
 import { useToastService } from '@/utils/toastService'
+import { formatDateWithoutTime } from '@/utils/dateFormatter'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
-const { showSuccess, showError } = useToastService()
+const { showSuccess } = useToastService()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const form = ref({
   enable_global_countdown: false,
@@ -392,7 +395,7 @@ async function loadSettings() {
 
 
   } catch (error) {
-    showError('Error', 'Failed to load main settings', 5000)
+    handleError(error, 'Failed to load main settings')
   }
 }
 
@@ -400,7 +403,7 @@ async function saveSettings() {
   // Validate settings
   const validation = validateMainSettings(form.value)
   if (!validation.isValid) {
-    showError('Validation Error', validation.errors.join(', '), 5000)
+    handleError(new Error(validation.errors.join(', ')), 'Validation Error')
     return
   }
 
@@ -409,7 +412,7 @@ async function saveSettings() {
     await updateMainSettings(form.value)
     showSuccess('Success', 'Main settings saved successfully', 5000)
   } catch (error) {
-    showError('Error', 'Failed to save main settings', 5000)
+    handleError(error, 'Failed to save main settings')
   } finally {
     saving.value = false
   }
@@ -419,16 +422,15 @@ function resetSettings() {
   loadSettings()
 }
 
+// Use centralized date formatter utility
 function formatWeddingDate(dateString) {
   if (!dateString) return 'Not set'
-  const date = new Date(dateString)
-  return date.toLocaleDateString()
+  return formatDateWithoutTime(dateString)
 }
 
 function formatDate(dateString) {
   if (!dateString) return 'Not set'
-  const date = new Date(dateString)
-  return date.toLocaleDateString()
+  return formatDateWithoutTime(dateString)
 }
 
 // Watch for date picker changes

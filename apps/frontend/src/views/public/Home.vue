@@ -316,7 +316,7 @@ async function fetchRSVPDeadline() {
       }
     }
   } catch (error) {
-    console.error('Failed to fetch RSVP deadline:', error)
+    // Silently fail for RSVP deadline - not critical for home page
   }
 }
 
@@ -637,16 +637,18 @@ function initCountdownFadeIn() {
       countdownElement.querySelector('.wedding-countdown') || countdownElement : 
       countdownElement
 
-    if (!targetElement) return
+    // Only proceed if targetElement is a valid Element node (nodeType 1)
+    if (!targetElement || !(targetElement instanceof Element) || targetElement.nodeType !== 1) return
 
     // Ensure element starts hidden - add class to parent wrapper if it exists
     const countdownParentElement = targetElement.parentElement
-    if (countdownParentElement && !countdownParentElement.classList.contains('countdown-fade-in')) {
+    // Only operate on Element nodes (nodeType 1) for parent as well
+    if (countdownParentElement && countdownParentElement instanceof Element && countdownParentElement.nodeType === 1 && !countdownParentElement.classList.contains('countdown-fade-in')) {
       countdownParentElement.classList.add('countdown-fade-in')
     }
     targetElement.classList.add('countdown-fade-in')
     targetElement.classList.remove('countdown-visible')
-    if (countdownParentElement) {
+    if (countdownParentElement && countdownParentElement instanceof Element && countdownParentElement.nodeType === 1) {
       countdownParentElement.classList.remove('countdown-visible')
     }
     
@@ -662,11 +664,13 @@ function initCountdownFadeIn() {
             // Small delay to ensure fade-in transition works
             setTimeout(() => {
               const countdownParent = entry.target.parentElement
+              // Only operate on Element nodes (nodeType 1)
+              if (!(entry.target instanceof Element) || entry.target.nodeType !== 1) return
               // Remove inline styles to allow CSS transition
               entry.target.style.removeProperty('opacity')
               entry.target.style.removeProperty('visibility')
               entry.target.classList.add('countdown-visible')
-              if (countdownParent) {
+              if (countdownParent && countdownParent instanceof Element && countdownParent.nodeType === 1) {
                 countdownParent.classList.add('countdown-visible')
               }
             }, 50)
@@ -683,11 +687,13 @@ function initCountdownFadeIn() {
       if (isInView) {
         setTimeout(() => {
           const countdownParent = targetElement.parentElement
+          // Only operate on Element nodes (nodeType 1)
+          if (!(targetElement instanceof Element) || targetElement.nodeType !== 1) return
           // Remove inline styles to allow CSS transition
           targetElement.style.removeProperty('opacity')
           targetElement.style.removeProperty('visibility')
           targetElement.classList.add('countdown-visible')
-          if (countdownParent) {
+          if (countdownParent && countdownParent instanceof Element && countdownParent.nodeType === 1) {
             countdownParent.classList.add('countdown-visible')
           }
         }, 100)
@@ -743,7 +749,8 @@ onMounted(() => {
   // Hide countdown immediately on page load and watch for when it appears
   const hideCountdownElement = (element) => {
     if (!element) return
-    
+    // Only operate on Element nodes (nodeType 1), not Comment nodes (nodeType 8) or other types
+    if (!(element instanceof Element) || element.nodeType !== 1) return
     element.classList.add('countdown-fade-in')
     element.classList.remove('countdown-visible')
     element.style.setProperty('opacity', '0', 'important')
@@ -758,7 +765,8 @@ onMounted(() => {
         countdownElement.querySelector('.wedding-countdown') || countdownElement : 
         countdownElement
       
-      if (targetElement) {
+      // Only operate on Element nodes (nodeType 1), not Comment nodes or other types
+      if (targetElement && targetElement instanceof Element && targetElement.nodeType === 1) {
         hideCountdownElement(targetElement)
       }
     }
@@ -770,8 +778,8 @@ onMounted(() => {
         const targetElement = countdownElement.querySelector ? 
           countdownElement.querySelector('.wedding-countdown') || countdownElement : 
           countdownElement
-        
-        if (targetElement && !targetElement.classList.contains('countdown-fade-in')) {
+        // Only operate on Element nodes (nodeType 1), not Comment nodes or other types
+        if (targetElement && targetElement instanceof Element && targetElement.nodeType === 1 && !targetElement.classList.contains('countdown-fade-in')) {
           hideCountdownElement(targetElement)
         }
       }

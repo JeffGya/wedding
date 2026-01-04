@@ -225,10 +225,12 @@ import MessageComposer from '@/components/messaging/MessageComposer.vue'
 import RecipientPicker from '@/components/messaging/RecipientPicker.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 import { useToastService } from '@/utils/toastService'
+import { useErrorHandler } from '@/composables/useErrorHandler'
 
 const route = useRoute()
 const router = useRouter()
-const { showSuccess, showError, showWarning, showInfo } = useToastService()
+const { showSuccess, showWarning, showInfo } = useToastService()
+const { handleError } = useErrorHandler({ showToast: true })
 
 const composerRef = ref(null)
 const recipientsRef = ref(null)
@@ -261,14 +263,14 @@ const handleComposerAction = async (actionType) => {
   try {
     const composerData = composerRef.value?.getData()
     if (!composerData) {
-      showError('Error', 'Please fill in the message content')
+      handleError(new Error('Please fill in the message content'), 'Validation Error')
       return
     }
 
     const recipients = recipientsRef.value?.getSelectedRecipients() || []
     
     if (actionType === 'scheduled' && !scheduledAt.value) {
-      showError('Error', 'Please select a schedule time')
+      handleError(new Error('Please select a schedule time'), 'Validation Error')
       return
     }
 
@@ -309,8 +311,7 @@ const handleComposerAction = async (actionType) => {
       router.push('/admin/guests/messages')
     }
   } catch (error) {
-    console.error('Error handling composer action:', error)
-    showError('Error', error.response?.data?.error || 'Failed to save message')
+    handleError(error, 'Failed to save message')
   } finally {
     actionTypeBeingHandled.value = null
   }
@@ -376,7 +377,7 @@ const handleSendMessage = async (messageId) => {
         failedCount: response.failedCount
       }
       sendingState.value = 'summary'
-      showError('Error', 'All messages failed to send. Message remains as draft.', 5000)
+      handleError(new Error('All messages failed to send. Message remains as draft.'), 'Send Failed')
     } else {
       // No recipients or other edge case
       sendingSummary.value = {
@@ -385,10 +386,9 @@ const handleSendMessage = async (messageId) => {
         failedCount: response.failedCount
       }
       sendingState.value = 'summary'
-      showError('Error', 'No messages were sent. Message remains as draft.', 5000)
+      handleError(new Error('No messages were sent. Message remains as draft.'), 'Send Failed')
     }
   } catch (error) {
-    console.error('Error sending message:', error)
     sendingSummary.value = {
       error: error.response?.data?.error || 'Failed to send messages',
       sentCount: 0,
@@ -397,7 +397,7 @@ const handleSendMessage = async (messageId) => {
     sendingState.value = 'summary'
     
     // Show error toast - message remains as draft
-    showError('Error', 'Failed to send messages. Message saved as draft.', 5000)
+    handleError(error, 'Failed to send messages. Message saved as draft.')
   }
 }
 
@@ -418,7 +418,7 @@ const loadTemplates = async () => {
     const response = await fetchTemplates()
     templates.value = response.templates || []
   } catch (error) {
-    console.error('Failed to load templates:', error)
+    // Silently fail for templates - not critical
   }
 }
 
@@ -450,8 +450,7 @@ const loadMessageForEdit = async () => {
       }
     })
   } catch (error) {
-    console.error('Failed to load message for edit:', error)
-    showError('Error', 'Failed to load message for editing')
+    handleError(error, 'Failed to load message for editing')
   }
 }
 
