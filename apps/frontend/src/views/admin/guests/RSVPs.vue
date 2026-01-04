@@ -360,7 +360,8 @@ const onRSVPFormSubmit = async (payload) => {
     showSuccess('Success', 'RSVP updated successfully');
   } catch (error) {
     console.error('Error updating RSVP:', error);
-    showError('Error', error.response?.data?.error || 'Failed to update RSVP');
+    const errorMessage = error.response?.data?.error?.message || error.response?.data?.message || error.response?.data?.error || 'Failed to update RSVP';
+    showError('Error', errorMessage);
   }
 };
 </script>

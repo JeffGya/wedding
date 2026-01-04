@@ -1,17 +1,5 @@
 'use strict';
 
-function formatDate(dateString) {
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  };
-  return new Date(dateString).toLocaleString('en-US', options);
-}
-
 const express = require('express');
 const { setGuestSession } = require('../middleware/guestSession');
 const router = express.Router();
@@ -54,7 +42,9 @@ const { getTemplateVariables, replaceTemplateVars } = require('../utils/template
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
 const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
 const { handlePlusOne, syncPlusOneAttendingStatus } = require('../helpers/plusOneService');
-const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
+const { sendBadRequest, sendNotFound, sendInternalError, sendForbidden } = require('../utils/errorHandler');
+const { validateRsvpInput, validateRsvpBusinessRules } = require('../helpers/rsvpValidation');
+const { formatDateWithTime } = require('../utils/dateFormatter');
 
 // Replace the old getInlineStyles function with new template system
 function applyEmailTemplate(content, style = 'elegant', options = {}) {
@@ -151,7 +141,7 @@ router.get('/:code', lookupRateLimit, async (req, res) => {
     // Preserve original ISO deadline for countdown, and add formatted version
     rows.forEach(row => {
       if (row.rsvp_deadline) {
-        row.rsvp_deadline_formatted = formatDate(row.rsvp_deadline);
+        row.rsvp_deadline_formatted = formatDateWithTime(row.rsvp_deadline);
         row.rsvp_deadline = new Date(row.rsvp_deadline).toISOString();
       }
     });
@@ -210,27 +200,11 @@ router.get('/:code', lookupRateLimit, async (req, res) => {
 // POST /api/rsvp
 router.post('/', async (req, res) => {
   const { code, attending, plus_one_name, dietary, notes, plus_one_dietary, send_email } = req.body;
-  if (!code) {
-    return res.status(400).json({ error: 'Code is required' });
-  }
-  // Input type validation
-  if (typeof attending === 'undefined') {
-    return sendBadRequest(res, 'attending is required');
-  }
-  if (typeof attending !== 'boolean') {
-    return sendBadRequest(res, 'attending must be a boolean');
-  }
-  if (plus_one_name !== undefined && plus_one_name !== null && typeof plus_one_name !== 'string') {
-    return sendBadRequest(res, 'plus_one_name must be a string');
-  }
-  if (dietary !== undefined && dietary !== null && typeof dietary !== 'string') {
-    return sendBadRequest(res, 'dietary must be a string');
-  }
-  if (notes !== undefined && notes !== null && typeof notes !== 'string') {
-    return sendBadRequest(res, 'notes must be a string');
-  }
-  if (plus_one_dietary !== undefined && plus_one_dietary !== null && typeof plus_one_dietary !== 'string') {
-    return sendBadRequest(res, 'plus_one_dietary must be a string');
+  
+  // Input validation
+  const inputValidation = validateRsvpInput(req.body, { requireCode: true, requireAttending: true });
+  if (!inputValidation.isValid) {
+    return sendBadRequest(res, inputValidation.errors[0]);
   }
 
   try {
@@ -239,14 +213,14 @@ router.post('/', async (req, res) => {
       return sendNotFound(res, 'Guest', code);
     }
 
-    // Validation: plus_one_name only if allowed
-    if (plus_one_name && !row.can_bring_plus_one) {
-      return sendBadRequest(res, 'This guest is not allowed a plus one');
-    }
-
-    // Enforce RSVP deadline
-    if (row.rsvp_deadline && new Date(row.rsvp_deadline) < new Date()) {
-      return res.status(403).json({ error: 'RSVP deadline has passed' });
+    // Business rules validation
+    const businessValidation = validateRsvpBusinessRules(row, req.body);
+    if (!businessValidation.isValid) {
+      // Check if deadline error (403) or other (400)
+      if (businessValidation.errors[0].includes('deadline')) {
+        return sendForbidden(res, businessValidation.errors[0]);
+      }
+      return sendBadRequest(res, businessValidation.errors[0]);
     }
 
     // Determine attending and rsvp_status

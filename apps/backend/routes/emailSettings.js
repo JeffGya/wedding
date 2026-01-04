@@ -10,6 +10,7 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { generateEmailHTML } = require('../utils/emailTemplates');
 const { sendNotFound, sendInternalError } = require('../utils/errorHandler');
+const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -65,15 +66,13 @@ async function sendTestConfirmationEmail(tempGuest, recipientEmail, testLanguage
     
     // Determine language
     const lang = testLanguage === 'lt' ? 'lt' : 'en';
-    let subjectTemplate = lang === 'lt' ? template.subject_lt : template.subject_en;
     const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
     
-    // Fallback for subject
-    if (!subjectTemplate) {
-      subjectTemplate = tempGuest.rsvp_status === 'attending' 
-        ? (lang === 'lt' ? 'Ačiū už jūsų RSVP, {{guestName}}!' : 'Thank you for your RSVP, {{guestName}}!')
-        : (lang === 'lt' ? 'Ačiū už jūsų RSVP, {{guestName}}' : 'Thank you for your RSVP, {{guestName}}');
-    }
+    // Resolve subject with fallback logic
+    const subjectTemplate = resolveTemplateSubject(template, lang, {
+      context: 'rsvp_confirmation',
+      rsvpStatus: tempGuest.rsvp_status
+    });
     
     // Replace variables
     const subject = replaceTemplateVars(subjectTemplate, variables);
@@ -621,31 +620,8 @@ router.post('/test', requireAuth, async (req, res) => {
       return sendNotFound(res, 'Template', templateId);
     }
     
-    // Parse subject field (may be JSON or separate columns)
-    let templateSubjectEn = '';
-    let templateSubjectLt = '';
-    if (rawTemplate.subject_en) {
-      // New schema: separate columns
-      templateSubjectEn = rawTemplate.subject_en || '';
-      templateSubjectLt = rawTemplate.subject_lt || '';
-    } else if (rawTemplate.subject) {
-      // Old schema: may be JSON
-      try {
-        const subjectData = JSON.parse(rawTemplate.subject);
-        templateSubjectEn = subjectData.en || rawTemplate.subject || '';
-        templateSubjectLt = subjectData.lt || rawTemplate.subject || '';
-      } catch (e) {
-        // Not JSON, use as-is for both
-        templateSubjectEn = rawTemplate.subject || '';
-        templateSubjectLt = rawTemplate.subject || '';
-      }
-    }
-    
-    const template = {
-      ...rawTemplate,
-      subject_en: templateSubjectEn,
-      subject_lt: templateSubjectLt
-    };
+    // Normalize template subjects (handles both new and old schemas)
+    const template = normalizeTemplateSubjects(rawTemplate);
 
     // Get template variables
     variables = await getTemplateVariables(tempGuest, template);

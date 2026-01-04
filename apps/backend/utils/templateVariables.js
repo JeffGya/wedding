@@ -3,6 +3,7 @@ const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const logger = require('../helpers/logger');
+const { formatDateWithoutTime, formatRsvpDeadline } = require('./dateFormatter');
 
 /**
  * System settings cache with TTL (5 minutes)
@@ -355,17 +356,17 @@ async function getTemplateVariables(guest, template = null) {
     // System Properties
     siteUrl: siteUrl, // Uses website_url from settings, falls back to SITE_URL env var
     websiteUrl: siteUrl, // Alias for siteUrl (uses website_url from settings, falls back to SITE_URL env var)
-    weddingDate: settings.wedding_date ? formatDate(settings.wedding_date) : '',
+    weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date) : '',
     venueName: settings.venue_name || '',
     venueAddress: settings.venue_address || '',
-    eventStartDate: settings.event_start_date ? formatDate(settings.event_start_date) : '',
-    eventEndDate: settings.event_end_date ? formatDate(settings.event_end_date) : '',
+    eventStartDate: settings.event_start_date ? formatDateWithoutTime(settings.event_start_date) : '',
+    eventEndDate: settings.event_end_date ? formatDateWithoutTime(settings.event_end_date) : '',
     eventTime: settings.event_time || '',
     brideName: settings.bride_name || '',
     groomName: settings.groom_name || '',
     contactEmail: settings.contact_email || '',
     contactPhone: settings.contact_phone || '',
-    rsvpDeadlineDate: settings.rsvp_deadline ? formatDate(settings.rsvp_deadline) : '',
+    rsvpDeadlineDate: settings.rsvp_deadline ? formatDateWithoutTime(settings.rsvp_deadline) : '',
     eventType: settings.event_type || '',
     dressCode: settings.dress_code || '',
     specialInstructions: settings.special_instructions || '',
@@ -383,29 +384,6 @@ async function getTemplateVariables(guest, template = null) {
 }
 
 
-/**
- * Format RSVP deadline date
- */
-function formatRsvpDeadline(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
-
-/**
- * Format date for display
- */
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
 
 /**
  * Get available template variables for documentation

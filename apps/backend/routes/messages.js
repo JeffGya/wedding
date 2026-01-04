@@ -7,42 +7,8 @@ const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
 const { sendBatchEmails } = require('../helpers/emailService');
 const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
+const { detectTemplateSchema } = require('../utils/templateSchema');
 const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
-
-// Helper function to detect template schema version (shared with templates.js logic)
-let schemaVersionCache = null;
-async function detectTemplateSchema() {
-  if (schemaVersionCache !== null) return schemaVersionCache;
-  
-  try {
-    // Try to fetch a template and check which columns exist
-    const testTemplate = await dbGet('SELECT * FROM templates LIMIT 1', []);
-    
-    if (testTemplate) {
-      const hasSubjectEn = 'subject_en' in testTemplate;
-      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
-      return schemaVersionCache;
-    } else {
-      // No templates exist, check schema directly
-      let checkSql;
-      if (process.env.DB_TYPE === 'mysql') {
-        checkSql = `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'templates' AND COLUMN_NAME = 'subject_en'`;
-      } else {
-        checkSql = `SELECT COUNT(*) as count FROM pragma_table_info('templates') WHERE name = 'subject_en'`;
-      }
-      
-      const result = await dbGet(checkSql, []);
-      const hasSubjectEn = (result?.count || 0) > 0;
-      
-      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
-      return schemaVersionCache;
-    }
-  } catch (error) {
-    // Default to old schema if detection fails
-    schemaVersionCache = 'old';
-    return schemaVersionCache;
-  }
-}
 // Use Luxon for robust timezone handling
 const { DateTime } = require('luxon');
 const logger = require('../helpers/logger');
@@ -103,6 +69,7 @@ function styleObjectToInline(styleObj) {
 }
 const { replaceTemplateVars, getTemplateVariables } = require('../utils/templateVariables');
 const { generateEmailHTML } = require('../utils/emailTemplates');
+const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 
 
 function formatRsvpDeadline(dateStr) {
@@ -119,11 +86,6 @@ function formatRsvpDeadline(dateStr) {
 
 // Protect all routes
 router.use(requireAuth);
-// Replace the existing console-based route hit middleware:
-router.use((req, res, next) => {
-  logger.debug('🧭 Route hit:', req.method, req.originalUrl);
-  next();
-});
 
 /**
  * @openapi
@@ -179,11 +141,7 @@ router.use((req, res, next) => {
  */
 // Create a new draft message
 router.post('/', async (req, res) => {
-  logger.debug('🧰 [messages.js] POST /api/messages hit with headers:', req.headers);
-  logger.debug('🧰 [messages.js] POST /api/messages hit with body:', req.body);
-  logger.debug('🧰 [messages.js] POST /messages hit with body:', req.body);
   const { subject, body_en, body_lt, status, scheduledAt, recipients, style = 'elegant' } = req.body;
-  logger.debug('🧰 [messages.js] Extracted fields:', { subject, body_en, body_lt, status, scheduledAt, recipients, style });
   // Validate required fields
   if (!subject || !body_en || !body_lt || !status) {
     return sendBadRequest(res, 'Subject, body_en, body_lt, and status are required.');
@@ -191,7 +149,6 @@ router.post('/', async (req, res) => {
   // Special validation for scheduled messages
   let scheduledForFinal = null;
   if (status === 'scheduled') {
-    logger.debug('🧰 [messages.js] Status is scheduled; scheduledAt:', scheduledAt);
     if (!scheduledAt) {
       return sendBadRequest(res, 'Scheduled time is required for scheduled messages.');
     }
@@ -205,28 +162,22 @@ router.post('/', async (req, res) => {
     }
     // Format scheduledForFinal for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
     scheduledForFinal = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
-    logger.debug('🧰 [messages.js] Formatted scheduledForFinal for MySQL:', scheduledForFinal);
   }
   try {
-    logger.debug('🧰 [messages.js] Inserting message with params:', [subject, body_en, body_lt, status, scheduledForFinal, style]);
     const insertResult = await dbRun(
       `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for, style) VALUES (?, ?, ?, ?, ?, ?)`,
       [subject, body_en, body_lt, status, scheduledForFinal, style]
     );
     const messageId = insertResult.insertId || insertResult.lastID;
-    logger.debug('🧰 [messages.js] Inserted messageId:', messageId);
     if (recipients && recipients.length) {
-      logger.debug('🧰 [messages.js] Recipients provided:', recipients);
       const guestSql = `SELECT id, email, preferred_language FROM guests WHERE id IN (${recipients.map(() => '?').join(',')})`;
       const guests = await dbAll(guestSql, recipients);
-      logger.debug('🧰 [messages.js] Guests fetched for recipients:', guests);
       const insertRecipientSql = `INSERT INTO message_recipients (message_id, guest_id, email, language, delivery_status) VALUES (?, ?, ?, ?, 'pending')`;
       for (const guest of guests) {
-        logger.debug('🧰 [messages.js] Inserting recipient for guest:', guest);
         try {
           await dbRun(insertRecipientSql, [messageId, guest.id, guest.email, guest.preferred_language || 'en']);
         } catch (e) {
-          logger.error('❌ Failed to insert recipient:', guest.id, e.message);
+          logger.error('Failed to insert recipient:', guest.id, e.message);
         }
       }
     }
@@ -346,7 +297,7 @@ router.post('/templates', async (req, res) => {
   
   try {
     // Detect schema version
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     let sql, params;
     if (schemaVersion === 'new') {
@@ -491,7 +442,7 @@ router.put('/templates/:id', async (req, res) => {
   
   try {
     // Detect schema version
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     let sql, params;
     if (schemaVersion === 'new') {
@@ -770,25 +721,16 @@ router.delete('/:id', async (req, res) => {
  */
 // Send message to selected guests (filtered by guestIds if provided)
 router.post('/:id/send', async (req, res, next) => {
-  logger.debug('✅ Route hit: POST /:id/send — messageId:', req.params.id);
   const messageId = req.params.id;
   const guestIds = req.body?.guestIds && Array.isArray(req.body.guestIds) && req.body.guestIds.length > 0
     ? req.body.guestIds
     : null;
-  // Debug: preparing to send message
-  logger.debug('[MESSAGES] Preparing to send message', {
-    messageId,
-    hasGuestIds: !!(guestIds && guestIds.length),
-    guestIdsCount: guestIds ? guestIds.length : 0
-  });
   try {
     // Load the message
     const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
     if (!message) {
-      logger.error('❌ No message found for ID:', messageId);
       return sendNotFound(res, 'Message', messageId);
     }
-    logger.debug('📦 Loaded message:', message);
     if ((!message.body_en || message.body_en.trim() === '') && (!message.body_lt || message.body_lt.trim() === '')) {
       logger.error('❌ Cannot send email: message body is empty.');
       return sendBadRequest(res, 'Cannot send email: message body is empty.');
@@ -808,8 +750,6 @@ router.post('/:id/send', async (req, res, next) => {
       guestParams = [];
     }
     const guests = await dbAll(guestSql, guestParams);
-    
-    logger.debug('[MESSAGES] Preparing batch send', { messageId, guestCount: guests.length });
     
     // Prepare email options for each guest
     const emailOptionsPromises = guests
@@ -1318,8 +1258,8 @@ router.post('/preview-template/:templateId', async (req, res) => {
     // Replace variables in template
     const body_en = replaceTemplateVars(template.body_en, variables);
     const body_lt = replaceTemplateVars(template.body_lt, variables);
-    // Use language-specific subject, with fallback for backward compatibility
-    const subjectTemplate = lang === 'lt' ? (template.subject_lt || template.subject || '') : (template.subject_en || template.subject || '');
+    // Resolve subject with fallback logic
+    const subjectTemplate = resolveTemplateSubject(template, lang, { context: 'message' });
     const subject = replaceTemplateVars(subjectTemplate, variables);
 
     const body = lang === 'lt' ? body_lt : body_en;

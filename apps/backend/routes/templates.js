@@ -5,56 +5,18 @@ const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+const { detectTemplateSchema } = require('../utils/templateSchema');
+const { formatDateWithoutTime } = require('../utils/dateFormatter');
+const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 
 const requireAuth = require('../middleware/auth');
 const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
 const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const logger = require('../helpers/logger');
 
-// Helper function to detect template schema version
-let schemaVersionCache = null;
-async function detectTemplateSchema() {
-  if (schemaVersionCache !== null) return schemaVersionCache;
-  
-  try {
-    // Try to fetch a template and check which columns exist
-    // This is more reliable than querying INFORMATION_SCHEMA
-    const testTemplate = await dbGet('SELECT * FROM templates LIMIT 1', []);
-    
-    if (testTemplate) {
-      const hasSubjectEn = 'subject_en' in testTemplate;
-      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
-      return schemaVersionCache;
-    } else {
-      // No templates exist, check schema directly
-      let checkSql;
-      if (process.env.DB_TYPE === 'mysql') {
-        checkSql = `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'templates' AND COLUMN_NAME = 'subject_en'`;
-      } else {
-        checkSql = `SELECT COUNT(*) as count FROM pragma_table_info('templates') WHERE name = 'subject_en'`;
-      }
-      
-      const result = await dbGet(checkSql, []);
-      const hasSubjectEn = (result?.count || 0) > 0;
-      
-      schemaVersionCache = hasSubjectEn ? 'new' : 'old';
-      return schemaVersionCache;
-    }
-  } catch (error) {
-    // Default to old schema if detection fails
-    schemaVersionCache = 'old';
-    return schemaVersionCache;
-  }
-}
-
 // Protect all routes
 router.use(requireAuth);
 
-// Debug log for all requests to this route
-router.use((req, res, next) => {
-  logger.debug('✅ Auth passed, hitting template route:', req.method, req.originalUrl);
-  next();
-});
 
 /**
  * @openapi
@@ -87,7 +49,7 @@ router.get('/', async (req, res) => {
     const rows = await dbAll(sql, []);
     
     // Detect schema version once
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     // Parse subject based on schema version
     const templates = rows.map(row => {
@@ -126,21 +88,8 @@ router.get('/', async (req, res) => {
 // Add route to get available template styles - MUST BE BEFORE /:id route
 router.get('/styles', async (req, res) => {
   try {
-    logger.debug('🔍 Fetching template styles...');
-    
-    // Use the already imported function instead of requiring it again
     const styles = getAvailableStyles();
-    
-    logger.debug('📋 Available styles:', JSON.stringify(styles, null, 2));
-    
-    const response = {
-      success: true,
-      styles
-    };
-    
-    logger.debug('📤 Sending response');
-    res.json(response);
-    logger.debug('✅ Response sent successfully');
+    res.json({ success: true, styles });
   } catch (error) {
     logger.error('❌ Error fetching template styles:', error);
     logger.error('Error stack:', error.stack);
@@ -218,34 +167,11 @@ router.get('/:id', async (req, res) => {
     if (!row) return sendNotFound(res, 'Template', req.params.id);
     
     // Detect schema version
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     // Parse subject based on schema version
-    let subjectEn = '';
-    let subjectLt = '';
-    if (schemaVersion === 'new') {
-      // New schema: direct columns
-      subjectEn = row.subject_en || '';
-      subjectLt = row.subject_lt || '';
-    } else {
-      // Old schema: JSON in subject column
-      try {
-        const subjectData = JSON.parse(row.subject || '{}');
-        subjectEn = subjectData.en || row.subject || '';
-        subjectLt = subjectData.lt || row.subject || '';
-      } catch (e) {
-        // Backward compatibility: if subject is not JSON, use it for both
-        subjectEn = row.subject || '';
-        subjectLt = row.subject || '';
-      }
-    }
-    
-    const template = {
-      ...row,
-      subject: subjectEn, // Keep backward compatibility with 'subject' field
-      subject_en: subjectEn,
-      subject_lt: subjectLt
-    };
+    // Normalize template subjects (handles both new and old schemas)
+    const template = normalizeTemplateSubjects(row);
     res.json({ success: true, template });
   } catch (err) {
     return sendInternalError(res, err, 'GET /templates');
@@ -300,14 +226,12 @@ router.post('/', async (req, res) => {
     const finalSubjectEn = subject_en || subject || '';
     const finalSubjectLt = subject_lt || subject || '';
     
-    logger.debug('Creating template with data:', { name, subject_en: finalSubjectEn, subject_lt: finalSubjectLt, body_en: body_en?.substring(0, 50), body_lt: body_lt?.substring(0, 50), style });
-    
     if (!name || !finalSubjectEn || !body_en || !body_lt) {
       return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
     }
 
     // Detect schema version
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     let sql, params;
     if (schemaVersion === 'new') {
@@ -321,13 +245,8 @@ router.post('/', async (req, res) => {
       params = [name, subjectJson, body_en, body_lt, style];
     }
     
-    logger.debug('Inserting template with SQL:', sql);
-    logger.debug('Parameters:', params);
-    
     const result = await dbRun(sql, params);
     const templateId = result.insertId || result.lastID;
-    
-    logger.debug('Template created with ID:', templateId);
 
     // Fetch the created template
     const templateRow = await dbGet('SELECT * FROM templates WHERE id = ?', [templateId]);
@@ -435,7 +354,7 @@ router.put('/:id', async (req, res) => {
     }
 
     // Detect schema version
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     let sql, params;
     if (schemaVersion === 'new') {
@@ -577,18 +496,13 @@ router.get('/:id/preview', async (req, res) => {
     const { id } = req.params;
     const { guestId } = req.query;
     
-    logger.debug('Preview request:', { id, guestId });
-    
     const templateRow = await dbGet('SELECT * FROM templates WHERE id = ?', [id]);
     if (!templateRow) {
-      logger.debug('Template not found for ID:', id);
       return sendNotFound(res, 'Template', id);
     }
-
-    logger.debug('Template found:', templateRow.name);
     
     // Detect schema version
-    const schemaVersion = await detectTemplateSchema();
+    const schemaVersion = await detectTemplateSchema(db);
     
     // Parse subject based on schema version
     let subjectEn = '';
@@ -629,29 +543,23 @@ router.get('/:id/preview', async (req, res) => {
       LIMIT 5
     `);
 
-    logger.debug('Sample guests found:', sampleGuests.length);
-
     // Get variables for template replacement
     let variables = {};
     let selectedGuest = null;
     
     try {
       if (guestId) {
-        logger.debug('Getting variables for specific guest:', guestId);
         // Get the specific guest data
         selectedGuest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
         if (selectedGuest) {
-          logger.debug('Found specific guest:', selectedGuest.name);
           variables = await getTemplateVariables(selectedGuest);
         } else {
-          logger.debug('Guest not found, using first sample guest');
           if (sampleGuests.length > 0) {
             selectedGuest = sampleGuests[0];
             variables = await getTemplateVariables(selectedGuest);
           }
         }
       } else {
-        logger.debug('Getting variables for first sample guest');
         if (sampleGuests.length > 0) {
           selectedGuest = sampleGuests[0];
           variables = await getTemplateVariables(selectedGuest);
@@ -677,14 +585,6 @@ router.get('/:id/preview', async (req, res) => {
         const canBringPlusOne = !isPlusOne && selectedGuest.can_bring_plus_one;
         
         // Format date helper
-        const formatDate = (dateStr) => {
-          if (!dateStr) return '';
-          return new Date(dateStr).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          });
-        };
         
         variables = {
           guestName: selectedGuest.name || 'Guest',
@@ -692,7 +592,7 @@ router.get('/:id/preview', async (req, res) => {
           code: selectedGuest.code || 'ABC123',
           rsvpLink: `${settings.website_url || SITE_URL}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
           plusOneName: '',
-          rsvpDeadline: selectedGuest.rsvp_deadline ? formatDate(selectedGuest.rsvp_deadline) : '',
+          rsvpDeadline: selectedGuest.rsvp_deadline ? formatDateWithoutTime(selectedGuest.rsvp_deadline) : '',
           email: selectedGuest.email || 'guest@example.com',
           preferredLanguage: selectedGuest.preferred_language || 'en',
           attending: selectedGuest.attending || false,
@@ -712,17 +612,17 @@ router.get('/:id/preview', async (req, res) => {
           isEnglishSpeaker: selectedGuest.preferred_language === 'en',
           isLithuanianSpeaker: selectedGuest.preferred_language === 'lt',
           siteUrl: SITE_URL,
-          weddingDate: settings.wedding_date ? formatDate(settings.wedding_date) : '',
+          weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date) : '',
           venueName: settings.venue_name || '',
           venueAddress: settings.venue_address || '',
-          eventStartDate: settings.event_start_date ? formatDate(settings.event_start_date) : '',
-          eventEndDate: settings.event_end_date ? formatDate(settings.event_end_date) : '',
+          eventStartDate: settings.event_start_date ? formatDateWithoutTime(settings.event_start_date) : '',
+          eventEndDate: settings.event_end_date ? formatDateWithoutTime(settings.event_end_date) : '',
           eventTime: settings.event_time || '',
           brideName: settings.bride_name || '',
           groomName: settings.groom_name || '',
           contactEmail: settings.contact_email || '',
           contactPhone: settings.contact_phone || '',
-          rsvpDeadlineDate: settings.rsvp_deadline ? formatDate(settings.rsvp_deadline) : '',
+          rsvpDeadlineDate: settings.rsvp_deadline ? formatDateWithoutTime(settings.rsvp_deadline) : '',
           eventType: settings.event_type || '',
           dressCode: settings.dress_code || '',
           specialInstructions: settings.special_instructions || '',
@@ -739,29 +639,12 @@ router.get('/:id/preview', async (req, res) => {
       }
     }
     
-    logger.debug('Selected guest for preview:', selectedGuest?.name);
-    logger.debug('Variables prepared:', Object.keys(variables));
-    logger.debug('Sample variables:', {
-      guestName: variables.guestName,
-      groupLabel: variables.groupLabel,
-      rsvp_status: variables.rsvp_status,
-      isPlusOne: variables.isPlusOne,
-      canBringPlusOne: variables.can_bring_plus_one,
-      isAttending: variables.isAttending
-    });
-    
     // Replace variables in template content
     const bodyEn = replaceTemplateVars(template.body_en || '', variables);
     const bodyLt = replaceTemplateVars(template.body_lt || '', variables);
-    // Use subject_en for English, fallback to subject_lt or empty string
-    const subject = replaceTemplateVars(template.subject_en || template.subject_lt || '', variables);
-
-    logger.debug('Variable replacement results:');
-    logger.debug('Original subject_en:', template.subject_en);
-    logger.debug('Original subject_lt:', template.subject_lt);
-    logger.debug('Replaced subject:', subject);
-    logger.debug('Original body_en length:', template.body_en?.length);
-    logger.debug('Replaced body_en length:', bodyEn?.length);
+    // Resolve subject with fallback logic (use English as default for preview)
+    const subjectTemplate = resolveTemplateSubject(template, 'en', { context: 'template_preview' });
+    const subject = replaceTemplateVars(subjectTemplate, variables);
 
     // Use the new email template system for previews
     const { generateEmailHTML } = require('../utils/emailTemplates');
@@ -797,7 +680,6 @@ router.get('/:id/preview', async (req, res) => {
       } : null
     };
     
-    logger.debug('Preview response prepared with style:', response.style);
     res.json(response);
   } catch (error) {
     logger.error('Error previewing template:', error);

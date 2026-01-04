@@ -9,22 +9,12 @@ const getSenderInfo = require('../helpers/getSenderInfo');
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
 const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
 const { handlePlusOne, syncPlusOneAttendingStatus } = require('../helpers/plusOneService');
-const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
+const { sendBadRequest, sendNotFound, sendInternalError, sendForbidden } = require('../utils/errorHandler');
+const { validateRsvpInput, validateRsvpBusinessRules } = require('../helpers/rsvpValidation');
+const { getGuestAnalytics } = require('../helpers/guestAnalytics');
+const { formatDateWithTime } = require('../utils/dateFormatter');
 
 const logger = require('../helpers/logger');
-
-// Helper to convert ISO date strings to human-readable format with time
-function formatDate(dateString) {
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  };
-  return new Date(dateString).toLocaleString('en-US', options);
-}
 
 const router = express.Router();
 
@@ -129,10 +119,10 @@ router.get('/', async (req, res) => {
     // Convert date fields to human-readable strings
     rows.forEach(row => {
       if (row.rsvp_deadline) {
-        row.rsvp_deadline = formatDate(row.rsvp_deadline);
+        row.rsvp_deadline = formatDateWithTime(row.rsvp_deadline);
       }
       if (row.updated_at) {
-        row.updated_at = formatDate(row.updated_at);
+        row.updated_at = formatDateWithTime(row.updated_at);
       }
     });
     res.json({ guests: rows, total: rows.length });
@@ -183,89 +173,15 @@ router.get('/', async (req, res) => {
  */
 router.get('/analytics', async (req, res) => {
   try {
-    // RSVP counts by status
-    const statusRows = await dbAll(
-      `SELECT rsvp_status AS status, COUNT(*) AS count
-       FROM guests
-       GROUP BY rsvp_status;`,
-      []
-    );
-    const stats = { total: 0, attending: 0, not_attending: 0, pending: 0 };
-    statusRows.forEach((row) => {
-      stats[row.status] = row.count;
-      stats.total += row.count;
-    });
-
-    // Dietary breakdown
-    const dietRows = await dbAll(
-      `SELECT dietary, COUNT(*) AS count
-       FROM guests
-       WHERE dietary IS NOT NULL AND dietary != ''
-       GROUP BY dietary;`,
-      []
-    );
-    const dietary = {};
-    dietRows.forEach((row) => {
-      dietary[row.dietary] = row.count;
-    });
-
-    // No-shows (pending past deadline)
-    const noRow = await dbGet(
-      process.env.DB_TYPE === 'mysql'
-        ? `SELECT COUNT(*) AS no_shows
-           FROM guests
-           WHERE rsvp_status = 'pending'
-             AND rsvp_deadline IS NOT NULL
-             AND rsvp_deadline < UTC_TIMESTAMP();`
-        : `SELECT COUNT(*) AS no_shows
-           FROM guests
-           WHERE rsvp_status = 'pending'
-             AND rsvp_deadline IS NOT NULL
-             AND rsvp_deadline < datetime('now');`,
-      []
-    );
-
-    // Late responses (responded after deadline)
-    const lateRow = await dbGet(
-      process.env.DB_TYPE === 'mysql'
-        ? `SELECT COUNT(*) AS late_responses
-           FROM guests
-           WHERE rsvp_status IN ('attending','not_attending')
-             AND rsvp_deadline IS NOT NULL
-             AND updated_at > rsvp_deadline;`
-        : `SELECT COUNT(*) AS late_responses
-           FROM guests
-           WHERE rsvp_status IN ('attending','not_attending')
-             AND rsvp_deadline IS NOT NULL
-             AND updated_at > rsvp_deadline;`,
-      []
-    );
-
-    // Average time to RSVP (in days)
-    const avgRow = await dbGet(
-      process.env.DB_TYPE === 'mysql'
-        ? `SELECT AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) AS avg_response_days
-           FROM guests
-           WHERE created_at IS NOT NULL
-             AND updated_at IS NOT NULL;`
-        : `SELECT AVG(JULIANDAY(updated_at) - JULIANDAY(created_at)) AS avg_response_days
-           FROM guests
-           WHERE created_at IS NOT NULL
-             AND updated_at IS NOT NULL;`,
-      []
-    );
-
+    const analytics = await getGuestAnalytics(db);
+    
     res.json({
       success: true,
-      stats,
-      dietary,
-      no_shows: noRow.no_shows || 0,
-      late_responses: lateRow.late_responses || 0,
-      avg_response_time_days: parseFloat(avgRow.avg_response_days) || 0.0
+      ...analytics
     });
   } catch (err) {
     logger.error('Error fetching RSVP analytics:', err);
-    return sendInternalError(res, err, 'GET /guests');
+    return sendInternalError(res, err, 'GET /guests/analytics');
   }
 });
 
@@ -559,25 +475,34 @@ router.delete('/:id', async (req, res) => {
  */
 router.post('/rsvp', async (req, res) => {
   const { id, attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
+  
   if (!id) {
     return sendBadRequest(res, 'Missing required field: id');
   }
+  
+  // Input validation (attending is optional for admin)
+  const inputValidation = validateRsvpInput(req.body, { requireCode: false, requireAttending: false });
+  if (!inputValidation.isValid) {
+    return sendBadRequest(res, inputValidation.errors[0]);
+  }
+  
   try {
     const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
     if (!row) return sendNotFound(res, 'Guest', req.params.id);
-    if (plus_one_name && !row.can_bring_plus_one) {
-      return sendBadRequest(res, 'This guest is not allowed a plus one');
+    
+    // Business rules validation
+    const businessValidation = validateRsvpBusinessRules(row, req.body);
+    if (!businessValidation.isValid) {
+      // Check if deadline error (403) or other (400)
+      if (businessValidation.errors[0].includes('deadline')) {
+        return sendForbidden(res, businessValidation.errors[0]);
+      }
+      return sendBadRequest(res, businessValidation.errors[0]);
     }
-    if (plus_one_dietary !== undefined && typeof plus_one_dietary !== 'string') {
-      return sendBadRequest(res, 'plus_one_dietary must be a string');
-    }
+    
     const attendingProvided = typeof attending !== 'undefined';
     const attendingValue = attendingProvided ? attending : row.attending;
     const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, attendingProvided);
-    
-    if (row.rsvp_deadline && new Date(row.rsvp_deadline) < new Date()) {
-      return res.status(403).json({ error: 'RSVP deadline has passed' });
-    }
     // Clear dietary and notes when not attending
     const finalDietary = attendingValue === false ? null : (dietary || null);
     const finalNotes = attendingValue === false ? null : (notes || null);
@@ -684,24 +609,29 @@ router.put('/:id/rsvp', async (req, res) => {
     return sendBadRequest(res, 'Missing required field: id');
   }
 
+  // Input validation (attending is optional for admin)
+  const inputValidation = validateRsvpInput(req.body, { requireCode: false, requireAttending: false });
+  if (!inputValidation.isValid) {
+    return sendBadRequest(res, inputValidation.errors[0]);
+  }
+
   try {
     const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
     if (!row) return sendNotFound(res, 'Guest', req.params.id);
 
-    if (plus_one_name && !row.can_bring_plus_one) {
-      return sendBadRequest(res, 'This guest is not allowed a plus one');
-    }
-    if (plus_one_dietary !== undefined && typeof plus_one_dietary !== 'string') {
-      return sendBadRequest(res, 'plus_one_dietary must be a string');
+    // Business rules validation
+    const businessValidation = validateRsvpBusinessRules(row, req.body);
+    if (!businessValidation.isValid) {
+      // Check if deadline error (403) or other (400)
+      if (businessValidation.errors[0].includes('deadline')) {
+        return sendForbidden(res, businessValidation.errors[0]);
+      }
+      return sendBadRequest(res, businessValidation.errors[0]);
     }
 
     const attendingProvided = typeof attending !== 'undefined';
     const attendingValue = attendingProvided ? attending : row.attending;
     const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, attendingProvided);
-
-    if (row.rsvp_deadline && new Date(row.rsvp_deadline) < new Date()) {
-      return res.status(403).json({ error: 'RSVP deadline has passed' });
-    }
 
     // Clear dietary and notes when not attending
     const finalDietary = attendingValue === false ? null : (dietary || null);

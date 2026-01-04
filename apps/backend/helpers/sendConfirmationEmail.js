@@ -7,6 +7,7 @@ const logger = require('./logger');
 const { sendEmail } = require('./emailService');
 const { generateEmailHTML } = require('../utils/emailTemplates');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+const { resolveTemplateSubject } = require('../utils/subjectResolver');
 
 /**
  * Send confirmation email to guest after RSVP submission
@@ -48,32 +49,13 @@ async function sendConfirmationEmail(db, guestData) {
     
     // Determine language
     const lang = guestData.preferred_language === 'lt' ? 'lt' : 'en';
-    let subjectTemplate = lang === 'lt' ? template.subject_lt : template.subject_en;
     const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
     
-    // Fallback 1: Check for old schema with single 'subject' column
-    if ((!subjectTemplate || subjectTemplate.trim() === '') && template.subject) {
-      subjectTemplate = template.subject;
-      logger.info(`Template "${templateName}" using legacy 'subject' column`);
-    }
-    
-    // Fallback 2: If still missing, use a default based on RSVP status
-    if (!subjectTemplate || subjectTemplate.trim() === '') {
-      if (guestData.rsvp_status === 'attending') {
-        subjectTemplate = lang === 'lt' 
-          ? 'Ačiū už jūsų RSVP, {{guestName}}!' 
-          : 'Thank you for your RSVP, {{guestName}}!';
-      } else if (guestData.rsvp_status === 'not_attending') {
-        subjectTemplate = lang === 'lt'
-          ? 'Ačiū už jūsų RSVP, {{guestName}}'
-          : 'Thank you for your RSVP, {{guestName}}';
-      } else {
-        subjectTemplate = lang === 'lt'
-          ? 'Ačiū už jūsų RSVP, {{guestName}}!'
-          : 'Thank you for your RSVP, {{guestName}}!';
-      }
-      logger.warn(`Template "${templateName}" missing subject_${lang}, using fallback`);
-    }
+    // Resolve subject with fallback logic
+    const subjectTemplate = resolveTemplateSubject(template, lang, {
+      context: 'rsvp_confirmation',
+      rsvpStatus: guestData.rsvp_status
+    });
     
     // Replace variables in template content
     const subject = replaceTemplateVars(subjectTemplate, variables);
