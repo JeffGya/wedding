@@ -5,6 +5,7 @@
 'use strict';
 
 const getDb = require('../db/connection');
+const Guest = require('../db/models/guest');
 const logger = require('../helpers/logger');
 
 const COOKIE_NAME = 'rsvp_session';
@@ -63,13 +64,10 @@ async function parseGuestSession(req, res, next) {
 
   try {
     const { guestId, code } = session;
-    const guest = await queryOne(
-      'SELECT * FROM guests WHERE id = ? AND code = ?',
-      [guestId, code]
-    );
+    const guest = await Guest.findById(guestId);
 
-    if (!guest) {
-      logger.debug('[guestSession] Invalid guest cookie. Clearing.');
+    if (!guest || guest.code !== code) {
+      logger.debug('[GUEST_SESSION] Invalid guest cookie. Clearing.');
       res.clearCookie(COOKIE_NAME);
       req.guest = null;
       req.guestId = null;

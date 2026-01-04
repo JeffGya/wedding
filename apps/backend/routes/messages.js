@@ -4,6 +4,7 @@ const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
+const Guest = require('../db/models/guest');
 const requireAuth = require('../middleware/auth');
 const { sendBatchEmails } = require('../helpers/emailService');
 const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
@@ -992,7 +993,7 @@ router.post('/preview', async (req, res) => {
     // Resolve selected guest and sample guests
     let selectedGuest = guest || null;
     if (!selectedGuest && guestId) {
-      selectedGuest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
+      selectedGuest = await Guest.findById(guestId);
     }
     let sampleGuests = [];
     if (!selectedGuest) {
@@ -1246,7 +1247,7 @@ router.post('/preview-template/:templateId', async (req, res) => {
     }
 
     // Get guest
-    const guest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
+    const guest = await Guest.findById(guestId);
     if (!guest) {
       return sendNotFound(res, 'Guest', req.params.guestId);
     }

@@ -550,7 +550,8 @@ router.get('/:id/preview', async (req, res) => {
     try {
       if (guestId) {
         // Get the specific guest data
-        selectedGuest = await dbGet('SELECT * FROM guests WHERE id = ?', [guestId]);
+        const Guest = require('../db/models/guest');
+        selectedGuest = await Guest.findById(guestId);
         if (selectedGuest) {
           variables = await getTemplateVariables(selectedGuest);
         } else {

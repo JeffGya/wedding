@@ -52,7 +52,8 @@ async function sendScheduledMessages() {
       for (const recipient of recipients) {
         try {
           // Get guest data for template variables
-          const guest = await dbGet('SELECT * FROM guests WHERE id = ?', [recipient.guest_id]);
+          const Guest = require('../db/models/guest');
+          const guest = await Guest.findById(recipient.guest_id);
           if (!guest) {
             logger.warn('[SCHEDULED_MESSAGES] Guest not found', { recipientId: recipient.id, guestId: recipient.guest_id });
             await dbRun(

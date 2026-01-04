@@ -228,3 +228,347 @@
 [2026-01-04T18:41:29.976Z] [DEBUG] [SCHEDULER] Started
 [2026-01-04T18:41:29.978Z] [INFO] Server is running on port 5001
 [2026-01-04T18:41:29.988Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:37:26.531Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:37:26.781Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:37:26.784Z] [INFO] Server is running on port 5001
+[2026-01-04T20:37:26.814Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:54:52.379Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:54:52.640Z] [INFO] Server is running on port 5001
+[2026-01-04T20:54:52.639Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:54:52.652Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:55:09.598Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:55:09.828Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:55:09.830Z] [INFO] Server is running on port 5001
+[2026-01-04T20:55:09.839Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:55:20.003Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:55:20.225Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:55:20.226Z] [INFO] Server is running on port 5001
+[2026-01-04T20:55:20.235Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:55:36.747Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:55:36.957Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:55:36.958Z] [INFO] Server is running on port 5001
+[2026-01-04T20:55:36.967Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:55:46.030Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:55:46.252Z] [INFO] Server is running on port 5001
+[2026-01-04T20:55:46.250Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:55:46.260Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:55:52.063Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:55:52.283Z] [INFO] Server is running on port 5001
+[2026-01-04T20:55:52.281Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:55:52.292Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:55:54.269Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:55:54.446Z] [INFO] Server is running on port 5001
+[2026-01-04T20:55:54.444Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:55:54.453Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:00.148Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:00.331Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:00.330Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:00.338Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:08.617Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:08.792Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:08.791Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:08.800Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:10.925Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:11.099Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:11.100Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:11.109Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:23.864Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:24.094Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:24.095Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:24.105Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:32.938Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:33.168Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:33.169Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:33.180Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:42.125Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:42.340Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:42.341Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:42.349Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:56:47.065Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:56:47.247Z] [INFO] Server is running on port 5001
+[2026-01-04T20:56:47.245Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:56:47.256Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:01.295Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:01.520Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:01.518Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:01.529Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:15.627Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:15.845Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:15.847Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:15.856Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:17.764Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:17.937Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:17.938Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:17.945Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:38.801Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:39.015Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:39.016Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:39.030Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:48.490Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:48.701Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:48.703Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:48.712Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:50.673Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:50.846Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:50.844Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:50.852Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:57.822Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:57:57.991Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:57:57.992Z] [INFO] Server is running on port 5001
+[2026-01-04T20:57:57.999Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:57:59.981Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:58:00.152Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:58:00.153Z] [INFO] Server is running on port 5001
+[2026-01-04T20:58:00.160Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:58:02.904Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:58:03.084Z] [INFO] Server is running on port 5001
+[2026-01-04T20:58:03.083Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:58:03.092Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T20:58:59.871Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T20:59:00.106Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T20:59:00.107Z] [INFO] Server is running on port 5001
+[2026-01-04T20:59:00.117Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:35.826Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:36.064Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:36.066Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:36.077Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:37.928Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:38.098Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:38.099Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:38.107Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:46.520Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:46.686Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:46.688Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:46.697Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:49.661Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:49.854Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:49.853Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:49.862Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:52.119Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:52.286Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:52.287Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:52.294Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:54.738Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:54.934Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:54.936Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:54.945Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:00:57.800Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:00:57.992Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:00:57.993Z] [INFO] Server is running on port 5001
+[2026-01-04T21:00:58.009Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:00.094Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:00.261Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:00.263Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:00.271Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:02.675Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:02.841Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:02.840Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:02.848Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:05.095Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:05.264Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:05.265Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:05.272Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:07.458Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:07.628Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:07.629Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:07.636Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:10.887Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:11.058Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:11.059Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:11.066Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:13.121Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:13.289Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:13.288Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:13.296Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:15.737Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:15.908Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:15.907Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:15.915Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:18.151Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:18.322Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:18.324Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:18.331Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:20.516Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:20.682Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:20.683Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:20.691Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:24.043Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:24.221Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:24.223Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:24.230Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:26.508Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:26.712Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:26.710Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:26.733Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:28.903Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:29.084Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:29.085Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:29.092Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:31.248Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:31.416Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:31.417Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:31.424Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:34.775Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:34.950Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:34.951Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:34.959Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:37.531Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:37.720Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:37.722Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:37.729Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:40.153Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:40.330Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:40.331Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:40.338Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:44.363Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:44.550Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:44.549Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:44.558Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:48.280Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:48.454Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:48.456Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:48.464Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:52.370Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:52.554Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:52.552Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:52.561Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:55.790Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:01:55.961Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:01:55.963Z] [INFO] Server is running on port 5001
+[2026-01-04T21:01:55.971Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:01:59.889Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:00.090Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:00.089Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:00.097Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:03.766Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:03.940Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:03.941Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:03.948Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:07.293Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:07.481Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:07.482Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:07.490Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:09.899Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:10.073Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:10.074Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:10.081Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:13.459Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:13.645Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:13.644Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:13.652Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:16.765Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:16.939Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:16.941Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:16.948Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:20.165Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:20.333Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:20.335Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:20.341Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:23.591Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:23.771Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:23.772Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:23.779Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:26.155Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:26.329Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:26.331Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:26.338Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:28.550Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:28.720Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:28.721Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:28.729Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:31.131Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:31.300Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:31.301Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:31.308Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:33.650Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:33.820Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:33.821Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:33.828Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:36.952Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:37.131Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:37.129Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:37.138Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:39.301Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:39.468Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:39.470Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:39.477Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:42.016Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:42.186Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:42.184Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:42.193Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:45.987Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:46.162Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:46.164Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:46.171Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:02:49.741Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:02:49.919Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:02:49.920Z] [INFO] Server is running on port 5001
+[2026-01-04T21:02:49.928Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:03:56.894Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-05T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-04T21:03:57.132Z] [DEBUG] [SCHEDULER] Started
+[2026-01-04T21:03:57.133Z] [INFO] Server is running on port 5001
+[2026-01-04T21:03:57.142Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-04T21:10:01.425Z] [DEBUG] Login request received:
+[2026-01-04T21:10:05.841Z] [INFO] [GUEST_MODEL] Guests listed {"count":12,"total":12,"page":1,"perPage":40}
+[2026-01-04T21:10:38.302Z] [INFO] [GUEST_MODEL] Guest updated {"id":"31","fields":9}
+[2026-01-04T21:10:38.314Z] [INFO] [GUEST_MODEL] Guests listed {"count":12,"total":12,"page":1,"perPage":40}
+[2026-01-04T21:11:01.993Z] [INFO] [GUEST_MODEL] Guest deleted {"id":"34","name":"Emma"}
+[2026-01-04T21:11:09.718Z] [INFO] [GUEST_MODEL] Guests listed {"count":11,"total":11,"page":1,"perPage":40}
+[2026-01-04T21:11:55.357Z] [INFO] [GUEST_MODEL] RSVP updated {"id":49,"rsvpStatus":"attending"}
+[2026-01-04T21:11:55.359Z] [INFO] [RSVP_ROUTE] RSVP PUBLIC UPDATE: code=77ALOH {"attending":true,"rsvp_status":"attending","plus_one_name":null,"dietary":null,"notes":null}
+[2026-01-04T21:11:55.362Z] [INFO] [RSVP_ROUTE] RSVP email decision: send_email=false (type: boolean), shouldSendEmail=false, code=77ALOH
+[2026-01-04T21:11:55.399Z] [INFO] [GUEST_MODEL] Guests listed {"count":11,"total":11,"page":1,"perPage":40}
+[2026-01-04T21:12:21.203Z] [INFO] [GUEST_MODEL] Guests listed {"count":11,"total":11,"page":1,"perPage":40}
+[2026-01-04T21:12:32.046Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-04T21:12:32.046Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-04T21:12:32.046Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-04T21:12:32.046Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-04T21:12:32.046Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-04T21:12:32.049Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-04T21:12:32.050Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-04T21:12:32.050Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-04T21:12:32.050Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-04T21:12:32.050Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-04T21:12:32.050Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-04T21:12:32.051Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-04T21:12:32.057Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-04T21:12:32.059Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-04T21:12:32.059Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-04T21:12:32.059Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-04T21:12:32.059Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-04T21:12:32.060Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-04T21:12:32.061Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-04T21:12:32.061Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-04T21:12:34.986Z] [DEBUG] [guestSession] Setting session for guestId=31
+[2026-01-04T21:12:49.895Z] [DEBUG] [guestSession] Setting session for guestId=41
+[2026-01-04T21:12:49.925Z] [DEBUG] [guestSession] Setting session for guestId=41
+[2026-01-04T21:13:12.942Z] [INFO] [GUEST_MODEL] RSVP updated {"id":41,"rsvpStatus":"attending"}
+[2026-01-04T21:13:12.943Z] [INFO] [RSVP_ROUTE] RSVP PUBLIC UPDATE: code=ZCXFHM {"attending":true,"rsvp_status":"attending","plus_one_name":null,"dietary":"Peanut allergy","notes":null}
+[2026-01-04T21:13:12.945Z] [INFO] [RSVP_ROUTE] RSVP email decision: send_email=undefined (type: undefined), shouldSendEmail=true, code=ZCXFHM
+[2026-01-04T21:13:12.957Z] [DEBUG] [EMAIL_SERVICE] Sending email {"to":"omaridj@jgyamfi.nl","subject":"Thank you for your RSVP, Max!"}
+[2026-01-04T21:13:13.478Z] [INFO] [EMAIL_SERVICE] Email sent {"to":"omaridj@jgyamfi.nl","messageId":"827851a3-7fdb-4a04-a105-da9c01992738"}
+[2026-01-04T21:13:13.479Z] [INFO] [SEND_CONFIRMATION_EMAIL] Sent {"guestCode":"ZCXFHM","messageId":"827851a3-7fdb-4a04-a105-da9c01992738"}
+[2026-01-04T21:13:13.504Z] [DEBUG] [guestSession] Setting session for guestId=41
+[2026-01-04T21:13:16.280Z] [DEBUG] [NAV] Navigation endpoint hit with locale: en
+[2026-01-04T21:13:16.281Z] [DEBUG] [NAV][DEBUG] About to call Page.findAll
+[2026-01-04T21:13:16.280Z] [DEBUG] [NAV][DEBUG] typeof Page: object
+[2026-01-04T21:13:16.280Z] [DEBUG] [NAV][DEBUG] Page.findAll: function
+[2026-01-04T21:13:16.282Z] [DEBUG] [NAV] Pages fetched: [{"id":31,"slug":"our-story","is_published":1,"show_in_nav":1,"nav_order":1},{"id":32,"slug":"all-blocks","is_published":1,"show_in_nav":1,"nav_order":2},{"id":33,"slug":"event-details","is_published":1,"show_in_nav":1,"nav_order":3}]
+[2026-01-04T21:13:16.280Z] [DEBUG] [NAV][DEBUG] Page model keys: ["getAll","getById","getBySlug","create","update","softDelete","restore","destroy","findAll","_Page"]
+[2026-01-04T21:13:16.282Z] [DEBUG] [NAV] Translation for page our-story (en): {"id":15,"page_id":31,"locale":"en","title":"Our Story","content":[{"type":"video","embed":"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" data-instgrm-version=\"14\" style=\"background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;max-width:540px;min-width:326px;padding:0;width:99.375%;width:-webkit-calc(100% - 2px);width:calc(100% - 2px)\"><div style=\"padding:16px\"> <a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%\" target=\"_blank\"> <div style=\"display:flex;flex-direction:row;align-items:center\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:40px;margin-right:14px;width:40px\"></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:100px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:60px\"></div></div></div><div style=\"padding:19% 0\"></div> <div style=\"display:block;height:50px;margin:0 auto 12px;width:50px\"></div><div style=\"padding-top:8px\"> <div style=\"color:#3897f0;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:550;line-height:18px\">View this post on Instagram</div></div><div style=\"padding:12.5% 0\"></div> <div style=\"display:flex;flex-direction:row;margin-bottom:14px;align-items:center\"><div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(0px) translateY(7px)\"></div> <div style=\"background-color:#F4F4F4;height:12.5px;transform:rotate(-45deg) translateX(3px) translateY(1px);width:12.5px;flex-grow:0;margin-right:14px;margin-left:2px\"></div> <div style=\"background-color:#F4F4F4;border-radius:50%;height:12.5px;width:12.5px;transform:translateX(9px) translateY(-18px)\"></div></div><div style=\"margin-left:8px\"> <div style=\"background-color:#F4F4F4;border-radius:50%;flex-grow:0;height:20px;width:20px\"></div> <div style=\"width:0;height:0;border-top:2px solid transparent;border-left:6px solid #f4f4f4;border-bottom:2px solid transparent;transform:translateX(16px) translateY(-4px) rotate(30deg)\"></div></div><div style=\"margin-left:auto\"> <div style=\"width:0px;border-top:8px solid #F4F4F4;border-right:8px solid transparent;transform:translateY(16px)\"></div> <div style=\"background-color:#F4F4F4;flex-grow:0;height:12px;width:16px;transform:translateY(-4px)\"></div> <div style=\"width:0;height:0;border-top:8px solid #F4F4F4;border-left:8px solid transparent;transform:translateY(-4px) translateX(8px)\"></div></div></div> <div style=\"display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-bottom:24px\"> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;margin-bottom:6px;width:224px\"></div> <div style=\"background-color:#F4F4F4;border-radius:4px;flex-grow:0;height:14px;width:144px\"></div></div></a><p style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap\"><a href=\"https://www.instagram.com/p/DPQpLtyjMrG/?utm_source=ig_embed&amp;utm_campaign=loading\" style=\"color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none\" target=\"_blank\">A post shared by Travelers house (@keliautojunamai)</a></p></div></blockquote> <script async></script>"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-10-27T22:28:48.000Z","deleted_at":null}
+[2026-01-04T21:13:16.283Z] [DEBUG] [NAV] Translation for page all-blocks (en): {"id":17,"page_id":32,"locale":"en","title":"All Blocks Test","content":[{"html":"<p>Welcome to the all-blocks test page.</p>","type":"rich-text"},{"alt":"Us smiling","src":"/uploads/story.jpg","type":"image"},{"type":"video","embed":"https://www.youtube.com/embed/dQw4w9WgXcQ"},{"type":"map","embed":"https://maps.google.com/maps?q=London&output=embed"},{"type":"divider"},{"id":4,"type":"survey"}],"created_at":"2025-08-08T21:35:07.000Z","updated_at":"2025-08-08T21:35:07.000Z","deleted_at":null}
+[2026-01-04T21:13:16.283Z] [DEBUG] [NAV] Translation for page event-details (en): {"id":18,"page_id":33,"locale":"en","title":"Event details","content":[{"html":"<h2 style=\"width:40%;padding-top:1rem;padding-bottom:0.75rem;margin:1.5rem auto 0.75rem;border:1px solid var(--bg-glass-border);background-image:var(--bg-glass)\" class=\"font-cursive text-[var(--int-base)] text-center rounded-md sm:text-2xl md:text-3xl lg:text-4xl\">The big day</h2><p class=\"ql-align-justify\">So the big day will actually be 2 and half big days. We will have accommodation for up to 80 guests at the site of the wedding. The wedding will happen in <strong>Keliautojų Namai </strong>in Lithuanian the travelers house. This is location just outside of Vilnius the capital of Lithuania.</p><p><br /></p><p class=\"ql-align-center\"><img style=\"max-width:100%;height:auto;width:800px\" src=\"http://localhost:5001/uploads/peeps-avatar.png\" width=\"800px\" height=\"auto\" /></p>","type":"rich-text"},{"type":"divider"},{"type":"map","embed":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d147692.93632861608!2d24.825976000000004!3d54.662069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ddf59e4e43d69f%3A0x37b75563a0e84634!2sKeliautoj%C5%B3%20namai!5e0!3m2!1sen!2sus!4v1755027190220!5m2!1sen!2sus\" class=\"w-full h-[5rem]\" style=\"border:0\" allowfullscreen loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"}],"created_at":"2025-08-12T19:36:27.000Z","updated_at":"2025-12-29T21:45:10.000Z","deleted_at":null}
+[2026-01-04T21:13:16.283Z] [DEBUG] [NAV] Final nav array: [{"slug":"our-story","title":"Our Story","order":1},{"slug":"all-blocks","title":"All Blocks Test","order":2},{"slug":"event-details","title":"Event details","order":3}]
+[2026-01-04T21:13:59.538Z] [INFO] [GUEST_MODEL] Guests listed {"count":11,"total":11,"page":1,"perPage":40}
+[2026-01-04T21:14:13.851Z] [INFO] [GUEST_MODEL] Guest updated {"id":"41","fields":9}
+[2026-01-04T21:14:13.861Z] [INFO] [GUEST_MODEL] Guests listed {"count":11,"total":11,"page":1,"perPage":40}
+[2026-01-04T21:14:25.672Z] [DEBUG] [guestSession] Setting session for guestId=41
+[2026-01-04T21:14:37.289Z] [INFO] [GUEST_MODEL] RSVP updated {"id":41,"rsvpStatus":"attending"}
+[2026-01-04T21:14:37.290Z] [INFO] [RSVP_ROUTE] RSVP PUBLIC UPDATE: code=ZCXFHM {"attending":true,"rsvp_status":"attending","plus_one_name":"Rachel","dietary":"Peanut allergy","notes":null}
+[2026-01-04T21:14:37.294Z] [INFO] [GUEST_MODEL] Plus-one created {"id":51,"groupId":41,"name":"Rachel"}
+[2026-01-04T21:14:37.297Z] [INFO] [GUEST_MODEL] Plus-one status synced {"groupId":41,"id":51,"name":"Rachel"}
+[2026-01-04T21:14:37.297Z] [INFO] [RSVP_ROUTE] RSVP email decision: send_email=undefined (type: undefined), shouldSendEmail=true, code=ZCXFHM
+[2026-01-04T21:14:37.300Z] [DEBUG] [EMAIL_SERVICE] Sending email {"to":"omaridj@jgyamfi.nl","subject":"Thank you for your RSVP, Max and Rachel!"}
+[2026-01-04T21:14:37.648Z] [INFO] [EMAIL_SERVICE] Email sent {"to":"omaridj@jgyamfi.nl","messageId":"fa7f04ef-6613-4b06-8ea5-67080d4d7b17"}
+[2026-01-04T21:14:37.649Z] [INFO] [SEND_CONFIRMATION_EMAIL] Sent {"guestCode":"ZCXFHM","messageId":"fa7f04ef-6613-4b06-8ea5-67080d4d7b17"}
+[2026-01-04T21:14:37.668Z] [DEBUG] [guestSession] Setting session for guestId=41

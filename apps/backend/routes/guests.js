@@ -1,18 +1,14 @@
 const express = require('express');
 const getDbConnection = require('../db/connection');
-const { createDbHelpers } = require('../db/queryHelpers');
 const db = getDbConnection();
-const { dbGet, dbAll, dbRun } = createDbHelpers(db);
+const Guest = require('../db/models/guest');
 const requireAuth = require('../middleware/auth');
 const axios = require('axios');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
-const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
-const { handlePlusOne, syncPlusOneAttendingStatus } = require('../helpers/plusOneService');
 const { sendBadRequest, sendNotFound, sendInternalError, sendForbidden } = require('../utils/errorHandler');
 const { validateRsvpInput, validateRsvpBusinessRules } = require('../helpers/rsvpValidation');
 const { getGuestAnalytics } = require('../helpers/guestAnalytics');
-const { formatDateWithTime } = require('../utils/dateFormatter');
 
 const logger = require('../helpers/logger');
 
@@ -74,60 +70,21 @@ router.get('/', async (req, res) => {
   try {
     const { attending, group_id, rsvp_status, sort_by, page = 1, per_page = 40 } = req.query;
 
-    let query = `
-      SELECT
-        id, group_id, group_label, name, preferred_language, email, code,
-        can_bring_plus_one, is_primary, attending,
-        rsvp_status, dietary, notes, rsvp_deadline, updated_at
-      FROM guests
-    `;
+    const filters = {};
+    if (attending !== undefined) filters.attending = attending;
+    if (group_id !== undefined) filters.group_id = group_id;
+    if (rsvp_status !== undefined) filters.rsvp_status = rsvp_status;
 
-    const queryParams = [];
-    const whereClauses = [];
+    const options = {
+      sort_by: sort_by,
+      page: parseInt(page),
+      per_page: parseInt(per_page)
+    };
 
-    if (attending !== undefined) {
-      whereClauses.push(`attending = ?`);
-      queryParams.push(attending === 'true' ? 1 : 0);
-    }
-    if (group_id !== undefined) {
-      whereClauses.push(`group_id = ?`);
-      queryParams.push(group_id);
-    }
-    if (rsvp_status !== undefined) {
-      whereClauses.push(`rsvp_status = ?`);
-      queryParams.push(rsvp_status);
-    }
-    if (whereClauses.length > 0) {
-      query += ' WHERE ' + whereClauses.join(' AND ');
-    }
-
-    if (sort_by === 'name') {
-      query += ` ORDER BY name ASC`;
-    } else if (sort_by === 'updated_at') {
-      query += ` ORDER BY updated_at DESC`;
-    } else {
-      query += ` ORDER BY group_id ASC, id ASC`;
-    }
-
-    const limit = parseInt(per_page);
-    const offset = (parseInt(page) - 1) * limit;
-    query += ` LIMIT ? OFFSET ?`;
-    queryParams.push(limit, offset);
-
-    // Use dbAll for async/await
-    const rows = await dbAll(query, queryParams);
-    // Convert date fields to human-readable strings
-    rows.forEach(row => {
-      if (row.rsvp_deadline) {
-        row.rsvp_deadline = formatDateWithTime(row.rsvp_deadline);
-      }
-      if (row.updated_at) {
-        row.updated_at = formatDateWithTime(row.updated_at);
-      }
-    });
-    res.json({ guests: rows, total: rows.length });
+    const result = await Guest.list(filters, options);
+    res.json(result);
   } catch (err) {
-    logger.error('Error fetching guests:', err);
+    logger.error('[GUESTS_ROUTE] Error fetching guests:', err);
     return sendInternalError(res, err, 'GET /guests');
   }
 });
@@ -211,17 +168,12 @@ router.get('/analytics', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return sendNotFound(res, 'Guest', req.params.id);
-    if (row.rsvp_deadline) {
-      row.rsvp_deadline = new Date(row.rsvp_deadline).toISOString();
-    }
-    if (row.updated_at) {
-      row.updated_at = new Date(row.updated_at).toISOString();
-    }
-    res.json(row);
+    const guest = await Guest.findById(id, { formatDates: 'iso' });
+    if (!guest) return sendNotFound(res, 'Guest', req.params.id);
+    res.json(guest);
   } catch (err) {
-    return sendInternalError(res, err, 'GET /guests');
+    logger.error('[GUESTS_ROUTE] Error fetching guest:', err);
+    return sendInternalError(res, err, 'GET /guests/:id');
   }
 });
 
@@ -254,47 +206,47 @@ router.get('/:id', async (req, res) => {
  *         description: Database error
  */
 router.post('/', async (req, res) => {
-  const {
-    group_id,
-    group_label,
-    name,
-    email,
-    code,
-    can_bring_plus_one,
-    is_primary
-  } = req.body;
-
-  // Basic validation
-  if (!group_label) return res.status(400).json({ error: 'group_label is required' });
-  if (!name) return res.status(400).json({ error: 'name is required' });
-  if (!code) return res.status(400).json({ error: 'code is required' });
-  // Email format validation
-  if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-    return sendBadRequest(res, 'Invalid email format');
-  }
-  // Boolean validation for can_bring_plus_one
-  if (typeof can_bring_plus_one !== 'undefined' &&
-      can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
-    return sendBadRequest(res, 'can_bring_plus_one must be a boolean or 0/1');
-  }
   try {
-    const result = await dbRun(
-      `INSERT INTO guests (
-        group_id, group_label, name, email, code,
-        can_bring_plus_one, is_primary
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [
-        group_id,
-        group_label,
-        name,
-        email,
-        code,
-        can_bring_plus_one || 0,
-        typeof is_primary !== 'undefined' ? is_primary : 1
-      ]
-    );
-    res.status(201).json({ id: result.insertId });
+    const {
+      group_id,
+      group_label,
+      name,
+      email,
+      code,
+      can_bring_plus_one,
+      is_primary
+    } = req.body;
+
+    // Validation
+    const validation = Guest.validateGuestData(req.body, {
+      requireCode: true,
+      requireName: true,
+      requireGroupLabel: true
+    });
+
+    if (!validation.isValid) {
+      return sendBadRequest(res, validation.errors[0]);
+    }
+
+    // Boolean validation for can_bring_plus_one
+    if (typeof can_bring_plus_one !== 'undefined' &&
+        can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
+      return sendBadRequest(res, 'can_bring_plus_one must be a boolean or 0/1');
+    }
+
+    const result = await Guest.create({
+      group_id,
+      group_label,
+      name,
+      email,
+      code,
+      can_bring_plus_one: can_bring_plus_one || 0,
+      is_primary: typeof is_primary !== 'undefined' ? is_primary : 1
+    });
+
+    res.status(201).json({ id: result.id });
   } catch (err) {
+    logger.error('[GUESTS_ROUTE] Error creating guest:', err);
     return sendInternalError(res, err, 'POST /guests');
   }
 });
@@ -334,75 +286,66 @@ router.post('/', async (req, res) => {
  *         description: Guest not found
  */
 router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const {
-    name,
-    email,
-    group_label,
-    can_bring_plus_one,
-    is_primary,
-    attending,
-    dietary,
-    notes,
-    rsvp_deadline,
-    code,
-    preferred_language
-  } = req.body;
-
-  // Basic validation
-  if (!group_label) return sendBadRequest(res, 'group_label is required');
-  if (!name) return sendBadRequest(res, 'name is required');
-  if (!code) return sendBadRequest(res, 'code is required');
-  if (preferred_language && !['en', 'lt'].includes(preferred_language)) {
-    return sendBadRequest(res, 'preferred_language must be either "en" or "lt"');
-  }
-  // Email format validation
-  if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-    return sendBadRequest(res, 'Invalid email format');
-  }
-  // Boolean validation for can_bring_plus_one
-  if (typeof can_bring_plus_one !== 'undefined' &&
-      can_bring_plus_one !== 0 && can_bring_plus_one !== 1 && typeof can_bring_plus_one !== 'boolean') {
-    return sendBadRequest(res, 'can_bring_plus_one must be a boolean or 0/1');
-  }
-  // RSVP deadline validation
-  if (rsvp_deadline && isNaN(Date.parse(rsvp_deadline))) {
-    return sendBadRequest(res, 'rsvp_deadline must be a valid datetime string');
-  }
-
   try {
-    const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return sendNotFound(res, 'Guest', req.params.id);
-    const isPrimaryValue = typeof is_primary !== 'undefined' ? is_primary : row.is_primary;
-    const attendingValue = typeof attending !== 'undefined' ? attending : null;
-    const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, typeof attending !== 'undefined');
-    // Clear dietary and notes when not attending
-    const finalDietary = attendingValue === false ? null : (dietary !== undefined ? dietary : row.dietary);
-    const finalNotes = attendingValue === false ? null : (notes !== undefined ? notes : row.notes);
-    await dbRun(
-      `UPDATE guests SET
-        name = ?, email = ?, group_label = ?,
-        can_bring_plus_one = ?, is_primary = ?, attending = ?, rsvp_status = ?,
-        dietary = ?, notes = ?, rsvp_deadline = ?, code = ?, preferred_language = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?`,
-      [
-        name,
-        email,
-        group_label,
-        can_bring_plus_one || 0,
-        isPrimaryValue,
-        attendingValue,
-        rsvpStatusVal,
-        finalDietary,
-        finalNotes,
-        rsvp_deadline || null,
-        code,
-        preferred_language || row.preferred_language,
-        id
-      ]
-    );
+    const { id } = req.params;
+    const {
+      name,
+      email,
+      group_label,
+      can_bring_plus_one,
+      is_primary,
+      attending,
+      dietary,
+      notes,
+      rsvp_deadline,
+      code,
+      preferred_language
+    } = req.body;
+
+    // Validation
+    if (!group_label) return sendBadRequest(res, 'group_label is required');
+    if (!name) return sendBadRequest(res, 'name is required');
+    if (!code) return sendBadRequest(res, 'code is required');
+
+    const validation = Guest.validateGuestData(req.body);
+    if (!validation.isValid) {
+      return sendBadRequest(res, validation.errors[0]);
+    }
+
+    // Check if guest exists
+    const existing = await Guest.findById(id);
+    if (!existing) return sendNotFound(res, 'Guest', req.params.id);
+
+    // Handle RSVP status conversion if attending is provided
+    let rsvp_status = existing.rsvp_status;
+    if (typeof attending !== 'undefined') {
+      const { convertAttendingToRsvpStatus } = require('../helpers/rsvpStatus');
+      rsvp_status = convertAttendingToRsvpStatus(attending, existing.rsvp_status, true);
+      // Clear dietary and notes when not attending
+      if (attending === false) {
+        dietary = null;
+        notes = null;
+      }
+    }
+
+    await Guest.update(id, {
+      name,
+      email,
+      group_label,
+      can_bring_plus_one: can_bring_plus_one !== undefined ? (can_bring_plus_one ? 1 : 0) : undefined,
+      is_primary: typeof is_primary !== 'undefined' ? is_primary : existing.is_primary,
+      attending: typeof attending !== 'undefined' ? attending : undefined,
+      rsvp_status,
+      dietary,
+      notes,
+      rsvp_deadline,
+      code,
+      preferred_language: preferred_language || existing.preferred_language
+    });
+
     res.json({ success: true });
   } catch (err) {
+    logger.error('[GUESTS_ROUTE] Error updating guest:', err);
     return sendInternalError(res, err, 'PUT /guests/:id');
   }
 });
@@ -434,13 +377,12 @@ router.put('/:id', async (req, res) => {
  *         description: Database error
  */
 router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
   try {
-    // Delete related message_recipients first to avoid foreign key constraint
-    await dbRun('DELETE FROM message_recipients WHERE guest_id = ?', [id]);
-    await dbRun('DELETE FROM guests WHERE id = ?', [id]);
+    const { id } = req.params;
+    await Guest.delete(id);
     res.json({ success: true });
   } catch (err) {
+    logger.error('[GUESTS_ROUTE] Error deleting guest:', err);
     return sendInternalError(res, err, 'DELETE /guests/:id');
   }
 });
@@ -474,24 +416,24 @@ router.delete('/:id', async (req, res) => {
  *         description: Guest not found
  */
 router.post('/rsvp', async (req, res) => {
-  const { id, attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
-  
-  if (!id) {
-    return sendBadRequest(res, 'Missing required field: id');
-  }
-  
-  // Input validation (attending is optional for admin)
-  const inputValidation = validateRsvpInput(req.body, { requireCode: false, requireAttending: false });
-  if (!inputValidation.isValid) {
-    return sendBadRequest(res, inputValidation.errors[0]);
-  }
-  
   try {
-    const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return sendNotFound(res, 'Guest', req.params.id);
+    const { id, attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
+    
+    if (!id) {
+      return sendBadRequest(res, 'Missing required field: id');
+    }
+    
+    // Input validation (attending is optional for admin)
+    const inputValidation = validateRsvpInput(req.body, { requireCode: false, requireAttending: false });
+    if (!inputValidation.isValid) {
+      return sendBadRequest(res, inputValidation.errors[0]);
+    }
+    
+    const guest = await Guest.findById(id);
+    if (!guest) return sendNotFound(res, 'Guest', id);
     
     // Business rules validation
-    const businessValidation = validateRsvpBusinessRules(row, req.body);
+    const businessValidation = validateRsvpBusinessRules(guest, req.body);
     if (!businessValidation.isValid) {
       // Check if deadline error (403) or other (400)
       if (businessValidation.errors[0].includes('deadline')) {
@@ -500,55 +442,47 @@ router.post('/rsvp', async (req, res) => {
       return sendBadRequest(res, businessValidation.errors[0]);
     }
     
-    const attendingProvided = typeof attending !== 'undefined';
-    const attendingValue = attendingProvided ? attending : row.attending;
-    const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, attendingProvided);
-    // Clear dietary and notes when not attending
-    const finalDietary = attendingValue === false ? null : (dietary || null);
-    const finalNotes = attendingValue === false ? null : (notes || null);
-    await dbRun(
-      `UPDATE guests SET
-        attending = ?, rsvp_status = ?, dietary = ?, notes = ?,
-        rsvp_deadline = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?`,
-      [
-        attendingValue,
-        rsvpStatusVal,
-        finalDietary,
-        finalNotes,
-        rsvp_deadline || row.rsvp_deadline,
-        id
-      ]
-    );
+    // Update RSVP
+    await Guest.updateRsvp(id, {
+      attending,
+      dietary,
+      notes,
+      rsvp_deadline
+    });
     
     // Handle plus one logic (create, update, or delete)
-    await handlePlusOne(db, row, plus_one_name || null, plus_one_dietary || null);
+    await Guest.handlePlusOne(guest, plus_one_name || null, plus_one_dietary || null);
+    
+    // Get updated guest to check RSVP status
+    const updatedGuest = await Guest.findById(id);
     
     // Sync plus-one attending status if primary is attending
-    if (rsvpStatusVal === 'attending') {
-      await syncPlusOneAttendingStatus(db, row.group_id, true);
+    if (updatedGuest.rsvp_status === 'attending') {
+      await Guest.syncPlusOneAttendingStatus(guest.group_id, true);
     }
+    
     res.json({ success: true });
     
     // Send confirmation email only if send_email flag is true
     if (send_email === true) {
       try {
         await sendConfirmationEmail(db, {
-          ...row,
-          rsvp_status: rsvpStatusVal,
-          preferred_language: row.preferred_language,
-          name: row.name,
-          group_label: row.group_label,
-          email: row.email,
-          code: row.code
+          ...guest,
+          rsvp_status: updatedGuest.rsvp_status,
+          preferred_language: guest.preferred_language,
+          name: guest.name,
+          group_label: guest.group_label,
+          email: guest.email,
+          code: guest.code
         });
       } catch (emailErr) {
-        logger.error('Error sending confirmation email:', emailErr);
+        logger.error('[GUESTS_ROUTE] Error sending confirmation email:', emailErr);
         // Don't fail the request if email fails
       }
     }
   } catch (err) {
-    return sendInternalError(res, err, 'PUT /guests/:id/rsvp');
+    logger.error('[GUESTS_ROUTE] Error updating RSVP:', err);
+    return sendInternalError(res, err, 'POST /guests/rsvp');
   }
 });
 
@@ -602,25 +536,25 @@ router.post('/rsvp', async (req, res) => {
  */
 
 router.put('/:id/rsvp', async (req, res) => {
-  const { id } = req.params;
-  const { attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
-
-  if (!id) {
-    return sendBadRequest(res, 'Missing required field: id');
-  }
-
-  // Input validation (attending is optional for admin)
-  const inputValidation = validateRsvpInput(req.body, { requireCode: false, requireAttending: false });
-  if (!inputValidation.isValid) {
-    return sendBadRequest(res, inputValidation.errors[0]);
-  }
-
   try {
-    const row = await dbGet('SELECT * FROM guests WHERE id = ?', [id]);
-    if (!row) return sendNotFound(res, 'Guest', req.params.id);
+    const { id } = req.params;
+    const { attending, dietary, notes, rsvp_deadline, plus_one_name, plus_one_dietary, send_email } = req.body;
+
+    if (!id) {
+      return sendBadRequest(res, 'Missing required field: id');
+    }
+
+    // Input validation (attending is optional for admin)
+    const inputValidation = validateRsvpInput(req.body, { requireCode: false, requireAttending: false });
+    if (!inputValidation.isValid) {
+      return sendBadRequest(res, inputValidation.errors[0]);
+    }
+
+    const guest = await Guest.findById(id);
+    if (!guest) return sendNotFound(res, 'Guest', req.params.id);
 
     // Business rules validation
-    const businessValidation = validateRsvpBusinessRules(row, req.body);
+    const businessValidation = validateRsvpBusinessRules(guest, req.body);
     if (!businessValidation.isValid) {
       // Check if deadline error (403) or other (400)
       if (businessValidation.errors[0].includes('deadline')) {
@@ -629,38 +563,23 @@ router.put('/:id/rsvp', async (req, res) => {
       return sendBadRequest(res, businessValidation.errors[0]);
     }
 
-    const attendingProvided = typeof attending !== 'undefined';
-    const attendingValue = attendingProvided ? attending : row.attending;
-    const rsvpStatusVal = convertAttendingToRsvpStatus(attendingValue, row.rsvp_status, attendingProvided);
-
-    // Clear dietary and notes when not attending
-    const finalDietary = attendingValue === false ? null : (dietary || null);
-    const finalNotes = attendingValue === false ? null : (notes || null);
-    await dbRun(
-      `UPDATE guests SET
-         attending = ?,
-         rsvp_status = ?,
-         dietary = ?,
-         notes = ?,
-         rsvp_deadline = ?,
-         updated_at = CURRENT_TIMESTAMP
-       WHERE id = ?`,
-      [
-        attendingValue,
-        rsvpStatusVal,
-        finalDietary,
-        finalNotes,
-        rsvp_deadline || row.rsvp_deadline,
-        id
-      ]
-    );
+    // Update RSVP
+    await Guest.updateRsvp(id, {
+      attending,
+      dietary,
+      notes,
+      rsvp_deadline
+    });
 
     // Handle plus one logic (create, update, or delete)
-    await handlePlusOne(db, row, plus_one_name || null, plus_one_dietary || null);
+    await Guest.handlePlusOne(guest, plus_one_name || null, plus_one_dietary || null);
+
+    // Get updated guest to check RSVP status
+    const updatedGuest = await Guest.findById(id);
 
     // Sync plus-one attending status if primary is attending
-    if (rsvpStatusVal === 'attending') {
-      await syncPlusOneAttendingStatus(db, row.group_id, true);
+    if (updatedGuest.rsvp_status === 'attending') {
+      await Guest.syncPlusOneAttendingStatus(guest.group_id, true);
     }
 
     res.json({ success: true });
@@ -669,20 +588,21 @@ router.put('/:id/rsvp', async (req, res) => {
     if (send_email === true) {
       try {
         await sendConfirmationEmail(db, {
-          ...row,
-          rsvp_status: rsvpStatusVal,
-          preferred_language: row.preferred_language,
-          name: row.name,
-          group_label: row.group_label,
-          email: row.email,
-          code: row.code
+          ...guest,
+          rsvp_status: updatedGuest.rsvp_status,
+          preferred_language: guest.preferred_language,
+          name: guest.name,
+          group_label: guest.group_label,
+          email: guest.email,
+          code: guest.code
         });
       } catch (emailErr) {
-        logger.error('Error sending confirmation email:', emailErr);
+        logger.error('[GUESTS_ROUTE] Error sending confirmation email:', emailErr);
         // Don't fail the request if email fails
       }
     }
   } catch (err) {
+    logger.error('[GUESTS_ROUTE] Error updating RSVP:', err);
     return sendInternalError(res, err, 'PUT /guests/:id/rsvp');
   }
 });
