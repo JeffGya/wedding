@@ -44,6 +44,22 @@ export async function updateEmailSettings(settings) {
   }
 }
 
+/**
+ * Fetch Resend quota status
+ * @returns {Promise<{daily: {sent: number, limit: number, remaining: number, resetsAt: string}, monthly: {sent: number, limit: number, remaining: number, resetsAt: string}, queue: {length: number, validUntil: string}}>}
+ */
+export async function fetchQuotaStatus() {
+  try {
+    const { data } = await api.get('/settings/email/quota', {
+      meta: { showLoader: false }
+    })
+    return data
+  } catch (error) {
+    console.error('Failed to fetch quota status:', error)
+    throw error
+  }
+}
+
 // ============================================================================
 // GUEST SETTINGS (RSVP)
 // ============================================================================

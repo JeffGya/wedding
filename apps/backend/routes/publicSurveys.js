@@ -15,36 +15,19 @@ const SurveyBlock = require('../db/models/surveyBlock');
 const SurveyResponse = require('../db/models/surveyResponse');
 const Page = require('../db/models/pages'); // only used if we fallback to page gating
 const { sendBadRequest, sendNotFound, sendForbidden, sendUnauthorized, sendInternalError } = require('../utils/errorHandler');
+const { createRateLimiter } = require('../middleware/rateLimiter');
 // req.guest is injected globally by parseGuestSession in index.js
 
 const router = express.Router();
 
-// ---------------- Rate limiter (IP + surveyId) ----------------
-const buckets = new Map();
-/**
- * Simple limiter: max N submissions per window per ip+survey
- */
-function rl(windowMs = 5 * 60 * 1000, max = 5) {
-  return (req, res, next) => {
-    const key = `${req.ip}:${req.params.id}`;
-    const now = Date.now();
-    let b = buckets.get(key);
-    if (!b || b.reset < now) {
-      b = { count: 1, reset: now + windowMs };
-      buckets.set(key, b);
-      return next();
-    }
-    if (b.count >= max) {
-      return res.status(429).json({
-        error: { message: 'Too many submissions. Try again later.', code: 'RATE_LIMIT' },
-        message: 'Too many submissions. Try again later.'
-      });
-    }
-    b.count++;
-    next();
-  };
-}
-const respondLimiter = rl();
+// Rate limiter for survey responses (IP + surveyId composite key)
+const respondLimiter = createRateLimiter({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 5,
+  keyGenerator: (req) => `${req.ip}:${req.params.id}`,
+  errorCode: 'RATE_LIMIT',
+  errorMessage: 'Too many submissions. Try again later.'
+});
 
 // ---------------- Helpers ----------------
 function badRequest(res, msg, code = 'INVALID_RESPONSE') {

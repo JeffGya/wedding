@@ -7,6 +7,7 @@ const resendClient = require('./resendClient');
 const logger = require('./logger');
 const getSenderInfo = require('./getSenderInfo');
 const { DateTime } = require('luxon');
+const quotaTracker = require('./quotaTracker');
 
 /**
  * Send a single email with retry logic
@@ -27,17 +28,39 @@ async function sendEmail(options) {
     html,
     from,
     db,
-    maxRetries = 3,
+    maxRetries = 5, // Increased for rate limit scenarios
     backoff = [0, 2000, 4000]
   } = options;
 
-  logger.debug('[EMAIL_SERVICE] Sending email', { to, subject: subject?.substring(0, 50) });
+  // Only log in development
+  if (process.env.NODE_ENV !== 'production') {
+    logger.debug('[EMAIL_SERVICE] Sending email', { to, subject: subject?.substring(0, 50) });
+  }
 
   // Validate required fields
   if (!to || !subject || !html) {
     const error = 'Missing required fields: to, subject, html';
     logger.error('[EMAIL_SERVICE] Validation failed', { to: !!to, subject: !!subject, html: !!html });
     return { success: false, error };
+  }
+
+  // Check quota before sending
+  if (!quotaTracker.canSend()) {
+    const quotaStatus = quotaTracker.getQuotaStatus();
+    logger.warn('[EMAIL_SERVICE] Quota exceeded, queuing message', { 
+      to, 
+      daily: `${quotaStatus.daily.sent}/${quotaStatus.daily.limit}`,
+      monthly: `${quotaStatus.monthly.sent}/${quotaStatus.monthly.limit}`
+    });
+    
+    // Queue the message
+    quotaTracker.queueMessage({ to, subject, html, from, db });
+    
+    return { 
+      success: false, 
+      error: 'Quota exceeded. Message queued for sending when quota resets.',
+      queued: true 
+    };
   }
 
   // Get sender info if not provided
@@ -64,7 +87,13 @@ async function sendEmail(options) {
       const response = await resendClient.emails.send(emailData);
       
       if (response && response.data && response.data.id) {
-        logger.info('[EMAIL_SERVICE] Email sent', { to, messageId: response.data.id });
+        // Increment quota counters after successful send
+        quotaTracker.incrementSent();
+        
+        // Log successful sends only in development or if LOG_LEVEL is DEBUG
+        if (process.env.NODE_ENV !== 'production' || process.env.LOG_LEVEL === 'DEBUG') {
+          logger.info('[EMAIL_SERVICE] Email sent', { to, messageId: response.data.id });
+        }
         return {
           success: true,
           messageId: response.data.id,
@@ -83,8 +112,34 @@ async function sendEmail(options) {
       
       if (isRateLimit && retries < maxRetries) {
         retries++;
-        const delayMs = backoff[retries] || backoff[backoff.length - 1];
-        logger.warn('[EMAIL_SERVICE] Rate limited, retrying', { attempt: retries, delayMs, to });
+        
+        // Extract retry-after header from response
+        let delayMs = backoff[retries] || backoff[backoff.length - 1];
+        const retryAfterHeader = err.response?.headers?.['retry-after'] || 
+                                err.response?.headers?.['Retry-After'] ||
+                                err.headers?.['retry-after'] ||
+                                err.headers?.['Retry-After'];
+        
+        if (retryAfterHeader) {
+          try {
+            // Parse retry-after value (can be seconds as number or string)
+            const retryAfterSeconds = typeof retryAfterHeader === 'string' 
+              ? parseInt(retryAfterHeader, 10) 
+              : retryAfterHeader;
+            
+            if (!isNaN(retryAfterSeconds) && retryAfterSeconds > 0) {
+              delayMs = retryAfterSeconds * 1000; // Convert to milliseconds
+            }
+          } catch (parseError) {
+            // Use backoff delay on parse error
+          }
+        }
+        
+        // Only log rate limit retries in development
+        if (process.env.NODE_ENV !== 'production') {
+          logger.warn('[EMAIL_SERVICE] Rate limited, retrying', { attempt: retries, delayMs, to });
+        }
+        
         await new Promise(resolve => setTimeout(resolve, delayMs));
         continue;
       }
@@ -191,13 +246,19 @@ async function sendBatchEmails(options) {
     getTrackingInfo
   } = options;
 
-  logger.debug('[EMAIL_SERVICE] Batch sending', { emailCount: emails.length, batchSize });
+  // Only log in development
+  if (process.env.NODE_ENV !== 'production') {
+    logger.debug('[EMAIL_SERVICE] Batch sending', { emailCount: emails.length, batchSize });
+  }
 
   const results = [];
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   for (let i = 0; i < emails.length; i += batchSize) {
     const batch = emails.slice(i, i + batchSize);
+    let batchPaused = false;
+    let pauseDelay = 0;
+    
     const batchPromises = batch.map(async (emailOptions) => {
       await delay(emailDelay);
       
@@ -210,10 +271,34 @@ async function sendBatchEmails(options) {
         ...trackingInfo
       });
       
+      // Check if rate limited (indicated by error message containing rate limit info)
+      if (!result.success && result.error && (
+        result.error.includes('429') || 
+        result.error.toLowerCase().includes('rate limit') ||
+        result.error.toLowerCase().includes('too many requests')
+      )) {
+        // Extract retry-after from error if available, or use default
+        const retryAfterMatch = result.error.match(/retry[-\s]after[:\s]+(\d+)/i);
+        if (retryAfterMatch) {
+          pauseDelay = parseInt(retryAfterMatch[1], 10) * 1000;
+        } else {
+          pauseDelay = 1000; // Default 1 second
+        }
+        batchPaused = true;
+        logger.warn('[EMAIL_SERVICE] Batch paused due to rate limit', { 
+          pauseDelay 
+        });
+      }
+      
       results.push(result);
     });
     
     await Promise.all(batchPromises);
+    
+    // If batch was paused due to rate limit, wait before continuing
+    if (batchPaused && pauseDelay > 0) {
+      await delay(pauseDelay);
+    }
     
     // Delay between batches
     if (i + batchSize < emails.length) {
@@ -224,7 +309,10 @@ async function sendBatchEmails(options) {
   const sentCount = results.filter(r => r.success || r.status === 'sent').length;
   const failedCount = results.filter(r => !r.success || r.status === 'failed').length;
 
-  logger.info('[EMAIL_SERVICE] Batch completed', { sentCount, failedCount, total: emails.length });
+  // Only log batch completion if there were failures or in development
+  if (failedCount > 0 || process.env.NODE_ENV !== 'production') {
+    logger.info('[EMAIL_SERVICE] Batch completed', { sentCount, failedCount, total: emails.length });
+  }
 
   return {
     success: true,

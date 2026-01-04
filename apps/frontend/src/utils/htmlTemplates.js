@@ -201,57 +201,262 @@ export function generateHtmlFromText(textContent, theme = 'elegant') {
 }
 
 /**
- * Enhanced conditional block processing for frontend preview
+ * Parse condition string into operator and operands (matches backend implementation)
+ * @param {string} condition - Condition string to parse
+ * @returns {Object|null} Parsed condition object or null if invalid
  */
-function processConditionalBlocks(text, variables = {}) {
-  // Handle {{#if condition}}...{{/if}} blocks
-  text = text.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, content) => {
-    return evaluateCondition(condition, variables) ? content : '';
-  });
+function parseCondition(condition) {
+  const trimmed = condition.trim();
   
-  // Handle {{#if condition}}...{{else}}...{{/if}} blocks
-  text = text.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, ifContent, elseContent) => {
-    return evaluateCondition(condition, variables) ? ifContent : elseContent;
-  });
+  // Try strict equality operators first (===, !==)
+  if (trimmed.includes('===')) {
+    const parts = trimmed.split('===').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '===', left: parts[0], right: parts[1] };
+    }
+  }
   
-  return text;
+  if (trimmed.includes('!==')) {
+    const parts = trimmed.split('!==').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '!==', left: parts[0], right: parts[1] };
+    }
+  }
+  
+  // Try loose equality operators (==, !=)
+  if (trimmed.includes('==')) {
+    const parts = trimmed.split('==').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '==', left: parts[0], right: parts[1] };
+    }
+  }
+  
+  if (trimmed.includes('!=')) {
+    const parts = trimmed.split('!=').map(s => s.trim().replace(/['"]/g, ''));
+    if (parts.length === 2) {
+      return { operator: '!=', left: parts[0], right: parts[1] };
+    }
+  }
+  
+  // Simple truthy check (no operator)
+  return { operator: 'truthy', left: trimmed, right: null };
 }
 
 /**
- * Evaluate conditional expressions for frontend
+ * Evaluate conditional expressions (matches backend implementation exactly)
+ * @param {string} condition - Condition string to evaluate
+ * @param {Object} variables - Template variables
+ * @returns {boolean} Evaluation result
  */
 function evaluateCondition(condition, variables) {
-  // Handle simple boolean checks
-  if (condition.includes('===')) {
-    const [key, value] = condition.split('===').map(s => s.trim().replace(/['"]/g, ''));
-    return variables[key] === value;
+  const parsed = parseCondition(condition);
+  
+  if (!parsed) {
+    if (import.meta.env.VITE_ENABLE_LOGS === 'true') {
+      console.warn('[TEMPLATE_PARSER] Invalid condition format in template', { condition });
+    }
+    return false;
   }
   
-  if (condition.includes('!==')) {
-    const [key, value] = condition.split('!==').map(s => s.trim().replace(/['"]/g, ''));
-    return variables[key] !== value;
+  try {
+    if (parsed.operator === '===') {
+      return variables[parsed.left] === parsed.right;
+    } else if (parsed.operator === '!==') {
+      return variables[parsed.left] !== parsed.right;
+    } else if (parsed.operator === '==') {
+      return variables[parsed.left] == parsed.right; // Loose equality for type coercion
+    } else if (parsed.operator === '!=') {
+      return variables[parsed.left] != parsed.right; // Loose equality for type coercion
+    } else if (parsed.operator === 'truthy') {
+      const value = variables[parsed.left];
+      
+      // Handle different types of values
+      if (typeof value === 'boolean') {
+        return value;
+      } else if (typeof value === 'string') {
+        return value.length > 0 && value !== 'null' && value !== 'undefined';
+      } else if (typeof value === 'number') {
+        return value !== 0;
+      } else if (Array.isArray(value)) {
+        return value.length > 0;
+      } else {
+        return !!value; // Default truthy check
+      }
+    }
+    
+    return false;
+  } catch (error) {
+    if (import.meta.env.VITE_ENABLE_LOGS === 'true') {
+      console.warn('[TEMPLATE_PARSER] Error evaluating condition in template', { condition, error: error.message });
+    }
+    return false;
+  }
+}
+
+/**
+ * Process conditional blocks with proper nested block handling (matches backend implementation)
+ * Uses recursive parser that tracks block depth to correctly match opening/closing tags
+ * @param {string} text - Template content
+ * @param {Object} variables - Template variables
+ * @returns {string} Processed template with conditionals evaluated
+ */
+function processConditionalBlocks(text, variables = {}) {
+  if (!text) return '';
+  
+  const enableLogs = import.meta.env.VITE_ENABLE_LOGS === 'true';
+  let result = '';
+  let i = 0;
+  
+  while (i < text.length) {
+    // Look for {{#if or {{#unless
+    const ifStart = text.indexOf('{{#if', i);
+    const unlessStart = text.indexOf('{{#unless', i);
+    
+    // Find the earliest conditional block start
+    let blockStart = -1;
+    let isUnless = false;
+    if (ifStart !== -1 && unlessStart !== -1) {
+      blockStart = Math.min(ifStart, unlessStart);
+      isUnless = unlessStart < ifStart;
+    } else if (ifStart !== -1) {
+      blockStart = ifStart;
+      isUnless = false;
+    } else if (unlessStart !== -1) {
+      blockStart = unlessStart;
+      isUnless = true;
+    }
+    
+    if (blockStart === -1) {
+      // No more conditionals, append rest of template
+      result += text.substring(i);
+      break;
+    }
+    
+    // Append content before the conditional
+    result += text.substring(i, blockStart);
+    
+    // Find the condition and opening brace end
+    const searchStart = blockStart + (isUnless ? 10 : 6); // After "{{#if" or "{{#unless"
+    const conditionEnd = text.indexOf('}}', searchStart);
+    if (conditionEnd === -1) {
+      // Malformed block, append as-is
+      if (enableLogs) {
+        console.warn('[TEMPLATE_PARSER] Warning: Malformed block found, missing closing }}', { position: blockStart });
+      }
+      result += text.substring(blockStart);
+      break;
+    }
+    
+    const condition = text.substring(searchStart, conditionEnd).trim();
+    
+    // Find the matching {{/if}} or {{/unless}} by tracking depth
+    let depth = 1;
+    let contentStart = conditionEnd + 2;
+    let contentEnd = contentStart;
+    let elseIndex = -1;
+    let elseDepth = -1;
+    
+    while (depth > 0 && contentEnd < text.length) {
+      const nextIf = text.indexOf('{{#if', contentEnd);
+      const nextUnless = text.indexOf('{{#unless', contentEnd);
+      const nextElse = text.indexOf('{{else}}', contentEnd);
+      const nextEndIf = text.indexOf('{{/if}}', contentEnd);
+      const nextEndUnless = text.indexOf('{{/unless}}', contentEnd);
+      
+      // Find the earliest of these
+      const positions = [
+        nextIf !== -1 ? nextIf : Infinity,
+        nextUnless !== -1 ? nextUnless : Infinity,
+        nextElse !== -1 ? nextElse : Infinity,
+        nextEndIf !== -1 ? nextEndIf : Infinity,
+        nextEndUnless !== -1 ? nextEndUnless : Infinity
+      ];
+      const minPos = Math.min(...positions);
+      
+      if (minPos === Infinity) {
+        // No more tags found, unmatched block
+        if (enableLogs) {
+          console.warn('[TEMPLATE_PARSER] Warning: Unmatched block tag', { condition, isUnless, position: blockStart });
+        }
+        result += text.substring(blockStart);
+        return result;
+      }
+      
+      if (minPos === nextIf || minPos === nextUnless) {
+        // Found nested block
+        depth++;
+        contentEnd = minPos + (minPos === nextUnless ? 10 : 6);
+      } else if ((minPos === nextEndIf && !isUnless) || (minPos === nextEndUnless && isUnless)) {
+        // Found matching closing tag ({{/if}} for {{#if}}, {{/unless}} for {{#unless}})
+        depth--;
+        if (depth === 0) {
+          contentEnd = minPos;
+          break;
+        }
+        contentEnd = minPos + (minPos === nextEndUnless ? 11 : 7);
+      } else if (minPos === nextEndIf && isUnless) {
+        // Found {{/if}} but we're looking for {{/unless}}, skip it (might be nested)
+        depth--;
+        if (depth === 0) {
+          // This shouldn't happen, but handle gracefully
+          if (enableLogs) {
+            console.warn('[TEMPLATE_PARSER] Warning: Found {{/if}} for {{#unless}} block', { condition, position: minPos });
+          }
+          contentEnd = minPos;
+          break;
+        }
+        contentEnd = minPos + 7;
+      } else if (minPos === nextEndUnless && !isUnless) {
+        // Found {{/unless}} but we're looking for {{/if}}, skip it (might be nested)
+        depth--;
+        if (depth === 0) {
+          // This shouldn't happen, but handle gracefully
+          if (enableLogs) {
+            console.warn('[TEMPLATE_PARSER] Warning: Found {{/unless}} for {{#if}} block', { condition, position: minPos });
+          }
+          contentEnd = minPos;
+          break;
+        }
+        contentEnd = minPos + 11;
+      } else if (minPos === nextElse && depth === 1) {
+        // Found else at current level (depth 1)
+        elseIndex = nextElse;
+        elseDepth = depth;
+        contentEnd = nextElse + 8;
+      } else {
+        // Else at deeper level, skip it
+        contentEnd = minPos + 8;
+      }
+    }
+    
+    if (depth === 0) {
+      // Found matching closing tag
+      const ifContent = text.substring(contentStart, elseIndex !== -1 ? elseIndex : contentEnd);
+      const elseContent = elseIndex !== -1 ? text.substring(elseIndex + 8, contentEnd) : '';
+      
+      // Evaluate condition (negate if unless)
+      const conditionResult = isUnless ? !evaluateCondition(condition, variables) : evaluateCondition(condition, variables);
+      
+      const selectedContent = conditionResult ? ifContent : elseContent;
+      
+      // Recursively process nested conditionals in the selected content
+      const processedContent = processConditionalBlocks(selectedContent, variables);
+      
+      result += processedContent;
+      
+      // Move past closing tag ({{/if}} or {{/unless}})
+      i = contentEnd + (isUnless ? 11 : 7);
+    } else {
+      // No matching closing tag, append as-is
+      if (enableLogs) {
+        console.warn('[TEMPLATE_PARSER] Warning: Unmatched {{#if}} tag', { condition, position: blockStart });
+      }
+      result += text.substring(blockStart);
+      break;
+    }
   }
   
-  if (condition.includes('==')) {
-    const [key, value] = condition.split('==').map(s => s.trim().replace(/['"]/g, ''));
-    return variables[key] == value;
-  }
-  
-  if (condition.includes('!=')) {
-    const [key, value] = condition.split('!=').map(s => s.trim().replace(/['"]/g, ''));
-    return variables[key] != value;
-  }
-  
-  // Handle simple truthy checks
-  const key = condition.trim();
-  const value = variables[key];
-  
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'string') return value.length > 0 && value !== 'null' && value !== 'undefined';
-  if (typeof value === 'number') return value !== 0;
-  if (Array.isArray(value)) return value.length > 0;
-  
-  return !!value;
+  return result;
 }
 
 /**

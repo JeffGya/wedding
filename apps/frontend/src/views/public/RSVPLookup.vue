@@ -86,12 +86,15 @@ async function submitLookup(event) {
       name: 'public-rsvp',
       params: { lang: route.params.lang, code: code.value.trim() }
     });
-  } catch {
-    error.value = t('rsvp.errorFetch');
+  } catch (err) {
+    // Handle rate limit errors (429)
+    if (err.response?.status === 429) {
+      error.value = err.response?.data?.message || 'Too many requests. Please try again later.';
+    } else {
+      error.value = t('rsvp.errorFetch');
+    }
   } finally {
     submitting.value = false;
-    console.log('Error message:', error.value);
-    console.log('Localized error message:', t('rsvp.errorFetch'));
   }
 }
 </script>

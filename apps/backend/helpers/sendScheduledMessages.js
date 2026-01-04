@@ -16,8 +16,6 @@ async function sendScheduledMessages() {
   let globalSent = 0;
   let globalFailed = 0;
   try {
-    logger.debug('📨 Starting scheduled message check...');
-    
     // Get all scheduled messages that are due
     const scheduledMessages = await dbAll(
       process.env.DB_TYPE === 'mysql'
@@ -33,23 +31,18 @@ async function sendScheduledMessages() {
     });
 
     if (dueMessages.length === 0) {
-      logger.debug('✅ No scheduled messages ready to send.');
       return;
     }
 
-    logger.debug(`📬 Found ${dueMessages.length} scheduled message(s) to send.`);
-
     for (const message of dueMessages) {
-      logger.debug(`➡️ Attempting to send message ID: ${message.id}`);
 
-      // Retrieve recipients for the scheduled message
+      // Retrieve recipients for the scheduled message (including rate_limited ones)
       const recipients = await dbAll(
-        `SELECT * FROM message_recipients WHERE message_id = ? AND delivery_status = 'pending'`,
+        `SELECT * FROM message_recipients WHERE message_id = ? AND (delivery_status = 'pending' OR delivery_status = 'rate_limited')`,
         [message.id]
       );
 
       if (recipients.length === 0) {
-        logger.debug(`⚠️ No recipients found for message ID: ${message.id}. Skipping.`);
         continue;
       }
 
@@ -114,7 +107,6 @@ async function sendScheduledMessages() {
           });
 
           if (result.success) {
-            logger.info('[SCHEDULED_MESSAGES] Sent', { to: recipient.email, messageId: result.messageId });
             // Update the status to 'sent' and store the message ID
             await dbRun(
               `UPDATE message_recipients SET delivery_status = ?, resend_message_id = ?, sent_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
@@ -123,18 +115,36 @@ async function sendScheduledMessages() {
             sendResults.push({ recipientId: recipient.id, status: 'sent' });
             globalSent++;
           } else {
-            logger.error('[SCHEDULED_MESSAGES] Failed', { to: recipient.email, error: result.error });
-            // Store the error in the database
-            await dbRun(
-              `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-              ['failed', result.error || 'Unknown error', recipient.id]
+            // Check if error is due to rate limiting
+            const isRateLimit = result.error && (
+              result.error.includes('429') || 
+              result.error.toLowerCase().includes('rate limit') ||
+              result.error.toLowerCase().includes('too many requests')
             );
-            sendResults.push({ recipientId: recipient.id, status: 'failed' });
-            globalFailed++;
+            
+            if (isRateLimit) {
+              logger.warn('[SCHEDULED_MESSAGES] Rate limited, marking for retry', { to: recipient.email, recipientId: recipient.id });
+              // Mark as rate_limited for retry in next scheduler run
+              await dbRun(
+                `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+                ['rate_limited', result.error || 'Rate limited', recipient.id]
+              );
+              sendResults.push({ recipientId: recipient.id, status: 'rate_limited' });
+              // Don't increment failed count - it will be retried
+            } else {
+              logger.error('[SCHEDULED_MESSAGES] Failed', { to: recipient.email, error: result.error });
+              // Store the error in the database
+              await dbRun(
+                `UPDATE message_recipients SET delivery_status = ?, error_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+                ['failed', result.error || 'Unknown error', recipient.id]
+              );
+              sendResults.push({ recipientId: recipient.id, status: 'failed' });
+              globalFailed++;
+            }
           }
 
-          // Add a delay to avoid rate limit
-          await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+          // Add a delay to avoid rate limit (reduced to 500ms to stay under 2 req/sec)
+          await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
 
         } catch (sendError) {
           logger.error('[SCHEDULED_MESSAGES] Send failed', { recipientId: recipient.id, error: sendError.message });
@@ -151,10 +161,12 @@ async function sendScheduledMessages() {
         `UPDATE messages SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
         ['sent', message.id]
       );
-
-      logger.debug(`✅ Finished sending message ID: ${message.id}. Results:`, sendResults);
     }
-    logger.debug(`📝 Scheduler summary: processed ${globalSent + globalFailed} deliveries — ${globalSent} sent, ${globalFailed} failed.`);
+    
+    // Only log summary if there were messages processed or failures
+    if (globalSent > 0 || globalFailed > 0) {
+      logger.info('[SCHEDULED_MESSAGES] Summary', { sent: globalSent, failed: globalFailed });
+    }
   } catch (err) {
     logger.error('❌ Error in sendScheduledMessages:', err);
   }

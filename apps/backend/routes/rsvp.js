@@ -2,30 +2,19 @@
 
 const express = require('express');
 const { setGuestSession } = require('../middleware/guestSession');
+const { createRateLimiter } = require('../middleware/rateLimiter');
 const router = express.Router();
-// Simple in-memory rate limiter (IP-based) for lookup route
-const rateBuckets = new Map();
-function rateLimit(windowMs = 15 * 60 * 1000, max = 10) {
-  return (req, res, next) => {
-    const key = req.ip;
-    const now = Date.now();
-    let bucket = rateBuckets.get(key);
-    if (!bucket || bucket.reset < now) {
-      bucket = { count: 1, reset: now + windowMs };
-      rateBuckets.set(key, bucket);
-      return next();
-    }
-    if (bucket.count >= max) {
-      return res.status(429).json({ error: { message: 'Too many requests. Try again later.', code: 'RATE_LIMITED' }, message: 'Too many requests. Try again later.' });
-    }
-    bucket.count++;
-    next();
-  };
-}
-// Allow overriding via env, but default to 15min / 10 req
+
+// Rate limiter for RSVP lookup route (IP-based, configurable via env)
 const WINDOW_MS = Number(process.env.RSVP_LOOKUP_WINDOW_MS) || 15 * 60 * 1000;
 const MAX_REQ = Number(process.env.RSVP_LOOKUP_MAX) || 10;
-const lookupRateLimit = rateLimit(WINDOW_MS, MAX_REQ);
+const lookupRateLimit = createRateLimiter({
+  windowMs: WINDOW_MS,
+  max: MAX_REQ,
+  keyGenerator: (req) => req.ip,
+  errorCode: 'RATE_LIMITED',
+  errorMessage: 'Too many requests. Try again later.'
+});
 // parse JSON bodies on this router
 router.use(express.json());
 const getDbConnection = require('../db/connection');

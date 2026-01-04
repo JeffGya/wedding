@@ -12,6 +12,7 @@ const { generateEmailHTML } = require('../utils/emailTemplates');
 const { sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 const requireAuth = require('../middleware/auth');
+const quotaTracker = require('../helpers/quotaTracker');
 
 const router = express.Router();
 
@@ -156,6 +157,69 @@ router.get('/', requireAuth, async (req, res) => {
   } catch (err) {
     logger.error('Error retrieving email settings:', err);
     return sendInternalError(res, err, 'GET /email-settings');
+  }
+});
+
+/**
+ * @openapi
+ * /emailSettings/quota:
+ *   get:
+ *     summary: Get Resend quota status and queue information
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       '200':
+ *         description: Quota status with daily, monthly, and queue information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 daily:
+ *                   type: object
+ *                   properties:
+ *                     sent:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     remaining:
+ *                       type: integer
+ *                     resetsAt:
+ *                       type: string
+ *                 monthly:
+ *                   type: object
+ *                   properties:
+ *                     sent:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     remaining:
+ *                       type: integer
+ *                     resetsAt:
+ *                       type: string
+ *                 queue:
+ *                   type: object
+ *                   properties:
+ *                     length:
+ *                       type: integer
+ *                     validUntil:
+ *                       type: string
+ *       '500':
+ *         description: Server error retrieving quota status
+ */
+// Get quota status
+router.get('/quota', requireAuth, async (req, res) => {
+  try {
+    const quotaStatus = quotaTracker.getQuotaStatus();
+    const queueStatus = quotaTracker.getQueueStatus();
+    
+    res.json({
+      ...quotaStatus,
+      queue: queueStatus
+    });
+  } catch (err) {
+    logger.error('Error retrieving quota status:', err);
+    return sendInternalError(res, err, 'GET /email-settings/quota');
   }
 });
 

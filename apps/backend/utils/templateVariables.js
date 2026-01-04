@@ -192,7 +192,8 @@ function evaluateCondition(condition, vars) {
 }
 
 /**
- * Process conditional blocks like {{#if condition}}...{{/if}}
+ * Process conditional blocks like {{#if condition}}...{{/if}} with proper nested block handling
+ * Uses recursive parser that tracks block depth to correctly match opening/closing tags
  * @param {string} template - Template content
  * @param {Object} vars - Template variables
  * @returns {string} Processed template with conditionals evaluated
@@ -200,19 +201,149 @@ function evaluateCondition(condition, vars) {
 function processConditionalBlocks(template, vars) {
   if (!template) return '';
   
-  let processed = template;
+  let result = '';
+  let i = 0;
   
-  // Handle {{#if condition}}...{{else}}...{{/if}} blocks first (more specific)
-  processed = processed.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, ifContent, elseContent) => {
-    return evaluateCondition(condition, vars) ? ifContent : elseContent;
-  });
+  while (i < template.length) {
+    // Look for {{#if or {{#unless
+    const ifStart = template.indexOf('{{#if', i);
+    const unlessStart = template.indexOf('{{#unless', i);
+    
+    // Find the earliest conditional block start
+    let blockStart = -1;
+    let isUnless = false;
+    if (ifStart !== -1 && unlessStart !== -1) {
+      blockStart = Math.min(ifStart, unlessStart);
+      isUnless = unlessStart < ifStart;
+    } else if (ifStart !== -1) {
+      blockStart = ifStart;
+      isUnless = false;
+    } else if (unlessStart !== -1) {
+      blockStart = unlessStart;
+      isUnless = true;
+    }
+    
+    if (blockStart === -1) {
+      // No more conditionals, append rest of template
+      result += template.substring(i);
+      break;
+    }
+    
+    // Append content before the conditional
+    result += template.substring(i, blockStart);
+    
+    // Find the condition and opening brace end
+    const searchStart = blockStart + (isUnless ? 10 : 6); // After "{{#if" or "{{#unless"
+    const conditionEnd = template.indexOf('}}', searchStart);
+    if (conditionEnd === -1) {
+      // Malformed block, append as-is
+      logger.warn('[TEMPLATE_PARSER] Warning: Malformed block found, missing closing }}', { position: blockStart });
+      result += template.substring(blockStart);
+      break;
+    }
+    
+    const condition = template.substring(searchStart, conditionEnd).trim();
+    
+    // Find the matching {{/if}} or {{/unless}} by tracking depth
+    let depth = 1;
+    let contentStart = conditionEnd + 2;
+    let contentEnd = contentStart;
+    let elseIndex = -1;
+    let elseDepth = -1;
+    
+    while (depth > 0 && contentEnd < template.length) {
+      const nextIf = template.indexOf('{{#if', contentEnd);
+      const nextUnless = template.indexOf('{{#unless', contentEnd);
+      const nextElse = template.indexOf('{{else}}', contentEnd);
+      const nextEndIf = template.indexOf('{{/if}}', contentEnd);
+      const nextEndUnless = template.indexOf('{{/unless}}', contentEnd);
+      
+      // Find the earliest of these
+      const positions = [
+        nextIf !== -1 ? nextIf : Infinity,
+        nextUnless !== -1 ? nextUnless : Infinity,
+        nextElse !== -1 ? nextElse : Infinity,
+        nextEndIf !== -1 ? nextEndIf : Infinity,
+        nextEndUnless !== -1 ? nextEndUnless : Infinity
+      ];
+      const minPos = Math.min(...positions);
+      
+      if (minPos === Infinity) {
+        // No more tags found, unmatched block
+        logger.warn('[TEMPLATE_PARSER] Warning: Unmatched block tag', { condition, isUnless, position: blockStart });
+        result += template.substring(blockStart);
+        return result;
+      }
+      
+      if (minPos === nextIf || minPos === nextUnless) {
+        // Found nested block
+        depth++;
+        contentEnd = minPos + (minPos === nextUnless ? 10 : 6);
+      } else if ((minPos === nextEndIf && !isUnless) || (minPos === nextEndUnless && isUnless)) {
+        // Found matching closing tag ({{/if}} for {{#if}}, {{/unless}} for {{#unless}})
+        depth--;
+        if (depth === 0) {
+          contentEnd = minPos;
+          break;
+        }
+        contentEnd = minPos + (minPos === nextEndUnless ? 11 : 7);
+      } else if (minPos === nextEndIf && isUnless) {
+        // Found {{/if}} but we're looking for {{/unless}}, skip it (might be nested)
+        depth--;
+        if (depth === 0) {
+          // This shouldn't happen, but handle gracefully
+          logger.warn('[TEMPLATE_PARSER] Warning: Found {{/if}} for {{#unless}} block', { condition, position: minPos });
+          contentEnd = minPos;
+          break;
+        }
+        contentEnd = minPos + 7;
+      } else if (minPos === nextEndUnless && !isUnless) {
+        // Found {{/unless}} but we're looking for {{/if}}, skip it (might be nested)
+        depth--;
+        if (depth === 0) {
+          // This shouldn't happen, but handle gracefully
+          logger.warn('[TEMPLATE_PARSER] Warning: Found {{/unless}} for {{#if}} block', { condition, position: minPos });
+          contentEnd = minPos;
+          break;
+        }
+        contentEnd = minPos + 11;
+      } else if (minPos === nextElse && depth === 1) {
+        // Found else at current level (depth 1)
+        elseIndex = nextElse;
+        elseDepth = depth;
+        contentEnd = nextElse + 8;
+      } else {
+        // Else at deeper level, skip it
+        contentEnd = minPos + 8;
+      }
+    }
+    
+    if (depth === 0) {
+      // Found matching closing tag
+      const ifContent = template.substring(contentStart, elseIndex !== -1 ? elseIndex : contentEnd);
+      const elseContent = elseIndex !== -1 ? template.substring(elseIndex + 8, contentEnd) : '';
+      
+      // Evaluate condition (negate if unless)
+      const conditionResult = isUnless ? !evaluateCondition(condition, vars) : evaluateCondition(condition, vars);
+      
+      const selectedContent = conditionResult ? ifContent : elseContent;
+      
+      // Recursively process nested conditionals in the selected content
+      const processedContent = processConditionalBlocks(selectedContent, vars);
+      
+      result += processedContent;
+      
+      // Move past closing tag ({{/if}} or {{/unless}})
+      i = contentEnd + (isUnless ? 11 : 7);
+    } else {
+      // No matching closing tag, append as-is
+      logger.warn('[TEMPLATE_PARSER] Warning: Unmatched {{#if}} tag', { condition, position: blockStart });
+      result += template.substring(blockStart);
+      break;
+    }
+  }
   
-  // Handle {{#if condition}}...{{/if}} blocks (no else)
-  processed = processed.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, content) => {
-    return evaluateCondition(condition, vars) ? content : '';
-  });
-  
-  return processed;
+  return result;
 }
 
 /**
