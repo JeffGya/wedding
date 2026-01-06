@@ -1,29 +1,29 @@
 <template>
   <Card class="bg-card-bg border border-form-border rounded-lg">
     <template #content>
-      <Form @submit="handleSubmit">
+      <Form :model="form" @submit="handleSubmit">
         <div class="space-y-8 mb-16">
           <FloatLabel variant="in">
             <InputText
               id="email"
-              v-model="email"
+              v-model="form.email"
               type="email"
               autocomplete="email"
               class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-              :class="{ 'border-red-500': error && !email }"
-              required
+              :class="{ 'border-red-500': error && !form.email }"
+              rules="required|email"
             />
             <label for="email" class="text-txt font-medium">Email</label>
           </FloatLabel>
           <FloatLabel variant="in">
             <Password
               id="password"
-              v-model="password"
+              v-model="form.password"
               :feedback="false"
               toggleMask
               class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-              :class="{ 'border-red-500': error && !password }"
-              required
+              :class="{ 'border-red-500': error && !form.password }"
+              rules="required"
             />
             <label for="password" class="text-txt font-medium">Password</label>
           </FloatLabel>
@@ -42,27 +42,30 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '@/api/auth.js';
 import { useAuthStore } from '@/store/auth';
 import Password from 'primevue/password';
 
-const email = ref('');
-const password = ref('');
+const form = reactive({
+  email: '',
+  password: ''
+});
+
 const error = ref('');
 const router = useRouter();
 const auth = useAuthStore();
 
 const handleSubmit = async () => {
-  if (!email.value || !password.value) return;
+  if (!form.email || !form.password) return;
 
   try {
-    await login({ email: email.value, password: password.value });
+    await login({ email: form.email, password: form.password });
     await auth.fetchUser();
     error.value = '';
-    email.value = '';
-    password.value = '';
+    form.email = '';
+    form.password = '';
     router.push('/admin/overview');
   } catch (err) {
     error.value = err.message;

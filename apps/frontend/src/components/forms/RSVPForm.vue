@@ -1,117 +1,92 @@
 <template>
   <Form
+    ref="formRef"
+    :model="form"
     class="space-y-16"
     :key="props.guest.code"
-    :validation-schema="validationSchema"
     @submit="onSubmit"
-    :initial-values="initialValues"
-    v-slot="{ errors, values }"
   >
     <CountdownTimer v-if="props.guest.rsvp_deadline" :deadline="props.guest.rsvp_deadline" @expired="onExpired" />
 
     <Banner v-if="formError" :message="formError" type="error" />
 
-    <Field name="attending" v-slot="{ field, handleChange, value }">
+    <div class="space-y-8">
+      <p class="text-txt font-medium">
+        {{ $t('rsvp.attendingLabel') }}
+      </p>
       <div class="space-y-8">
-        <p class="text-txt font-medium">
-          {{ $t('rsvp.attendingLabel') }}
-        </p>
-        <div class="space-y-8">
-          <div class="flex items-center gap-16">
-            <RadioButton 
-              :modelValue="value"
-              @update:modelValue="(val) => { 
-                handleChange(val);
-                form.attending = val;
-              }"
-              inputId="attending-yes" 
-              name="attending" 
-              :value="true"
-              class="text-btn-primary-base"
-            />
-            <label for="attending-yes" class="text-txt font-medium">{{ $t('rsvp.attendingYes') }}</label>
-          </div>
-          <div class="flex items-center gap-16">
-            <RadioButton 
-              :modelValue="value"
-              @update:modelValue="(val) => { 
-                handleChange(val);
-                form.attending = val;
-              }"
-              inputId="attending-no" 
-              name="attending" 
-              :value="false" 
-              class="text-btn-primary-base"
-            />
-            <label for="attending-no" class="text-txt font-medium">{{ $t('rsvp.attendingNo') }}</label>
-          </div>
+        <div class="flex items-center gap-16">
+          <RadioButton 
+            v-model="form.attending"
+            inputId="attending-yes" 
+            name="attending" 
+            :value="true"
+            class="text-btn-primary-base"
+            rules="required"
+          />
+          <label for="attending-yes" class="text-txt font-medium">{{ $t('rsvp.attendingYes') }}</label>
         </div>
-        <Banner v-if="errors.attending" :message="errors.attending" type="error" :closable="false" class="text-sm" />
+        <div class="flex items-center gap-16">
+          <RadioButton 
+            v-model="form.attending"
+            inputId="attending-no" 
+            name="attending" 
+            :value="false" 
+            class="text-btn-primary-base"
+            rules="required"
+          />
+          <label for="attending-no" class="text-txt font-medium">{{ $t('rsvp.attendingNo') }}</label>
+        </div>
       </div>
-    </Field>
+      <Banner v-if="fieldErrors.attending" :message="fieldErrors.attending" type="error" :closable="false" class="text-sm" />
+    </div>
 
     <Transition name="fade">
       <div v-if="form.attending" class="space-y-8">
-        <Field name="dietary" v-slot="{ field, handleChange, value }">
-          <label for="dietary" class="text-txt font-medium block mb-8">
-            {{ $t('rsvp.dietaryLabel') }}
-          </label>
-          <InputText 
-            id="dietary" 
-            type="text"
-            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-            :modelValue="value"
-            @update:modelValue="(val) => { 
-              handleChange(val);
-              form.dietary = val;
-            }"
-          />
-        </Field>
-        <Banner v-if="errors.dietary" :message="errors.dietary" type="error" :closable="false" class="text-sm" />
+        <label for="dietary" class="text-txt font-medium block mb-8">
+          {{ $t('rsvp.dietaryLabel') }}
+        </label>
+        <InputText 
+          id="dietary" 
+          v-model="form.dietary"
+          type="text"
+          class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+          :rules="dietaryRules"
+        />
+        <Banner v-if="fieldErrors.dietary" :message="fieldErrors.dietary" type="error" :closable="false" class="text-sm" />
       </div>
     </Transition>
 
     <Transition name="fade">
       <div v-if="form.attending" class="space-y-8">
-        <Field name="notes" v-slot="{ field, handleChange, value }">
-          <label for="notes" class="text-txt font-medium block mb-8">
-            {{ $t('rsvp.notesLabel') }}
-          </label>
-          <Textarea
-            id="notes" 
-            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus min-h-48"
-            :modelValue="value"
-            @update:modelValue="(val) => { 
-              handleChange(val);
-              form.notes = val;
-            }"
-          />
-        </Field>
-        <Banner v-if="errors.notes" :message="errors.notes" type="error" :closable="false" class="text-sm" />
+        <label for="notes" class="text-txt font-medium block mb-8">
+          {{ $t('rsvp.notesLabel') }}
+        </label>
+        <Textarea
+          id="notes" 
+          v-model="form.notes"
+          class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus min-h-48"
+          :rules="notesRules"
+        />
+        <Banner v-if="fieldErrors.notes" :message="fieldErrors.notes" type="error" :closable="false" class="text-sm" />
       </div>
     </Transition>
 
     <Transition name="fade">
       <div v-if="form.attending && props.guest.can_bring_plus_one" class="space-y-8">
-        <Field name="add_plus_one" v-slot="{ field, handleChange, value }">
-          <p class="text-txt font-medium">
-            {{ $t('rsvp.plusOneLabel') }}
-          </p>
-          <div class="flex items-center gap-16">
-            <ToggleSwitch 
-              inputId="add-plus-one" 
-              :modelValue="value"
-              @update:modelValue="(val) => { 
-                handleChange(val);
-                form.add_plus_one = val;
-              }"
-              class="text-btn-primary-base"
-            />
-            <label for="add-plus-one" class="text-txt font-medium">
-              {{ value ? $t('rsvp.yes') : $t('rsvp.no') }}
-            </label>
-          </div>
-        </Field>
+        <p class="text-txt font-medium">
+          {{ $t('rsvp.plusOneLabel') }}
+        </p>
+        <div class="flex items-center gap-16">
+          <ToggleSwitch 
+            inputId="add-plus-one" 
+            v-model="form.add_plus_one"
+            class="text-btn-primary-base"
+          />
+          <label for="add-plus-one" class="text-txt font-medium">
+            {{ form.add_plus_one ? $t('rsvp.yes') : $t('rsvp.no') }}
+          </label>
+        </div>
       </div>
     </Transition>
 
@@ -121,39 +96,29 @@
         class="plus-one p-16 rounded-md space-y-16 border border-bg-glass-border"
       >
         <div class="space-y-8">
-          <Field name="plus_one_name" v-slot="{ field, handleChange, value }">
-            <label for="plus_one_name" class="text-txt font-medium block mb-8">
-              {{ $t('rsvp.plusOneNameLabel') }}
-            </label>
-            <InputText
-              id="plus_one_name"
-              class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-              :modelValue="value"
-              @update:modelValue="(val) => { 
-                handleChange(val);
-                form.plus_one_name = val;
-              }"
-            />
-          </Field>
-          <Banner v-if="errors.plus_one_name" :message="errors.plus_one_name" type="error" :closable="false" class="text-sm" />
+          <label for="plus_one_name" class="text-txt font-medium block mb-8">
+            {{ $t('rsvp.plusOneNameLabel') }}
+          </label>
+          <InputText
+            id="plus_one_name"
+            v-model="form.plus_one_name"
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+            :rules="plusOneNameRules"
+          />
+          <Banner v-if="fieldErrors.plus_one_name" :message="fieldErrors.plus_one_name" type="error" :closable="false" class="text-sm" />
         </div>
         
         <div class="space-y-8">
-          <Field name="plus_one_dietary" v-slot="{ field, handleChange, value }">
-            <label for="plus_one_dietary" class="text-txt font-medium block mb-8">
-              {{ $t('rsvp.plusOneDietaryLabel') }}
-            </label>
-            <InputText 
-              id="plus_one_dietary" 
-              class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
-              :modelValue="value"
-              @update:modelValue="(val) => { 
-                handleChange(val);
-                form.plus_one_dietary = val;
-              }"
-            />
-          </Field>
-          <Banner v-if="errors.plus_one_dietary" :message="errors.plus_one_dietary" type="error" :closable="false" class="text-sm" />
+          <label for="plus_one_dietary" class="text-txt font-medium block mb-8">
+            {{ $t('rsvp.plusOneDietaryLabel') }}
+          </label>
+          <InputText 
+            id="plus_one_dietary" 
+            v-model="form.plus_one_dietary"
+            class="w-full bg-form-bg border border-form-border rounded-md transition-colors duration-200 focus:bg-form-bg-focus focus:border-form-border-focus"
+            :rules="plusOneDietaryRules"
+          />
+          <Banner v-if="fieldErrors.plus_one_dietary" :message="fieldErrors.plus_one_dietary" type="error" :closable="false" class="text-sm" />
         </div>
       </div>
     </Transition>
@@ -187,11 +152,9 @@
 
 <script setup>
 import { computed, ref, reactive, watch } from 'vue';
-import { Form, Field, useField } from 'vee-validate';
 import Banner from '@/components/ui/Banner.vue';
 import CountdownTimer from '@/components/ui/CountdownTimer.vue';
 import { useI18n } from 'vue-i18n';
-import { createRsvpSchema } from '@/validation/rsvp.schema';
 
 const { t } = useI18n();
 
@@ -209,38 +172,13 @@ const props = defineProps({
 const emit = defineEmits(['submit', 'update:modelValue']);
 
 const formError = ref('');
-
-// Build dynamic validation schema using shared Yup schema
-const validationSchema = computed(() =>
-  createRsvpSchema({ plusOneAllowed: props.guest.can_bring_plus_one })
-);
+const formRef = ref(null);
+const fieldErrors = ref({});
 
 // Check if this is a returning guest (has already submitted an RSVP)
 const isReturningGuest = computed(() => props.guest.attending !== null && props.guest.attending !== undefined);
 
-const initialValues = computed(() => {
-  // Only pre-select values for returning guests
-  if (isReturningGuest.value) {
-    return {
-      attending: Boolean(props.guest.attending),
-      dietary: props.guest.dietary || '',
-      notes: props.guest.notes || '',
-      add_plus_one: Boolean(props.guest.plus_one_name), // auto-enable toggle if name exists
-      plus_one_name: props.guest.plus_one_name || '',
-      plus_one_dietary: props.guest.plus_one_dietary || ''
-    };
-  }
-  // New guests: no pre-selection
-  return {
-    attending: null,
-    dietary: '',
-    notes: '',
-    add_plus_one: false,
-    plus_one_name: '',
-    plus_one_dietary: ''
-  };
-});
-
+// Initialize form with guest data if returning guest
 const form = reactive({
   attending: isReturningGuest.value ? Boolean(props.guest.attending) : null,
   dietary: isReturningGuest.value ? (props.guest.dietary || '') : '',
@@ -253,9 +191,46 @@ const form = reactive({
   send_email: false
 });
 
+// Validation rules for PrimeVue Form
+// Pattern matches: no code injection characters (<>[]{}%^=*|\~`)
+const safeStringPattern = /^[^<>[\]{}$%^=*|\\~`]+$/;
+const safeStringRule = `regex:${safeStringPattern.source}`;
+
+const dietaryRules = computed(() => {
+  return form.dietary ? safeStringRule : '';
+});
+
+const notesRules = computed(() => {
+  if (!form.notes) return '';
+  return `max:500|${safeStringRule}`;
+});
+
+const plusOneNameRules = computed(() => {
+  if (!props.guest.can_bring_plus_one || !form.add_plus_one) return '';
+  return form.plus_one_name ? safeStringRule : '';
+});
+
+const plusOneDietaryRules = computed(() => {
+  if (!props.guest.can_bring_plus_one || !form.add_plus_one) return '';
+  return form.plus_one_dietary ? safeStringRule : '';
+});
+
+// Watch form changes and emit to parent if needed
 watch(form, (newVal) => {
   emit('update:modelValue', { ...newVal });
 }, { deep: true });
+
+// Re-initialize form when guest prop changes
+watch(() => props.guest.code, () => {
+  const isReturning = props.guest.attending !== null && props.guest.attending !== undefined;
+  form.attending = isReturning ? Boolean(props.guest.attending) : null;
+  form.dietary = isReturning ? (props.guest.dietary || '') : '';
+  form.notes = isReturning ? (props.guest.notes || '') : '';
+  form.add_plus_one = isReturning && props.guest.can_bring_plus_one ? Boolean(props.guest.plus_one_name) : false;
+  form.plus_one_name = isReturning && props.guest.can_bring_plus_one ? (props.guest.plus_one_name || '') : '';
+  form.plus_one_dietary = isReturning && props.guest.can_bring_plus_one ? (props.guest.plus_one_dietary || '') : '';
+  form.send_email = false;
+});
 
 // Determine if form should be disabled (deadline passed)
 const isDisabled = computed(() => {
@@ -267,30 +242,70 @@ function onExpired() {
   formError.value = 'RSVP deadline has passed';
 }
 
-async function onSubmit(values) {
+async function onSubmit() {
   formError.value = '';
+  fieldErrors.value = {};
   
-  // Use validated values from vee-validate, fallback to form object for fields not in values
-  const attendingValue = values.attending !== undefined ? values.attending : form.attending;
-  const dietaryValue = values.dietary !== undefined ? values.dietary : form.dietary;
-  const notesValue = values.notes !== undefined ? values.notes : form.notes;
-  const plusOneNameValue = values.plus_one_name !== undefined ? values.plus_one_name : form.plus_one_name;
-  const plusOneDietaryValue = values.plus_one_dietary !== undefined ? values.plus_one_dietary : form.plus_one_dietary;
-  const addPlusOneValue = values.add_plus_one !== undefined ? values.add_plus_one : form.add_plus_one;
+  // Validate form using PrimeVue Form's validate method
+  if (formRef.value && typeof formRef.value.validate === 'function') {
+    const valid = await formRef.value.validate();
+    if (!valid) {
+      // Get validation errors from form
+      const errors = formRef.value.errors || {};
+      fieldErrors.value = errors;
+      return;
+    }
+  }
   
-  const isRemovingPlusOne = props.guest.can_bring_plus_one && !addPlusOneValue && props.guest.plus_one_name;
+  // Manual validation for required fields
+  if (form.attending === null || form.attending === undefined) {
+    fieldErrors.value.attending = t('rsvp.attendingRequired');
+    return;
+  }
+  
+  // Validate dietary restrictions if provided
+  if (form.dietary && !/^[^<>[\]{}$%^=*|\\~`]+$/.test(form.dietary)) {
+    fieldErrors.value.dietary = t('rsvp.noCodeChars');
+    return;
+  }
+  
+  // Validate notes if provided
+  if (form.notes) {
+    if (form.notes.length > 500) {
+      fieldErrors.value.notes = t('rsvp.notesMax');
+      return;
+    }
+    if (!/^[^<>[\]{}$%^=*|\\~`]+$/.test(form.notes)) {
+      fieldErrors.value.notes = t('rsvp.noCodeChars');
+      return;
+    }
+  }
+  
+  // Validate plus one fields if enabled
+  if (props.guest.can_bring_plus_one && form.add_plus_one) {
+    if (form.plus_one_name && !/^[^<>[\]{}$%^=*|\\~`]+$/.test(form.plus_one_name)) {
+      fieldErrors.value.plus_one_name = t('rsvp.noCodeChars');
+      return;
+    }
+    if (form.plus_one_dietary && !/^[^<>[\]{}$%^=*|\\~`]+$/.test(form.plus_one_dietary)) {
+      fieldErrors.value.plus_one_dietary = t('rsvp.noCodeChars');
+      return;
+    }
+  }
+  
+  const isRemovingPlusOne = props.guest.can_bring_plus_one && !form.add_plus_one && props.guest.plus_one_name;
   
   // Only include plus one data if guest is allowed to bring a plus one
-  const canIncludePlusOne = props.guest.can_bring_plus_one && addPlusOneValue;
+  const canIncludePlusOne = props.guest.can_bring_plus_one && form.add_plus_one;
   
   try {
     const payload = {
       code: props.guest.code,
-      attending: attendingValue,
-      dietary: dietaryValue || null,
-      notes: notesValue || null,
-      plus_one_name: canIncludePlusOne ? plusOneNameValue : null,
-      plus_one_dietary: canIncludePlusOne ? plusOneDietaryValue : null
+      attending: form.attending,
+      dietary: form.dietary || null,
+      notes: form.notes || null,
+      plus_one_name: canIncludePlusOne ? (form.plus_one_name || null) : null,
+      plus_one_dietary: canIncludePlusOne ? (form.plus_one_dietary || null) : null
     };
     
     // Only include send_email in admin mode

@@ -81,10 +81,10 @@
 
 <script>
 import { fetchNavigation } from '@/api/navigation';
-import { fetchRSVPSession } from '@/api/rsvp';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import Menubar from 'primevue/menubar';
 import { getCurrentDarkMode, savePreference } from '@/utils/darkMode';
+import { useGuestSession } from '@/composables/useGuestSession';
 // NOTE: Language/menu reactivity patch
 // We make the header refresh its navigation whenever the route language changes
 // and build RouterLink targets using named routes + params so they always use
@@ -102,6 +102,14 @@ export default {
   components: {
     LanguageSwitcher,
     Menubar,
+  },
+  setup() {
+    const { hasSession, sessionCode, loadSession } = useGuestSession({ autoLoad: false, showLoader: false });
+    return {
+      hasSession,
+      sessionCode,
+      loadSession
+    };
   },
   data() {
     return {
@@ -131,15 +139,10 @@ export default {
     },
     async goToRSVP() {
       const lang = this.$route.params.lang || this.selectedLanguage;
-      try {
-        const session = await fetchRSVPSession();
-        const code = session?.code || session?.guest?.code;
-        if (code) {
-          this.$router.push({ name: 'public-rsvp', params: { lang, code } });
-        } else {
-          this.$router.push({ name: 'public-rsvp-lookup', params: { lang } });
-        }
-      } catch {
+      await this.loadSession();
+      if (this.hasSession && this.sessionCode) {
+        this.$router.push({ name: 'public-rsvp', params: { lang, code: this.sessionCode } });
+      } else {
         this.$router.push({ name: 'public-rsvp-lookup', params: { lang } });
       }
     },

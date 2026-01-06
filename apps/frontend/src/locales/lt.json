@@ -48,6 +48,7 @@
   "home.countdown.days": "Diena(-os)",
 
   "rsvp.lookupTitle": "Įveskite savo RSVP kodą",
+  "rsvp.lookupDescription": "Jūs gavote el. laišką su savo RSVP kodu. Prašome jį įvesti žemiau, kad galėtumėte tęsti. Jei negavote el. laiško, prašome susisiekti su mumis kuo greičiau.",
   "rsvp.lookupLabel": "RSVP kodas",
   "rsvp.lookupButton": "Rasti mano RSVP",
   "rsvp.title": "Taigi, ar atvyksite?",
@@ -99,6 +100,7 @@
   "rsvp.labelPlusOneDietary": "Papildomo svečio mitybos apribojimai",
 
   "rsvp.confirmDeletePlusOne": "Ar tikrai norite pašalinti savo anksčiau pridėtą papildomą svečią?",
+  "rsvp.notAvailable": "Nenurodyta",
 
   "rsvpGate.pageRequiresAttending": "Šis puslapis prieinamas tik svečiams, kurie patvirtino dalyvavimą.",
   "rsvpGate.enterCodePrompt": "Prašome įvesti savo RSVP kodą, kad galėtumėte tęsti:",
@@ -117,6 +119,6 @@
   "footer.madeWith": "Sukurta su ❤️ mūsų didžiajai šventei.",
   "footer.nav.rsvp": "RSVP",
   "footer.nav.contact": "Kontaktai",
-  "footer.nav.credit": "Organized by ",
+  "footer.nav.credit": "Organizuoja ",
   "footer.copyright": "© 2025-2026 Brigita & Jeffrey. Visos teisės saugomos."
 }

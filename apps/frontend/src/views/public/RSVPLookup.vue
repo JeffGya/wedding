@@ -20,7 +20,7 @@
               type="error" 
               />
             <Form @submit="submitLookup" class="space-y-8">
-                <p class="-mt-4">You have received an email with your RSVP code. Please enter it below to continue. If you have not received an email, please contact us as soon as possible.</p>
+                <p class="-mt-4 text-txt">{{ $t('rsvp.lookupDescription') }}</p>
               <FloatLabel variant="in">
                 <InputText
                   id="lookup-code"
@@ -54,22 +54,31 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { fetchGuestByCode } from '@/api/rsvp';
 import Banner from '@/components/ui/Banner.vue';
 import { useGuestSettings } from '@/hooks/useGuestSettings'
 import FloatLabel from 'primevue/floatlabel';
 import { useToastService } from '@/utils/toastService';
-import { useErrorHandler } from '@/composables/useErrorHandler';
+import { useRSVPLookup } from '@/composables/useRSVPLookup';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const { loading: settingsLoading, isClosed } = useGuestSettings()
 const { showSuccess } = useToastService();
-const { error, handleError } = useErrorHandler({ showToast: false, showBanner: true });
 
 const code = ref('');
-const submitting = ref(false);
+
+// Use RSVP lookup composable
+const { submitting, error, lookupGuest } = useRSVPLookup({
+  showLoader: false,
+  onSuccess: (guest, codeValue) => {
+    showSuccess('Success', t('rsvp.lookupSuccess'), 5000);
+    router.push({
+      name: 'public-rsvp',
+      params: { lang: route.params.lang, code: codeValue }
+    });
+  }
+});
 
 async function submitLookup(event) {
   // Prevent default behavior if the event exists
@@ -77,26 +86,8 @@ async function submitLookup(event) {
     event.preventDefault();
   }
 
-  error.value = '';
   if (!code.value) return;
-  submitting.value = true;
-  try {
-    await fetchGuestByCode(code.value.trim());
-    showSuccess('Success', t('rsvp.lookupSuccess'), 5000);
-    router.push({
-      name: 'public-rsvp',
-      params: { lang: route.params.lang, code: code.value.trim() }
-    });
-  } catch (err) {
-    // Handle rate limit errors (429)
-    if (err.response?.status === 429) {
-      error.value = err.response?.data?.message || 'Too many requests. Please try again later.';
-    } else {
-      handleError(err, t('rsvp.errorFetch'));
-    }
-  } finally {
-    submitting.value = false;
-  }
+  await lookupGuest(code.value);
 }
 </script>
 

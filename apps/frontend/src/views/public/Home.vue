@@ -239,8 +239,8 @@ import { useRoute } from 'vue-router'
 import WeddingCountdown from '@/components/WeddingCountdown.vue'
 import { useRouter } from 'vue-router'
 import { fetchNavigation } from '@/api/navigation'
-import { fetchRSVPSession } from '@/api/rsvp'
 import { fetchGuestSettings } from '@/api/settings'
+import { useGuestSession } from '@/composables/useGuestSession'
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import ScrollTop from 'primevue/scrolltop'
 import Typed from 'typed.js'
@@ -250,6 +250,7 @@ const { settings, loading, isClosed } = useGuestSettings()
 const route = useRoute()
 const router = useRouter()
 const lang = route.params.lang || 'en'
+const { hasSession, sessionCode, loadSession } = useGuestSession({ autoLoad: false, showLoader: false })
 
 // Map home CTAs to their intended page slugs
 // Update these slugs to match created pages in Admin
@@ -324,15 +325,11 @@ async function fetchRSVPDeadline() {
  * Navigate to the full RSVP form if there's an active session; otherwise, go to lookup.
  */
 async function goToRSVP() {
-  try {
-    const session = await fetchRSVPSession()
-    if (session?.code) {
-      // Jump directly to the form
-      router.push({ name: 'public-rsvp', params: { lang, code: session.code } })
-      return
-    }
-  } catch {
-    // No valid session
+  await loadSession()
+  if (hasSession.value && sessionCode.value) {
+    // Jump directly to the form
+    router.push({ name: 'public-rsvp', params: { lang, code: sessionCode.value } })
+    return
   }
   // Fallback to lookup
   router.push({ name: 'public-rsvp-lookup', params: { lang } })

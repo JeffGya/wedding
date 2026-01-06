@@ -40,6 +40,7 @@
   "home.countdown.months": "Month(s)",
   "home.countdown.days": "Day(s)",
   "rsvp.lookupTitle": "Enter your RSVP code",
+  "rsvp.lookupDescription": "You have received an email with your RSVP code. Please enter it below to continue. If you have not received an email, please contact us as soon as possible.",
   "rsvp.lookupLabel": "RSVP code",
   "rsvp.lookupButton": "Confirm RSVP code",
   "rsvp.title": "RVSP response form",
@@ -91,6 +92,7 @@
   "rsvp.labelPlusOneDietary": "Plus One Dietary Restrictions",
 
   "rsvp.confirmDeletePlusOne": "Are you sure you want to remove your earlier added plus one?",
+  "rsvp.notAvailable": "Not provided",
 
   "rsvpGate.pageRequiresAttending": "This page is only available to guests who have RSVP'd as attending.",
   "rsvpGate.enterCodePrompt": "Please enter your RSVP code to continue:",
