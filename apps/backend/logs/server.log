@@ -1,432 +1,327 @@
-[2026-01-08T19:21:45.649Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:21:45.878Z] [INFO] Server is running on port 5001
-[2026-01-08T19:21:45.889Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:21:47.851Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:21:48.017Z] [INFO] Server is running on port 5001
-[2026-01-08T19:21:48.025Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:21:52.683Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:21:52.841Z] [INFO] Server is running on port 5001
-[2026-01-08T19:21:52.848Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:23:06.754Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:23:06.985Z] [INFO] Server is running on port 5001
-[2026-01-08T19:23:06.995Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:23:31.006Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:23:31.332Z] [INFO] Server is running on port 5001
-[2026-01-08T19:23:31.342Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:24:09.556Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:24:09.767Z] [INFO] Server is running on port 5001
-[2026-01-08T19:24:09.776Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:25:07.629Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:25:07.882Z] [INFO] Server is running on port 5001
-[2026-01-08T19:25:07.890Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:25:51.562Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:25:51.785Z] [INFO] Server is running on port 5001
-[2026-01-08T19:25:51.794Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:29:56.456Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:29:56.696Z] [INFO] Server is running on port 5001
-[2026-01-08T19:29:56.706Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:30:18.250Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:30:18.448Z] [INFO] Server is running on port 5001
-[2026-01-08T19:30:18.460Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:39:36.826Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:39:37.100Z] [INFO] Server is running on port 5001
-[2026-01-08T19:39:37.110Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:39:50.262Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:39:50.433Z] [INFO] Server is running on port 5001
-[2026-01-08T19:39:50.439Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:40:20.321Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:40:20.523Z] [INFO] Server is running on port 5001
-[2026-01-08T19:40:20.532Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:40:54.019Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:40:54.238Z] [INFO] Server is running on port 5001
-[2026-01-08T19:40:54.247Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:41:23.803Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:41:24.013Z] [INFO] Server is running on port 5001
-[2026-01-08T19:41:24.024Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:41:55.632Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:41:55.845Z] [INFO] Server is running on port 5001
-[2026-01-08T19:41:55.853Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:42:24.484Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:42:24.698Z] [INFO] Server is running on port 5001
-[2026-01-08T19:42:24.711Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:42:35.220Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:42:35.433Z] [INFO] Server is running on port 5001
-[2026-01-08T19:42:35.444Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:45:31.922Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:45:32.153Z] [INFO] Server is running on port 5001
-[2026-01-08T19:45:32.163Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:47:18.693Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:47:18.930Z] [INFO] Server is running on port 5001
-[2026-01-08T19:47:18.939Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:47:26.669Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:47:26.901Z] [INFO] Server is running on port 5001
-[2026-01-08T19:47:26.910Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:48:53.600Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:48:53.845Z] [INFO] Server is running on port 5001
-[2026-01-08T19:48:53.856Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:55:56.075Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:55:56.303Z] [INFO] Server is running on port 5001
-[2026-01-08T19:55:56.317Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:57:28.296Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:57:28.549Z] [INFO] Server is running on port 5001
-[2026-01-08T19:57:28.558Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T19:59:29.200Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T19:59:29.429Z] [INFO] Server is running on port 5001
-[2026-01-08T19:59:29.438Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:01:14.093Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:01:14.317Z] [INFO] Server is running on port 5001
-[2026-01-08T20:01:14.326Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:03:03.207Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:03:03.430Z] [INFO] Server is running on port 5001
-[2026-01-08T20:03:03.439Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:03:38.657Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:03:38.865Z] [INFO] Server is running on port 5001
-[2026-01-08T20:03:38.874Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:03:47.248Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:03:47.443Z] [INFO] Server is running on port 5001
-[2026-01-08T20:03:47.451Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:22:11.252Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:22:11.488Z] [INFO] Server is running on port 5001
-[2026-01-08T20:22:11.497Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:22:15.214Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:22:15.386Z] [INFO] Server is running on port 5001
-[2026-01-08T20:22:15.393Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:22:32.710Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:22:32.909Z] [INFO] Server is running on port 5001
-[2026-01-08T20:22:32.918Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:23:28.805Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:23:29.037Z] [INFO] Server is running on port 5001
-[2026-01-08T20:23:29.046Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:23:31.230Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:23:31.404Z] [INFO] Server is running on port 5001
-[2026-01-08T20:23:31.410Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:23:33.721Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:23:33.897Z] [INFO] Server is running on port 5001
-[2026-01-08T20:23:33.904Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:23:47.191Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:23:47.359Z] [INFO] Server is running on port 5001
-[2026-01-08T20:23:47.366Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:23:55.789Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:23:55.957Z] [INFO] Server is running on port 5001
-[2026-01-08T20:23:55.964Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:25:05.945Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:25:06.171Z] [INFO] Server is running on port 5001
-[2026-01-08T20:25:06.180Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:25:14.680Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:25:14.853Z] [INFO] Server is running on port 5001
-[2026-01-08T20:25:14.861Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:25:20.475Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:25:20.655Z] [INFO] Server is running on port 5001
-[2026-01-08T20:25:20.661Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:25:29.581Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:25:29.750Z] [INFO] Server is running on port 5001
-[2026-01-08T20:25:29.757Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:32:26.707Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:32:26.976Z] [INFO] Server is running on port 5001
-[2026-01-08T20:32:26.986Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:32:29.374Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:32:29.592Z] [INFO] Server is running on port 5001
-[2026-01-08T20:32:29.602Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:32:32.486Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:32:32.655Z] [INFO] Server is running on port 5001
-[2026-01-08T20:32:32.662Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:32:41.060Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:32:41.232Z] [INFO] Server is running on port 5001
-[2026-01-08T20:32:41.239Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:35:12.248Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:35:12.487Z] [INFO] Server is running on port 5001
-[2026-01-08T20:35:12.497Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:35:23.481Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:35:23.690Z] [INFO] Server is running on port 5001
-[2026-01-08T20:35:23.698Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:35:26.401Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:35:26.568Z] [INFO] Server is running on port 5001
-[2026-01-08T20:35:26.575Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:35:29.208Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:35:29.382Z] [INFO] Server is running on port 5001
-[2026-01-08T20:35:29.388Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:35:41.625Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:35:41.793Z] [INFO] Server is running on port 5001
-[2026-01-08T20:35:41.800Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:36:53.647Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:36:53.879Z] [INFO] Server is running on port 5001
-[2026-01-08T20:36:53.888Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:36:56.207Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:36:56.404Z] [INFO] Server is running on port 5001
-[2026-01-08T20:36:56.410Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:37:05.615Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:37:05.786Z] [INFO] Server is running on port 5001
-[2026-01-08T20:37:05.794Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:37:25.665Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:37:25.871Z] [INFO] Server is running on port 5001
-[2026-01-08T20:37:25.880Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:37:27.077Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:37:27.234Z] [INFO] Server is running on port 5001
-[2026-01-08T20:37:27.241Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:38:24.049Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:38:24.270Z] [INFO] Server is running on port 5001
-[2026-01-08T20:38:24.280Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:38:34.878Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:38:35.073Z] [INFO] Server is running on port 5001
-[2026-01-08T20:38:35.082Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:39:18.193Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:39:18.397Z] [INFO] Server is running on port 5001
-[2026-01-08T20:39:18.407Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:39:25.848Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:39:26.041Z] [INFO] Server is running on port 5001
-[2026-01-08T20:39:26.049Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:39:40.582Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:39:40.785Z] [INFO] Server is running on port 5001
-[2026-01-08T20:39:40.794Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:41:04.657Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:41:04.877Z] [INFO] Server is running on port 5001
-[2026-01-08T20:41:04.886Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:42:19.383Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:42:19.611Z] [INFO] Server is running on port 5001
-[2026-01-08T20:42:19.620Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:42:26.393Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:42:26.551Z] [INFO] Server is running on port 5001
-[2026-01-08T20:42:26.557Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:43:00.774Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:43:00.998Z] [INFO] Server is running on port 5001
-[2026-01-08T20:43:01.008Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:43:28.821Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:43:28.988Z] [INFO] Server is running on port 5001
-[2026-01-08T20:43:28.995Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:43:42.619Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:43:42.780Z] [INFO] Server is running on port 5001
-[2026-01-08T20:43:42.786Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:46:10.078Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:46:10.304Z] [INFO] Server is running on port 5001
-[2026-01-08T20:46:10.314Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:46:12.228Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:46:12.383Z] [INFO] Server is running on port 5001
-[2026-01-08T20:46:12.389Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-08T20:47:22.335Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-09T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-08T20:47:22.565Z] [INFO] Server is running on port 5001
-[2026-01-08T20:47:22.573Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T00:05:11.583Z] [INFO] [QUOTA_TRACKER] Daily quota reset {"previousCount":0,"newResetTime":"2026-01-10T00:00:00.999Z"}
-[2026-01-09T15:31:54.413Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:31:54.645Z] [INFO] Server is running on port 5001
-[2026-01-09T15:31:54.683Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:35:58.394Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:35:58.628Z] [INFO] Server is running on port 5001
-[2026-01-09T15:35:58.637Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:36:06.190Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:36:06.428Z] [INFO] Server is running on port 5001
-[2026-01-09T15:36:06.437Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:36:28.394Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:36:28.603Z] [INFO] Server is running on port 5001
-[2026-01-09T15:36:28.612Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:40:29.016Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:40:29.241Z] [INFO] Server is running on port 5001
-[2026-01-09T15:40:29.251Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:40:36.705Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:40:36.899Z] [INFO] Server is running on port 5001
-[2026-01-09T15:40:36.909Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:40:53.721Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:40:53.901Z] [INFO] Server is running on port 5001
-[2026-01-09T15:40:53.910Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:41:11.497Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:41:11.662Z] [INFO] Server is running on port 5001
-[2026-01-09T15:41:11.671Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:46:53.377Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:46:53.662Z] [INFO] Server is running on port 5001
-[2026-01-09T15:46:53.680Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:47:12.382Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:47:12.587Z] [INFO] Server is running on port 5001
-[2026-01-09T15:47:12.597Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:47:29.150Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:47:29.356Z] [INFO] Server is running on port 5001
-[2026-01-09T15:47:29.364Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:47:53.205Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:47:53.455Z] [INFO] Server is running on port 5001
-[2026-01-09T15:47:53.468Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:57:25.087Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:57:25.317Z] [INFO] Server is running on port 5001
-[2026-01-09T15:57:25.326Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:57:36.618Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:57:36.817Z] [INFO] Server is running on port 5001
-[2026-01-09T15:57:36.826Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T15:58:01.488Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T15:58:01.703Z] [INFO] Server is running on port 5001
-[2026-01-09T15:58:01.712Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:01:41.927Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:01:42.176Z] [INFO] Server is running on port 5001
-[2026-01-09T16:01:42.187Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:01:56.962Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:01:57.189Z] [INFO] Server is running on port 5001
-[2026-01-09T16:01:57.199Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:02:17.264Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:02:17.476Z] [INFO] Server is running on port 5001
-[2026-01-09T16:02:17.485Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:02:35.035Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:02:35.249Z] [INFO] Server is running on port 5001
-[2026-01-09T16:02:35.262Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:03:18.889Z] [INFO] [EMAIL_SERVICE] Email sent {"to":"Jeffogya@gmail.com","messageId":"da3c6c4c-5300-4c44-ae0c-8c14b81edea3"}
-[2026-01-09T16:04:45.092Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:04:45.315Z] [INFO] Server is running on port 5001
-[2026-01-09T16:04:45.325Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:04:50.661Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:04:50.845Z] [INFO] Server is running on port 5001
-[2026-01-09T16:04:50.852Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:05:04.440Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:05:04.662Z] [INFO] Server is running on port 5001
-[2026-01-09T16:05:04.671Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:05:15.600Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:05:15.801Z] [INFO] Server is running on port 5001
-[2026-01-09T16:05:15.809Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:11:11.508Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:11:11.733Z] [INFO] Server is running on port 5001
-[2026-01-09T16:11:11.744Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-09T16:11:35.852Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-10T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-09T16:11:36.057Z] [INFO] Server is running on port 5001
-[2026-01-09T16:11:36.065Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T00:08:07.387Z] [INFO] [QUOTA_TRACKER] Daily quota reset {"previousCount":0,"newResetTime":"2026-01-11T00:00:00.999Z"}
-[2026-01-10T15:50:54.719Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T15:50:54.959Z] [INFO] Server is running on port 5001
-[2026-01-10T15:50:54.976Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T15:51:17.317Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T15:51:17.522Z] [INFO] Server is running on port 5001
-[2026-01-10T15:51:17.530Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T15:52:13.144Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T15:52:13.433Z] [INFO] Server is running on port 5001
-[2026-01-10T15:52:13.444Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T15:54:11.450Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T15:54:11.674Z] [INFO] Server is running on port 5001
-[2026-01-10T15:54:11.686Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:19:36.793Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:19:37.015Z] [INFO] Server is running on port 5001
-[2026-01-10T16:19:37.025Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:20:51.385Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:20:51.584Z] [INFO] Server is running on port 5001
-[2026-01-10T16:20:51.592Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:36:46.593Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:36:46.873Z] [INFO] Server is running on port 5001
-[2026-01-10T16:36:46.883Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:36:49.346Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:36:49.516Z] [INFO] Server is running on port 5001
-[2026-01-10T16:36:49.525Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:36:53.698Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:36:53.887Z] [INFO] Server is running on port 5001
-[2026-01-10T16:36:53.897Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:00.774Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:00.993Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:01.002Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:08.213Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:08.498Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:08.509Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:25.914Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:26.085Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:26.094Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:38.734Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:38.914Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:38.921Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:42.451Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:42.619Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:42.625Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:45.935Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:46.094Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:46.100Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:37:54.045Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:37:54.226Z] [INFO] Server is running on port 5001
-[2026-01-10T16:37:54.232Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:39:35.339Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:39:35.571Z] [INFO] Server is running on port 5001
-[2026-01-10T16:39:35.580Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:39:52.689Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:39:52.874Z] [INFO] Server is running on port 5001
-[2026-01-10T16:39:52.882Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:55:25.159Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:55:25.417Z] [INFO] Server is running on port 5001
-[2026-01-10T16:55:25.470Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:55:55.316Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:55:55.534Z] [INFO] Server is running on port 5001
-[2026-01-10T16:55:55.545Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:56:13.301Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:56:13.516Z] [INFO] Server is running on port 5001
-[2026-01-10T16:56:13.526Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:56:34.209Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:56:34.409Z] [INFO] Server is running on port 5001
-[2026-01-10T16:56:34.418Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:58:34.179Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:58:34.407Z] [INFO] Server is running on port 5001
-[2026-01-10T16:58:34.417Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:58:41.449Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:58:41.606Z] [INFO] Server is running on port 5001
-[2026-01-10T16:58:41.612Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:58:43.771Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:58:43.931Z] [INFO] Server is running on port 5001
-[2026-01-10T16:58:43.938Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:58:45.877Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:58:46.035Z] [INFO] Server is running on port 5001
-[2026-01-10T16:58:46.042Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:59:02.977Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:59:03.176Z] [INFO] Server is running on port 5001
-[2026-01-10T16:59:03.186Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T16:59:36.087Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T16:59:36.295Z] [INFO] Server is running on port 5001
-[2026-01-10T16:59:36.304Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-10T17:06:48.079Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-11T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-10T17:06:48.453Z] [INFO] Server is running on port 5001
-[2026-01-10T17:06:48.481Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T15:59:01.506Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T15:59:01.747Z] [INFO] Server is running on port 5001
-[2026-01-12T15:59:01.762Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:06:06.386Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:06:06.629Z] [INFO] Server is running on port 5001
-[2026-01-12T16:06:06.638Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:07:20.945Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:07:21.172Z] [INFO] Server is running on port 5001
-[2026-01-12T16:07:21.180Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:07:59.046Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:07:59.247Z] [INFO] Server is running on port 5001
-[2026-01-12T16:07:59.256Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:08:09.861Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:08:10.021Z] [INFO] Server is running on port 5001
-[2026-01-12T16:08:10.027Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:13:14.940Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:13:15.171Z] [INFO] Server is running on port 5001
-[2026-01-12T16:13:15.181Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:13:18.324Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:13:18.494Z] [INFO] Server is running on port 5001
-[2026-01-12T16:13:18.501Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:13:27.616Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:13:27.802Z] [INFO] Server is running on port 5001
-[2026-01-12T16:13:27.808Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:13:47.495Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:13:47.661Z] [INFO] Server is running on port 5001
-[2026-01-12T16:13:47.668Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:13:51.195Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:13:51.369Z] [INFO] Server is running on port 5001
-[2026-01-12T16:13:51.375Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:14:08.172Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:14:08.384Z] [INFO] Server is running on port 5001
-[2026-01-12T16:14:08.392Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:14:35.955Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:14:36.171Z] [INFO] Server is running on port 5001
-[2026-01-12T16:14:36.180Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:14:45.234Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:14:45.397Z] [INFO] Server is running on port 5001
-[2026-01-12T16:14:45.405Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:15:03.340Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:15:03.558Z] [INFO] Server is running on port 5001
-[2026-01-12T16:15:03.567Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:15:14.639Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:15:14.841Z] [INFO] Server is running on port 5001
-[2026-01-12T16:15:14.850Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:15:55.244Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:15:55.468Z] [INFO] Server is running on port 5001
-[2026-01-12T16:15:55.479Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:16:30.297Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:16:30.498Z] [INFO] Server is running on port 5001
-[2026-01-12T16:16:30.507Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:16:42.589Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:16:42.750Z] [INFO] Server is running on port 5001
-[2026-01-12T16:16:42.757Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:17:01.284Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:17:01.449Z] [INFO] Server is running on port 5001
-[2026-01-12T16:17:01.455Z] [INFO] ✅ Connected to MySQL database.
-[2026-01-12T16:17:32.754Z] [INFO] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-12T16:17:32.955Z] [INFO] Server is running on port 5001
-[2026-01-12T16:17:32.963Z] [INFO] ✅ Connected to MySQL database.
+[2026-01-12T19:58:08.810Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T19:58:09.065Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T19:58:09.075Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T19:58:35.391Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T19:58:35.633Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T19:58:35.642Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T19:58:46.620Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T19:58:46.821Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T19:58:46.830Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:00:08.983Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:00:09.219Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:00:09.230Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:00:23.970Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:00:24.248Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:00:24.258Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:00:54.454Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:00:54.666Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:00:54.676Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:01:07.628Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:01:07.832Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:01:07.841Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:02:59.312Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:02:59.559Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:02:59.571Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:03:32.971Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:03:33.184Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:03:33.195Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:03:44.534Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:03:44.743Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:03:44.753Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:05:59.608Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:05:59.875Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:05:59.885Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:06:09.617Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:06:09.813Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:06:09.822Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:07:32.260Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:07:32.505Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:07:32.515Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:07:41.617Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:07:41.821Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:07:41.829Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:09:02.253Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:09:02.500Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:09:02.514Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:09:12.128Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:09:12.287Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:09:12.293Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:10:46.359Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:10:46.605Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:10:46.615Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:10:57.606Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:10:57.935Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:10:57.945Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:11:09.074Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:11:09.284Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:11:09.295Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:12:49.651Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:12:49.884Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:12:49.894Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:13:22.675Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:13:22.890Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:13:22.900Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:13:34.404Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:13:34.608Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:13:34.617Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:14:40.016Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:14:40.270Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:14:40.280Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:14:50.384Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:14:50.579Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:14:50.587Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:16:01.840Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:16:02.093Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:16:02.106Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:16:13.859Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:16:14.059Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:16:14.068Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:17:26.191Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:17:26.444Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:17:26.454Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:17:39.600Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:17:39.848Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:17:39.858Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:17:53.219Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:17:53.424Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:17:53.436Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:21:13.627Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:21:13.872Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:21:13.882Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:21:30.227Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:21:30.480Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:21:30.488Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:25:05.358Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:25:05.606Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:25:05.616Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:25:17.340Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:25:17.562Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:25:17.572Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:25:28.747Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:25:28.976Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:25:28.985Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:26:06.444Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:26:06.698Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:26:06.709Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:26:18.777Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:26:18.972Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:26:18.980Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:29:15.103Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:29:15.338Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:29:15.349Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:29:37.628Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:29:37.868Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:29:37.877Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:29:57.397Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:29:57.604Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:29:57.613Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:30:13.065Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:30:13.300Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:30:13.310Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:30:23.036Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:30:23.237Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:30:23.247Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:31:50.397Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:31:50.645Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:31:50.654Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:31:56.915Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:31:57.161Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:31:57.170Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:32:05.407Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:32:05.602Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:32:05.611Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:34:19.062Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:34:19.303Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:34:19.314Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:34:31.913Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:34:32.151Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:34:32.166Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:34:40.943Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:34:41.136Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:34:41.147Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:37:37.826Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:37:38.079Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:37:38.089Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:37:43.666Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:37:43.906Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:37:43.915Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:37:49.693Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:37:49.959Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:37:49.968Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:37:59.914Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:38:00.247Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:38:00.257Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:38:11.599Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:38:11.812Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:38:11.821Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:40:41.698Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:40:41.966Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:40:41.977Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:40:53.671Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:40:53.876Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:40:53.885Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:40:56.010Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:40:56.175Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:40:56.184Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:42:59.612Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:42:59.865Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:42:59.875Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:43:01.513Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:43:01.815Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:43:01.823Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:43:03.527Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:43:03.766Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:43:03.773Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:43:21.540Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:43:21.756Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:43:21.779Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:44:24.823Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:44:25.060Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:44:25.071Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:44:41.297Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:44:41.512Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:44:41.521Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:45:06.412Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:45:06.615Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:45:06.628Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:46:42.728Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:46:42.973Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:46:42.982Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:46:44.316Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:46:44.605Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:46:44.613Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:46:51.494Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:46:51.664Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:46:51.671Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:47:31.663Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:47:31.955Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:47:31.971Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:47:49.233Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:47:49.434Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:47:49.442Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:48:55.727Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:48:55.968Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:48:55.979Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:48:57.603Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:48:57.849Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:48:57.870Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:48:59.607Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:48:59.821Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:48:59.830Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:01.885Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:02.117Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:02.126Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:04.162Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:04.395Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:04.403Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:06.509Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:06.775Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:06.793Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:17.372Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:17.664Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:17.674Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:34.562Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:34.780Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:34.790Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:36.456Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:36.704Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:36.711Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:46.181Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:46.696Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:46.704Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:49:49.864Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:49:50.099Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:49:50.112Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:50:00.222Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:50:00.443Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:50:00.452Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:51:19.037Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:51:19.274Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:51:19.290Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:51:45.195Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:51:45.401Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:51:45.409Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:52:09.283Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:52:09.487Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:52:09.495Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:52:25.110Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:52:25.322Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:52:25.332Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:52:48.004Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:52:48.219Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:52:48.231Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:52:54.796Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:52:55.002Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:52:55.011Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:53:24.903Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:53:25.110Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:53:25.120Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:54:28.153Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:54:28.383Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:54:28.392Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:54:40.726Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:54:40.964Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:54:40.973Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:55:51.665Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:55:51.964Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:55:51.976Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:56:34.604Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:56:34.856Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:56:34.867Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:59:43.404Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:59:43.651Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:59:43.663Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:59:45.313Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:59:45.530Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:59:45.545Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T20:59:58.793Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T20:59:59.034Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T20:59:59.045Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:00:08.148Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:00:08.438Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:00:08.450Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:19:16.178Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:19:16.415Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:19:16.424Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:19:19.534Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:19:19.711Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:19:19.720Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:19:44.687Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:19:44.928Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:19:44.939Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:19:52.006Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:19:52.230Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:19:52.240Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:19:58.046Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:19:57.829Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:19:58.057Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:20:05.321Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:20:05.545Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:20:05.555Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:20:17.766Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:20:18.005Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:20:18.014Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:20:27.116Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:20:27.342Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:20:27.351Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:20:40.250Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:20:40.491Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:20:40.500Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:21:54.350Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:21:54.618Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:21:54.632Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:22:09.496Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:22:09.699Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:22:09.708Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:25:39.025Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:25:39.263Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:25:39.275Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:25:43.635Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:25:43.818Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:25:43.825Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:26:09.600Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:26:09.889Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:26:09.902Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-12T21:26:31.340Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-13T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-12T21:26:31.582Z] [INFO][staging] Server is running on port 5001
+[2026-01-12T21:26:31.591Z] [INFO][staging] ✅ Connected to MySQL database.

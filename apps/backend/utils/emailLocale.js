@@ -18,7 +18,8 @@ const translations = {
     // Footer and sign-off
     footer: {
       signoff: 'With love and joy,',
-      preheader: "We can't wait to celebrate with you"
+      preheader: "We can't wait to celebrate with you",
+      disclaimer: 'We will keep the emails to a minimum. Contact us if there are any questions.'
     }
   },
   lt: {
@@ -35,7 +36,8 @@ const translations = {
     // Footer and sign-off
     footer: {
       signoff: 'Su meile ir džiaugsmu,',
-      preheader: 'Negalime laukti švęsti su jumis'
+      preheader: 'Negalime laukti švęsti su jumis',
+      disclaimer: 'El. laiškų bus kuo mažiau. Susisiekite su mumis, jei turite klausimų.'
     }
   }
 };

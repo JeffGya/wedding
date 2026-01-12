@@ -39,6 +39,36 @@ body  {
   /* PrimeVue Card Overrides */
   --p-card-background:                        var(--card-bg) !important;
   --p-card-color:                             var(--text);
+}
+
+/* Template Preview Panel - Force Card to use flexbox for height */
+.p-card.h-full {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.p-card.h-full .p-card-body {
+  flex: 1 1 0% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+.p-card.h-full .p-card-content {
+  flex: 1 1 0% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+/* Mobile view: Set minimum height for preview panel */
+@media screen and (max-width: 1023px) {
+  .p-card.h-full {
+    min-height: 750px !important;
+  }
+}
+
+body {
 
   /* PrimeVue ToggleSwitch Overrides */
   --p-toggleswitch-background:                var(--int-base) !important; 

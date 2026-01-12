@@ -905,6 +905,13 @@ const storedTopOverlayImageUrl = ref(null);
 const storedHeroImageUrl = ref(null);
 const storedEmailTitle = ref(null);
 
+// Store toolbar state (header, size, font) for persistence across language switches
+const storedToolbarState = ref({
+  header: null,
+  size: null,
+  font: null
+});
+
 // Extract markers from initial content (in order: Top Overlay Image, Preheader, Hero Image, Hero Subtitle, Email Title, Info Card Config, RSVP Code, Secondary Info, Button)
 function extractMarkersFromContent(content) {
   if (!content) {
@@ -919,6 +926,7 @@ function extractMarkersFromContent(content) {
       rsvpCodeEnabled: null,
       secondaryInfo: null,
       button: null,
+      toolbarState: { header: null, size: null, font: null },
       cleanedContent: content
     };
   }
@@ -934,6 +942,7 @@ function extractMarkersFromContent(content) {
   let rsvpCodeEnabled = null;
   let secondaryInfo = null;
   let button = null;
+  let toolbarState = { header: null, size: null, font: null };
   
   // 1. Extract TOP_OVERLAY_IMAGE marker
   const topOverlayImageMatch = cleanedContent.match(/<!--TOP_OVERLAY_IMAGE:(.*?)-->/);
@@ -1035,6 +1044,17 @@ function extractMarkersFromContent(content) {
     cleanedContent = cleanedContent.replace(buttonMatch[0], '').trim();
   }
   
+  // 10. Extract TOOLBAR_STATE marker (format: <!--TOOLBAR_STATE:header|size|font-->)
+  const toolbarStateMatch = cleanedContent.match(/<!--TOOLBAR_STATE:([^|]*)\|([^|]*)\|([^>]*)-->/);
+  if (toolbarStateMatch) {
+    toolbarState = {
+      header: toolbarStateMatch[1].trim() || null,
+      size: toolbarStateMatch[2].trim() || null,
+      font: toolbarStateMatch[3].trim() || null
+    };
+    cleanedContent = cleanedContent.replace(toolbarStateMatch[0], '').trim();
+  }
+  
   return {
     topOverlayImage,
     preheader,
@@ -1046,6 +1066,7 @@ function extractMarkersFromContent(content) {
     rsvpCodeEnabled,
     secondaryInfo,
     button,
+    toolbarState,
     cleanedContent
   };
 }
@@ -1111,6 +1132,14 @@ function injectMarkersIntoContent(content) {
     const value = storedButton.value.value || '';
     const marker = `<!--BUTTON:${storedButton.value.text}|${storedButton.value.type}|${value}-->`;
     markers.push(marker);
+  }
+  
+  // 10. Toolbar State
+  if (storedToolbarState.value.header || storedToolbarState.value.size || storedToolbarState.value.font) {
+    const header = storedToolbarState.value.header || '';
+    const size = storedToolbarState.value.size || '';
+    const font = storedToolbarState.value.font || '';
+    markers.push(`<!--TOOLBAR_STATE:${header}|${size}|${font}-->`);
   }
   
   // Prepend all markers
@@ -1959,6 +1988,7 @@ onMounted(() => {
           storedRsvpCodeEnabled.value = markers.rsvpCodeEnabled;
           storedSecondaryInfo.value = markers.secondaryInfo;
           storedButton.value = markers.button;
+          storedToolbarState.value = markers.toolbarState || { header: null, size: null, font: null };
           
           const cleanedContent = markers.cleanedContent;
           
@@ -1966,6 +1996,11 @@ onMounted(() => {
           quill.root.innerHTML = cleanedContent || '';
           editorContent.value = props.modelValue; // Keep full content with markers
           htmlContent.value = props.modelValue;
+          
+          // Restore toolbar selections
+          nextTick(() => {
+            restoreToolbarState();
+          });
         }
         
         // Ensure all existing images are responsive
@@ -1982,6 +2017,23 @@ onMounted(() => {
           attributes: true,
           attributeFilter: ['style', 'width', 'height']
         });
+        
+        // Add event listeners to toolbar selects to save state when changed
+        if (toolbarRef.value) {
+          const headerSelect = toolbarRef.value.querySelector('.ql-header');
+          const sizeSelect = toolbarRef.value.querySelector('.ql-size');
+          const fontSelect = toolbarRef.value.querySelector('.ql-font');
+          
+          if (headerSelect) {
+            headerSelect.addEventListener('change', saveToolbarState);
+          }
+          if (sizeSelect) {
+            sizeSelect.addEventListener('change', saveToolbarState);
+          }
+          if (fontSelect) {
+            fontSelect.addEventListener('change', saveToolbarState);
+          }
+        }
       }
     }
   });
@@ -2009,6 +2061,7 @@ watch(() => props.modelValue, (newValue) => {
     storedInfoCardLabels.value = extractedMarkers.infoCardLabels;
     storedRsvpCodeEnabled.value = extractedMarkers.rsvpCodeEnabled;
     storedSecondaryInfo.value = extractedMarkers.secondaryInfo;
+    storedToolbarState.value = extractedMarkers.toolbarState || { header: null, size: null, font: null };
     
     editorContent.value = newValue || '';
     htmlContent.value = newValue || '';
@@ -2018,11 +2071,78 @@ watch(() => props.modelValue, (newValue) => {
         const quill = editorRef.value.quill;
         // Set cleaned content (without markers) to Quill
         quill.root.innerHTML = extractedMarkers.cleanedContent || '';
+        // Restore toolbar selections
+        restoreToolbarState();
       }
       isInternalUpdate.value = false;
     });
   }
 });
+
+// Function to restore toolbar state from stored values
+function restoreToolbarState() {
+  if (!toolbarRef.value || !editorRef.value?.quill) return;
+  
+  const toolbar = toolbarRef.value;
+  const quill = editorRef.value.quill;
+  
+  // Use setTimeout to ensure toolbar is fully rendered
+  setTimeout(() => {
+    // Restore header selection
+    if (storedToolbarState.value.header) {
+      const headerSelect = toolbar.querySelector('.ql-header');
+      if (headerSelect) {
+        headerSelect.value = storedToolbarState.value.header;
+        // Trigger change event to update Quill and visual state
+        const changeEvent = new Event('change', { bubbles: true });
+        headerSelect.dispatchEvent(changeEvent);
+      }
+    }
+    
+    // Restore size selection
+    if (storedToolbarState.value.size) {
+      const sizeSelect = toolbar.querySelector('.ql-size');
+      if (sizeSelect) {
+        sizeSelect.value = storedToolbarState.value.size;
+        const changeEvent = new Event('change', { bubbles: true });
+        sizeSelect.dispatchEvent(changeEvent);
+      }
+    }
+    
+    // Restore font selection
+    if (storedToolbarState.value.font) {
+      const fontSelect = toolbar.querySelector('.ql-font');
+      if (fontSelect) {
+        fontSelect.value = storedToolbarState.value.font;
+        const changeEvent = new Event('change', { bubbles: true });
+        fontSelect.dispatchEvent(changeEvent);
+      }
+    }
+  }, 100);
+}
+
+// Function to save current toolbar state
+function saveToolbarState() {
+  if (!toolbarRef.value) return;
+  
+  const toolbar = toolbarRef.value;
+  
+  const headerSelect = toolbar.querySelector('.ql-header');
+  const sizeSelect = toolbar.querySelector('.ql-size');
+  const fontSelect = toolbar.querySelector('.ql-font');
+  
+  storedToolbarState.value = {
+    header: headerSelect?.value || null,
+    size: sizeSelect?.value || null,
+    font: fontSelect?.value || null
+  };
+  
+  // Trigger content update to save toolbar state in markers
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    handleTextChange(null, null, 'user');
+  }
+}
 </script>
 
 <style scoped>

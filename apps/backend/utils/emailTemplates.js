@@ -110,8 +110,10 @@ const EMAIL_TEMPLATES = {
     background: '#D2C6B2 ',
     wrapper: {
       background: '#A68626',
-      padding: '24px',
-      borderRadius: '60px',
+      padding: '16px',
+      paddingMobile: '8px', // Mobile wrapper padding
+      borderRadius: '60px', // Desktop border radius
+      borderRadiusMobile: '36px', // Mobile border radius
       marginTop: '0px',
       marginTopMobile: '0px', // Mobile marginTop for overlay image
     },
@@ -119,11 +121,12 @@ const EMAIL_TEMPLATES = {
       background: '#E9E7D9',
       width: '560px', // Desktop: 560px
       widthMobile: '100%', // Mobile: 100%
-      padding:  '24px', // Desktop padding
-      paddingTop: '88px', // Desktop padding
-      paddingTopMobile: '72px', // Mobile paddingTop
-      paddingMobile: '20px', // Mobile padding
-      borderRadius: '36px', // Optional corner radius
+      padding:  '20px', // Desktop padding
+      paddingTop: '20px', // Desktop padding
+      paddingTopMobile: '16px', // Mobile paddingTop
+      paddingMobile: '16px', // Mobile padding
+      borderRadius: '44px', // Desktop border radius
+      borderRadiusMobile: '32px', // Mobile border radius
       spacing: '32px', // Spacing between sections
     },
     // Section 0: Preheader (hidden)
@@ -141,7 +144,8 @@ const EMAIL_TEMPLATES = {
       subtitleFont: "'Lora', Georgia, 'Times New Roman', serif",
       subtitleSize: '20px', // 16-18px (using 17px)
       titleColor: '#E3B13F',
-      borderRadius: '12px'
+      borderRadius: '24px', // Desktop border radius
+      borderRadiusMobile: '16px' // Mobile border radius
     },
     // Section 2: Context/Message
     context: {
@@ -150,13 +154,14 @@ const EMAIL_TEMPLATES = {
       bodySize: '17px', // 16-18px (using 17px)
       bodyFont: "'Open Sans', Arial, sans-serif",
       textColor: '#442727',
-      padding: '20px'
+      padding: '0px'
     },
     // Section 3: Info Card (optional)
     infoCard: {
       background: '#D2C6B2', // Soft neutral
       padding: '18px', // 16-20px (using 18px)
-      borderRadius: '8px',
+      borderRadius: '24px', // Desktop border radius
+      borderRadiusMobile: '16px', // Mobile border radius
       border: '1px solid #ABA38D', // Optional light gray border
       spacing: '8px', // 8-12px (using 10px)
       labelSize: '12px', // Small caps or lighter
@@ -167,7 +172,8 @@ const EMAIL_TEMPLATES = {
     rsvpCode: {
       background: '#D2C6B2', // Soft neutral (same family as info card)
       padding: '18px', // 16-20px (using 18px)
-      borderRadius: '8px',
+      borderRadius: '24px', // Desktop border radius
+      borderRadiusMobile: '16px', // Mobile border radius
       border: '1px dashed #ABA38D', // Dashed or subtle solid
       spacing: '10px', // 8-12px (using 10px)
       labelSize: '12px',
@@ -179,7 +185,8 @@ const EMAIL_TEMPLATES = {
     cta: {
       height: '48px', // Minimum height
       padding: '24px', // Horizontal padding
-      borderRadius: '16px', // 8-24px (using 16px)
+      borderRadius: '16px', // Desktop border radius
+      borderRadiusMobile: '16px', // Mobile border radius
       maxWidth: '320px', // Desktop max width
       widthMobile: '100%', // Mobile: fill container
       background: '#442727',
@@ -199,7 +206,8 @@ const EMAIL_TEMPLATES = {
       fontSize: '20px', // 16-18px (using 17px)
       font: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
       signatureFont: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
-      signatureSize: '80px',
+      signatureSize: '80px', // Desktop signature size
+      signatureSizeMobile: '40px', // Mobile signature size
       textColor: '#442727'
     },
     // Section 8: Footer
@@ -232,7 +240,8 @@ const EMAIL_TEMPLATES = {
       font: "'Open Sans', Arial, Helvetica, sans-serif",
       fontSize: '16px',
       fontWeight: '700',
-      borderRadius: '6px',
+      borderRadius: '6px', // Desktop border radius
+      borderRadiusMobile: '4px', // Mobile border radius
       padding: '14px 28px'
     }
   },
@@ -582,6 +591,28 @@ function calculateTitleFontSize(title) {
 }
 
 /**
+ * Replace custom fonts with system fonts for fallback mode
+ * @param {string} fontFamily - Font family string
+ * @returns {string} System font fallback
+ */
+function getSystemFontFallback(fontFamily) {
+  if (!fontFamily) return 'Arial, sans-serif';
+  
+  // Check for cursive/script fonts (Great Vibes, etc.)
+  if (fontFamily.includes('Great Vibes') || fontFamily.includes('Brush Script') || fontFamily.includes('Lucida Handwriting') || fontFamily.includes('cursive')) {
+    return 'Georgia, "Times New Roman", serif';
+  }
+  
+  // Check for serif fonts (Lora, etc.)
+  if (fontFamily.includes('Lora') || fontFamily.includes('Georgia') || fontFamily.includes('Times')) {
+    return 'Georgia, "Times New Roman", serif';
+  }
+  
+  // Default to sans-serif
+  return 'Arial, Helvetica, sans-serif';
+}
+
+/**
  * Extract button from content using marker format
  * @param {string} content - The content to extract button from
  * @returns {Object} Object with button object (or null) and cleaned content
@@ -646,8 +677,12 @@ function extractButton(content) {
 /**
  * Generate the new modular email template based on Figma design
  * Implements 8-section modular structure
+ * @param {string} content - Email content
+ * @param {Object} options - Template options
+ * @param {string} style - Template style ('elegant', 'modern', 'friendly')
+ * @param {boolean} fallbackMode - If true, strip web fonts and inline all styles for maximum email client compatibility
  */
-function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
+function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant', fallbackMode = false) {
   const { getTranslation, getSectionTranslations } = require('./emailLocale');
   const language = options.language || 'en';
   const lang = language === 'lt' ? 'lt' : 'en';
@@ -778,6 +813,16 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
   const shouldShowInfoCard = showInfoCard === true;
   const shouldShowRsvpCode = extractedShowRsvpCode === true;
   
+  // Get font families based on fallback mode (must be before sections are created)
+  const heroTitleFont = fallbackMode ? getSystemFontFallback(config.hero.titleFont) : config.hero.titleFont;
+  const heroSubtitleFont = fallbackMode ? getSystemFontFallback(config.hero.subtitleFont) : config.hero.subtitleFont;
+  const contextBodyFont = fallbackMode ? getSystemFontFallback(config.context.bodyFont) : config.context.bodyFont;
+  const ctaFont = fallbackMode ? getSystemFontFallback(config.cta.font) : config.cta.font;
+  const signoffFont = fallbackMode ? getSystemFontFallback(config.signoff.font) : config.signoff.font;
+  const signatureFont = fallbackMode ? getSystemFontFallback(config.signoff.signatureFont) : config.signoff.signatureFont;
+  const bodyFont = fallbackMode ? 'Arial, Helvetica, sans-serif' : "'Open Sans', Arial, sans-serif";
+  const headingFont = fallbackMode ? 'Georgia, "Times New Roman", serif' : "'Lora', Georgia, 'Times New Roman', serif";
+  
   // Section 0: Preheader (hidden)
   const preheaderSection = `
     <!-- Preheader / Hidden -->
@@ -789,33 +834,48 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
 
   // Section 1: Hero
   // If hero image present: Display as square background image with title/subtitle/logo aligned to bottom
-  // Desktop: 560px x 560px, Mobile: 100% width with square aspect ratio
+  // Desktop: square based on container width minus padding, Mobile: 100% width with square aspect ratio
   // If no hero image: Display title/subtitle only (current behavior)
+  
+  // Calculate square dimensions: container width minus left/right padding
+  const containerWidth = parseInt(config.container.width) || 560;
+  const containerPadding = parseInt(config.container.padding) || 24;
+  const heroSquareSize = containerWidth - (containerPadding * 2); // 560 - 48 = 512px
+  
   const heroSection = heroImageUrl ? `
     <!-- Hero Section with Background Image (Square) -->
     <tr>
       <td style="padding: 0; text-align: center;">
-        <!-- Outer wrapper for responsive width (100% on mobile, max 560px on desktop) -->
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; margin: 0 auto; background-image: url('${heroImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: ${config.hero.borderRadius};">
+        <!-- Outer wrapper for responsive width (100% on mobile, max square size on desktop) -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="hero-image-wrapper" style="max-width: ${heroSquareSize}px; margin: 0 auto; border-radius: ${config.hero.borderRadius}; overflow: hidden;">
           <tr>
-            <!-- Square container: width 100%, height matches width using padding-bottom trick -->
-            <td style="width: 100%; padding-bottom: 100%; position: relative; background: linear-gradient(to bottom right, rgba(15,15,15,0.25), rgba(68,39,39,0.75)); border-radius: ${config.hero.borderRadius};">
-              <!-- Content table positioned at bottom -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="position: absolute; bottom: 0; left: 0; width: 100%;">
+            <!-- Square container: using background attribute and explicit height/width for reliable square in email clients -->
+            <!-- Square size calculated: container width (${containerWidth}px) minus padding (${containerPadding * 2}px) = ${heroSquareSize}px -->
+            <td width="${heroSquareSize}" height="${heroSquareSize}" background="${heroImageUrl}" class="hero-image" style="width: 100%; max-width: ${heroSquareSize}px; padding: 0; background-image: url('${heroImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: ${config.hero.borderRadius};">
+              <!-- Content table with explicit height matching td, uses spacer rows to position content at bottom -->
+              <table role="presentation" width="${heroSquareSize}" height="${heroSquareSize}" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: ${heroSquareSize}px;">
+                <!-- Spacer rows to push content to bottom - total = ${heroSquareSize - 200}px for ${heroSquareSize}px square -->
                 <tr>
-                  <td style="padding-bottom: 24px; padding-left: 24px; padding-right: 24px; text-align: center;">
+                  <td style="height: ${Math.floor((heroSquareSize - 200) / 2)}px; line-height: 1px; font-size: 1px;">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td style="height: ${Math.floor((heroSquareSize - 200) / 2)}px; line-height: 1px; font-size: 1px;">&nbsp;</td>
+                </tr>
+                <!-- Content row at bottom with gradient overlay background - overlays on background-image -->
+                <tr>
+                  <td style="padding-bottom: 24px; padding-left: 24px; padding-right: 24px; text-align: center; background: linear-gradient(to top, rgba(15,15,15,0.4), transparent);">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align: center;">
                       <tr>
                         <td style="padding-bottom: 12px;">
-                          <h1 class="hero-title" style="margin: 0; padding: 0; font-family: ${config.hero.titleFont}; font-size: ${config.hero.titleSize}; color: ${config.hero.titleColor}; font-weight: normal; line-height: 1.2; text-shadow: 0 2px 4px rgba(15,15,15,0.3);">
-                                ${displayTitle}
-                              </h1>
-                            </td>
-                          </tr>
+                          <h1 class="hero-title" style="margin: 0; padding: 0; font-family: ${heroTitleFont}; font-size: ${config.hero.titleSize}; color: ${config.hero.titleColor}; font-weight: normal; line-height: 1.2; text-shadow: 0 2px 4px rgba(15,15,15,0.5);">
+                            ${displayTitle}
+                          </h1>
+                        </td>
+                      </tr>
                       ${finalSubtitle ? `
                       <tr>
                         <td style="padding-bottom: 12px;">
-                          <p class="hero-subtitle" style="margin: 0; padding: 0; font-size: ${config.hero.subtitleSize}; font-family: ${config.hero.subtitleFont}; color: ${config.hero.titleColor}; line-height: 1.4; text-shadow: 0 1px 2px rgba(15,15,15,0.3);">
+                          <p class="hero-subtitle" style="margin: 0; padding: 0; font-size: ${config.hero.subtitleSize}; font-family: ${heroSubtitleFont}; color: ${config.hero.titleColor}; line-height: 1.4; text-shadow: 0 1px 2px rgba(15,15,15,0.5);">
                             ${finalSubtitle}
                           </p>
                         </td>
@@ -826,10 +886,10 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
                           ${loadLogoHtmlWithColor(config.hero.titleColor)}
                         </td>
                       </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
+                    </table>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
@@ -842,7 +902,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td style="padding-bottom: ${config.hero.spacing};">
-              <h1 class="hero-title" style="margin: 0; padding: 0; font-family: ${config.hero.titleFont}; font-size: ${config.hero.titleSize}; color: ${config.hero.titleColor}; font-weight: normal; line-height: 1.2;">
+              <h1 class="hero-title" style="margin: 0; padding: 0; font-family: ${heroTitleFont}; font-size: ${config.hero.titleSize}; color: ${config.hero.titleColor}; font-weight: normal; line-height: 1.2;">
                 ${displayTitle}
               </h1>
             </td>
@@ -850,7 +910,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
           ${finalSubtitle ? `
           <tr>
             <td>
-              <p class="hero-subtitle" style="margin: 0; padding: 0; font-size: ${config.hero.subtitleSize}; color: ${config.hero.titleColor}; line-height: 1.4;">
+              <p class="hero-subtitle" style="margin: 0; padding: 0; font-size: ${config.hero.subtitleSize}; font-family: ${heroSubtitleFont}; color: ${config.hero.titleColor}; line-height: 1.4;">
                 ${finalSubtitle}
               </p>
             </td>
@@ -868,7 +928,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
       <td style="padding-bottom: ${config.container.spacing};">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td class="context-body" style="font-family: ${config.context.bodyFont}; font-size: ${config.context.bodySize}; line-height: 1.6; color: ${config.context.textColor}; padding-left: ${config.context.padding}; padding-right: ${config.context.padding};">
+            <td class="context-body" style="font-family: ${contextBodyFont}; font-size: ${config.context.bodySize}; line-height: 1.6; color: ${config.context.textColor}; padding-left: ${config.context.padding}; padding-right: ${config.context.padding};">
               ${mainContent}
             </td>
           </tr>
@@ -882,7 +942,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
     <!-- Info Card Section -->
     <tr>
       <td style="padding-bottom: ${config.container.spacing};">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.infoCard.background}; border: ${config.infoCard.border}; border-radius: ${config.infoCard.borderRadius};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="info-card" style="background-color: ${config.infoCard.background}; border: ${config.infoCard.border}; border-radius: ${config.infoCard.borderRadius};">
           <tr>
             <td style="padding: ${config.infoCard.padding};">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -923,7 +983,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
     <!-- RSVP Code Section (Standalone) -->
     <tr>
       <td style="padding-bottom: ${config.container.spacing};">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.rsvpCode.background}; border: ${config.rsvpCode.border}; border-radius: ${config.rsvpCode.borderRadius};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="rsvp-code" style="background-color: ${config.rsvpCode.background}; border: ${config.rsvpCode.border}; border-radius: ${config.rsvpCode.borderRadius};">
           <tr>
             <td style="padding: ${config.rsvpCode.padding}; text-align: center;">
               <div style="font-size: ${config.rsvpCode.labelSize}; text-transform: uppercase; color: ${config.rsvpCode.textColor}; opacity: 0.7; margin-bottom: ${config.rsvpCode.spacing};">${rsvpCodeTranslations.label || 'RSVP Code'}</div>
@@ -952,7 +1012,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
                           </v:roundrect>
                           <![endif]-->
                           <!--[if !mso]><!-->
-              <a href="${buttonUrl}" style="font-family: ${config.cta.font}; font-size: ${config.cta.fontSize}; font-weight: ${config.cta.fontWeight}; color: ${config.cta.textColor}; text-decoration: none; display: block; width: 100%; height: ${config.cta.height}; line-height: ${config.cta.height}; overflow: hidden; box-sizing: border-box;">
+              <a href="${buttonUrl}" style="font-family: ${ctaFont}; font-size: ${config.cta.fontSize}; font-weight: ${config.cta.fontWeight}; color: ${config.cta.textColor}; text-decoration: none; display: block; width: 100%; height: ${config.cta.height}; line-height: ${config.cta.height}; overflow: hidden; box-sizing: border-box;">
                 ${button.text}
                           </a>
                           <!--<![endif]-->
@@ -994,11 +1054,11 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
       <td style="padding-bottom: ${config.container.spacing};">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="font-family: ${config.signoff.font}; font-size: ${config.signoff.fontSize}; color: ${config.signoff.textColor}; line-height: 1.6; text-align: center;">
+            <td style="font-family: ${signoffFont}; font-size: ${config.signoff.fontSize}; color: ${config.signoff.textColor}; line-height: 1.6; text-align: center;">
               <p style="margin: 0 0 12px 0;">
                 ${footerText}
               </p>
-              <p style="margin: 0; font-family: ${config.signoff.signatureFont}; font-size: ${config.signoff.signatureSize}; color: ${config.signoff.textColor};">
+              <p class="signature-text" style="margin: 0; font-family: ${signatureFont}; font-size: ${config.signoff.signatureSize}; color: ${config.signoff.textColor};">
                 Brigita &amp; Jeffrey
               </p>
             </td>
@@ -1019,6 +1079,11 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
               <a href="${siteUrl}" style="font-size: ${config.footer.fontSize}; color: ${config.footer.linkColor}; text-decoration: none;">
                 ${siteUrl.replace(/^https?:\/\//, '')}
               </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: center; padding-bottom: ${config.footer.spacing}; font-size: ${config.footer.fontSize}; color: ${config.footer.textColor}; line-height: 1.5;">
+              ${getTrans('footer.disclaimer')}
             </td>
           </tr>
           ${contactInfo ? `
@@ -1044,8 +1109,8 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
   <meta name="color-scheme" content="light">
   <meta name="supported-color-schemes" content="light">
   <title>Wedding Invitation</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" type="text/css">
+  ${!fallbackMode ? `<!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" type="text/css">` : ''}
   <!--[if mso]>
   <noscript>
     <xml>
@@ -1056,7 +1121,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
   </noscript>
   <![endif]-->
   <style type="text/css">
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap');
+    ${!fallbackMode ? `@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap');` : ''}
     
     /* Reset styles for email clients */
     body, table, td, p, a, li, blockquote { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
@@ -1068,9 +1133,9 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
     [data-ogsc] .email-bg { background-color: ${config.background} !important; }
     [data-ogsc] .card-bg { background-color: ${config.container.background} !important; }
     
-    /* Apply Lora font to h2 and below headings with fallback */
+    /* Apply font to h2 and below headings with fallback */
     h2, h3, h4, h5, h6 {
-      font-family: 'Lora', Georgia, 'Times New Roman', serif !important;
+      font-family: ${headingFont} !important;
     }
     
     /* Ensure container padding is applied */
@@ -1088,21 +1153,17 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
       height: auto;
     }
     
-    /* Mobile breakpoint (375px and below) */
-    @media screen and (max-width: 375px) {
+    /* Mobile breakpoint (480px and below) */
+    @media screen and (max-width: 480px) {
       .email-container { 
         width: 100% !important; 
         max-width: 100% !important; 
-        border-radius: 0 !important;
       }
       .email-content { 
         padding-top: ${config.container.paddingTopMobile || config.container.paddingTop} !important; 
         padding-right: ${config.container.paddingMobile} !important; 
         padding-bottom: ${config.container.paddingMobile} !important; 
         padding-left: ${config.container.paddingMobile} !important; 
-      }
-      .top-overlay-wrapper {
-        margin-top: -${config.wrapper?.marginTopMobile || config.wrapper?.marginTop || '24px'} !important;
       }
       .hero-title { 
         font-size: ${config.hero.titleSizeMobile} !important; 
@@ -1122,11 +1183,30 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
         width: 100% !important;
         max-width: 100% !important;
       }
-      div[style*="position: absolute"][style*="top: 0"] {
-        width: 100% !important;
-        max-width: 100% !important;
-        left: 0 !important;
-        transform: none !important;
+      .signature-text {
+        font-size: ${config.signoff.signatureSizeMobile || config.signoff.signatureSize} !important;
+      }
+      /* Mobile border radius overrides */
+      .email-wrapper {
+        border-radius: ${config.wrapper?.borderRadiusMobile || config.wrapper?.borderRadius || '24px'} !important;
+      }
+      .email-container {
+        border-radius: ${config.container.borderRadiusMobile || config.container.borderRadius} !important;
+      }
+      .hero-image-wrapper {
+        border-radius: ${config.hero.borderRadiusMobile || config.hero.borderRadius} !important;
+      }
+      .hero-image {
+        border-radius: ${config.hero.borderRadiusMobile || config.hero.borderRadius} !important;
+      }
+      .info-card {
+        border-radius: ${config.infoCard.borderRadiusMobile || config.infoCard.borderRadius} !important;
+      }
+      .rsvp-code {
+        border-radius: ${config.rsvpCode.borderRadiusMobile || config.rsvpCode.borderRadius} !important;
+      }
+      .cta-button {
+        border-radius: ${config.cta.borderRadiusMobile || config.cta.borderRadius} !important;
       }
     }
     
@@ -1141,9 +1221,6 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
         padding-bottom: ${config.container.paddingMobile} !important; 
         padding-left: ${config.container.paddingMobile} !important; 
       }
-      .top-overlay-wrapper {
-        margin-top: -${config.wrapper?.marginTopMobile || config.wrapper?.marginTop || '24px'} !important;
-      }
       .cta-button-wrapper {
         width: 100% !important;
         max-width: 100% !important;
@@ -1152,39 +1229,52 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
         width: 100% !important;
         max-width: 100% !important;
       }
-      div[style*="position: absolute"][style*="top: 0"] {
-        width: 100% !important;
-        max-width: 100% !important;
-        left: 0 !important;
-        transform: none !important;
+    }
+    
+    /* Mobile wrapper padding override */
+    @media screen and (max-width: 480px) {
+      .email-wrapper-padding {
+        padding: ${config.wrapper?.paddingMobile || config.wrapper?.padding || '24px'} !important;
       }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: ${config.background}; font-family: 'Open Sans', Arial, sans-serif;" class="email-bg">
+<body style="margin: 0; padding: 0; background-color: ${config.background}; font-family: ${bodyFont};" class="email-bg">
   ${preheaderSection}
   
   <!-- Main Container Table -->
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.background};" class="email-bg">
     <tr>
       <td align="center" style="padding: 20px;">
-        
         <!-- Email Wrapper Container -->
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.wrapper?.background || '#A68626'}; border-radius: ${config.wrapper?.borderRadius || '36px'}; position: relative;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="email-wrapper" style="background-color: ${config.wrapper?.background || '#A68626'}; border-radius: ${config.wrapper?.borderRadius || '36px'}; position: relative;">
           <tr>
-            <td style="padding: ${config.wrapper?.padding || '24px'}; position: relative;">
-              ${topOverlayImageUrl ? `
-              <!-- Top Overlay Image - Absolutely positioned at top -->
-              <div class="top-overlay-wrapper" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 9999; width: 560px; max-width: 560px; margin-top: -${config.wrapper?.marginTop || '24px'};">
-                <img src="${topOverlayImageUrl}" alt="" style="width: 560px; max-width: 560px; height: auto; display: block; position: relative; z-index: 9999;" class="top-overlay-image" />
-              </div>
-              ` : ''}
-              
+            <td class="email-wrapper-padding" style="padding: ${config.wrapper?.padding || '24px'}; position: relative;">
               <!-- Email Content Container -->
-              <table role="presentation" width="${config.container.width}" cellpadding="0" cellspacing="0" border="0" class="email-container card-bg" style="max-width: ${config.container.width}; background-color: ${config.container.background}; border-radius: ${config.container.borderRadius}; position: relative; z-index: 1;">
-                
+              <table role="presentation" width="${config.container.width}" cellpadding="0" cellspacing="0" border="0" class="email-container card-bg" style="max-width: ${config.container.width}; background-color: ${config.container.background}; border-radius: ${config.container.borderRadius}; position: relative;">
+                ${topOverlayImageUrl ? (() => {
+                  // Calculate overlay margin - use wrapper padding if marginTop is 0px or empty
+                  const overlayMargin = (config.wrapper?.marginTop && config.wrapper.marginTop !== '0px') 
+                    ? config.wrapper.marginTop 
+                    : (config.wrapper?.padding || '24px');
+                  const marginValue = parseInt(overlayMargin) || 24;
+                  return `
+                <!-- Top Overlay Image - Positioned to overlay container, ignoring container padding -->
                 <tr>
-                  <td class="email-content" style="padding-top: ${config.container.paddingTop} !important; padding-right: ${config.container.padding} !important; padding-bottom: ${config.container.padding} !important; padding-left: ${config.container.padding} !important;">
+                  <td align="center" style="padding: 0; line-height: 0; position: relative;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: -${marginValue}px; margin-bottom: -${marginValue}px; position: relative; z-index: 10;">
+                      <tr>
+                        <td align="center" style="padding: 0;">
+                          <img src="${topOverlayImageUrl}" alt="" style="width: 560px; max-width: 560px; height: auto; display: block;" class="top-overlay-image" />
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                `;
+                })() : ''}
+                <tr>
+                  <td class="email-content" style="padding-top: ${config.container.paddingTop} !important; padding-right: ${config.container.padding} !important; padding-bottom: ${config.container.padding} !important; padding-left: ${config.container.padding} !important; position: relative; z-index: 1;">
                     <!-- Content Wrapper Table - sections are <tr> elements so they need to be in a table -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       ${heroSection}
@@ -1218,11 +1308,16 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
 /**
  * Generate complete email HTML with header, content, and footer
  * Unified function that handles all styles through the definitive template
+ * @param {string} content - Email content
+ * @param {string} style - Template style ('elegant', 'modern', 'friendly')
+ * @param {Object} options - Template options (may include fallbackMode)
  */
 function generateEmailHTML(content, style = 'elegant', options = {}) {
+  // Extract fallbackMode from options
+  const fallbackMode = options.fallbackMode === true;
   // Pass the style parameter to generateDefinitiveEmailHTML
   // Missing properties in the selected style will fall back to elegant defaults
-  return generateDefinitiveEmailHTML(content, options, style);
+  return generateDefinitiveEmailHTML(content, options, style, fallbackMode);
 }
 
 /**

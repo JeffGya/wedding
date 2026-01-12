@@ -333,6 +333,19 @@
                     Where to send the test email (defaults to guest email)
                   </p>
                 </div>
+
+                <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg">
+                  <ToggleSwitch
+                    id="fallbackMode"
+                    v-model="fallbackMode"
+                  />
+                  <div class="flex-1">
+                    <label for="fallbackMode" class="font-medium">Fallback Preview Mode</label>
+                    <p class="text-sm text-gray-600 mt-1">
+                      Preview email with system fonts only and stricter CSS rules for maximum email client compatibility
+                    </p>
+                  </div>
+                </div>
               </div>
             </template>
           </Card>
@@ -794,6 +807,7 @@ const sendModeOptions = [
   { label: 'Schedule (5 min ahead)', value: 'scheduled' }
 ]
 const recipientEmail = ref('')
+const fallbackMode = ref(false)
 const formattedScheduledTime = computed(() => {
   if (sendMode.value === 'scheduled') {
     const now = new Date()
@@ -1028,7 +1042,8 @@ async function sendTestEmail(previewOnly = false) {
       recipientEmail: emailToUse,
       testLanguage: testLanguage.value,
       healthCheckMode: true,
-      sendRsvpConfirmation: rsvpData.value?.send_confirmation || false
+      sendRsvpConfirmation: rsvpData.value?.send_confirmation || false,
+      fallbackMode: fallbackMode.value
     }
 
     const response = await sendTestEmailApi(payload)
@@ -1089,6 +1104,7 @@ function resetForm() {
   testLanguage.value = 'en'
   sendMode.value = 'immediate'
   recipientEmail.value = ''
+  fallbackMode.value = false
   variables.value = null
   emailHtml.value = null
   emailHtmlEn.value = null

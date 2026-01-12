@@ -379,7 +379,8 @@ router.post('/test', requireAuth, async (req, res) => {
     sendMode = 'immediate',
     recipientEmail,
     testLanguage = 'en',
-    healthCheckMode = true
+    healthCheckMode = true,
+    fallbackMode = false
   } = req.body;
 
   // Health check results
@@ -753,7 +754,9 @@ router.post('/test', requireAuth, async (req, res) => {
         language: lang,
         // Ensure infoCard and rsvpCode are preserved from templateOptions
         infoCard: templateOptions.infoCard,
-        rsvpCode: templateOptions.rsvpCode
+        rsvpCode: templateOptions.rsvpCode,
+        // Pass fallbackMode for email generation
+        fallbackMode: fallbackMode === true
       };
       
       return generateEmailHTML(body, templateStyle, finalOptions);

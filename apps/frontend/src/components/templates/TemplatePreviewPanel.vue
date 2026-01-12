@@ -7,37 +7,39 @@
       </div>
     </template>
     <template #content>
-      <div class="space-y-4">
-        <!-- Guest Selector -->
-        <div v-if="sampleGuests && sampleGuests.length > 0">
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Preview with Guest
-          </label>
-          <Select
-            v-model="selectedGuestId"
-            :options="sampleGuests"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Select a guest for preview"
-            class="w-full"
-            @change="handleGuestChange"
-          />
-        </div>
+      <div class="flex flex-col h-full">
+        <div class="space-y-4 flex-shrink-0">
+          <!-- Guest Selector -->
+          <div v-if="sampleGuests && sampleGuests.length > 0">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Preview with Guest
+            </label>
+            <Select
+              v-model="selectedGuestId"
+              :options="sampleGuests"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="Select a guest for preview"
+              class="w-full"
+              @change="handleGuestChange"
+            />
+          </div>
 
-        <!-- Language Tabs -->
-        <div>
-          <SelectButton
-            v-model="activeLanguage"
-            :options="languageOptions"
-            optionLabel="label"
-            optionValue="value"
-            class="w-full"
-            @change="handleLanguageChange"
-          />
+          <!-- Language Tabs -->
+          <div>
+            <SelectButton
+              v-model="activeLanguage"
+              :options="languageOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+              @change="handleLanguageChange"
+            />
+          </div>
         </div>
 
         <!-- Preview Content -->
-        <div class="preview-content">
+        <div class="preview-content flex-1 min-h-0">
           <div v-if="loading" class="flex justify-center items-center py-8">
             <ProgressSpinner />
           </div>
@@ -144,22 +146,53 @@ function handleLanguageChange() {
 </script>
 
 <style scoped>
+/* Ensure Card content area gets full height */
+:deep(.p-card.h-full) {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+:deep(.p-card.h-full .p-card-body) {
+  flex: 1 1 0% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+:deep(.p-card.h-full .p-card-content) {
+  flex: 1 1 0% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+.preview-content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+}
+
 .email-preview-container {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .email-preview-frame {
   background: #f9fafb;
-  min-height: 400px;
-  max-height: 600px;
   position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
 .email-iframe {
   width: 100%;
-  height: 500px;
+  height: 100%;
   border: none;
   background: white;
   overflow-y: auto;
