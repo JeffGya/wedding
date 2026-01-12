@@ -32,10 +32,6 @@ async function sendEmail(options) {
     backoff = [0, 2000, 4000]
   } = options;
 
-  // Only log in development
-  if (process.env.NODE_ENV !== 'production') {
-    logger.debug('[EMAIL_SERVICE] Sending email', { to, subject: subject?.substring(0, 50) });
-  }
 
   // Validate required fields
   if (!to || !subject || !html) {
@@ -246,10 +242,6 @@ async function sendBatchEmails(options) {
     getTrackingInfo
   } = options;
 
-  // Only log in development
-  if (process.env.NODE_ENV !== 'production') {
-    logger.debug('[EMAIL_SERVICE] Batch sending', { emailCount: emails.length, batchSize });
-  }
 
   const results = [];
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));

@@ -9,6 +9,7 @@ const { sendEmail } = require('../helpers/emailService');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { generateEmailHTML } = require('../utils/emailTemplates');
+const { prepareTemplateOptions } = require('../helpers/emailGeneration');
 const { sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 const requireAuth = require('../middleware/auth');
@@ -79,12 +80,23 @@ async function sendTestConfirmationEmail(tempGuest, recipientEmail, testLanguage
     const subject = replaceTemplateVars(subjectTemplate, variables);
     const body = replaceTemplateVars(bodyTemplate || '', variables);
     
+    // Prepare template options with infoCard and rsvpCode from variables
+    const templateOptions = prepareTemplateOptions(variables, template, lang);
+    
+    // Merge with test-specific options
+    const finalOptions = {
+      ...templateOptions,
+      siteUrl: process.env.SITE_URL || 'http://localhost:5001',
+      title: 'Brigita & Jeffrey',
+      language: lang,
+      // Ensure infoCard and rsvpCode are preserved from templateOptions
+      infoCard: templateOptions.infoCard,
+      rsvpCode: templateOptions.rsvpCode
+    };
+    
     // Generate email HTML
     const styleKey = template.style || 'elegant';
-    const emailHtml = generateEmailHTML(body, styleKey, {
-      siteUrl: process.env.SITE_URL || 'http://localhost:5001',
-      title: 'Brigita & Jeffrey'
-    });
+    const emailHtml = generateEmailHTML(body, styleKey, finalOptions);
     
     // Send via unified email service
     const result = await sendEmail({
@@ -727,17 +739,24 @@ router.post('/test', requireAuth, async (req, res) => {
 
     // Generate email HTML
     const generateHtml = (body, lang) => {
-      return generateEmailHTML(
-        body,
-        templateStyle,
-        {
-          title: 'Brigita & Jeffrey',
-          buttonText: lang === 'en' ? 'RSVP Here' : 'RSVP Čia',
-          buttonUrl: `${process.env.SITE_URL || 'http://localhost:5001'}/${lang}/rsvp/${tempGuest.code}`,
-          footerText: lang === 'en' ? 'With love and joy,' : 'Su meile ir džiaugsmu,',
-          siteUrl: process.env.SITE_URL || 'http://localhost:5001'
-        }
-      );
+      // Prepare template options with infoCard and rsvpCode from variables
+      const templateOptions = prepareTemplateOptions(variables, template, lang);
+      
+      // Merge with test-specific options
+      const finalOptions = {
+        ...templateOptions,
+        title: 'Brigita & Jeffrey',
+        buttonText: lang === 'en' ? 'RSVP Here' : 'RSVP Čia',
+        buttonUrl: `${process.env.SITE_URL || 'http://localhost:5001'}/${lang}/rsvp/${tempGuest.code}`,
+        footerText: lang === 'en' ? 'With love and joy,' : 'Su meile ir džiaugsmu,',
+        siteUrl: process.env.SITE_URL || 'http://localhost:5001',
+        language: lang,
+        // Ensure infoCard and rsvpCode are preserved from templateOptions
+        infoCard: templateOptions.infoCard,
+        rsvpCode: templateOptions.rsvpCode
+      };
+      
+      return generateEmailHTML(body, templateStyle, finalOptions);
     };
 
     if (testLanguage === 'both' || testLanguage === 'en') {

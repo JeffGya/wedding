@@ -25,17 +25,11 @@ const axios = require('axios');
 const logger = require('../helpers/logger');
 const getSenderInfo = require('../helpers/getSenderInfo');
 
-const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
-const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+const { generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
 const { sendConfirmationEmail } = require('../helpers/sendConfirmationEmail');
 const { sendBadRequest, sendNotFound, sendInternalError, sendForbidden } = require('../utils/errorHandler');
 const { validateRsvpInput, validateRsvpBusinessRules } = require('../helpers/rsvpValidation');
 const { formatDateWithTime } = require('../utils/dateFormatter');
-
-// Replace the old getInlineStyles function with new template system
-function applyEmailTemplate(content, style = 'elegant', options = {}) {
-  return generateEmailHTML(content, style, options);
-}
 
 /**
  * @openapi

@@ -14,62 +14,8 @@ const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
 const { DateTime } = require('luxon');
 const logger = require('../helpers/logger');
 
-// Function to get inline styles for email templates (Gmail-compatible)
-function getInlineStyles(style) {
-  const styles = {
-    elegant: {
-      fontFamily: 'Lora, Georgia, serif',
-      color: '#333333',
-      lineHeight: '1.6',
-      padding: '20px',
-      backgroundColor: '#F5F5DC',
-      border: '2px solid #D2B48C',
-      textAlign: 'left',
-      fontSize: '16px',
-      borderRadius: '8px',
-      maxWidth: '600px',
-      margin: '0 auto'
-    },
-    modern: {
-      fontFamily: 'Open Sans, Arial, sans-serif',
-      color: '#333333',
-      lineHeight: '1.5',
-      padding: '20px',
-      backgroundColor: '#F8F8F8',
-      border: '1px solid #CCCCCC',
-      textAlign: 'left',
-      fontSize: '16px',
-      borderRadius: '12px',
-      maxWidth: '600px',
-      margin: '0 auto',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-    },
-    friendly: {
-      fontFamily: 'Open Sans, Arial, sans-serif',
-      color: '#333333',
-      lineHeight: '1.6',
-      padding: '20px',
-      backgroundColor: '#FFF8DC',
-      border: '2px solid #DEB887',
-      textAlign: 'left',
-      fontSize: '16px',
-      borderRadius: '16px',
-      maxWidth: '600px',
-      margin: '0 auto'
-    }
-  };
-  
-  return styles[style] || styles.elegant;
-}
-
-// Function to convert style object to inline CSS string
-function styleObjectToInline(styleObj) {
-  return Object.entries(styleObj)
-    .map(([key, value]) => `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value}`)
-    .join('; ');
-}
-const { replaceTemplateVars, getTemplateVariables } = require('../utils/templateVariables');
-const { generateEmailHTML } = require('../utils/emailTemplates');
+// Use unified email generation service
+const { generateEmailFromMessage } = require('../helpers/emailGeneration');
 const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 
 
@@ -752,7 +698,7 @@ router.post('/:id/send', async (req, res, next) => {
     }
     const guests = await dbAll(guestSql, guestParams);
     
-    // Prepare email options for each guest
+    // Prepare email options for each guest using unified service
     const emailOptionsPromises = guests
       .filter(guest => {
         if (!guest.email) {
@@ -762,36 +708,21 @@ router.post('/:id/send', async (req, res, next) => {
         return true;
       })
       .map(async (guest) => {
-        const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-        
-        // Get enhanced variables for this guest
-        const variables = await getTemplateVariables(guest, message);
-        
-        // Replace variables in message content
-        const body_en = replaceTemplateVars(message.body_en, variables);
-        const body_lt = replaceTemplateVars(message.body_lt, variables);
-        const subject = replaceTemplateVars(message.subject, variables);
-        
-        // Prepare email template options from settings
-        const templateOptions = {
-          siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
-          title: variables.brideName && variables.groomName 
-            ? `${variables.brideName} & ${variables.groomName}`
-            : undefined
-        };
-        
-        // Apply shared email template system for consistent, inline-styled HTML
-        const styleKey = message.style || 'elegant';
-        const emailHtmlEn = generateEmailHTML(body_en, styleKey, templateOptions);
-        const emailHtmlLt = generateEmailHTML(body_lt, styleKey, templateOptions);
-        
-        return {
-          to: guest.email,
-          subject: subject,
-          html: lang === 'lt' ? emailHtmlLt : emailHtmlEn,
-          guestId: guest.id,
-          language: lang
-        };
+        try {
+          // Use unified email generation service
+          const emailData = await generateEmailFromMessage(message, guest, {
+            style: message.style || 'elegant'
+          });
+          
+          return emailData;
+        } catch (error) {
+          logger.error('[MESSAGES] Error preparing email for guest', { 
+            guestId: guest.id,
+            error: error.message,
+            stack: error.stack
+          });
+          throw error;
+        }
       });
     
     const emailOptions = await Promise.all(emailOptionsPromises);
@@ -1013,33 +944,36 @@ router.post('/preview', async (req, res) => {
       };
     }
 
-    // Compute variables and replace
+    // Use unified email generation service for both languages
+    const emailDataEn = await generateEmailFromMessage(
+      tpl,
+      selectedGuest,
+      { style, language: 'en' }
+    );
+    
+    const emailDataLt = await generateEmailFromMessage(
+      tpl,
+      selectedGuest,
+      { style, language: 'lt' }
+    );
+
+    // Get processed content for preview (body_en and body_lt) - needed for editing view
+    const { getEmailContent } = require('../helpers/emailGeneration');
+    const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
     const variables = await getTemplateVariables(selectedGuest, tpl);
-    const body_en = replaceTemplateVars(tpl.body_en, variables);
-    const body_lt = replaceTemplateVars(tpl.body_lt, variables);
-    const subject = replaceTemplateVars(tpl.subject, variables);
-
-    // Prepare email template options from settings
-    const emailOptions = {
-      buttonText: null,
-      buttonUrl: null,
-      siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
-      title: variables.brideName && variables.groomName 
-        ? `${variables.brideName} & ${variables.groomName}`
-        : undefined
-    };
-
-    // Generate email HTML for both languages without action button
-    const email_html_en = generateEmailHTML(body_en, style, emailOptions);
-    const email_html_lt = generateEmailHTML(body_lt, style, emailOptions);
+    const { body: body_en } = await getEmailContent(tpl, selectedGuest, 'en');
+    const { body: body_lt } = await getEmailContent(tpl, selectedGuest, 'lt');
+    const processedBodyEn = replaceTemplateVars(body_en, variables);
+    const processedBodyLt = replaceTemplateVars(body_lt, variables);
+    const subject = emailDataEn.subject; // Use subject from generated email
 
     return res.json({
       success: true,
       subject,
-      body_en,
-      body_lt,
-      email_html_en,
-      email_html_lt,
+      body_en: processedBodyEn,
+      body_lt: processedBodyLt,
+      email_html_en: emailDataEn.html,
+      email_html_lt: emailDataLt.html,
       style,
       sampleGuests,
       selectedGuest: selectedGuest && selectedGuest.id ? {
@@ -1103,7 +1037,7 @@ router.post('/:id/resend', async (req, res, next) => {
     );
     
     
-    // Prepare email options for each guest
+    // Prepare email options for each guest using unified service
     const emailOptionsPromises = guests
       .filter(guest => {
         if (!guest.email) {
@@ -1113,35 +1047,21 @@ router.post('/:id/resend', async (req, res, next) => {
         return true;
       })
       .map(async (guest) => {
-        const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
-        
-        // Get enhanced variables for this guest
-        const variables = await getTemplateVariables(guest, message);
-        
-        // Replace variables in message content
-        const body_en = replaceTemplateVars(message.body_en, variables);
-        const body_lt = replaceTemplateVars(message.body_lt, variables);
-        const subject = replaceTemplateVars(message.subject, variables);
-        
-        // Prepare email template options from settings
-        const templateOptions = {
-          siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
-          title: variables.brideName && variables.groomName 
-            ? `${variables.brideName} & ${variables.groomName}`
-            : undefined
-        };
-        
-        // Apply shared email template system for consistent, inline-styled HTML
-        const styleKey = message.style || 'elegant';
-        const emailHtml = generateEmailHTML(lang === 'lt' ? body_lt : body_en, styleKey, templateOptions);
-        
-        return {
-          to: guest.email,
-          subject: subject,
-          html: emailHtml,
-          guestId: guest.id,
-          language: lang
-        };
+        try {
+          // Use unified email generation service
+          const emailData = await generateEmailFromMessage(message, guest, {
+            style: message.style || 'elegant'
+          });
+          
+          return emailData;
+        } catch (error) {
+          logger.error('[MESSAGES] Error preparing resend email for guest', { 
+            guestId: guest.id,
+            error: error.message,
+            stack: error.stack
+          });
+          throw error;
+        }
       });
     
     const emailOptions = await Promise.all(emailOptionsPromises);

@@ -114,8 +114,6 @@ async function validateHeaderImageUrl(url) {
 // GET /api/pages — fetch all pages
 router.get('/', async (req, res) => {
   try {
-    logger.debug('[GET /api/pages] Fetching all pages with pagination & filters (route-level)...');
-
     // Flags & params
     const includeDeleted = req.query.includeDeleted === 'true';
     const status = (req.query.status || 'all').toLowerCase(); // 'all' | 'published' | 'draft'
@@ -168,7 +166,6 @@ router.get('/', async (req, res) => {
       orderDir,
     };
 
-    logger.debug('[GET /api/pages] Returning', paged.length, 'of', total);
     res.json({ data: paged, meta });
   } catch (err) {
     logger.error('[GET /api/pages] Error:', err.message, err.stack);
@@ -224,7 +221,6 @@ router.get('/:id', async (req, res) => {
     if (!Number.isInteger(id) || id <= 0) {
       return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
-    logger.debug(`[GET /api/pages/${id}] Fetching page and translations...`);
     const page = await Page.getById(id, { includeDeleted: true });
     const translations = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
     res.json({ ...page, translations });
@@ -301,15 +297,12 @@ router.post('/', async (req, res) => {
       translations = [],
     } = req.body;
 
-    logger.debug('[POST /api/pages] Request body:', req.body);
-
     // --------------------------------------------------
     // 1) Pre-validate ALL translations & survey refs first (no DB writes yet)
     // --------------------------------------------------
     const preparedTranslations = [];
     for (const translation of translations) {
       const { locale, title, content } = translation || {};
-      logger.debug('[POST /api/pages] Pre-validating translation:', translation);
 
       if (!locale || typeof content === 'undefined') {
         const msg = `Invalid translation payload (locale/content missing)`;
@@ -371,8 +364,6 @@ router.post('/', async (req, res) => {
       return sendInternalError(res, createErr, 'POST /admin/pages');
     }
 
-    logger.debug('[POST /api/pages] Created page:', newPage);
-
     // Auto-link any survey blocks with null page_id to this new page
     const surveyIdsToLinkPost = preparedTranslations
       .flatMap(t => t.content.filter(b => b.type === 'survey').map(b => b.id))
@@ -383,7 +374,6 @@ router.post('/', async (req, res) => {
         const sb2 = await SurveyBlock.getById(sid, { includeDeleted: true });
         if (sb2 && sb2.page_id == null) {
           await SurveyBlock.update(sid, { page_id: newPage.id });
-          logger.debug(`[POST /api/pages] Linked survey block ${sid} to page ${newPage.id}`);
         }
       } catch (linkErr) {
         logger.warn(`[POST /api/pages] Could not link survey block ${sid}:`, linkErr.message);
@@ -400,7 +390,6 @@ router.post('/', async (req, res) => {
           content: t.content,
         });
         createdTranslations.push(created);
-        logger.debug(`[POST /api/pages] Translation saved for locale: ${t.locale}`);
       }
     } catch (trErr) {
       logger.error('[POST /api/pages] Failed while saving translations, cleaning up...', trErr.message);
@@ -497,8 +486,6 @@ router.put('/:id', async (req, res) => {
       translations = [],
     } = req.body;
 
-    logger.debug(`[PUT /api/pages/${id}] Updating page...`, req.body);
-
     // Check if page exists
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
@@ -512,7 +499,6 @@ router.put('/:id', async (req, res) => {
     const preparedTranslations = [];
     for (const translation of translations) {
       const { locale, title, content } = translation || {};
-      logger.debug(`[PUT /api/pages/${id}] Pre-validating translation for ${locale}...`, translation);
 
       if (!locale || typeof content === 'undefined') {
         const msg = `Invalid translation payload (locale/content missing)`;
@@ -564,7 +550,6 @@ router.put('/:id', async (req, res) => {
       nav_order,
       header_image_url,
     });
-    logger.debug(`[PUT /api/pages/${id}] Page updated.`);
 
     // Auto-link any survey blocks with null page_id to this page
     const surveyIdsToLinkPut = preparedTranslations
@@ -576,7 +561,6 @@ router.put('/:id', async (req, res) => {
         const sb2 = await SurveyBlock.getById(sid, { includeDeleted: true });
         if (sb2 && sb2.page_id == null) {
           await SurveyBlock.update(sid, { page_id: id });
-          logger.debug(`[PUT /api/pages/${id}] Linked survey block ${sid} to page ${id}`);
         }
       } catch (linkErr) {
         logger.warn(`[PUT /api/pages/${id}] Could not link survey block ${sid}:`, linkErr.message);
@@ -593,7 +577,6 @@ router.put('/:id', async (req, res) => {
           title: t.title,
           content: t.content,
         });
-        logger.debug(`[PUT /api/pages/${id}] Updated translation for locale: ${t.locale}`);
       } else {
         await PageTranslation.create({
           page_id: id,
@@ -601,7 +584,6 @@ router.put('/:id', async (req, res) => {
           title: t.title,
           content: t.content,
         });
-        logger.debug(`[PUT /api/pages/${id}] Created translation for locale: ${t.locale}`);
       }
     }
 
@@ -651,7 +633,6 @@ router.delete('/:id', async (req, res) => {
     if (!Number.isInteger(id) || id <= 0) {
       return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
-    logger.debug(`[DELETE /api/pages/${id}] Deleting page and translations...`);
     // Soft delete translations then page
     const trs = await PageTranslation.getTranslationsByPageId(id, { includeDeleted: true });
     for (const tr of trs) {
@@ -709,8 +690,6 @@ router.put('/:id/restore', async (req, res) => {
     if (!Number.isInteger(id) || id <= 0) {
       return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
-    logger.debug(`[RESTORE /api/pages/${id}] Restoring page and translations...`);
-
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
       return sendNotFound(res, 'Page', id);
@@ -776,8 +755,6 @@ router.delete('/:id/destroy', async (req, res) => {
     if (!Number.isInteger(id) || id <= 0) {
       return sendBadRequest(res, 'Invalid page id', 'INVALID_ID');
     }
-    logger.debug(`[DESTROY /api/pages/${id}] Hard deleting page and translations...`);
-
     const page = await Page.getById(id, { includeDeleted: true });
     if (!page) {
       return sendNotFound(res, 'Page', id);

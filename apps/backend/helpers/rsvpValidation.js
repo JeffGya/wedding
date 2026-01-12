@@ -53,11 +53,6 @@ function validateRsvpInput(data, options = {}) {
 
   const isValid = errors.length === 0;
 
-  // Only log validation failures
-  if (!isValid) {
-    logger.debug('[RSVP_VALIDATION] Input validation failed', { errors });
-  }
-
   return { isValid, errors };
 }
 
@@ -73,10 +68,6 @@ function validateRsvpBusinessRules(guest, data) {
   // Validate plus-one permission
   if (data.plus_one_name && !guest.can_bring_plus_one) {
     errors.push('This guest is not allowed a plus one');
-    logger.debug('[RSVP_VALIDATION] Plus-one validation failed', {
-      guestId: guest.id,
-      plusOneName: data.plus_one_name
-    });
   }
 
   // Validate RSVP deadline
@@ -84,19 +75,10 @@ function validateRsvpBusinessRules(guest, data) {
     const deadlineCheck = validateRsvpDeadline(guest.rsvp_deadline);
     if (deadlineCheck.hasPassed) {
       errors.push(deadlineCheck.error);
-      logger.debug('[RSVP_VALIDATION] Deadline validation failed', {
-        guestId: guest.id,
-        deadline: guest.rsvp_deadline
-      });
     }
   }
 
   const isValid = errors.length === 0;
-
-  // Only log validation failures
-  if (!isValid) {
-    logger.debug('[RSVP_VALIDATION] Business rules validation failed', { errors });
-  }
 
   return { isValid, errors };
 }

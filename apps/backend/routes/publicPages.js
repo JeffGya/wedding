@@ -17,28 +17,18 @@ const router = express.Router();
 // GET /api/pages/navigation
 router.get('/navigation', async (req, res) => {
   const locale = req.query.locale || 'en';
-  logger.debug('[NAV] Navigation endpoint hit with locale:', locale);
-  // Debug logs before try/catch
-  logger.debug('[NAV][DEBUG] typeof Page:', typeof Page);
-  logger.debug('[NAV][DEBUG] Page model keys:', Object.keys(Page));
-  logger.debug('[NAV][DEBUG] Page.findAll:', typeof Page.findAll);
   try {
-    // Debug log before calling Page.findAll
-    logger.debug('[NAV][DEBUG] About to call Page.findAll');
     // Fetch only published pages that should show in nav, ordered by nav_order
     const pages = await Page.findAll({
       where: { is_published: true, show_in_nav: true },
       order: [['nav_order', 'ASC']],
     });
-    logger.debug('[NAV] Pages fetched:', Array.isArray(pages) ? pages.map(p => ({id: p.id, slug: p.slug, is_published: p.is_published, show_in_nav: p.show_in_nav, nav_order: p.nav_order})) : pages);
 
     // Map to minimal nav payload with locale fallback
     const nav = await Promise.all(pages.map(async (p) => {
       let tr = await PageTranslation.getByPageIdAndLocale(p.id, locale);
-      logger.debug(`[NAV] Translation for page ${p.slug} (${locale}):`, tr);
       if (!tr && locale !== 'en') {
         tr = await PageTranslation.getByPageIdAndLocale(p.id, 'en');
-        logger.debug(`[NAV] Fallback translation for page ${p.slug} (en):`, tr);
       }
       return {
         slug: p.slug,
@@ -46,7 +36,6 @@ router.get('/navigation', async (req, res) => {
         order: p.nav_order
       };
     }));
-    logger.debug('[NAV] Final nav array:', nav);
 
     return res.json(nav);
   } catch (err) {
@@ -127,8 +116,6 @@ router.get('/:slug', async (req, res) => {
   const requestedLocale = req.query.locale || 'en';
   const fallbackLocale = 'en';
   const guest = req.guest || null;
-
-  logger.debug(`[PUBLIC PAGE] slug="${slug}" locale="${requestedLocale}" guestId=${guest?.id || 'none'}`);
 
   try {
     // 1. Fetch page by slug
@@ -247,7 +234,6 @@ router.get('/:slug', async (req, res) => {
       }
     }
 
-    logger.debug(`[PUBLIC PAGE] ✅ Served page "${slug}" (${translation.locale})`);
 
     return res.json({
       slug: page.slug,

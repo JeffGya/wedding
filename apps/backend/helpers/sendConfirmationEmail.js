@@ -5,9 +5,7 @@
 
 const logger = require('./logger');
 const { sendEmail } = require('./emailService');
-const { generateEmailHTML } = require('../utils/emailTemplates');
-const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
-const { resolveTemplateSubject } = require('../utils/subjectResolver');
+const { generateEmailFromTemplate } = require('../helpers/emailGeneration');
 
 /**
  * Send confirmation email to guest after RSVP submission
@@ -40,44 +38,20 @@ async function sendConfirmationEmail(db, guestData) {
     // Fetch the appropriate template
     const template = await dbGet("SELECT * FROM templates WHERE name = ?", [templateName]);
     if (!template) {
-      logger.error(`Failed to load template: ${templateName}`);
+      logger.error(`[SEND_CONFIRMATION_EMAIL] Failed to load template: ${templateName}`);
       return;
     }
     
-    // Get enhanced template variables for this guest
-    const variables = await getTemplateVariables(guestData, template);
-    
-    // Determine language
-    const lang = guestData.preferred_language === 'lt' ? 'lt' : 'en';
-    const bodyTemplate = lang === 'lt' ? template.body_lt : template.body_en;
-    
-    // Resolve subject with fallback logic
-    const subjectTemplate = resolveTemplateSubject(template, lang, {
-      context: 'rsvp_confirmation',
-      rsvpStatus: guestData.rsvp_status
+    // Use unified email generation service
+    const emailData = await generateEmailFromTemplate(template, guestData, {
+      style: template.style || 'elegant'
     });
-    
-    // Replace variables in template content
-    const subject = replaceTemplateVars(subjectTemplate, variables);
-    const body = replaceTemplateVars(bodyTemplate, variables);
-    
-    // Prepare email template options from settings
-    const emailOptions = {
-      siteUrl: variables.websiteUrl || variables.siteUrl || process.env.SITE_URL || 'http://localhost:5001',
-      title: variables.brideName && variables.groomName 
-        ? `${variables.brideName} & ${variables.groomName}`
-        : undefined
-    };
-    
-    // Apply email template styling
-    const styleKey = template.style || 'elegant';
-    const emailHtml = generateEmailHTML(body, styleKey, emailOptions);
     
     // Send via unified email service
     const result = await sendEmail({
       to: guestData.email,
-      subject: subject,
-      html: emailHtml,
+      subject: emailData.subject,
+      html: emailData.html,
       db
     });
     
@@ -87,7 +61,11 @@ async function sendConfirmationEmail(db, guestData) {
       logger.error("[SEND_CONFIRMATION_EMAIL] Failed", { guestCode: guestData.code, error: result.error });
     }
   } catch (e) {
-    logger.error("[SEND_CONFIRMATION_EMAIL] Error", { guestCode: guestData.code, error: e.message });
+    logger.error("[SEND_CONFIRMATION_EMAIL] Error", { 
+      guestCode: guestData.code, 
+      error: e.message,
+      stack: e.stack
+    });
     // Don't throw - email failure shouldn't block RSVP submission
   }
 }

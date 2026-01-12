@@ -10,12 +10,63 @@ const { formatDateWithoutTime } = require('../utils/dateFormatter');
 const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 
 const requireAuth = require('../middleware/auth');
-const { generateEmailHTML, generateButtonHTML, getAvailableStyles } = require('../utils/emailTemplates');
+const { generateButtonHTML, getAvailableStyles, extractButton } = require('../utils/emailTemplates');
+const { generateEmailFromTemplate } = require('../helpers/emailGeneration');
 const { sendBadRequest, sendNotFound, sendInternalError } = require('../utils/errorHandler');
 const logger = require('../helpers/logger');
+const { getBySlug: getPageBySlug } = require('../db/models/pages');
 
 // Protect all routes
 router.use(requireAuth);
+
+/**
+ * Validate button page slug if button type is 'page'
+ * @param {string} bodyEn - English body content
+ * @param {string} bodyLt - Lithuanian body content
+ * @returns {Promise<{valid: boolean, error: string|null}>}
+ */
+async function validateButtonPageSlug(bodyEn, bodyLt) {
+  // Extract button from both language versions
+  const buttonEn = bodyEn ? extractButton(bodyEn).button : null;
+  const buttonLt = bodyLt ? extractButton(bodyLt).button : null;
+  
+  // Check if any button has type 'page'
+  const buttonsToValidate = [buttonEn, buttonLt].filter(b => b && b.type === 'page');
+  
+  if (buttonsToValidate.length === 0) {
+    return { valid: true, error: null };
+  }
+  
+  // Validate each page slug
+  for (const button of buttonsToValidate) {
+    if (!button.value || !button.value.trim()) {
+      logger.warn('[TEMPLATE_VALIDATION] Page-type button missing slug value', { button });
+      return { valid: false, error: 'Button with type "page" must have a page slug specified.' };
+    }
+    
+    const slug = button.value.trim();
+    
+      try {
+        // Check if page exists and is published
+        const page = await getPageBySlug(slug);
+      
+      if (!page) {
+        logger.warn('[TEMPLATE_VALIDATION] Page not found', { slug });
+        return { valid: false, error: `Page with slug "${slug}" does not exist. Please select a valid page or remove the button.` };
+      }
+      
+      if (!page.is_published) {
+        logger.warn('[TEMPLATE_VALIDATION] Page is not published', { slug, is_published: page.is_published });
+        return { valid: false, error: `Page "${slug}" is not published. Please publish the page or select a different page.` };
+      }
+    } catch (error) {
+      logger.error('[TEMPLATE_VALIDATION] Error validating page slug', { slug, error: error.message });
+      return { valid: false, error: `Error validating page slug "${slug}": ${error.message}` };
+    }
+  }
+  
+  return { valid: true, error: null };
+}
 
 
 /**
@@ -230,6 +281,13 @@ router.post('/', async (req, res) => {
       return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
     }
 
+    // Validate button page slug if button type is 'page'
+    const buttonValidation = await validateButtonPageSlug(body_en, body_lt);
+    if (!buttonValidation.valid) {
+      logger.warn('[TEMPLATE_CREATE] Button validation failed', { error: buttonValidation.error });
+      return sendBadRequest(res, buttonValidation.error);
+    }
+
     // Detect schema version
     const schemaVersion = await detectTemplateSchema(db);
     
@@ -351,6 +409,13 @@ router.put('/:id', async (req, res) => {
     
     if (!name || !finalSubjectEn || !body_en || !body_lt) {
       return sendBadRequest(res, 'Name, subject (or subject_en), body_en, and body_lt are required.');
+    }
+
+    // Validate button page slug if button type is 'page'
+    const buttonValidation = await validateButtonPageSlug(body_en, body_lt);
+    if (!buttonValidation.valid) {
+      logger.warn('[TEMPLATE_UPDATE] Button validation failed', { templateId: id, error: buttonValidation.error });
+      return sendBadRequest(res, buttonValidation.error);
     }
 
     // Detect schema version
@@ -640,39 +705,38 @@ router.get('/:id/preview', async (req, res) => {
       }
     }
     
-    // Replace variables in template content
-    const bodyEn = replaceTemplateVars(template.body_en || '', variables);
-    const bodyLt = replaceTemplateVars(template.body_lt || '', variables);
-    // Resolve subject with fallback logic (use English as default for preview)
-    const subjectTemplate = resolveTemplateSubject(template, 'en', { context: 'template_preview' });
-    const subject = replaceTemplateVars(subjectTemplate, variables);
-
-    // Use the new email template system for previews
-    const { generateEmailHTML } = require('../utils/emailTemplates');
+    // Use unified email generation service for both languages
+    const emailDataEn = await generateEmailFromTemplate(
+      template,
+      selectedGuest,
+      { style: template.style || 'elegant', language: 'en' }
+    );
     
-    const style = template.style || 'elegant';
-    const previewOptions = {
-      title: variables.brideName && variables.groomName 
-        ? `${variables.brideName} & ${variables.groomName}`
-        : 'Brigita & Jeffrey',
-      buttonText: 'Visit Our Website',
-      buttonUrl: variables.websiteUrl || variables.siteUrl || 'https://your-wedding-site.com',
-      footerText: 'With love and joy,',
-      siteUrl: variables.websiteUrl || variables.siteUrl || 'https://your-wedding-site.com'
-    };
+    const emailDataLt = await generateEmailFromTemplate(
+      template,
+      selectedGuest,
+      { style: template.style || 'elegant', language: 'lt' }
+    );
 
-    // Generate full email HTML for both languages
-    const emailHtmlEn = generateEmailHTML(bodyEn, style, previewOptions);
-    const emailHtmlLt = generateEmailHTML(bodyLt, style, previewOptions);
+    // Get processed content for preview (body_en and body_lt) - needed for editing view
+    const { getEmailContent } = require('../helpers/emailGeneration');
+    // Reuse existing variables variable (already declared at line 548)
+    // Note: getTemplateVariables and replaceTemplateVars are already imported at top of file
+    variables = await getTemplateVariables(selectedGuest, template);
+    const { body: bodyEn } = await getEmailContent(template, selectedGuest, 'en');
+    const { body: bodyLt } = await getEmailContent(template, selectedGuest, 'lt');
+    const processedBodyEn = replaceTemplateVars(bodyEn, variables);
+    const processedBodyLt = replaceTemplateVars(bodyLt, variables);
+    const subject = emailDataEn.subject; // Use subject from generated email
 
     const response = {
       success: true,
       subject,
-      body_en: bodyEn, // Keep raw content for editing
-      body_lt: bodyLt, // Keep raw content for editing
-      email_html_en: emailHtmlEn, // Full email HTML for preview
-      email_html_lt: emailHtmlLt, // Full email HTML for preview
-      style,
+      body_en: processedBodyEn, // Keep processed content for preview
+      body_lt: processedBodyLt, // Keep processed content for preview
+      email_html_en: emailDataEn.html, // Full email HTML for preview
+      email_html_lt: emailDataLt.html, // Full email HTML for preview
+      style: template.style || 'elegant',
       sampleGuests,
       selectedGuest: selectedGuest ? {
         id: selectedGuest.id,
@@ -686,6 +750,247 @@ router.get('/:id/preview', async (req, res) => {
     logger.error('Error previewing template:', error);
     logger.error('Error stack:', error.stack);
     return sendInternalError(res, error, 'GET /templates/:id/preview');
+  }
+});
+
+/**
+ * @openapi
+ * /templates/preview:
+ *   post:
+ *     summary: Preview an unsaved template with sample data
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - subject_en
+ *               - subject_lt
+ *               - body_en
+ *               - body_lt
+ *             properties:
+ *               name:
+ *                 type: string
+ *               subject_en:
+ *                 type: string
+ *               subject_lt:
+ *                 type: string
+ *               body_en:
+ *                 type: string
+ *               body_lt:
+ *                 type: string
+ *               style:
+ *                 type: string
+ *                 default: elegant
+ *               guestId:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Preview generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 subject:
+ *                   type: string
+ *                 body_en:
+ *                   type: string
+ *                 body_lt:
+ *                   type: string
+ *                 email_html_en:
+ *                   type: string
+ *                 email_html_lt:
+ *                   type: string
+ *                 style:
+ *                   type: string
+ *                 sampleGuests:
+ *                   type: array
+ *                 selectedGuest:
+ *                   type: object
+ *       '500':
+ *         description: Server error
+ */
+// Preview an unsaved template with sample data
+router.post('/preview', async (req, res) => {
+  try {
+    const { name, subject_en, subject_lt, body_en, body_lt, style = 'elegant', guestId } = req.body;
+    
+    // Validate required fields
+    if (!name || !subject_en || !subject_lt || !body_en || !body_lt) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields: name, subject_en, subject_lt, body_en, body_lt'
+      });
+    }
+    
+    // Create template object from request data
+    const template = {
+      id: null, // No ID since it's unsaved
+      name,
+      subject: subject_en, // Keep backward compatibility
+      subject_en,
+      subject_lt,
+      body_en,
+      body_lt,
+      style
+    };
+
+    // Get sample guests for preview with all necessary fields
+    const sampleGuests = await dbAll(`
+      SELECT id, name, email, group_label, preferred_language, rsvp_status, 
+             can_bring_plus_one, dietary, notes, code,
+             responded_at, attending
+      FROM guests 
+      WHERE email IS NOT NULL 
+      ORDER BY name 
+      LIMIT 5
+    `);
+
+    // Get variables for template replacement
+    let variables = {};
+    let selectedGuest = null;
+    
+    try {
+      if (guestId) {
+        // Get the specific guest data
+        const Guest = require('../db/models/guest');
+        selectedGuest = await Guest.findById(guestId);
+        if (selectedGuest) {
+          variables = await getTemplateVariables(selectedGuest, template);
+        } else {
+          if (sampleGuests.length > 0) {
+            selectedGuest = sampleGuests[0];
+            variables = await getTemplateVariables(selectedGuest, template);
+          }
+        }
+      } else {
+        if (sampleGuests.length > 0) {
+          selectedGuest = sampleGuests[0];
+          variables = await getTemplateVariables(selectedGuest, template);
+        }
+      }
+    } catch (error) {
+      logger.error('Error getting variables:', error);
+      // Create basic variables as fallback using actual settings
+      if (sampleGuests.length > 0) {
+        selectedGuest = sampleGuests[0];
+        
+        // Get actual settings for fallback
+        const { getSystemSettings } = require('../utils/templateVariables');
+        const getDbConnection = require('../db/connection');
+        const db = getDbConnection();
+        const settings = await getSystemSettings(db);
+        const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
+        
+        // Determine if guest is a plus one based on group label
+        const isPlusOne = selectedGuest.group_label && selectedGuest.group_label.toLowerCase().includes('plus one');
+        
+        // Determine if guest can bring plus one (not a plus one themselves and has permission)
+        const canBringPlusOne = !isPlusOne && selectedGuest.can_bring_plus_one;
+        
+        variables = {
+          guestName: selectedGuest.name || 'Guest',
+          groupLabel: selectedGuest.group_label || 'Guest',
+          code: selectedGuest.code || 'ABC123',
+          rsvpLink: `${settings.website_url || SITE_URL}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
+          plusOneName: '',
+          rsvpDeadline: selectedGuest.rsvp_deadline ? formatDateWithoutTime(selectedGuest.rsvp_deadline) : '',
+          email: selectedGuest.email || 'guest@example.com',
+          preferredLanguage: selectedGuest.preferred_language || 'en',
+          attending: selectedGuest.attending || false,
+          rsvp_status: selectedGuest.rsvp_status || 'pending',
+          responded_at: selectedGuest.responded_at || null,
+          can_bring_plus_one: canBringPlusOne,
+          dietary: selectedGuest.dietary || '',
+          notes: selectedGuest.notes || '',
+          hasPlusOne: false,
+          isPlusOne: isPlusOne,
+          hasResponded: !!selectedGuest.responded_at,
+          isAttending: selectedGuest.rsvp_status === 'attending',
+          isNotAttending: selectedGuest.rsvp_status === 'not_attending',
+          isPending: selectedGuest.rsvp_status === 'pending',
+          isBrideFamily: selectedGuest.group_label === 'Bride\'s Family',
+          isGroomFamily: selectedGuest.group_label === 'Groom\'s Family',
+          isEnglishSpeaker: selectedGuest.preferred_language === 'en',
+          isLithuanianSpeaker: selectedGuest.preferred_language === 'lt',
+          siteUrl: SITE_URL,
+          weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date) : '',
+          venueName: settings.venue_name || '',
+          venueAddress: settings.venue_address || '',
+          eventStartDate: settings.event_start_date ? formatDateWithoutTime(settings.event_start_date) : '',
+          eventEndDate: settings.event_end_date ? formatDateWithoutTime(settings.event_end_date) : '',
+          eventTime: settings.event_time || '',
+          brideName: settings.bride_name || '',
+          groomName: settings.groom_name || '',
+          contactEmail: settings.contact_email || '',
+          contactPhone: settings.contact_phone || '',
+          rsvpDeadlineDate: settings.rsvp_deadline ? formatDateWithoutTime(settings.rsvp_deadline) : '',
+          eventType: settings.event_type || '',
+          dressCode: settings.dress_code || '',
+          specialInstructions: settings.special_instructions || '',
+          websiteUrl: settings.website_url || SITE_URL,
+          appTitle: settings.app_title || 'Wedding Site',
+          senderName: '',
+          senderEmail: '',
+          currentDate: new Date().toLocaleDateString(),
+          daysUntilWedding: settings.wedding_date ? 
+            Math.ceil((new Date(settings.wedding_date) - new Date()) / (1000 * 60 * 60 * 24)) + ' days' : ''
+        };
+      } else {
+        variables = {};
+      }
+    }
+    
+    // Use unified email generation service for both languages
+    const emailDataEn = await generateEmailFromTemplate(
+      template,
+      selectedGuest,
+      { style: template.style || 'elegant', language: 'en' }
+    );
+    
+    const emailDataLt = await generateEmailFromTemplate(
+      template,
+      selectedGuest,
+      { style: template.style || 'elegant', language: 'lt' }
+    );
+
+    // Get processed content for preview (body_en and body_lt) - needed for editing view
+    const { getEmailContent } = require('../helpers/emailGeneration');
+    variables = await getTemplateVariables(selectedGuest, template);
+    const { body: bodyEn } = await getEmailContent(template, selectedGuest, 'en');
+    const { body: bodyLt } = await getEmailContent(template, selectedGuest, 'lt');
+    const processedBodyEn = replaceTemplateVars(bodyEn, variables);
+    const processedBodyLt = replaceTemplateVars(bodyLt, variables);
+    const subject = emailDataEn.subject; // Use subject from generated email
+
+    const response = {
+      success: true,
+      subject,
+      body_en: processedBodyEn, // Keep processed content for preview
+      body_lt: processedBodyLt, // Keep processed content for preview
+      email_html_en: emailDataEn.html, // Full email HTML for preview
+      email_html_lt: emailDataLt.html, // Full email HTML for preview
+      style: template.style || 'elegant',
+      sampleGuests,
+      selectedGuest: selectedGuest ? {
+        id: selectedGuest.id,
+        name: selectedGuest.name,
+        email: selectedGuest.email
+      } : null
+    };
+    
+    res.json(response);
+  } catch (error) {
+    logger.error('Error previewing unsaved template:', error);
+    logger.error('Error stack:', error.stack);
+    return sendInternalError(res, error, 'POST /templates/preview');
   }
 });
 

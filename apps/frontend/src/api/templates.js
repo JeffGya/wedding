@@ -85,6 +85,25 @@ export async function deleteTemplate(templateId) {
  * @param {number} guestId - Optional guest ID to use for preview
  * @returns {Promise<{success: boolean, preview: Object, sampleGuests: Array}>}
  */
+/**
+ * Preview unsaved template data
+ * @param {Object} templateData - Template data object with name, subject_en, subject_lt, body_en, body_lt, style
+ * @param {number|null} guestId - Optional guest ID for preview
+ * @returns {Promise<Object>} Preview data with email_html_en, email_html_lt, subject, sampleGuests, selectedGuest
+ */
+export async function previewTemplateData(templateData, guestId = null) {
+  try {
+    const response = await api.post('/templates/preview', {
+      ...templateData,
+      guestId
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to preview template data:', error);
+    throw error;
+  }
+}
+
 export async function previewTemplate(templateId, guestId = null) {
   try {
     const params = guestId ? { guestId } : {};

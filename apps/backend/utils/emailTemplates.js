@@ -54,10 +54,163 @@ function loadLogoHtml() {
   }
 }
 
+/**
+ * Load logo HTML with specific color for hero section
+ * @param {string} color - Color hex code (e.g., '#E3B13F')
+ * @returns {string} HTML string for the logo with color applied
+ */
+function loadLogoHtmlWithColor(color) {
+  try {
+    // Try to load SVG and apply color
+    const rawSvg = fs.readFileSync(
+      path.join(__dirname, 'wedding-logo.svg'), 
+      'utf8'
+    );
+    
+    // Apply color to all path elements
+    // First, replace any existing fill attributes
+    let coloredSvg = rawSvg.replace(/fill="[^"]*"/g, `fill="${color}"`);
+    coloredSvg = coloredSvg.replace(/fill='[^']*'/g, `fill='${color}'`);
+    
+    // Replace fill in style attributes
+    coloredSvg = coloredSvg.replace(/style="([^"]*)"/g, (match, styleContent) => {
+      const newStyle = styleContent.replace(/fill:[^;]*/g, `fill:${color}`);
+      return `style="${newStyle}"`;
+    });
+    
+    // Add fill attribute to all path elements that don't have one
+    // This handles paths with only class attributes (like class="cls-1")
+    coloredSvg = coloredSvg.replace(/<path([^>]*)>/g, (match, attributes) => {
+      // Check if fill attribute already exists
+      if (attributes.includes('fill=')) {
+        return match; // Already has fill, return as is (already replaced above)
+      }
+      // Add fill attribute
+      return `<path fill="${color}"${attributes}>`;
+    });
+    
+    // Size the SVG appropriately for hero section
+    coloredSvg = coloredSvg.replace(
+      '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01">',
+      `<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928.06 899.01" width="60" height="60" style="max-width: 60px; max-height: 60px; display: block; margin: 0 auto;">`
+    );
+    
+    return coloredSvg;
+  } catch (svgError) {
+    // Fallback to text logo with color
+    return `<div style="font-family: 'Great Vibes', cursive; font-size: 24px; color: ${color}; margin: 0 auto; text-align: center;">Brigita & Jeffrey</div>`;
+  }
+}
+
 const EMAIL_TEMPLATES = {
   elegant: {
     name: 'Elegant',
-    description: 'Premium design with cursive titles, sans body, optional header image, and signature footer',
+    description: 'Modular design with clear sections: Hero, Context, Info Card, CTA, Secondary Info, Sign-off, Footer',
+    // Background colors
+    background: '#D2C6B2 ',
+    wrapper: {
+      background: '#A68626',
+      padding: '24px',
+      borderRadius: '60px',
+      marginTop: '0px',
+      marginTopMobile: '0px', // Mobile marginTop for overlay image
+    },
+    container: {
+      background: '#E9E7D9',
+      width: '560px', // Desktop: 560px
+      widthMobile: '100%', // Mobile: 100%
+      padding:  '24px', // Desktop padding
+      paddingTop: '88px', // Desktop padding
+      paddingTopMobile: '72px', // Mobile paddingTop
+      paddingMobile: '20px', // Mobile padding
+      borderRadius: '36px', // Optional corner radius
+      spacing: '32px', // Spacing between sections
+    },
+    // Section 0: Preheader (hidden)
+    preheader: {
+      fontSize: '12px',
+      color: '#F7F6F4' // Same as background to hide
+    },
+    // Section 1: Hero
+    hero: {
+      padding: '24px 0',
+      spacing: '16px', // 12-16px spacing
+      titleFont: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
+      titleSize: '64px', // Desktop: 32-36px (using 34px)
+      titleSizeMobile: '30px', // Mobile: 28-32px (using 30px)
+      subtitleFont: "'Lora', Georgia, 'Times New Roman', serif",
+      subtitleSize: '20px', // 16-18px (using 17px)
+      titleColor: '#E3B13F',
+      borderRadius: '12px'
+    },
+    // Section 2: Context/Message
+    context: {
+      spacing: '12px',
+      headingSize: '22px', // 20-24px (using 22px)
+      bodySize: '17px', // 16-18px (using 17px)
+      bodyFont: "'Open Sans', Arial, sans-serif",
+      textColor: '#442727',
+      padding: '20px'
+    },
+    // Section 3: Info Card (optional)
+    infoCard: {
+      background: '#D2C6B2', // Soft neutral
+      padding: '18px', // 16-20px (using 18px)
+      borderRadius: '8px',
+      border: '1px solid #ABA38D', // Optional light gray border
+      spacing: '8px', // 8-12px (using 10px)
+      labelSize: '12px', // Small caps or lighter
+      valueSize: '16px',
+      textColor: '#442727'
+    },
+    // Section 4: RSVP Code (optional - standalone segment)
+    rsvpCode: {
+      background: '#D2C6B2', // Soft neutral (same family as info card)
+      padding: '18px', // 16-20px (using 18px)
+      borderRadius: '8px',
+      border: '1px dashed #ABA38D', // Dashed or subtle solid
+      spacing: '10px', // 8-12px (using 10px)
+      labelSize: '12px',
+      codeSize: '24px',
+      codeFont: "'Courier New', monospace",
+      textColor: '#442727'
+    },
+    // Section 5: Primary CTA
+    cta: {
+      height: '48px', // Minimum height
+      padding: '24px', // Horizontal padding
+      borderRadius: '16px', // 8-24px (using 16px)
+      maxWidth: '320px', // Desktop max width
+      widthMobile: '100%', // Mobile: fill container
+      background: '#442727',
+      textColor: '#D2C6B2',
+      font: "'Open Sans', Arial, sans-serif",
+      fontSize: '16px',
+      fontWeight: '600'
+    },
+    // Section 6: Secondary Information
+    secondaryInfo: {
+      spacing: '10px', // 8-12px (using 10px)
+      fontSize: '15px', // 14-16px (using 15px)
+      textColor: '#442727'
+    },
+    // Section 7: Personal Sign-off
+    signoff: {
+      fontSize: '20px', // 16-18px (using 17px)
+      font: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
+      signatureFont: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
+      signatureSize: '80px',
+      textColor: '#442727'
+    },
+    // Section 8: Footer
+    footer: {
+      paddingTop: '24px',
+      spacing: '8px',
+      fontSize: '12px', // 12-13px
+      textColor: '#666666', // Lower contrast
+      linkColor: '#DAA520'
+    },
+    // Legacy properties for backward compatibility
     header: {
       background: '#E9E7D9',
       border: '2px solid #D2C6B2',
@@ -73,7 +226,6 @@ const EMAIL_TEMPLATES = {
       lineHeight: '1.7'
     },
     button: {
-      // Gold-filled with high contrast for accessibility
       background: '#DAA520',
       textColor: '#442727',
       border: '2px solid #442727',
@@ -82,14 +234,6 @@ const EMAIL_TEMPLATES = {
       fontWeight: '700',
       borderRadius: '6px',
       padding: '14px 28px'
-    },
-    footer: {
-      background: '#E9E7D9',
-      border: '2px solid #D2C6B2',
-      font: "'Lora', Georgia, 'Times New Roman', serif",
-      fontSize: '16px',
-      signatureFont: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
-      signatureSize: '88px'
     }
   },
   modern: {
@@ -161,22 +305,231 @@ const EMAIL_TEMPLATES = {
 };
 
 /**
- * Extract header image URL from content marker and return cleaned content
- * Marker format: <!--HEADER_IMAGE:https://...-->
+ * Extract top overlay image URL from content marker and return cleaned content
+ * Marker format: <!--TOP_OVERLAY_IMAGE:https://...-->
  */
-function extractHeaderImage(content) {
-  const headerImageRegex = /<!--HEADER_IMAGE:(.*?)-->/;
-  const match = content.match(headerImageRegex);
+function extractTopOverlayImage(content) {
+  if (!content) {
+    return {
+      topOverlayImageUrl: null,
+      cleanedContent: ''
+    };
+  }
+  
+  const regex = /<!--TOP_OVERLAY_IMAGE:(.*?)-->/;
+  const match = content.match(regex);
   
   if (match) {
     return {
-      headerImageUrl: match[1].trim(),
+      topOverlayImageUrl: match[1].trim(),
+      cleanedContent: content.replace(regex, '').trim()
+    };
+  }
+  
+  return {
+    topOverlayImageUrl: null,
+    cleanedContent: content
+  };
+}
+
+/**
+ * Extract header image URL from content marker and return cleaned content
+ * Marker format: <!--HEADER_IMAGE:https://...-->
+ */
+/**
+ * Extract hero image from content marker and return cleaned content
+ * Supports both old HEADER_IMAGE and new HERO_IMAGE markers for backward compatibility
+ * Marker format: <!--HERO_IMAGE:https://...--> or <!--HEADER_IMAGE:https://...-->
+ */
+function extractHeroImage(content) {
+  if (!content) {
+    return {
+      heroImageUrl: null,
+      cleanedContent: ''
+    };
+  }
+  
+  // Try new HERO_IMAGE marker first
+  const heroImageRegex = /<!--HERO_IMAGE:(.*?)-->/;
+  let match = content.match(heroImageRegex);
+  let cleanedContent = content;
+  
+  if (match) {
+    return {
+      heroImageUrl: match[1].trim(),
+      cleanedContent: content.replace(heroImageRegex, '').trim()
+    };
+  }
+  
+  // Fallback to old HEADER_IMAGE marker for backward compatibility
+  const headerImageRegex = /<!--HEADER_IMAGE:(.*?)-->/;
+  match = content.match(headerImageRegex);
+  
+  if (match) {
+    return {
+      heroImageUrl: match[1].trim(),
       cleanedContent: content.replace(headerImageRegex, '').trim()
     };
   }
   
   return {
-    headerImageUrl: null,
+    heroImageUrl: null,
+    cleanedContent: content
+  };
+}
+
+/**
+ * Extract preheader text from content marker
+ * Marker format: <!--PREHEADER:Custom preheader text-->
+ */
+function extractPreheader(content) {
+  if (!content) {
+    return {
+      preheaderText: null,
+      cleanedContent: ''
+    };
+  }
+  
+  const regex = /<!--PREHEADER:(.*?)-->/;
+  const match = content.match(regex);
+  
+  if (match) {
+    return {
+      preheaderText: match[1].trim(),
+      cleanedContent: content.replace(regex, '').trim()
+    };
+  }
+  
+  return {
+    preheaderText: null,
+    cleanedContent: content
+  };
+}
+
+/**
+ * Extract hero subtitle from content marker
+ * Marker format: <!--HERO_SUBTITLE:Custom subtitle text-->
+ */
+function extractHeroSubtitle(content) {
+  if (!content) {
+    return {
+      subtitle: null,
+      cleanedContent: ''
+    };
+  }
+  
+  const regex = /<!--HERO_SUBTITLE:(.*?)-->/;
+  const match = content.match(regex);
+  
+  if (match) {
+    return {
+      subtitle: match[1].trim(),
+      cleanedContent: content.replace(regex, '').trim()
+    };
+  }
+  
+  return {
+    subtitle: null,
+    cleanedContent: content
+  };
+}
+
+/**
+ * Extract info card configuration (toggle and custom labels)
+ * Marker formats:
+ * - <!--INFO_CARD:enabled--> or <!--INFO_CARD:disabled-->
+ * - <!--INFO_CARD_DATE_LABEL:Wedding Date-->
+ * - <!--INFO_CARD_LOCATION_LABEL:Venue-->
+ * - <!--INFO_CARD_TIME_LABEL:Start Time-->
+ */
+function extractInfoCardConfig(content) {
+  if (!content) {
+    return {
+      showInfoCard: null,
+      dateLabel: null,
+      locationLabel: null,
+      timeLabel: null,
+      cleanedContent: ''
+    };
+  }
+  
+  const toggleRegex = /<!--INFO_CARD:(enabled|disabled)-->/;
+  const dateLabelRegex = /<!--INFO_CARD_DATE_LABEL:(.*?)-->/;
+  const locationLabelRegex = /<!--INFO_CARD_LOCATION_LABEL:(.*?)-->/;
+  const timeLabelRegex = /<!--INFO_CARD_TIME_LABEL:(.*?)-->/;
+  
+  const toggleMatch = content.match(toggleRegex);
+  const dateLabelMatch = content.match(dateLabelRegex);
+  const locationLabelMatch = content.match(locationLabelRegex);
+  const timeLabelMatch = content.match(timeLabelRegex);
+  
+  let cleaned = content;
+  if (toggleMatch) cleaned = cleaned.replace(toggleRegex, '').trim();
+  if (dateLabelMatch) cleaned = cleaned.replace(dateLabelRegex, '').trim();
+  if (locationLabelMatch) cleaned = cleaned.replace(locationLabelRegex, '').trim();
+  if (timeLabelMatch) cleaned = cleaned.replace(timeLabelRegex, '').trim();
+  
+  return {
+    showInfoCard: toggleMatch ? toggleMatch[1] === 'enabled' : null,
+    dateLabel: dateLabelMatch ? dateLabelMatch[1].trim() : null,
+    locationLabel: locationLabelMatch ? locationLabelMatch[1].trim() : null,
+    timeLabel: timeLabelMatch ? timeLabelMatch[1].trim() : null,
+    cleanedContent: cleaned
+  };
+}
+
+/**
+ * Extract RSVP code toggle from content marker
+ * Marker format: <!--RSVP_CODE:enabled--> or <!--RSVP_CODE:disabled-->
+ */
+function extractRsvpCodeToggle(content) {
+  if (!content) {
+    return {
+      showRsvpCode: null,
+      cleanedContent: ''
+    };
+  }
+  
+  const regex = /<!--RSVP_CODE:(enabled|disabled)-->/;
+  const match = content.match(regex);
+  
+  if (match) {
+    return {
+      showRsvpCode: match[1] === 'enabled',
+      cleanedContent: content.replace(regex, '').trim()
+    };
+  }
+  
+  return {
+    showRsvpCode: null,
+    cleanedContent: content
+  };
+}
+
+/**
+ * Extract secondary information from content marker
+ * Marker format: <!--SECONDARY_INFO:Custom secondary information text-->
+ */
+function extractSecondaryInfo(content) {
+  if (!content) {
+    return {
+      secondaryInfo: null,
+      cleanedContent: ''
+    };
+  }
+  
+  const regex = /<!--SECONDARY_INFO:(.*?)-->/;
+  const match = content.match(regex);
+  
+  if (match) {
+    return {
+      secondaryInfo: match[1].trim(),
+      cleanedContent: content.replace(regex, '').trim()
+    };
+  }
+  
+  return {
+    secondaryInfo: null,
     cleanedContent: content
   };
 }
@@ -186,6 +539,13 @@ function extractHeaderImage(content) {
  * Marker format: <!--EMAIL_TITLE:Custom Title Here-->
  */
 function extractEmailTitle(content) {
+  if (!content) {
+    return {
+      customTitle: null,
+      cleanedContent: ''
+    };
+  }
+  
   const titleRegex = /<!--EMAIL_TITLE:(.*?)-->/;
   const match = content.match(titleRegex);
   
@@ -209,113 +569,391 @@ function extractEmailTitle(content) {
  */
 function calculateTitleFontSize(title) {
   const titleLength = title.length;
-  const availableWidth = 600; // Full container width
-  const minSize = 64; // Minimum size for very long titles
-  const maxSize = 100; // Maximum size for very short titles
+  const availableWidth = 520; // Container width (520px)
+  const minSize = 28; // Minimum size for very long titles (mobile)
+  const maxSize = 36; // Maximum size for very short titles (desktop)
   
   // Estimate character width for cursive font Great Vibes
-  // Great Vibes is a flowing cursive font that takes significantly more horizontal space
-  // Target: text should be ~125% of available width to ensure visible clipping
-  const targetWidth = availableWidth * 1.25; // 125% of width for proper clipping
-  const estimatedCharWidth = 0.70; // Increased to 0.70 to account for Great Vibes very wide rendering
+  const targetWidth = availableWidth * 0.9; // 90% of width
+  const estimatedCharWidth = 0.70;
   const calculatedSize = Math.floor((targetWidth / titleLength) / estimatedCharWidth);
   
-  // Use the calculated size directly, only clamp to reasonable bounds
   return Math.max(minSize, Math.min(maxSize, calculatedSize));
 }
 
 /**
- * Generate the definitive email template with optional header image and signature footer
+ * Extract button from content using marker format
+ * @param {string} content - The content to extract button from
+ * @returns {Object} Object with button object (or null) and cleaned content
  */
-function generateDefinitiveEmailHTML(content, options = {}) {
-  const config = EMAIL_TEMPLATES.elegant;
+function extractButton(content) {
+  if (!content) {
+    return {
+      button: null,
+      cleanedContent: ''
+    };
+  }
+  
+  let cleanedContent = content;
+  
+  // Extract button marker: <!--BUTTON:text|type|value-->
+  const buttonMarkerRegex = /<!--BUTTON:([^|]+)\|([^|]+)\|([^>]*)-->/g;
+  const matches = [];
+  let match;
+  
+  while ((match = buttonMarkerRegex.exec(content)) !== null) {
+    matches.push({
+      fullMatch: match[0],
+      text: match[1].trim(),
+      type: match[2].trim(),
+      value: match[3].trim()
+    });
+  }
+  
+  // Check for multiple markers - this is an error
+  if (matches.length > 1) {
+    logger.error('[BUTTON_EXTRACT] Multiple button markers detected', {
+      count: matches.length,
+      markers: matches.map(m => ({ text: m.text, type: m.type, value: m.value }))
+    });
+    throw new Error(`Multiple button markers found in content. Only one button is allowed per template. Found ${matches.length} markers.`);
+  }
+  
+  if (matches.length === 0) {
+    return {
+      button: null,
+      cleanedContent: content.trim()
+    };
+  }
+  
+  // Extract the single button
+  const buttonMatch = matches[0];
+  const button = {
+    text: buttonMatch.text,
+    type: buttonMatch.type,
+    value: buttonMatch.value
+  };
+  
+  // Remove marker from content
+  cleanedContent = cleanedContent.replace(buttonMatch.fullMatch, '').trim();
+  
+  return {
+    button,
+    cleanedContent
+  };
+}
+
+/**
+ * Generate the new modular email template based on Figma design
+ * Implements 8-section modular structure
+ */
+function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant') {
+  const { getTranslation, getSectionTranslations } = require('./emailLocale');
+  const language = options.language || 'en';
+  const lang = language === 'lt' ? 'lt' : 'en';
+  const rsvpCodeTranslations = getSectionTranslations('rsvpCode', lang);
+  const getTrans = (key) => getTranslation(key, lang);
+
+  // Get the selected template config, fallback to elegant
+  const selectedConfig = EMAIL_TEMPLATES[style] || EMAIL_TEMPLATES.elegant;
+  const elegantConfig = EMAIL_TEMPLATES.elegant;
+  
+  // Merge with elegant defaults for missing properties
+  const config = {
+    background: selectedConfig.background || elegantConfig.background,
+    wrapper: selectedConfig.wrapper || elegantConfig.wrapper,
+    container: selectedConfig.container || elegantConfig.container,
+    preheader: selectedConfig.preheader || elegantConfig.preheader,
+    hero: selectedConfig.hero || elegantConfig.hero,
+    context: selectedConfig.context || elegantConfig.context,
+    infoCard: selectedConfig.infoCard || elegantConfig.infoCard,
+    rsvpCode: selectedConfig.rsvpCode || elegantConfig.rsvpCode,
+    cta: selectedConfig.cta || elegantConfig.cta,
+    secondaryInfo: selectedConfig.secondaryInfo || elegantConfig.secondaryInfo,
+    signoff: selectedConfig.signoff || elegantConfig.signoff,
+    footer: selectedConfig.footer || elegantConfig.footer,
+    // Keep legacy properties for backward compatibility
+    header: selectedConfig.header,
+    content: selectedConfig.content,
+    button: selectedConfig.button
+  };
   const {
     title = 'Brigita & Jeffrey',
-    buttonText,
-    buttonUrl,
+    subtitle = null, // Optional subline
     footerText = 'With love and joy,',
-    siteUrl = 'https://your-wedding-site.com'
+    siteUrl = 'https://your-wedding-site.com',
+    preheaderText = "We can't wait to celebrate with you",
+    // Optional info card data (auto-populated from template variables if available)
+    infoCard = null, // { date: { label: 'Date', value: '...' }, location: {...}, time: {...} }
+    rsvpCode = null, // Optional RSVP code to display
+    secondaryInfo = null, // Optional secondary information blocks
+    contactInfo = null // Optional contact information for footer
   } = options;
 
-  // Extract header image if present
-  const { headerImageUrl, cleanedContent: contentAfterImage } = extractHeaderImage(content);
+
+  // Ensure content is a string
+  const safeContent = content || '';
   
-  // Extract custom title if present
-  const { customTitle, cleanedContent } = extractEmailTitle(contentAfterImage);
+  // Extract all markers in sequence (preserve order as specified in plan)
+  // 1. Top Overlay Image (first, so it overlays everything)
+  const { topOverlayImageUrl, cleanedContent: contentAfterTopOverlay } = extractTopOverlayImage(safeContent);
+  
+  // 2. Preheader
+  const { preheaderText: extractedPreheader, cleanedContent: contentAfterPreheader } = extractPreheader(contentAfterTopOverlay);
+  
+  // 3. Hero Image (replaces Header Image)
+  const { heroImageUrl, cleanedContent: contentAfterImage } = extractHeroImage(contentAfterPreheader);
+  
+  // 4. Hero Subtitle
+  const { subtitle: extractedSubtitle, cleanedContent: contentAfterSubtitle } = extractHeroSubtitle(contentAfterImage);
+  
+  // 5. Email Title (existing)
+  const { customTitle, cleanedContent: contentAfterTitle } = extractEmailTitle(contentAfterSubtitle);
+  
+  // 6. Info Card Config (toggle + labels)
+  const { 
+    showInfoCard, 
+    dateLabel: customDateLabel, 
+    locationLabel: customLocationLabel, 
+    timeLabel: customTimeLabel, 
+    cleanedContent: contentAfterInfoCard 
+  } = extractInfoCardConfig(contentAfterTitle);
+  
+  // 7. RSVP Code Toggle
+  const { showRsvpCode: extractedShowRsvpCode, cleanedContent: contentAfterRsvpToggle } = extractRsvpCodeToggle(contentAfterInfoCard);
+  
+  // 8. Secondary Info
+  const { secondaryInfo: extractedSecondaryInfo, cleanedContent: contentAfterSecondaryInfo } = extractSecondaryInfo(contentAfterRsvpToggle);
+  
+  // 9. Button (single button marker)
+  const { button, cleanedContent: mainContent } = extractButton(contentAfterSecondaryInfo);
+  
+  // Generate button URL if button exists
+  let buttonUrl = null;
+  if (button) {
+    if (button.type === 'home') {
+      buttonUrl = `${siteUrl}/${language}/home`;
+    } else if (button.type === 'rsvp') {
+      if (rsvpCode) {
+        buttonUrl = `${siteUrl}/${language}/rsvp/${rsvpCode}`;
+      } else {
+        buttonUrl = `${siteUrl}/${language}/rsvp`;
+      }
+    } else if (button.type === 'page') {
+      if (!button.value) {
+        logger.warn('[BUTTON] Page type button missing slug value', { button });
+        buttonUrl = `${siteUrl}/${language}/home`; // Fallback to home
+      } else {
+        buttonUrl = `${siteUrl}/${language}/pages/${button.value}`;
+      }
+    } else {
+      logger.error('[BUTTON] Unknown button type', { button });
+      buttonUrl = `${siteUrl}/${language}/home`; // Fallback to home
+    }
+  }
+  
+  // Use extracted values, falling back to options
+  const finalPreheaderText = extractedPreheader || preheaderText;
+  const finalSubtitle = extractedSubtitle || subtitle;
+  const finalSecondaryInfo = extractedSecondaryInfo || secondaryInfo;
   
   // Use custom title from marker, or fall back to options title
   const displayTitle = customTitle || title;
   
-  // Calculate dynamic font size using helper function
-  const titleFontSize = calculateTitleFontSize(displayTitle);
+  // Apply custom info card labels if provided
+  if (infoCard) {
+    if (infoCard.date && customDateLabel) {
+      infoCard.date.label = customDateLabel;
+    }
+    if (infoCard.location && customLocationLabel) {
+      infoCard.location.label = customLocationLabel;
+    }
+    if (infoCard.time && customTimeLabel) {
+      infoCard.time.label = customTimeLabel;
+    }
+  }
   
-  // Check if button markers exist in content (user explicitly added button via rich text editor)
-  // Buttons should ONLY show when explicitly added via button markers in content, never from options
-  // Note: If markers are already converted to HTML, they're in cleanedContent, so buttonRow is not needed
-  // Never show buttonRow - buttons should only come from content (markers or HTML)
-  const shouldShowButton = false;
-
-  // Header image row (cover-style, fixed height) with title overlay if present
-  const headerImageRow = headerImageUrl ? `
-          <!-- Header Image (Cover) with Title Overlay -->
-          <tr>
-            <td style="padding: 0; line-height: 0; position: relative; overflow: hidden;">
-              <div class="header-image-container" style="width: 100%; height: ${120 + Math.ceil(titleFontSize * 1.5) + 32}px; position: relative; background-color: #E9E7D9;">
-                <!-- Image container (200px, allows 32px overlap for title) -->
-                <div class="header-image" style="width: 100%; height: 200px; overflow: hidden; background-color: #D2C6B2; position: relative;">
-                  <img 
-                    src="${headerImageUrl}" 
-                    alt="Header" 
-                    width="600" 
-                    style="width: 100%; height: 200px; object-fit: cover; display: block; border: 0;"
-                  />
+  // Respect toggle settings: only show sections when explicitly enabled via markers
+  // If marker is null (not set), don't show the section even if data exists
+  const shouldShowInfoCard = showInfoCard === true;
+  const shouldShowRsvpCode = extractedShowRsvpCode === true;
+  
+  // Section 0: Preheader (hidden)
+  const preheaderSection = `
+    <!-- Preheader / Hidden -->
+    <div style="display: none; font-size: 0; line-height: 0; max-height: 0; max-width: 0; overflow: hidden; mso-hide: all;">
+      ${finalPreheaderText}
                 </div>
-                <!-- Title overlay on bottom of image (32px overlap, NO padding for proper clipping) -->
-                <!-- Height multiplier 1.5 works for both Great Vibes and fallback fonts -->
-                <div class="title-overlay" style="position: absolute; top: 168px; left: -32px; right: -32px; overflow: hidden; z-index: 10; height: ${Math.ceil(titleFontSize * 1.5) + 32}px; width: calc(100% + 64px);">
-                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0;">
-                    <tr>
-                      <td style="text-align: center; padding: 0;">
-                        <table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" width="664" style="margin: 0 auto;">
-                          <tr>
-                            <td style="text-align: center; padding: 0 32px;">
-                              <h1 class="mobile-title text-dark" style="margin: 0; padding: 0; font-family: 'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif; font-size: ${titleFontSize}px; color: ${config.header.titleColor}; font-weight: normal; letter-spacing: 0.3px; white-space: nowrap; text-align: center; line-height: 1.3; display: inline-block;">
+  `;
+
+
+  // Section 1: Hero
+  // If hero image present: Display as square background image with title/subtitle/logo aligned to bottom
+  // Desktop: 560px x 560px, Mobile: 100% width with square aspect ratio
+  // If no hero image: Display title/subtitle only (current behavior)
+  const heroSection = heroImageUrl ? `
+    <!-- Hero Section with Background Image (Square) -->
+    <tr>
+      <td style="padding: 0; text-align: center;">
+        <!-- Outer wrapper for responsive width (100% on mobile, max 560px on desktop) -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; margin: 0 auto; background-image: url('${heroImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: ${config.hero.borderRadius};">
+          <tr>
+            <!-- Square container: width 100%, height matches width using padding-bottom trick -->
+            <td style="width: 100%; padding-bottom: 100%; position: relative; background: linear-gradient(to bottom right, rgba(15,15,15,0.25), rgba(68,39,39,0.75)); border-radius: ${config.hero.borderRadius};">
+              <!-- Content table positioned at bottom -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="position: absolute; bottom: 0; left: 0; width: 100%;">
+                <tr>
+                  <td style="padding-bottom: 24px; padding-left: 24px; padding-right: 24px; text-align: center;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align: center;">
+                      <tr>
+                        <td style="padding-bottom: 12px;">
+                          <h1 class="hero-title" style="margin: 0; padding: 0; font-family: ${config.hero.titleFont}; font-size: ${config.hero.titleSize}; color: ${config.hero.titleColor}; font-weight: normal; line-height: 1.2; text-shadow: 0 2px 4px rgba(15,15,15,0.3);">
                                 ${displayTitle}
                               </h1>
                             </td>
                           </tr>
+                      ${finalSubtitle ? `
+                      <tr>
+                        <td style="padding-bottom: 12px;">
+                          <p class="hero-subtitle" style="margin: 0; padding: 0; font-size: ${config.hero.subtitleSize}; font-family: ${config.hero.subtitleFont}; color: ${config.hero.titleColor}; line-height: 1.4; text-shadow: 0 1px 2px rgba(15,15,15,0.3);">
+                            ${finalSubtitle}
+                          </p>
+                        </td>
+                      </tr>
+                      ` : ''}
+                      <tr>
+                        <td style="padding-bottom: 24px;">
+                          ${loadLogoHtmlWithColor(config.hero.titleColor)}
+                        </td>
+                      </tr>
                         </table>
                       </td>
                     </tr>
                   </table>
-                </div>
-              </div>
             </td>
           </tr>
-          <!-- Spacing after header image with title (16px to border) -->
+        </table>
+      </td>
+    </tr>
+  ` : `
+    <!-- Hero Section without Background Image -->
+    <tr>
+      <td style="padding: ${config.hero.padding}; text-align: center;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="padding: 16px 0 0 0; height: 0; line-height: 0; font-size: 0;">
-              &nbsp;
+            <td style="padding-bottom: ${config.hero.spacing};">
+              <h1 class="hero-title" style="margin: 0; padding: 0; font-family: ${config.hero.titleFont}; font-size: ${config.hero.titleSize}; color: ${config.hero.titleColor}; font-weight: normal; line-height: 1.2;">
+                ${displayTitle}
+              </h1>
+            </td>
+          </tr>
+          ${finalSubtitle ? `
+          <tr>
+            <td>
+              <p class="hero-subtitle" style="margin: 0; padding: 0; font-size: ${config.hero.subtitleSize}; color: ${config.hero.titleColor}; line-height: 1.4;">
+                ${finalSubtitle}
+              </p>
+            </td>
+          </tr>
+          ` : ''}
+        </table>
+      </td>
+    </tr>
+  `;
+
+  // Section 2: Context/Message Block
+  const contextSection = `
+    <!-- Context / Message Section -->
+    <tr>
+      <td style="padding-bottom: ${config.container.spacing};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td class="context-body" style="font-family: ${config.context.bodyFont}; font-size: ${config.context.bodySize}; line-height: 1.6; color: ${config.context.textColor}; padding-left: ${config.context.padding}; padding-right: ${config.context.padding};">
+              ${mainContent}
+            </td>
+          </tr>
+                        </table>
+                      </td>
+                    </tr>
+  `;
+
+  // Section 3: Info Card (optional) - respect toggle setting
+  const infoCardSection = (shouldShowInfoCard && infoCard) ? `
+    <!-- Info Card Section -->
+    <tr>
+      <td style="padding-bottom: ${config.container.spacing};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.infoCard.background}; border: ${config.infoCard.border}; border-radius: ${config.infoCard.borderRadius};">
+          <tr>
+            <td style="padding: ${config.infoCard.padding};">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                ${infoCard.date ? `
+                <tr>
+                  <td style="padding-bottom: ${infoCard.location || infoCard.time ? config.infoCard.spacing : '0'};">
+                    <div style="font-size: ${config.infoCard.labelSize}; text-transform: uppercase; color: ${config.infoCard.textColor}; opacity: 0.7; margin-bottom: 4px;">${infoCard.date.label || getTrans('infoCard.date')}</div>
+                    <div style="font-size: ${config.infoCard.valueSize}; color: ${config.infoCard.textColor}; font-weight: 500;">${infoCard.date.value}</div>
+                  </td>
+                </tr>
+                ` : ''}
+                ${infoCard.location ? `
+                <tr>
+                  <td style="padding-bottom: ${infoCard.time ? config.infoCard.spacing : '0'};">
+                    <div style="font-size: ${config.infoCard.labelSize}; text-transform: uppercase; color: ${config.infoCard.textColor}; opacity: 0.7; margin-bottom: 4px;">${infoCard.location.label || getTrans('infoCard.location')}</div>
+                    <div style="font-size: ${config.infoCard.valueSize}; color: ${config.infoCard.textColor}; font-weight: 500;">${infoCard.location.value}</div>
+                  </td>
+                </tr>
+                ` : ''}
+                ${infoCard.time ? `
+                <tr>
+                  <td>
+                    <div style="font-size: ${config.infoCard.labelSize}; text-transform: uppercase; color: ${config.infoCard.textColor}; opacity: 0.7; margin-bottom: 4px;">${infoCard.time.label || getTrans('infoCard.time')}</div>
+                    <div style="font-size: ${config.infoCard.valueSize}; color: ${config.infoCard.textColor}; font-weight: 500;">${infoCard.time.value}</div>
+                  </td>
+                </tr>
+                ` : ''}
+                  </table>
+            </td>
+          </tr>
+        </table>
             </td>
           </tr>
   ` : '';
 
-  // Gold-filled accessible CTA button
-  const buttonRow = shouldShowButton ? `
-                <tr>
-                  <td style="text-align: center; padding-top: 30px;">
-                    <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
-                      <tr>
-                        <td class="mobile-button" style="background-color: ${config.button.background}; border: ${config.button.border}; border-radius: ${config.button.borderRadius}; padding: ${config.button.padding}; text-align: center; mso-padding-alt: 0;">
+  // Section 4: RSVP Code component (if provided) - standalone segment - respect toggle setting
+  const rsvpCodeSection = (shouldShowRsvpCode && rsvpCode) ? `
+    <!-- RSVP Code Section (Standalone) -->
+    <tr>
+      <td style="padding-bottom: ${config.container.spacing};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.rsvpCode.background}; border: ${config.rsvpCode.border}; border-radius: ${config.rsvpCode.borderRadius};">
+          <tr>
+            <td style="padding: ${config.rsvpCode.padding}; text-align: center;">
+              <div style="font-size: ${config.rsvpCode.labelSize}; text-transform: uppercase; color: ${config.rsvpCode.textColor}; opacity: 0.7; margin-bottom: ${config.rsvpCode.spacing};">${rsvpCodeTranslations.label || 'RSVP Code'}</div>
+              <div style="font-size: ${config.rsvpCode.codeSize}; font-weight: 700; color: ${config.rsvpCode.textColor}; letter-spacing: 2px; font-family: ${config.rsvpCode.codeFont};">${rsvpCode}</div>
+            </td>
+          </tr>
+        </table>
+            </td>
+          </tr>
+  ` : '';
+
+  // Section 5: Primary CTA (single button extracted from content)
+  const ctaSection = (button && buttonUrl) ? `
+    <!-- Primary CTA Section -->
+    <tr>
+      <td style="padding-bottom: ${config.container.spacing}; text-align: center;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="cta-button-wrapper" style="margin: 0 auto; width: auto;">
+          <tr>
+            <td class="cta-button" style="background-color: ${config.cta.background}; border-radius: ${config.cta.borderRadius}; height: ${config.cta.height}; max-height: ${config.cta.height}; padding: 0 ${config.cta.padding}; text-align: center; mso-padding-alt: 0;">
                           <!--[if mso]>
-                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${buttonUrl}" style="height:48px;v-text-anchor:middle;width:200px;" arcsize="13%" strokecolor="#442727" strokeweight="2px" fillcolor="#DAA520">
+              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${buttonUrl}" style="height:${config.cta.height};v-text-anchor:middle;width:200px;" arcsize="25%" strokecolor="${config.cta.background}" fillcolor="${config.cta.background}">
                             <w:anchorlock/>
-                            <center style="color:#442727;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">${buttonText}</center>
+                <center style="color:${config.cta.textColor};font-family:Arial,sans-serif;font-size:${config.cta.fontSize};font-weight:${config.cta.fontWeight};">
+                  ${button.text}
+                </center>
                           </v:roundrect>
                           <![endif]-->
                           <!--[if !mso]><!-->
-                          <a href="${buttonUrl}" style="font-family: ${config.button.font}; font-size: ${config.button.fontSize}; font-weight: ${config.button.fontWeight}; color: ${config.button.textColor}; text-decoration: none; display: inline-block; line-height: 1;">
-                            ${buttonText}
+              <a href="${buttonUrl}" style="font-family: ${config.cta.font}; font-size: ${config.cta.fontSize}; font-weight: ${config.cta.fontWeight}; color: ${config.cta.textColor}; text-decoration: none; display: block; width: 100%; height: ${config.cta.height}; line-height: ${config.cta.height}; overflow: hidden; box-sizing: border-box;">
+                ${button.text}
                           </a>
                           <!--<![endif]-->
                         </td>
@@ -325,7 +963,78 @@ function generateDefinitiveEmailHTML(content, options = {}) {
                 </tr>
   ` : '';
 
-  return `<!DOCTYPE html>
+  // Section 6: Secondary Information
+  const secondaryInfoSection = finalSecondaryInfo ? `
+    <!-- Secondary Information Section -->
+    <tr>
+      <td style="padding-bottom: ${config.container.spacing};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          ${Array.isArray(finalSecondaryInfo) ? finalSecondaryInfo.map(info => `
+          <tr>
+            <td style="padding-bottom: ${config.secondaryInfo.spacing}; font-size: ${config.secondaryInfo.fontSize}; color: ${config.secondaryInfo.textColor}; line-height: 1.5;">
+              ${info}
+            </td>
+          </tr>
+          `).join('') : `
+          <tr>
+            <td style="font-size: ${config.secondaryInfo.fontSize}; color: ${config.secondaryInfo.textColor}; line-height: 1.5;">
+              ${finalSecondaryInfo}
+            </td>
+          </tr>
+          `}
+                    </table>
+                  </td>
+                </tr>
+  ` : '';
+
+  // Section 7: Personal Sign-off
+  const signoffSection = `
+    <!-- Personal Sign-off Section -->
+    <tr>
+      <td style="padding-bottom: ${config.container.spacing};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="font-family: ${config.signoff.font}; font-size: ${config.signoff.fontSize}; color: ${config.signoff.textColor}; line-height: 1.6; text-align: center;">
+              <p style="margin: 0 0 12px 0;">
+                ${footerText}
+              </p>
+              <p style="margin: 0; font-family: ${config.signoff.signatureFont}; font-size: ${config.signoff.signatureSize}; color: ${config.signoff.textColor};">
+                Brigita &amp; Jeffrey
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  `;
+
+  // Section 8: Footer
+  const footerSection = `
+    <!-- Footer Section -->
+    <tr>
+      <td style="padding-top: ${config.footer.paddingTop}; border-top: 1px solid #E5E5E5;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="text-align: center; padding-bottom: ${config.footer.spacing};">
+              <a href="${siteUrl}" style="font-size: ${config.footer.fontSize}; color: ${config.footer.linkColor}; text-decoration: none;">
+                ${siteUrl.replace(/^https?:\/\//, '')}
+              </a>
+            </td>
+          </tr>
+          ${contactInfo ? `
+          <tr>
+            <td style="text-align: center; padding-bottom: ${config.footer.spacing}; font-size: ${config.footer.fontSize}; color: ${config.footer.textColor};">
+              ${contactInfo}
+            </td>
+          </tr>
+          ` : ''}
+        </table>
+      </td>
+    </tr>
+  `;
+
+  // Build complete HTML structure
+  const html = `<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="utf-8">
@@ -335,7 +1044,7 @@ function generateDefinitiveEmailHTML(content, options = {}) {
   <meta name="color-scheme" content="light">
   <meta name="supported-color-schemes" content="light">
   <title>Wedding Invitation</title>
-  <!-- Google Fonts - some email clients support this -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" type="text/css">
   <!--[if mso]>
   <noscript>
@@ -347,25 +1056,7 @@ function generateDefinitiveEmailHTML(content, options = {}) {
   </noscript>
   <![endif]-->
   <style type="text/css">
-    /* @font-face declarations for better email client support */
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap');
-    
-    /* Font fallbacks for clients that block external fonts */
-    /* Great Vibes fallback: Brush Script MT, Lucida Handwriting, then Georgia serif */
-    /* Lora fallback: use Georgia serif */
-    /* Open Sans fallback: use Arial sans-serif */
-    /* Note: We try multiple methods (link tag, @import, @font-face) for maximum compatibility */
-    
-    /* Conservative styling approach: Values optimized to work for both Great Vibes and fallback fonts */
-    /* - Title containers use 1.5x multiplier (middle ground between 1.3 for Great Vibes and 1.6 for fallbacks) */
-    /* - Line-height: 1.3 works well for both font types */
-    /* - Letter-spacing: 0.3px is tighter for fallbacks but acceptable for Great Vibes */
-    /* - Signature height: 95px accommodates both font rendering differences */
-    
-    /* Apply Lora font to h2 and below headings with fallback */
-    h2, h3, h4, h5, h6 {
-      font-family: 'Lora', Georgia, 'Times New Roman', serif !important;
-    }
     
     /* Reset styles for email clients */
     body, table, td, p, a, li, blockquote { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
@@ -373,225 +1064,145 @@ function generateDefinitiveEmailHTML(content, options = {}) {
     img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
     body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
     
-    /* Prevent dark mode color inversion on key elements */
-    [data-ogsc] .email-bg { background-color: #F1EFE8 !important; }
-    [data-ogsc] .card-bg { background-color: #E9E7D9 !important; }
-    [data-ogsc] .text-dark { color: #442727 !important; }
-    [data-ogsc] .btn-gold { background-color: #DAA520 !important; }
+    /* Prevent dark mode color inversion */
+    [data-ogsc] .email-bg { background-color: ${config.background} !important; }
+    [data-ogsc] .card-bg { background-color: ${config.container.background} !important; }
     
-    /* Tablet breakpoint (768px and below) */
-    @media screen and (max-width: 768px) {
-      .email-container { max-width: 100% !important; }
-      .mobile-content { padding: 24px 20px !important; }
-      .mobile-header { padding: 24px 20px !important; }
-      .mobile-footer { padding: 24px 20px !important; }
-      /* Slightly larger title on tablets */
-      .mobile-title { font-size: 48px !important; }
-      /* Adjust header image for tablets */
-      .header-image { height: 180px !important; }
-      /* Responsive header image container height for tablets */
-      /* Formula: 120 + (titleFontSize * 1.5) + 32, where titleFontSize = 48px on tablet */
-      .header-image-container { height: 224px !important; }
-      /* Adjust title overlay position for tablets (180px image - 32px overlap = 148px) */
-      .title-overlay { top: 148px !important; height: 104px !important; }
-      /* Keep signature consistent on tablets - close to desktop size */
-      .mobile-signature { font-size: 80px !important; height: 92px !important; }
-      .mobile-signature p { font-size: 80px !important; padding-top: 8px !important; }
-      /* Constrain title tables on tablets */
-      table[width="664"] { width: 100% !important; max-width: 100% !important; }
+    /* Apply Lora font to h2 and below headings with fallback */
+    h2, h3, h4, h5, h6 {
+      font-family: 'Lora', Georgia, 'Times New Roman', serif !important;
     }
     
-    /* Mobile breakpoint (600px and below) - phones */
+    /* Ensure container padding is applied */
+    .email-content {
+      padding-top: ${config.container.padding} !important;
+      padding-right: ${config.container.padding} !important;
+      padding-bottom: ${config.container.padding} !important;
+      padding-left: ${config.container.padding} !important;
+    }
+    
+    /* Top overlay image styles */
+    .top-overlay-image {
+      width: 560px;
+      max-width: 560px;
+      height: auto;
+    }
+    
+    /* Mobile breakpoint (375px and below) */
+    @media screen and (max-width: 375px) {
+      .email-container { 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        border-radius: 0 !important;
+      }
+      .email-content { 
+        padding-top: ${config.container.paddingTopMobile || config.container.paddingTop} !important; 
+        padding-right: ${config.container.paddingMobile} !important; 
+        padding-bottom: ${config.container.paddingMobile} !important; 
+        padding-left: ${config.container.paddingMobile} !important; 
+      }
+      .top-overlay-wrapper {
+        margin-top: -${config.wrapper?.marginTopMobile || config.wrapper?.marginTop || '24px'} !important;
+      }
+      .hero-title { 
+        font-size: ${config.hero.titleSizeMobile} !important; 
+      }
+      .cta-button-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .cta-button { 
+        width: 100% !important; 
+        max-width: 100% !important;
+      }
+      .context-body { 
+        font-size: 15px !important; 
+      }
+      .top-overlay-image {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      div[style*="position: absolute"][style*="top: 0"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        transform: none !important;
+      }
+    }
+    
+    /* Tablet breakpoint (600px and below) */
     @media screen and (max-width: 600px) {
-      /* Match Friendly template's mobile approach for better control */
-      .email-container { width: 100% !important; max-width: 100% !important; }
-      /* Reduce outer padding on mobile for more content space */
-      td[align="center"] { padding: 15px !important; }
-      .mobile-padding { padding: 0 20px !important; }
-      .mobile-text { font-size: 14px !important; }
-      .mobile-button { padding: 10px 20px !important; }
-      .mobile-header { padding: 20px 15px !important; }
-      .mobile-content { padding: 30px 20px !important; }
-      .mobile-footer { padding: 20px 15px !important; }
-      /* Increase title font size for better mobile readability - override dynamic sizing */
-      /* Override inline font-size styles for mobile */
-      h1.mobile-title,
-      .mobile-title,
-      h1[class*="mobile-title"] { 
-        font-size: 40px !important; 
-        line-height: 1.3 !important; 
-        letter-spacing: 0.2px !important;
+      .email-container { 
+        max-width: 100% !important; 
       }
-      /* Keep signature consistent across devices - larger font and height to prevent clipping */
-      .mobile-signature { font-size: 72px !important; height: 90px !important; }
-      .mobile-signature p { font-size: 72px !important; padding-top: 8px !important; }
-      .header-image { height: 150px !important; }
-      /* Responsive header image container height for mobile */
-      /* Formula: 120 + (titleFontSize * 1.5) + 32, where titleFontSize = 40px on mobile */
-      .header-image-container { height: 212px !important; }
-      /* Adjust title overlay position for mobile (150px image - 32px overlap = 118px) */
-      .title-overlay { top: 118px !important; height: 92px !important; }
-      /* Ensure table cells don't stretch beyond viewport */
-      table { max-width: 100% !important; table-layout: auto !important; }
-      td { max-width: 100% !important; word-wrap: break-word !important; }
-      /* Constrain title tables (664px) on mobile to prevent overflow */
-      table[width="664"] { width: 100% !important; max-width: 100% !important; }
-      table[width="664"] td { padding-left: 16px !important; padding-right: 16px !important; }
-      /* Ensure content text wraps properly on mobile */
-      .mobile-text { word-wrap: break-word !important; overflow-wrap: break-word !important; }
-      /* Override fixed padding values on mobile */
-      td[style*="padding: 0 30px"],
-      td[style*="padding:0 30px"] { padding-left: 20px !important; padding-right: 20px !important; }
-      td[style*="padding: 30px"],
-      td[style*="padding:30px"] { padding: 30px 20px !important; }
-      /* Make images responsive */
-      img { max-width: 100% !important; height: auto !important; }
-      /* Ensure buttons are touch-friendly */
-      .mobile-button a { min-height: 44px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
-      /* Adjust title container heights for mobile - override dynamic sizing */
-      /* Target title containers more specifically */
-      .mobile-header div[style*="overflow: hidden"] {
-        height: auto !important;
-        min-height: 50px !important;
-        max-height: 100px !important;
+      .email-content { 
+        padding-top: ${config.container.paddingTopMobile || config.container.paddingTop} !important; 
+        padding-right: ${config.container.paddingMobile} !important; 
+        padding-bottom: ${config.container.paddingMobile} !important; 
+        padding-left: ${config.container.paddingMobile} !important; 
       }
-      /* Adjust header image title overlay for mobile */
-      div[style*="position: absolute"][style*="z-index: 10"] {
-        height: auto !important;
-        min-height: 70px !important;
-        max-height: 130px !important;
+      .top-overlay-wrapper {
+        margin-top: -${config.wrapper?.marginTopMobile || config.wrapper?.marginTop || '24px'} !important;
       }
-    }
-    
-    /* Small mobile breakpoint (480px and below) - small phones */
-    @media screen and (max-width: 480px) {
-      td[align="center"] { padding: 10px !important; }
-      .mobile-content { padding: 24px 16px !important; }
-      .mobile-header { padding: 16px 12px !important; }
-      .mobile-footer { padding: 16px 12px !important; }
-      .mobile-title { font-size: 36px !important; }
-      .mobile-text { font-size: 13px !important; }
-      /* Responsive header image container height for small mobile */
-      /* Formula: 120 + (titleFontSize * 1.5) + 32, where titleFontSize = 36px on small mobile */
-      .header-image-container { height: 206px !important; }
-      /* Title overlay position same as mobile (150px image - 32px overlap = 118px) */
-      .title-overlay { top: 118px !important; height: 86px !important; }
-      /* Keep signature readable on small phones - still larger to prevent clipping */
-      .mobile-signature { font-size: 68px !important; height: 88px !important; }
-      .mobile-signature p { font-size: 68px !important; padding-top: 8px !important; }
-    }
+      .cta-button-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .top-overlay-image {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      div[style*="position: absolute"][style*="top: 0"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        transform: none !important;
+      }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #F1EFE8; font-family: 'Open Sans', Arial, sans-serif;" class="email-bg">
+<body style="margin: 0; padding: 0; background-color: ${config.background}; font-family: 'Open Sans', Arial, sans-serif;" class="email-bg">
+  ${preheaderSection}
   
   <!-- Main Container Table -->
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F1EFE8;" class="email-bg">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.background};" class="email-bg">
     <tr>
       <td align="center" style="padding: 20px;">
         
-        <!-- Email Content Table -->
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="email-container" style="max-width: 600px; background-color: #E9E7D9; border: 2px solid #D2C6B2; border-radius: 8px;" class="card-bg">
-          
-          ${headerImageRow}
-          
-          <!-- Logo & Title Header (only if no header image) -->
-          ${!headerImageUrl ? `
+        <!-- Email Wrapper Container -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="background-color: ${config.wrapper?.background || '#A68626'}; border-radius: ${config.wrapper?.borderRadius || '36px'}; position: relative;">
           <tr>
-            <td class="mobile-header" style="padding: 0; background-color: #E9E7D9; text-align: center; overflow: hidden;" bgcolor="#E9E7D9">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="text-align: center; padding: 0;">
-                    <!-- Title with top clipping (16px) and side clipping (32px each) - hits border -->
-                    <!-- Height multiplier 1.5 works for both Great Vibes and fallback fonts -->
-                    <div style="overflow: hidden; height: ${Math.ceil(titleFontSize * 1.5)}px; position: relative; margin-top: -16px;">
-                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0;">
-                        <tr>
-                          <td style="text-align: center; padding: 0;">
-                            <table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" width="664" style="margin: 0 auto;">
-                              <tr>
-                                <td style="text-align: center; padding: 0 32px;">
-                                  <h1 class="mobile-title text-dark" style="margin: 0; padding: 0; font-family: 'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif; font-size: ${titleFontSize}px; color: ${config.header.titleColor}; font-weight: normal; letter-spacing: 0.3px; white-space: nowrap; text-align: center; line-height: 1.3; display: inline-block;">
-                                    ${displayTitle}
-                                  </h1>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                    <!-- Logo below title -->
-                    <div style="margin-top: 16px; margin-bottom: 16px;">
-                      ${loadLogoHtml()}
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          ` : ''}
-          
-          <!-- Decorative Divider -->
-          <tr>
-            <td class="mobile-padding" style="padding: 0 30px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="border-bottom: 1px solid #D2C6B2; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          
-          <!-- Content -->
-          <tr>
-            <td class="mobile-content" style="padding: 30px; background-color: #E9E7D9;" bgcolor="#E9E7D9">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td class="mobile-text text-dark" style="font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-size: ${config.content.bodySize}; line-height: ${config.content.lineHeight}; color: #442727;">
-                    ${cleanedContent}
-                  </td>
-                </tr>
-                ${buttonRow}
-              </table>
-            </td>
-          </tr>
-          
-          <!-- Footer with Combined Greeting -->
-          <tr>
-            <td class="mobile-footer" style="padding: 24px 30px 0 30px; background-color: #E9E7D9; text-align: center;" bgcolor="#E9E7D9">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                ${headerImageUrl ? `
-                <!-- Logo in footer (only if header image exists) -->
-                <tr>
-                  <td style="text-align: center; padding-bottom: 16px;">
-                    ${loadLogoHtml()}
-                  </td>
-                </tr>
-                ` : ''}
-                <tr>
-                  <td class="mobile-text text-dark" style="font-family: 'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif; font-size: 24px; color: #442727; line-height: 1.4; text-align: center;">
-                    <p style="margin: 0; font-style: normal;">
-                      ${footerText}
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Oversized Signature Footer (Clipped / Out-of-Bounds Effect) -->
-          <tr>
-            <td style="padding: 0; background-color: #E9E7D9; overflow: hidden; margin-top: 0;" bgcolor="#E9E7D9">
-              <!-- Height increased slightly to accommodate both Great Vibes and fallback fonts -->
-              <div class="mobile-signature" style="height: 95px; overflow: hidden; text-align: center; position: relative;">
-                <p style="margin: 0; padding-top: 10px; font-family: 'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif; font-size: ${config.footer.signatureSize}; color: #442727; line-height: 1.1; white-space: nowrap; opacity: 0.85;">
-                  Brigita &amp; Jeffrey
-                </p>
+            <td style="padding: ${config.wrapper?.padding || '24px'}; position: relative;">
+              ${topOverlayImageUrl ? `
+              <!-- Top Overlay Image - Absolutely positioned at top -->
+              <div class="top-overlay-wrapper" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 9999; width: 560px; max-width: 560px; margin-top: -${config.wrapper?.marginTop || '24px'};">
+                <img src="${topOverlayImageUrl}" alt="" style="width: 560px; max-width: 560px; height: auto; display: block; position: relative; z-index: 9999;" class="top-overlay-image" />
               </div>
+              ` : ''}
+              
+              <!-- Email Content Container -->
+              <table role="presentation" width="${config.container.width}" cellpadding="0" cellspacing="0" border="0" class="email-container card-bg" style="max-width: ${config.container.width}; background-color: ${config.container.background}; border-radius: ${config.container.borderRadius}; position: relative; z-index: 1;">
+                
+                <tr>
+                  <td class="email-content" style="padding-top: ${config.container.paddingTop} !important; padding-right: ${config.container.padding} !important; padding-bottom: ${config.container.padding} !important; padding-left: ${config.container.padding} !important;">
+                    <!-- Content Wrapper Table - sections are <tr> elements so they need to be in a table -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      ${heroSection}
+                      ${contextSection}
+                      ${infoCardSection}
+                      ${rsvpCodeSection}
+                      ${ctaSection}
+                      ${secondaryInfoSection}
+                      ${signoffSection}
+                      ${footerSection}
+              </table>
             </td>
           </tr>
           
+              </table>
+              
+            </td>
+          </tr>
         </table>
         
       </td>
@@ -600,6 +1211,8 @@ function generateDefinitiveEmailHTML(content, options = {}) {
   
 </body>
 </html>`;
+
+  return html;
 }
 
 /**
@@ -607,9 +1220,9 @@ function generateDefinitiveEmailHTML(content, options = {}) {
  * Unified function that handles all styles through the definitive template
  */
 function generateEmailHTML(content, style = 'elegant', options = {}) {
-  // All styles now use the definitive template (elegant style)
-  // The style parameter is kept for backward compatibility but all styles render the same
-  return generateDefinitiveEmailHTML(content, options);
+  // Pass the style parameter to generateDefinitiveEmailHTML
+  // Missing properties in the selected style will fall back to elegant defaults
+  return generateDefinitiveEmailHTML(content, options, style);
 }
 
 /**
@@ -650,8 +1263,15 @@ module.exports = {
   generateEmailHTML,
   generateDefinitiveEmailHTML,
   generateButtonHTML,
-  extractHeaderImage,
+  extractTopOverlayImage,
+  extractHeroImage,
+  extractPreheader,
+  extractHeroSubtitle,
+  extractInfoCardConfig,
+  extractRsvpCodeToggle,
+  extractSecondaryInfo,
   extractEmailTitle,
+  extractButton,
   calculateTitleFontSize,
   loadLogoHtml,
   getAvailableStyles,

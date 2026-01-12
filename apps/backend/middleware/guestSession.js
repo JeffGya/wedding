@@ -67,7 +67,6 @@ async function parseGuestSession(req, res, next) {
     const guest = await Guest.findById(guestId);
 
     if (!guest || guest.code !== code) {
-      logger.debug('[GUEST_SESSION] Invalid guest cookie. Clearing.');
       res.clearCookie(COOKIE_NAME);
       req.guest = null;
       req.guestId = null;
@@ -88,12 +87,10 @@ async function parseGuestSession(req, res, next) {
 }
 
 function setGuestSession(res, guestId, code) {
-  logger.debug(`[guestSession] Setting session for guestId=${guestId}`);
   refreshCookie(res, { guestId, code });
 }
 
 function clearGuestSession(res) {
-  logger.debug('[guestSession] Clearing guest session cookie');
   res.clearCookie(COOKIE_NAME);
 }
 

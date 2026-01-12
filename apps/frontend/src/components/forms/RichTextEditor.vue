@@ -104,30 +104,50 @@
             </button>
           </span>
           
-          <!-- Button insertion -->
-          <span class="ql-formats">
-            <button
-              type="button"
-              class="ql-custom-button"
-              @mousedown.prevent
-              @click="insertButton"
-              title="Insert Button"
-            >
-              <span v-html="quillButtonIcon"></span>
-            </button>
-          </span>
-          
-          <!-- Email Header Elements (email context only) -->
+          <!-- Email Section Controls (email context only) -->
           <span v-if="context === 'email'" class="ql-formats">
+            <!-- Top Overlay Image -->
             <button
               type="button"
-              class="ql-custom-header-image"
+              class="ql-custom-top-overlay-image"
               @mousedown.prevent
-              @click="openHeaderImagePicker"
-              title="Insert Header Image"
+              @click="openTopOverlayImagePicker"
+              title="Insert Top Overlay Image"
             >
-              <i class="i-solar:panorama-bold"></i>
+              <i class="i-solar:picture-bold"></i>
             </button>
+            <button
+              v-if="storedTopOverlayImageUrl"
+              type="button"
+              class="ql-custom-remove"
+              @mousedown.prevent
+              @click="clearTopOverlayImage"
+              title="Remove Top Overlay Image"
+            >
+              <i class="i-solar:close-circle-bold"></i>
+            </button>
+            <!-- Hero Image (replaces Header Image) -->
+            <button
+              type="button"
+              class="ql-custom-hero-image"
+              @mousedown.prevent
+              @click="openHeroImagePicker"
+              title="Insert Hero Image"
+              ref="heroImageButtonRef"
+            >
+              <i class="i-solar:gallery-bold" ref="heroImageIconRef"></i>
+            </button>
+            <button
+              v-if="storedHeroImageUrl"
+              type="button"
+              class="ql-custom-remove"
+              @mousedown.prevent
+              @click="clearHeroImage"
+              title="Remove Hero Image"
+            >
+              <i class="i-solar:close-circle-bold"></i>
+            </button>
+            <!-- Email Title -->
             <button
               type="button"
               class="ql-custom-email-title"
@@ -136,6 +156,96 @@
               title="Set Email Title"
             >
               <i class="i-solar:text-field-bold"></i>
+            </button>
+            <!-- Preheader -->
+            <button
+              type="button"
+              class="ql-custom-preheader"
+              @mousedown.prevent
+              @click="openPreheaderDialog"
+              title="Set Preheader Text"
+            >
+              <i class="i-solar:document-text-bold"></i>
+            </button>
+            <!-- Hero Subtitle -->
+            <button
+              type="button"
+              class="ql-custom-hero-subtitle"
+              @mousedown.prevent
+              @click="openHeroSubtitleDialog"
+              title="Set Hero Subtitle"
+            >
+              <i class="i-solar:text-bold"></i>
+            </button>
+            <!-- Info Card Toggle -->
+            <button
+              type="button"
+              class="ql-custom-info-card"
+              @mousedown.prevent
+              @click="toggleInfoCard"
+              title="Toggle Info Card"
+            >
+              <i class="i-solar:card-bold"></i>
+            </button>
+            <!-- Info Card Labels -->
+            <button
+              type="button"
+              class="ql-custom-info-card-labels"
+              @mousedown.prevent
+              @click="openInfoCardLabelsDialog"
+              title="Customize Info Card Labels"
+            >
+              <i class="i-solar:tag-bold"></i>
+            </button>
+            <!-- RSVP Code Toggle -->
+            <button
+              type="button"
+              class="ql-custom-rsvp-code"
+              @mousedown.prevent
+              @click="toggleRsvpCode"
+              title="Toggle RSVP Code"
+            >
+              <i class="i-solar:key-bold"></i>
+            </button>
+            <!-- Secondary Information -->
+            <button
+              type="button"
+              class="ql-custom-secondary-info"
+              @mousedown.prevent
+              @click="openSecondaryInfoDialog"
+              title="Add Secondary Information"
+            >
+              <i class="i-solar:info-circle-bold"></i>
+            </button>
+            <button
+              v-if="storedSecondaryInfo"
+              type="button"
+              class="ql-custom-remove"
+              @mousedown.prevent
+              @click="clearSecondaryInfo"
+              title="Remove Secondary Information"
+            >
+              <i class="i-solar:close-circle-bold"></i>
+            </button>
+            <!-- Button -->
+            <button
+              type="button"
+              class="ql-custom-button"
+              @mousedown.prevent
+              @click="openButtonDialog"
+              title="Add Button"
+            >
+              <i class="i-solar:button-bold"></i>
+            </button>
+            <button
+              v-if="storedButton"
+              type="button"
+              class="ql-custom-remove"
+              @mousedown.prevent
+              @click="clearButton"
+              title="Remove Button"
+            >
+              <i class="i-solar:close-circle-bold"></i>
             </button>
           </span>
           
@@ -156,15 +266,15 @@
     />
     
     <ImagePicker
-      :visible="headerImagePickerVisible"
-      @update:visible="headerImagePickerVisible = $event"
-      @select="insertHeaderImage"
+      :visible="heroImagePickerVisible"
+      @update:visible="heroImagePickerVisible = $event"
+      @select="insertHeroImage"
     />
     
-    <ButtonConfigModal
-      :visible="buttonConfigVisible"
-      @close="buttonConfigVisible = false"
-      @insert="handleButtonConfigInsert"
+    <ImagePicker
+      :visible="topOverlayImagePickerVisible"
+      @update:visible="topOverlayImagePickerVisible = $event"
+      @select="insertTopOverlayImage"
     />
     
     <ImageConfigModal
@@ -201,7 +311,16 @@
           />
           <p class="text-xs text-int-secondary mt-1">This title will appear under the logo in the email.</p>
         </div>
-        <div class="flex justify-end gap-2 mt-2">
+        <div class="flex justify-between items-center mt-2">
+          <Button
+            v-if="storedEmailTitle"
+            label="Clear"
+            severity="danger"
+            outlined
+            @click="clearEmailTitle"
+          />
+          <div v-else></div>
+          <div class="flex gap-2">
           <Button
             label="Cancel"
             severity="secondary"
@@ -211,6 +330,293 @@
             label="Apply"
             @click="insertEmailTitle"
           />
+          </div>
+        </div>
+      </div>
+    </Dialog>
+    
+    <!-- Preheader Dialog -->
+    <Dialog
+      v-model:visible="preheaderDialogVisible"
+      header="Set Preheader Text"
+      :modal="true"
+      :draggable="false"
+      :closable="true"
+      class="w-full max-w-md"
+      :pt="{
+        root: { class: 'bg-bg-glass border border-bg-glass-border rounded-xl shadow-lg' },
+        header: { class: 'text-int-base font-cursive text-xl pb-2' },
+        content: { class: 'p-4' }
+      }"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Preheader Text</label>
+          <InputText
+            v-model="preheaderInput"
+            placeholder="e.g., We can't wait to celebrate with you"
+            class="w-full"
+          />
+          <p class="text-xs text-int-secondary mt-1">This text appears in email client previews but is hidden in the email body.</p>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+          <Button
+            v-if="storedPreheader"
+            label="Clear"
+            severity="danger"
+            outlined
+            @click="clearPreheader"
+          />
+          <div v-else></div>
+          <div class="flex gap-2">
+            <Button
+              label="Cancel"
+              severity="secondary"
+              @click="preheaderDialogVisible = false"
+            />
+            <Button
+              label="Apply"
+              @click="insertPreheader"
+            />
+          </div>
+        </div>
+      </div>
+    </Dialog>
+    
+    <!-- Hero Subtitle Dialog -->
+    <Dialog
+      v-model:visible="heroSubtitleDialogVisible"
+      header="Set Hero Subtitle"
+      :modal="true"
+      :draggable="false"
+      :closable="true"
+      class="w-full max-w-md"
+      :pt="{
+        root: { class: 'bg-bg-glass border border-bg-glass-border rounded-xl shadow-lg' },
+        header: { class: 'text-int-base font-cursive text-xl pb-2' },
+        content: { class: 'p-4' }
+      }"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Subtitle Text</label>
+          <InputText
+            v-model="heroSubtitleInput"
+            placeholder="e.g., Join us for our special day"
+            class="w-full"
+          />
+          <p class="text-xs text-int-secondary mt-1">This subtitle appears below the main title in the hero section.</p>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+          <Button
+            v-if="storedHeroSubtitle"
+            label="Clear"
+            severity="danger"
+            outlined
+            @click="clearHeroSubtitle"
+          />
+          <div v-else></div>
+          <div class="flex gap-2">
+            <Button
+              label="Cancel"
+              severity="secondary"
+              @click="heroSubtitleDialogVisible = false"
+            />
+            <Button
+              label="Apply"
+              @click="insertHeroSubtitle"
+            />
+          </div>
+        </div>
+      </div>
+    </Dialog>
+    
+    <!-- Info Card Labels Dialog -->
+    <Dialog
+      v-model:visible="infoCardLabelsDialogVisible"
+      header="Customize Info Card Labels"
+      :modal="true"
+      :draggable="false"
+      :closable="true"
+      class="w-full max-w-md"
+      :pt="{
+        root: { class: 'bg-bg-glass border border-bg-glass-border rounded-xl shadow-lg' },
+        header: { class: 'text-int-base font-cursive text-xl pb-2' },
+        content: { class: 'p-4' }
+      }"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Date Label</label>
+          <InputText
+            v-model="infoCardLabelsInput.date"
+            placeholder="e.g., Wedding Date"
+            class="w-full"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Location Label</label>
+          <InputText
+            v-model="infoCardLabelsInput.location"
+            placeholder="e.g., Venue"
+            class="w-full"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Time Label</label>
+          <InputText
+            v-model="infoCardLabelsInput.time"
+            placeholder="e.g., Start Time"
+            class="w-full"
+          />
+        </div>
+        <p class="text-xs text-int-secondary">Leave blank to use default labels.</p>
+        <div class="flex justify-between items-center mt-2">
+          <Button
+            v-if="storedInfoCardLabels.date || storedInfoCardLabels.location || storedInfoCardLabels.time"
+            label="Clear"
+            severity="danger"
+            outlined
+            @click="clearInfoCardLabels"
+          />
+          <div v-else></div>
+          <div class="flex gap-2">
+            <Button
+              label="Cancel"
+              severity="secondary"
+              @click="infoCardLabelsDialogVisible = false"
+            />
+            <Button
+              label="Apply"
+              @click="insertInfoCardLabels"
+            />
+          </div>
+        </div>
+      </div>
+    </Dialog>
+    
+    <!-- Button Dialog -->
+    <Dialog
+      v-model:visible="buttonDialogVisible"
+      header="Add Button"
+      :modal="true"
+      :draggable="false"
+      :closable="true"
+      class="w-full max-w-md"
+      :pt="{
+        root: { class: 'bg-bg-glass border border-bg-glass-border rounded-xl shadow-lg' },
+        header: { class: 'text-int-base font-cursive text-xl pb-2' },
+        content: { class: 'p-4' }
+      }"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Button Text</label>
+          <InputText
+            v-model="buttonTextInput"
+            :placeholder="getButtonTextPlaceholder()"
+            class="w-full"
+          />
+          <p class="text-xs text-int-secondary mt-1">The text displayed on the button.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Link Type</label>
+          <Select
+            v-model="buttonTypeInput"
+            :options="[
+              { label: 'Home', value: 'home' },
+              { label: 'RSVP', value: 'rsvp' },
+              { label: 'Page', value: 'page' }
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select link type"
+            class="w-full"
+          />
+        </div>
+        <div v-if="buttonTypeInput === 'page'">
+          <label class="block text-sm font-medium text-int-base mb-1">Page</label>
+          <Select
+            v-model="buttonPageSlugInput"
+            :options="availablePages"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select a page"
+            class="w-full"
+            :loading="availablePages.length === 0"
+          />
+          <p class="text-xs text-int-secondary mt-1">Select a published page to link to.</p>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+          <Button
+            v-if="storedButton"
+            label="Clear"
+            severity="danger"
+            outlined
+            @click="clearButton"
+          />
+          <div v-else></div>
+          <div class="flex gap-2">
+            <Button
+              label="Cancel"
+              severity="secondary"
+              @click="buttonDialogVisible = false"
+            />
+            <Button
+              label="Apply"
+              @click="insertButton"
+              :disabled="!buttonTextInput.trim() || (buttonTypeInput === 'page' && !buttonPageSlugInput)"
+            />
+          </div>
+        </div>
+      </div>
+    </Dialog>
+    
+    <!-- Secondary Information Dialog -->
+    <Dialog
+      v-model:visible="secondaryInfoDialogVisible"
+      header="Add Secondary Information"
+      :modal="true"
+      :draggable="false"
+      :closable="true"
+      class="w-full max-w-md"
+      :pt="{
+        root: { class: 'bg-bg-glass border border-bg-glass-border rounded-xl shadow-lg' },
+        header: { class: 'text-int-base font-cursive text-xl pb-2' },
+        content: { class: 'p-4' }
+      }"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="block text-sm font-medium text-int-base mb-1">Secondary Information</label>
+          <Textarea
+            v-model="secondaryInfoInput"
+            placeholder="Enter additional information..."
+            rows="4"
+            class="w-full"
+          />
+          <p class="text-xs text-int-secondary mt-1">This information appears after the primary CTA button.</p>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+          <Button
+            v-if="storedSecondaryInfo"
+            label="Clear"
+            severity="danger"
+            outlined
+            @click="clearSecondaryInfo"
+          />
+          <div v-else></div>
+          <div class="flex gap-2">
+            <Button
+              label="Cancel"
+              severity="secondary"
+              @click="secondaryInfoDialogVisible = false"
+            />
+            <Button
+              label="Apply"
+              @click="insertSecondaryInfo"
+            />
+          </div>
         </div>
       </div>
     </Dialog>
@@ -233,8 +639,13 @@ import { ref, onMounted, nextTick, watch } from 'vue';
 import Editor from 'primevue/editor';
 import Quill from 'quill';
 import ImagePicker from '@/components/ui/ImagePicker.vue';
-import ButtonConfigModal from '@/components/ui/ButtonConfigModal.vue';
 import ImageConfigModal from '@/components/ui/ImageConfigModal.vue';
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+import Button from 'primevue/button';
+import Select from 'primevue/select';
+import api from '@/api';
 
 // Get Quill's built-in icons
 const QuillIcons = Quill.import('ui/icons');
@@ -453,10 +864,34 @@ const formats = [
 const editorRef = ref(null);
 const showHtml = ref(false);
 const pickerVisible = ref(false);
-const headerImagePickerVisible = ref(false); // For header image insertion
+const heroImagePickerVisible = ref(false); // For hero image insertion
+const topOverlayImagePickerVisible = ref(false); // For top overlay image insertion
 const emailTitleDialogVisible = ref(false); // For email title input
+const preheaderDialogVisible = ref(false);
+const heroSubtitleDialogVisible = ref(false);
+const infoCardLabelsDialogVisible = ref(false);
+const secondaryInfoDialogVisible = ref(false);
+const buttonDialogVisible = ref(false);
+
+// State for new markers
+const storedPreheader = ref(null);
+const storedHeroSubtitle = ref(null);
+const storedInfoCardEnabled = ref(null); // null, true, or false
+const storedInfoCardLabels = ref({ date: null, location: null, time: null });
+const storedRsvpCodeEnabled = ref(null);
+const storedSecondaryInfo = ref(null);
+const storedButton = ref(null); // { text: string, type: 'home' | 'rsvp' | 'page', value: string }
+
+// Dialog input values
+const preheaderInput = ref('');
+const buttonTextInput = ref('');
+const buttonTypeInput = ref('home');
+const buttonPageSlugInput = ref(null);
+const availablePages = ref([]);
+const heroSubtitleInput = ref('');
+const infoCardLabelsInput = ref({ date: '', location: '', time: '' });
+const secondaryInfoInput = ref('');
 const emailTitleInput = ref(''); // Current email title input value
-const buttonConfigVisible = ref(false);
 const imageConfigVisible = ref(false);
 const selectedImageSrc = ref('');
 const selectedImageWidth = ref('');
@@ -466,44 +901,221 @@ const selectedImageIndex = ref(null);
 const isHtmlTextareaFocused = ref(false); // Track if HTML textarea has focus
 
 // Store email markers separately (Quill strips HTML comments)
-const storedHeaderImageUrl = ref(null);
+const storedTopOverlayImageUrl = ref(null);
+const storedHeroImageUrl = ref(null);
 const storedEmailTitle = ref(null);
 
-// Extract markers from initial content
+// Extract markers from initial content (in order: Top Overlay Image, Preheader, Hero Image, Hero Subtitle, Email Title, Info Card Config, RSVP Code, Secondary Info, Button)
 function extractMarkersFromContent(content) {
-  if (!content) return { headerImage: null, emailTitle: null, cleanedContent: content };
+  if (!content) {
+    return {
+      topOverlayImage: null,
+      preheader: null,
+      heroImage: null,
+      heroSubtitle: null,
+      emailTitle: null,
+      infoCardEnabled: null,
+      infoCardLabels: { date: null, location: null, time: null },
+      rsvpCodeEnabled: null,
+      secondaryInfo: null,
+      button: null,
+      cleanedContent: content
+    };
+  }
   
   let cleanedContent = content;
-  let headerImage = null;
+  let topOverlayImage = null;
+  let preheader = null;
+  let heroImage = null;
+  let heroSubtitle = null;
   let emailTitle = null;
+  let infoCardEnabled = null;
+  let infoCardLabels = { date: null, location: null, time: null };
+  let rsvpCodeEnabled = null;
+  let secondaryInfo = null;
+  let button = null;
   
-  const headerMatch = content.match(/<!--HEADER_IMAGE:(.*?)-->/);
-  if (headerMatch) {
-    headerImage = headerMatch[1].trim();
+  // 1. Extract TOP_OVERLAY_IMAGE marker
+  const topOverlayImageMatch = cleanedContent.match(/<!--TOP_OVERLAY_IMAGE:(.*?)-->/);
+  if (topOverlayImageMatch) {
+    topOverlayImage = topOverlayImageMatch[1].trim();
+    cleanedContent = cleanedContent.replace(topOverlayImageMatch[0], '').trim();
+  }
+  
+  // 2. Extract PREHEADER marker
+  const preheaderMatch = cleanedContent.match(/<!--PREHEADER:(.*?)-->/);
+  if (preheaderMatch) {
+    preheader = preheaderMatch[1].trim();
+    cleanedContent = cleanedContent.replace(preheaderMatch[0], '').trim();
+  }
+  
+  // 3. Extract HERO_IMAGE marker (also supports old HEADER_IMAGE for backward compatibility)
+  const heroMatch = cleanedContent.match(/<!--HERO_IMAGE:(.*?)-->/);
+  const headerMatch = cleanedContent.match(/<!--HEADER_IMAGE:(.*?)-->/); // Backward compatibility
+  if (heroMatch) {
+    heroImage = heroMatch[1].trim();
+    cleanedContent = cleanedContent.replace(heroMatch[0], '').trim();
+  } else if (headerMatch) {
+    // Convert old HEADER_IMAGE to hero image
+    heroImage = headerMatch[1].trim();
     cleanedContent = cleanedContent.replace(headerMatch[0], '').trim();
   }
   
+  // 4. Extract HERO_SUBTITLE marker
+  const heroSubtitleMatch = cleanedContent.match(/<!--HERO_SUBTITLE:(.*?)-->/);
+  if (heroSubtitleMatch) {
+    heroSubtitle = heroSubtitleMatch[1].trim();
+    cleanedContent = cleanedContent.replace(heroSubtitleMatch[0], '').trim();
+  }
+  
+  // 5. Extract EMAIL_TITLE marker
   const titleMatch = cleanedContent.match(/<!--EMAIL_TITLE:(.*?)-->/);
   if (titleMatch) {
     emailTitle = titleMatch[1].trim();
     cleanedContent = cleanedContent.replace(titleMatch[0], '').trim();
   }
   
-  return { headerImage, emailTitle, cleanedContent };
+  // 6. Extract INFO_CARD config (toggle + labels)
+  const infoCardToggleMatch = cleanedContent.match(/<!--INFO_CARD:(enabled|disabled)-->/);
+  if (infoCardToggleMatch) {
+    infoCardEnabled = infoCardToggleMatch[1] === 'enabled';
+    cleanedContent = cleanedContent.replace(infoCardToggleMatch[0], '').trim();
+  }
+  
+  const infoCardDateLabelMatch = cleanedContent.match(/<!--INFO_CARD_DATE_LABEL:(.*?)-->/);
+  if (infoCardDateLabelMatch) {
+    infoCardLabels.date = infoCardDateLabelMatch[1].trim();
+    cleanedContent = cleanedContent.replace(infoCardDateLabelMatch[0], '').trim();
+  }
+  
+  const infoCardLocationLabelMatch = cleanedContent.match(/<!--INFO_CARD_LOCATION_LABEL:(.*?)-->/);
+  if (infoCardLocationLabelMatch) {
+    infoCardLabels.location = infoCardLocationLabelMatch[1].trim();
+    cleanedContent = cleanedContent.replace(infoCardLocationLabelMatch[0], '').trim();
+  }
+  
+  const infoCardTimeLabelMatch = cleanedContent.match(/<!--INFO_CARD_TIME_LABEL:(.*?)-->/);
+  if (infoCardTimeLabelMatch) {
+    infoCardLabels.time = infoCardTimeLabelMatch[1].trim();
+    cleanedContent = cleanedContent.replace(infoCardTimeLabelMatch[0], '').trim();
+  }
+  
+  // 7. Extract RSVP_CODE toggle
+  const rsvpCodeMatch = cleanedContent.match(/<!--RSVP_CODE:(enabled|disabled)-->/);
+  if (rsvpCodeMatch) {
+    rsvpCodeEnabled = rsvpCodeMatch[1] === 'enabled';
+    cleanedContent = cleanedContent.replace(rsvpCodeMatch[0], '').trim();
+  }
+  
+  // 8. Extract SECONDARY_INFO marker
+  const secondaryInfoMatch = cleanedContent.match(/<!--SECONDARY_INFO:(.*?)-->/);
+  if (secondaryInfoMatch) {
+    secondaryInfo = secondaryInfoMatch[1].trim();
+    cleanedContent = cleanedContent.replace(secondaryInfoMatch[0], '').trim();
+  }
+  
+  // 9. Extract BUTTON marker
+  const buttonMatch = cleanedContent.match(/<!--BUTTON:([^|]+)\|([^|]+)\|([^>]*)-->/);
+  if (buttonMatch) {
+    const buttonText = buttonMatch[1].trim();
+    const buttonType = buttonMatch[2].trim();
+    const buttonValue = buttonMatch[3].trim();
+    
+    // Check for multiple button markers
+    const allButtonMatches = cleanedContent.match(/<!--BUTTON:[^>]+-->/g);
+    if (allButtonMatches && allButtonMatches.length > 1) {
+      // Multiple button markers detected - extract the first one
+    }
+    
+    button = {
+      text: buttonText,
+      type: buttonType,
+      value: buttonValue
+    };
+    cleanedContent = cleanedContent.replace(buttonMatch[0], '').trim();
+  }
+  
+  return {
+    topOverlayImage,
+    preheader,
+    heroImage,
+    heroSubtitle,
+    emailTitle,
+    infoCardEnabled,
+    infoCardLabels,
+    rsvpCodeEnabled,
+    secondaryInfo,
+    button,
+    cleanedContent
+  };
 }
 
-// Inject markers back into content for saving
+// Inject markers back into content for saving (in order: Top Overlay Image, Preheader, Hero Image, Hero Subtitle, Email Title, Info Card Config, RSVP Code, Secondary Info, Button)
 function injectMarkersIntoContent(content) {
   if (props.context !== 'email') return content;
   
   let result = content || '';
+  const markers = [];
   
-  // Prepend markers in order: header image first, then title
-  if (storedEmailTitle.value) {
-    result = `<!--EMAIL_TITLE:${storedEmailTitle.value}-->\n` + result;
+  // 1. Top Overlay Image
+  if (storedTopOverlayImageUrl.value) {
+    markers.push(`<!--TOP_OVERLAY_IMAGE:${storedTopOverlayImageUrl.value}-->`);
   }
-  if (storedHeaderImageUrl.value) {
-    result = `<!--HEADER_IMAGE:${storedHeaderImageUrl.value}-->\n` + result;
+  
+  // 2. Preheader
+  if (storedPreheader.value) {
+    markers.push(`<!--PREHEADER:${storedPreheader.value}-->`);
+  }
+  
+  // 3. Hero Image
+  if (storedHeroImageUrl.value) {
+    markers.push(`<!--HERO_IMAGE:${storedHeroImageUrl.value}-->`);
+  }
+  
+  // 4. Hero Subtitle
+  if (storedHeroSubtitle.value) {
+    markers.push(`<!--HERO_SUBTITLE:${storedHeroSubtitle.value}-->`);
+  }
+  
+  // 5. Email Title
+  if (storedEmailTitle.value) {
+    markers.push(`<!--EMAIL_TITLE:${storedEmailTitle.value}-->`);
+  }
+  
+  // 6. Info Card Config
+  if (storedInfoCardEnabled.value !== null) {
+    markers.push(`<!--INFO_CARD:${storedInfoCardEnabled.value ? 'enabled' : 'disabled'}-->`);
+  }
+  if (storedInfoCardLabels.value.date) {
+    markers.push(`<!--INFO_CARD_DATE_LABEL:${storedInfoCardLabels.value.date}-->`);
+  }
+  if (storedInfoCardLabels.value.location) {
+    markers.push(`<!--INFO_CARD_LOCATION_LABEL:${storedInfoCardLabels.value.location}-->`);
+  }
+  if (storedInfoCardLabels.value.time) {
+    markers.push(`<!--INFO_CARD_TIME_LABEL:${storedInfoCardLabels.value.time}-->`);
+  }
+  
+  // 7. RSVP Code Toggle
+  if (storedRsvpCodeEnabled.value !== null) {
+    markers.push(`<!--RSVP_CODE:${storedRsvpCodeEnabled.value ? 'enabled' : 'disabled'}-->`);
+  }
+  
+  // 8. Secondary Info
+  if (storedSecondaryInfo.value) {
+    markers.push(`<!--SECONDARY_INFO:${storedSecondaryInfo.value}-->`);
+  }
+  
+  // 9. Button
+  if (storedButton.value) {
+    const value = storedButton.value.value || '';
+    const marker = `<!--BUTTON:${storedButton.value.text}|${storedButton.value.type}|${value}-->`;
+    markers.push(marker);
+  }
+  
+  // Prepend all markers
+  if (markers.length > 0) {
+    result = markers.join('\n') + '\n' + result;
   }
   
   return result;
@@ -511,7 +1123,6 @@ function injectMarkersIntoContent(content) {
 
 // Use Quill's built-in icons directly for custom buttons
 const quillImageIcon = QuillIcons.image || '<svg viewBox="0 0 18 18"><rect class="ql-stroke" height="10" width="12" x="3" y="4"></rect><circle class="ql-fill" cx="6" cy="7" r="1"></circle><polyline class="ql-even ql-fill" points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline></svg>';
-const quillButtonIcon = '<svg viewBox="0 0 18 18"><rect class="ql-stroke" height="4" width="12" x="3" y="7" rx="2"></rect><line class="ql-stroke" x1="6" x2="6" y1="5" y2="13"></line><line class="ql-stroke" x1="12" x2="12" y1="5" y2="13"></line></svg>';
 const quillCodeIcon = QuillIcons['code-block'] || '<svg viewBox="0 0 18 18"><polyline class="ql-stroke" points="5 7 3 9 5 11"></polyline><polyline class="ql-stroke" points="13 7 15 9 13 11"></polyline><line class="ql-stroke" x1="10" x2="8" y1="5" y2="13"></line></svg>';
 
 // Enhanced function to convert button markers to proper HTML based on context
@@ -524,29 +1135,34 @@ function convertButtonMarkersToHtml(content) {
     // Page buttons are already HTML, no conversion needed
     return processedContent;
   } else {
-    // Convert email button markers to table structure with accessible gold-filled styling
-    // This matches the definitive email template CTA button style
+    // Convert new email button markers <!--BUTTON:text|type|value--> to styled button for preview
+    // This renders as visual-only button (not clickable) in the editor preview
     processedContent = processedContent.replace(
-      /\[BUTTON:([^|]+)\|([^\]]+)\]/g,
-      (match, buttonText, buttonUrl) => `
-        <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin: 24px auto;">
-          <tr>
-            <td style="background-color: #DAA520; border: 2px solid #442727; border-radius: 6px; padding: 14px 28px; text-align: center; mso-padding-alt: 0;">
-              <!--[if mso]>
-              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${buttonUrl}" style="height:48px;v-text-anchor:middle;width:200px;" arcsize="13%" strokecolor="#442727" strokeweight="2px" fillcolor="#DAA520">
-                <w:anchorlock/>
-                <center style="color:#442727;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">${buttonText}</center>
-              </v:roundrect>
-              <![endif]-->
-              <!--[if !mso]><!-->
-              <a href="${buttonUrl}" style="font-family: 'Open Sans', Arial, sans-serif; font-size: 16px; font-weight: 700; color: #442727; text-decoration: none; display: inline-block; line-height: 1;">
+      /<!--BUTTON:([^|]+)\|([^|]+)\|([^>]*)-->/g,
+      (match, buttonText, buttonType, buttonValue) => {
+        // Generate placeholder URL based on type (for display only)
+        let displayUrl = '#';
+        if (buttonType === 'home') {
+          displayUrl = '/en/home';
+        } else if (buttonType === 'rsvp') {
+          displayUrl = '/en/rsvp';
+        } else if (buttonType === 'page' && buttonValue) {
+          displayUrl = `/en/pages/${buttonValue}`;
+        }
+        
+        // Render as styled button (visual only, not clickable)
+        return `
+          <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin: 24px auto; max-width: 320px; width: 100%;">
+            <tr>
+              <td style="background-color: #DAA520; border-radius: 16px; padding: 16px; text-align: center; mso-padding-alt: 0;">
+                <span style="font-family: 'Open Sans', Arial, sans-serif; font-size: 16px; font-weight: 700; color: #442727; text-decoration: none; display: inline-block; line-height: 48px; min-height: 48px; pointer-events: none; cursor: default;">
                 ${buttonText}
-              </a>
-              <!--<![endif]-->
+                </span>
             </td>
           </tr>
         </table>
-      `
+        `;
+      }
     );
   }
   
@@ -576,235 +1192,21 @@ function handleTextChange(delta, oldDelta, source) {
   }
 }
 
-// Enhanced button insertion that opens config modal
-function insertButton() {
-  buttonConfigVisible.value = true;
-}
-
-// Handle button configuration from modal
-function handleButtonConfigInsert(buttonConfig) {
-  if (editorRef.value && editorRef.value.quill) {
-    const quill = editorRef.value.quill;
-    const range = quill.getSelection();
-    
-    if (props.context === 'page') {
-      // Insert page button with PrimeVue styling
-      insertPageButton(quill, range, buttonConfig);
-    } else {
-      // Insert email button with table structure
-      insertEmailButton(quill, range, buttonConfig);
-    }
-    
-    // Close modal and trigger content update
-    buttonConfigVisible.value = false;
-    handleTextChange();
-  }
-}
-
-// Insert button for page blocks (PrimeVue Button) - Using simple HTML insertion
-function insertPageButton(quill, range, buttonConfig) {
-  // Create button HTML
-  const buttonHtml = `
-    <button 
-      class="p-button p-button-primary" 
-      style="
-        background: var(--int-base);
-        border: 2px solid var(--int-hover);
-        color: var(--acc2-base);
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-      "
-      onclick="window.location.href='${buttonConfig.url}'"
-      onmouseover="this.style.background='var(--int-hover)';this.style.color='var(--acc2-base)'"
-      onmouseout="this.style.background='var(--int-base)';this.style.color='var(--acc2-base)'"
-    >
-      ${buttonConfig.text}
-    </button>
-  `;
-  
-  // Insert HTML at the current position
-  if (range) {
-    // Insert new line before button if not at start
-    if (range.index > 0) {
-      quill.insertText(range.index, '\n', 'user');
-      range.index += 1;
-    }
-    
-    // Insert HTML using Quill's clipboard API
-    const delta = quill.clipboard.convert(buttonHtml);
-    quill.updateContents(delta);
-    
-    // Insert new line after button
-    quill.insertText(range.index + 1, '\n', 'user');
-    
-    // Set selection after the button
-    quill.setSelection(range.index + 2);
-  } else {
-    // Insert at the end
-    const length = quill.getLength();
-    
-    // Insert new line before button if not empty
-    if (length > 1) {
-      quill.insertText(length - 1, '\n', 'user');
-    }
-    
-    // Insert HTML at the end
-    const delta = quill.clipboard.convert(buttonHtml);
-    quill.updateContents(delta);
-    
-    // Insert new line after button
-    quill.insertText(length + 1, '\n', 'user');
-    
-    // Set selection after the button
-    quill.setSelection(length + 2);
-  }
-}
-
-// Insert button for email templates/messages (table structure)
-function insertEmailButton(quill, range, buttonConfig) {
-  const buttonMarker = `[BUTTON:${buttonConfig.text}|${buttonConfig.url}]`;
-  
-  if (range) {
-    // Insert new line before button if not at start
-    if (range.index > 0) {
-      quill.insertText(range.index, '\n', 'user');
-      range.index += 1;
-    }
-    
-    // Insert button marker with styling
-    quill.insertText(range.index, buttonMarker, {
-      'bold': true,
-      'color': '#DAA520',
-      'background': '#442727'
-    });
-    
-    // Insert new line after button
-    quill.insertText(range.index + buttonMarker.length, '\n', 'user');
-    
-    // Set selection after the button
-    quill.setSelection(range.index + buttonMarker.length + 1);
-  } else {
-    // Insert new line before button if not empty
-    const length = quill.getLength();
-    
-    if (length > 1) {
-      quill.insertText(length - 1, '\n', 'user');
-    }
-    
-    // Insert button marker
-    quill.insertText(length, buttonMarker, {
-      'bold': true,
-      'color': '#DAA520',
-      'background': '#442727'
-    });
-    
-    // Insert new line after button
-    quill.insertText(length + buttonMarker.length, '\n', 'user');
-    
-    // Set selection after the button
-    quill.setSelection(length + buttonMarker.length + 1);
-  }
-}
-
-// Helper function to insert HTML at a specific position
-function insertHtmlAtPosition(quill, range, html) {
-  if (range) {
-    // Insert new line before button if not at start
-    if (range.index > 0) {
-      quill.insertText(range.index, '\n', 'user');
-      range.index += 1;
-    }
-    
-    // Insert HTML at cursor position
-    const currentHtml = quill.root.innerHTML;
-    const beforeCursor = currentHtml.substring(0, range.index);
-    const afterCursor = currentHtml.substring(range.index);
-    const newHtml = beforeCursor + html + afterCursor;
-    
-    quill.root.innerHTML = newHtml;
-    
-    // Set cursor position after the inserted button
-    quill.setSelection(range.index + html.length);
-  } else {
-    // Insert at the end
-    const currentHtml = quill.root.innerHTML;
-    const newHtml = currentHtml + html;
-    quill.root.innerHTML = newHtml;
-    
-    // Set cursor at the end
-    quill.setSelection(quill.getLength());
-  }
-}
-
-// Alternative method: Insert HTML directly into the editor's root
-function insertButtonAlternative() {
-  const buttonHtml = `
-    <a href="#" style="
-      display: inline-block;
-      padding: 12px 24px;
-      background-color: #F1EFE8;
-      color: #DAA520;
-      text-decoration: none;
-      border-radius: 6px;
-      font-family: 'Open Sans', sans-serif;
-      font-weight: 600;
-      font-size: 14px;
-      border: 2px solid #DAA520;
-      transition: all 0.3s ease;
-    ">Button Text</a>
-  `;
-  
-  if (editorRef.value && editorRef.value.quill) {
-    const quill = editorRef.value.quill;
-    const range = quill.getSelection();
-    
-    if (range) {
-      // Insert HTML directly at the cursor position
-      const currentHtml = quill.root.innerHTML;
-      const beforeCursor = currentHtml.substring(0, range.index);
-      const afterCursor = currentHtml.substring(range.index);
-      const newHtml = beforeCursor + buttonHtml + afterCursor;
-      
-      quill.root.innerHTML = newHtml;
-      
-      // Set cursor position after the inserted button
-      quill.setSelection(range.index + buttonHtml.length);
-    } else {
-      // Insert at the end
-      const currentHtml = quill.root.innerHTML;
-      const newHtml = currentHtml + buttonHtml;
-      quill.root.innerHTML = newHtml;
-      
-      // Set cursor at the end
-      quill.setSelection(quill.getLength());
-    }
-    
-    // Update the content
-    updateContent();
-  }
-}
 
 // Open image picker
 function openImagePicker() {
   pickerVisible.value = true;
 }
 
-// Open header image picker (for email templates)
-function openHeaderImagePicker() {
-  headerImagePickerVisible.value = true;
+// Open hero image picker (for email templates)
+function openHeroImagePicker() {
+  heroImagePickerVisible.value = true;
 }
 
-// Insert header image marker at the beginning of content
-function insertHeaderImage(imageUrl) {
-  // Store the header image URL (Quill strips HTML comments, so we store separately)
-  storedHeaderImageUrl.value = imageUrl;
+// Insert hero image marker at the beginning of content
+function insertHeroImage(imageUrl) {
+  // Store the hero image URL (Quill strips HTML comments, so we store separately)
+  storedHeroImageUrl.value = imageUrl;
   
   // Trigger content update to emit the new content with marker
   if (editorRef.value?.quill) {
@@ -817,7 +1219,55 @@ function insertHeaderImage(imageUrl) {
     emit('update:modelValue', contentWithMarkers);
   }
   
-  headerImagePickerVisible.value = false;
+  heroImagePickerVisible.value = false;
+}
+
+function clearHeroImage() {
+  storedHeroImageUrl.value = null;
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    htmlContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+}
+
+// Open top overlay image picker (for email templates)
+function openTopOverlayImagePicker() {
+  topOverlayImagePickerVisible.value = true;
+}
+
+// Insert top overlay image marker at the beginning of content
+function insertTopOverlayImage(imageUrl) {
+  // Store the top overlay image URL (Quill strips HTML comments, so we store separately)
+  storedTopOverlayImageUrl.value = imageUrl;
+  
+  // Trigger content update to emit the new content with marker
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    htmlContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  topOverlayImagePickerVisible.value = false;
+}
+
+function clearTopOverlayImage() {
+  storedTopOverlayImageUrl.value = null;
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    htmlContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
 }
 
 // Open email title dialog
@@ -829,13 +1279,12 @@ function openEmailTitleDialog() {
 
 // Insert email title marker at the beginning of content (after header image if present)
 function insertEmailTitle() {
+  // Allow empty values to clear the marker
   if (!emailTitleInput.value.trim()) {
-    emailTitleDialogVisible.value = false;
-    return;
+    storedEmailTitle.value = null;
+  } else {
+    storedEmailTitle.value = emailTitleInput.value.trim();
   }
-  
-  // Store the email title (Quill strips HTML comments, so we store separately)
-  storedEmailTitle.value = emailTitleInput.value.trim();
   
   // Trigger content update to emit the new content with marker
   if (editorRef.value?.quill) {
@@ -850,6 +1299,337 @@ function insertEmailTitle() {
   
   emailTitleDialogVisible.value = false;
 }
+
+function clearEmailTitle() {
+  storedEmailTitle.value = null;
+  emailTitleInput.value = '';
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    htmlContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  emailTitleDialogVisible.value = false;
+}
+
+// Preheader functions
+function openPreheaderDialog() {
+  preheaderInput.value = storedPreheader.value || '';
+  preheaderDialogVisible.value = true;
+}
+
+function insertPreheader() {
+  // Allow empty values to clear the marker
+  if (!preheaderInput.value.trim()) {
+    storedPreheader.value = null;
+  } else {
+    storedPreheader.value = preheaderInput.value.trim();
+  }
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  preheaderDialogVisible.value = false;
+}
+
+function clearPreheader() {
+  storedPreheader.value = null;
+  preheaderInput.value = '';
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  preheaderDialogVisible.value = false;
+}
+
+// Hero Subtitle functions
+function openHeroSubtitleDialog() {
+  heroSubtitleInput.value = storedHeroSubtitle.value || '';
+  heroSubtitleDialogVisible.value = true;
+}
+
+function insertHeroSubtitle() {
+  // Allow empty values to clear the marker
+  if (!heroSubtitleInput.value.trim()) {
+    storedHeroSubtitle.value = null;
+  } else {
+    storedHeroSubtitle.value = heroSubtitleInput.value.trim();
+  }
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  heroSubtitleDialogVisible.value = false;
+}
+
+function clearHeroSubtitle() {
+  storedHeroSubtitle.value = null;
+  heroSubtitleInput.value = '';
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  heroSubtitleDialogVisible.value = false;
+}
+
+// Info Card functions
+function toggleInfoCard() {
+  // Toggle between null (auto), true (enabled), false (disabled)
+  if (storedInfoCardEnabled.value === null) {
+    storedInfoCardEnabled.value = true;
+  } else if (storedInfoCardEnabled.value === true) {
+    storedInfoCardEnabled.value = false;
+  } else {
+    storedInfoCardEnabled.value = null;
+  }
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+}
+
+function openInfoCardLabelsDialog() {
+  infoCardLabelsInput.value = {
+    date: storedInfoCardLabels.value.date || '',
+    location: storedInfoCardLabels.value.location || '',
+    time: storedInfoCardLabels.value.time || ''
+  };
+  infoCardLabelsDialogVisible.value = true;
+}
+
+function insertInfoCardLabels() {
+  storedInfoCardLabels.value = {
+    date: infoCardLabelsInput.value.date.trim() || null,
+    location: infoCardLabelsInput.value.location.trim() || null,
+    time: infoCardLabelsInput.value.time.trim() || null
+  };
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  infoCardLabelsDialogVisible.value = false;
+}
+
+function clearInfoCardLabels() {
+  storedInfoCardLabels.value = { date: null, location: null, time: null };
+  infoCardLabelsInput.value = { date: '', location: '', time: '' };
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  infoCardLabelsDialogVisible.value = false;
+}
+
+// RSVP Code functions
+function toggleRsvpCode() {
+  // Toggle between null (auto), true (enabled), false (disabled)
+  if (storedRsvpCodeEnabled.value === null) {
+    storedRsvpCodeEnabled.value = true;
+  } else if (storedRsvpCodeEnabled.value === true) {
+    storedRsvpCodeEnabled.value = false;
+  } else {
+    storedRsvpCodeEnabled.value = null;
+  }
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+}
+
+// Secondary Information functions
+function openSecondaryInfoDialog() {
+  secondaryInfoInput.value = storedSecondaryInfo.value || '';
+  secondaryInfoDialogVisible.value = true;
+}
+
+function insertSecondaryInfo() {
+  if (!secondaryInfoInput.value.trim()) {
+    storedSecondaryInfo.value = null;
+  } else {
+    storedSecondaryInfo.value = secondaryInfoInput.value.trim();
+  }
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  secondaryInfoDialogVisible.value = false;
+}
+
+function clearSecondaryInfo() {
+  storedSecondaryInfo.value = null;
+  secondaryInfoInput.value = '';
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  secondaryInfoDialogVisible.value = false;
+}
+
+// Button functions
+function getButtonTextPlaceholder() {
+  if (buttonTypeInput.value === 'home') return 'Visit Home';
+  if (buttonTypeInput.value === 'rsvp') return 'RSVP Now';
+  if (buttonTypeInput.value === 'page') return 'Learn More';
+  return 'Button Text';
+}
+
+async function fetchPublishedPages() {
+  try {
+    const response = await api.get('/admin/pages', {
+      params: { status: 'published', limit: 1000 },
+      meta: { showLoader: false }
+    });
+    
+    const pages = response.data?.data || response.data || [];
+    
+    if (pages.length === 0) {
+      availablePages.value = [];
+      return;
+    }
+    
+    // Format pages for dropdown: use slug as label (capitalize words)
+    const formattedPages = pages.map((page) => {
+      const label = page.slug
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      
+      return {
+        label: label,
+        value: page.slug
+      };
+    });
+    
+    availablePages.value = formattedPages;
+  } catch (error) {
+    availablePages.value = [];
+  }
+}
+
+function openButtonDialog() {
+  // Pre-fill with existing button values or defaults
+  if (storedButton.value) {
+    buttonTextInput.value = storedButton.value.text;
+    buttonTypeInput.value = storedButton.value.type;
+    buttonPageSlugInput.value = storedButton.value.type === 'page' ? storedButton.value.value : null;
+  } else {
+    // Set defaults
+    buttonTextInput.value = '';
+    buttonTypeInput.value = 'home';
+    buttonPageSlugInput.value = null;
+  }
+  
+  // Always fetch pages when dialog opens (they'll be used if type is 'page')
+  // This ensures pages are available immediately when user selects 'page' type
+  if (availablePages.value.length === 0) {
+    fetchPublishedPages();
+  }
+  
+  buttonDialogVisible.value = true;
+}
+
+function insertButton() {
+  // Validate
+  if (!buttonTextInput.value.trim()) {
+    return;
+  }
+  
+  if (buttonTypeInput.value === 'page' && !buttonPageSlugInput.value) {
+    return;
+  }
+  
+  // Store button config
+  storedButton.value = {
+    text: buttonTextInput.value.trim(),
+    type: buttonTypeInput.value,
+    value: buttonTypeInput.value === 'page' ? buttonPageSlugInput.value : ''
+  };
+  
+  // Update content
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  buttonDialogVisible.value = false;
+}
+
+function clearButton() {
+  storedButton.value = null;
+  buttonTextInput.value = '';
+  buttonTypeInput.value = 'home';
+  buttonPageSlugInput.value = null;
+  
+  if (editorRef.value?.quill) {
+    const currentContent = editorRef.value.quill.root.innerHTML;
+    const processedContent = convertButtonMarkersToHtml(currentContent);
+    const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    editorContent.value = contentWithMarkers;
+    emit('update:modelValue', contentWithMarkers);
+  }
+  
+  buttonDialogVisible.value = false;
+}
+
+// Watch button type to fetch pages when changed to 'page'
+watch(buttonTypeInput, (newType) => {
+  if (newType === 'page' && availablePages.value.length === 0) {
+    fetchPublishedPages();
+  }
+});
 
 // Insert image from picker
 function insertImage(imageUrl) {
@@ -1168,12 +1948,22 @@ onMounted(() => {
       if (quill) {
         if (props.modelValue) {
           // Extract markers from initial content (Quill would strip them)
-          const { headerImage, emailTitle, cleanedContent } = extractMarkersFromContent(props.modelValue);
-          storedHeaderImageUrl.value = headerImage;
-          storedEmailTitle.value = emailTitle;
+          const markers = extractMarkersFromContent(props.modelValue);
+          storedTopOverlayImageUrl.value = markers.topOverlayImage;
+          storedPreheader.value = markers.preheader;
+          storedHeroImageUrl.value = markers.heroImage;
+          storedHeroSubtitle.value = markers.heroSubtitle;
+          storedEmailTitle.value = markers.emailTitle;
+          storedInfoCardEnabled.value = markers.infoCardEnabled;
+          storedInfoCardLabels.value = markers.infoCardLabels;
+          storedRsvpCodeEnabled.value = markers.rsvpCodeEnabled;
+          storedSecondaryInfo.value = markers.secondaryInfo;
+          storedButton.value = markers.button;
+          
+          const cleanedContent = markers.cleanedContent;
           
           // Set cleaned content to Quill (without markers)
-          quill.root.innerHTML = cleanedContent;
+          quill.root.innerHTML = cleanedContent || '';
           editorContent.value = props.modelValue; // Keep full content with markers
           htmlContent.value = props.modelValue;
         }
@@ -1199,13 +1989,26 @@ onMounted(() => {
 
 // Watch for external changes to modelValue
 watch(() => props.modelValue, (newValue) => {
-  if (!isInternalUpdate.value && newValue !== editorContent.value) {
+  const quillContent = editorRef.value?.quill?.root?.innerHTML || '';
+  const markers = extractMarkersFromContent(newValue || '');
+  const expectedQuillContent = markers.cleanedContent || '';
+  const quillNeedsSync = quillContent !== expectedQuillContent;
+  
+  // Update if modelValue changed OR if Quill content doesn't match expected cleaned content
+  if (!isInternalUpdate.value && (newValue !== editorContent.value || quillNeedsSync)) {
     isInternalUpdate.value = true;
     
     // Extract markers from new content
-    const { headerImage, emailTitle, cleanedContent } = extractMarkersFromContent(newValue);
-    storedHeaderImageUrl.value = headerImage;
-    storedEmailTitle.value = emailTitle;
+    const extractedMarkers = extractMarkersFromContent(newValue);
+    storedTopOverlayImageUrl.value = extractedMarkers.topOverlayImage;
+    storedPreheader.value = extractedMarkers.preheader;
+    storedHeroImageUrl.value = extractedMarkers.heroImage;
+    storedHeroSubtitle.value = extractedMarkers.heroSubtitle;
+    storedEmailTitle.value = extractedMarkers.emailTitle;
+    storedInfoCardEnabled.value = extractedMarkers.infoCardEnabled;
+    storedInfoCardLabels.value = extractedMarkers.infoCardLabels;
+    storedRsvpCodeEnabled.value = extractedMarkers.rsvpCodeEnabled;
+    storedSecondaryInfo.value = extractedMarkers.secondaryInfo;
     
     editorContent.value = newValue || '';
     htmlContent.value = newValue || '';
@@ -1214,7 +2017,7 @@ watch(() => props.modelValue, (newValue) => {
       if (editorRef.value && editorRef.value.quill) {
         const quill = editorRef.value.quill;
         // Set cleaned content (without markers) to Quill
-        quill.root.innerHTML = cleanedContent || '';
+        quill.root.innerHTML = extractedMarkers.cleanedContent || '';
       }
       isInternalUpdate.value = false;
     });
@@ -1283,7 +2086,7 @@ watch(() => props.modelValue, (newValue) => {
   background-color: #e5e7eb;
 }
 
-.ql-custom-header-image {
+.ql-custom-hero-image {
   background: none;
   border: none;
   cursor: pointer;
@@ -1292,8 +2095,47 @@ watch(() => props.modelValue, (newValue) => {
   border-radius: 3px;
 }
 
-.ql-custom-header-image:hover {
+.ql-custom-hero-image:hover {
   background-color: #e5e7eb;
+}
+
+.ql-custom-hero-subtitle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-hero-subtitle:hover {
+  background-color: #e5e7eb;
+}
+
+.ql-custom-hero-subtitle i {
+  display: inline-block !important;
+}
+
+.ql-custom-button i {
+  display: inline-block !important;
+}
+
+.ql-custom-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+  color: #ef4444;
+}
+
+.ql-custom-remove:hover {
+  background-color: #fee2e2;
+}
+
+.ql-custom-remove i {
+  display: inline-block !important;
 }
 
 /* Override Quill's default h2 styles for special titles */

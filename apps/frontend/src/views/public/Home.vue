@@ -169,12 +169,13 @@
       <!-- Left side: Image/placeholder -->
       <div class="section-visual section-visual-left">
         <div class="w-full h-full bg-form-bg flex items-center justify-center">
-          <img 
+          <!--<img 
             :src="uploadsUrl + '/collage.png'" 
             alt="Collage of pictures from Lithuania including buildings in Vilnius, summer houses and peole enjoying themselves"
             class="w-full h-fit object-cover"
             :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }"
-          >
+          > -->
+          <video :src="uploadsUrl + '/Lithuania-impression.mp4'" class="w-full h-fit object-cover" :class="{ 'brightness-60': isDarkMode, 'brightness-100': !isDarkMode }" muted loop autoplay playsinline></video>
         </div>
       </div>
 

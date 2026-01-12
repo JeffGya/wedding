@@ -13,7 +13,7 @@
       />
     </template>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Main Form -->
       <div class="lg:col-span-2">
         <Card>
@@ -137,70 +137,26 @@
         </Card>
       </div>
 
-      <!-- Variables Helper -->
-      <div class="lg:col-span-1">
-        <Card>
-          <template #title>
-            <div class="flex items-center space-x-2">
-              <i class="i-solar-info-circle-bold-duotone text-acc-base"></i>
-              <span>Available Variables</span>
-            </div>
-          </template>
-          <template #content>
-            <div class="space-y-4">
-              <div>
-                <h4 class="font-semibold text-sm text-gray-700 mb-2">Guest Information</h4>
-                <div class="space-y-1">
-                  <div class="text-xs text-gray-600">&#123;&#123;guestName&#125;&#125; - Guest's name</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;email&#125;&#125; - Guest's email</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;groupLabel&#125;&#125; - Guest's group</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;code&#125;&#125; or &#123;&#123;rsvpCode&#125;&#125; - RSVP code</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;rsvpLink&#125;&#125; - RSVP link (uses website_url from settings)</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;plus_one_name&#125;&#125; - Plus one's name</div>
-                </div>
-              </div>
-              
-              <div>
-                <h4 class="font-semibold text-sm text-gray-700 mb-2">Event Information</h4>
-                <div class="space-y-1">
-                  <div class="text-xs text-gray-600">&#123;&#123;venueName&#125;&#125; - Venue name</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;venueAddress&#125;&#125; - Venue address</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;eventStartDate&#125;&#125; - Event date</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;eventTime&#125;&#125; - Event time</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;rsvpDeadline&#125;&#125; - RSVP deadline</div>
-                </div>
-              </div>
-              
-              <div>
-                <h4 class="font-semibold text-sm text-gray-700 mb-2">Couple Information</h4>
-                <div class="space-y-1">
-                  <div class="text-xs text-gray-600">&#123;&#123;brideName&#125;&#125; - Bride's name</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;groomName&#125;&#125; - Groom's name</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;contactEmail&#125;&#125; - Contact email</div>
-                </div>
-              </div>
-              
-              <div>
-                <h4 class="font-semibold text-sm text-gray-700 mb-2">Conditional Logic</h4>
-                <div class="space-y-1">
-                  <div class="text-xs text-gray-600">&#123;&#123;#if variable&#125;&#125;...&#123;&#123;/if&#125;&#125; - Show if variable exists</div>
-                  <div class="text-xs text-gray-600">&#123;&#123;#unless variable&#125;&#125;...&#123;&#123;/unless&#125;&#125; - Show if variable doesn't exist</div>
-                </div>
-              </div>
-            </div>
-          </template>
-        </Card>
+      <!-- Right Column: Preview Panel -->
+      <div class="lg:col-span-2">
+        <TemplatePreviewPanel
+          :preview-data="previewData"
+          :loading="previewLoading"
+          :error="previewError"
+          @guest-selected="handleGuestSelected"
+          @language-changed="handleLanguageChanged"
+        />
       </div>
     </div>
   </AdminPageWrapper>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { createTemplate, updateTemplate, fetchTemplate } from '@/api/templates'
+import { createTemplate, updateTemplate, fetchTemplate, previewTemplateData, getTemplateStyles } from '@/api/templates'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
-import { getTemplateStyles } from '@/api/templates';
+import TemplatePreviewPanel from '@/components/templates/TemplatePreviewPanel.vue'
 import { useToastService } from '@/utils/toastService'
 import { useErrorHandler } from '@/composables/useErrorHandler'
 
@@ -229,6 +185,13 @@ const form = ref({
   body_lt: '',
   style: 'elegant'
 })
+
+// Preview state
+const previewData = ref(null)
+const previewLoading = ref(false)
+const previewError = ref(null)
+const selectedGuestId = ref(null)
+const previewDebounceTimer = ref(null)
 
 async function loadTemplate() {
   if (!isEditMode.value) return
@@ -279,6 +242,66 @@ async function saveTemplate() {
   }
 }
 
+// Debounced preview update function
+function updatePreview() {
+  // Clear existing timer
+  if (previewDebounceTimer.value) {
+    clearTimeout(previewDebounceTimer.value)
+  }
+  
+  // Set new timer (2 seconds delay)
+  previewDebounceTimer.value = setTimeout(async () => {
+    if (!form.value.name || !form.value.subject_en || !form.value.subject_lt || !form.value.body_en || !form.value.body_lt) {
+      previewData.value = null
+      return
+    }
+    
+    try {
+      previewLoading.value = true
+      previewError.value = null
+      
+      const response = await previewTemplateData({
+        name: form.value.name,
+        subject_en: form.value.subject_en,
+        subject_lt: form.value.subject_lt,
+        body_en: form.value.body_en,
+        body_lt: form.value.body_lt,
+        style: form.value.style
+      }, selectedGuestId.value)
+      
+      previewData.value = response
+    } catch (error) {
+      previewError.value = error.message || 'Failed to generate preview'
+      console.error('Preview error:', error)
+    } finally {
+      previewLoading.value = false
+    }
+  }, 2000) // 2 second debounce
+}
+
+// Watch form fields for changes
+watch([
+  () => form.value.body_en,
+  () => form.value.body_lt,
+  () => form.value.subject_en,
+  () => form.value.subject_lt,
+  () => form.value.style
+], (newValues, oldValues) => {
+  updatePreview()
+}, { deep: true })
+
+// Handle guest selection from preview panel
+function handleGuestSelected(guestId) {
+  selectedGuestId.value = guestId
+  updatePreview()
+}
+
+// Handle language change from preview panel
+function handleLanguageChanged(language) {
+  // Language change is handled by the preview panel component
+  // This is just for future extensibility if needed
+}
+
 onMounted(async () => {
   try {
     // Load template styles first
@@ -290,6 +313,9 @@ onMounted(async () => {
     if (isEditMode.value) {
       await loadTemplate();
     }
+    
+    // Initial preview after form is loaded
+    updatePreview()
   } catch (error) {
     handleError(error, 'Failed to load template styles');
   }

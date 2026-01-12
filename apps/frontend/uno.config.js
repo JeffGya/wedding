@@ -13,6 +13,10 @@ export default defineConfig({
           (await import('@iconify-json/solar/icons.json')).default,
       },
       prefix: 'i-',
+      extraProperties: {
+        'display': 'inline-block',
+        'vertical-align': 'middle',
+      },
     }),
   ],
   
@@ -28,6 +32,19 @@ export default defineConfig({
     'i-solar-close-circle-bold-duotone',
     'i-solar-check-circle-bold',
     'i-solar-check-circle-bold-duotone',
+    // RichTextEditor email section control icons
+    'i-solar:gallery-bold',
+    'i-solar:text-field-bold',
+    'i-solar:document-text-bold',
+    'i-solar:text-bold',
+    'i-solar:card-bold',
+    'i-solar:tag-bold',
+    'i-solar:key-bold',
+    'i-solar:info-circle-bold',
+    'i-solar:settings-bold',
+    'i-solar:add-circle-bold',
+    'i-solar:close-circle-bold',
+    'i-solar:button-bold',
   ],
   theme: {
     fontFamily: {

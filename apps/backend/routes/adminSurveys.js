@@ -220,8 +220,6 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const payload = req.body;
-    logger.debug('[POST /api/admin/surveys] body:', payload);
-
     const errors = validateSurveyPayload(payload, false);
     if (errors.length) {
       return sendBadRequest(res, errors.join(', '), 'INVALID_SURVEY');

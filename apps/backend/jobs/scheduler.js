@@ -36,10 +36,6 @@ function startScheduler() {
     }
   });
 
-  // Only log startup in development
-  if (process.env.NODE_ENV !== 'production') {
-    logger.debug('[SCHEDULER] Started');
-  }
 }
 
 module.exports = startScheduler;

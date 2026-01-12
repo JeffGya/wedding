@@ -2,8 +2,7 @@ const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const logger = require('./logger');
 const { sendEmail } = require('./emailService');
-const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
-const { generateEmailHTML } = require('../utils/emailTemplates');
+const { generateEmailFromMessage } = require('../helpers/emailGeneration');
 
 const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
@@ -79,31 +78,17 @@ async function sendScheduledMessages() {
 
           const lang = recipient.language === 'lt' ? 'lt' : 'en';
           
-          // Get enhanced variables for this guest
-          const variables = await getTemplateVariables(guest, message);
-          
-          // Replace variables in message content
-          const body_en = replaceTemplateVars(message.body_en, variables);
-          const body_lt = replaceTemplateVars(message.body_lt, variables);
-          const subject = replaceTemplateVars(message.subject, variables);
-          
-          // Prepare email template options from settings
-          const emailOptions = {
-            siteUrl: variables.websiteUrl || variables.siteUrl || SITE_URL,
-            title: variables.brideName && variables.groomName 
-              ? `${variables.brideName} & ${variables.groomName}`
-              : undefined
-          };
-          
-          // Apply shared email template system for consistent, inline-styled HTML
-          const styleKey = message.style || 'elegant';
-          const emailHtml = generateEmailHTML(lang === 'lt' ? body_lt : body_en, styleKey, emailOptions);
+          // Use unified email generation service
+          const emailData = await generateEmailFromMessage(message, guest, {
+            style: message.style || 'elegant',
+            language: lang
+          });
 
           // Send via unified email service
           const result = await sendEmail({
             to: recipient.email,
-            subject: subject,
-            html: emailHtml,
+            subject: emailData.subject,
+            html: emailData.html,
             db
           });
 
