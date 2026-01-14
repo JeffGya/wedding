@@ -381,13 +381,35 @@ async function getPlusOneName(db, guestId) {
 }
 
 /**
+ * Get the plus one's dietary restrictions for a guest
+ */
+async function getPlusOneDietary(db, guestId) {
+  try {
+    const { dbGet } = createDbHelpers(db);
+    const row = await dbGet(
+      'SELECT dietary FROM guests WHERE group_id = (SELECT group_id FROM guests WHERE id = ?) AND is_primary = 0 LIMIT 1',
+      [guestId]
+    );
+    // Handle null, undefined, or empty string - return empty string for all
+    const dietary = row?.dietary;
+    if (dietary === null || dietary === undefined) {
+      return '';
+    }
+    return String(dietary); // Convert to string in case it's not already
+  } catch (err) {
+    logger.error('Error getting plus one dietary:', err);
+    return '';
+  }
+}
+
+/**
  * Check if template content uses plus-one variables
  * @param {string} templateContent - Template content to check
  * @returns {boolean} True if template uses plus-one variables
  */
 function templateUsesPlusOneVars(templateContent) {
   if (!templateContent) return false;
-  const plusOneVars = ['plusOneName', 'plus_one_name', 'hasPlusOne', 'has_plus_one'];
+  const plusOneVars = ['plusOneName', 'plus_one_name', 'hasPlusOne', 'has_plus_one', 'plusOneDietary', 'plus_one_dietary', 'hasPlusOneDietary', 'has_plus_one_dietary'];
   return plusOneVars.some(varName => templateContent.includes(`{{${varName}}}`) || templateContent.includes(`{{#if ${varName}}}`));
 }
 
@@ -436,10 +458,17 @@ async function getTemplateVariables(guest, template = null, language = null) {
   // Get plus one information (lazy load - only if needed)
   let hasPlusOne = false;
   let plusOneName = '';
+  let plusOneDietary = '';
+  let hasPlusOneDietary = false;
   
   if (needsPlusOneData) {
     hasPlusOne = await checkIfGuestHasPlusOne(db, guest.id);
     plusOneName = await getPlusOneName(db, guest.id);
+    plusOneDietary = await getPlusOneDietary(db, guest.id);
+    // Calculate hasPlusOneDietary: true only if dietary exists and is not empty after trimming
+    const dietaryValue = plusOneDietary || '';
+    const dietaryTrimmed = typeof dietaryValue === 'string' ? dietaryValue.trim() : '';
+    hasPlusOneDietary = dietaryTrimmed.length > 0;
   }
   
   // Calculate derived values
@@ -481,6 +510,10 @@ async function getTemplateVariables(guest, template = null, language = null) {
     rsvpLink: `${siteUrl}/${guest.preferred_language}/rsvp/${guest.code}`,
     plusOneName: plusOneName,
     plus_one_name: plusOneName, // Alias for template compatibility (snake_case)
+    plusOneDietary: plusOneDietary,
+    plus_one_dietary: plusOneDietary, // Alias for template compatibility (snake_case)
+    hasPlusOneDietary: hasPlusOneDietary,
+    has_plus_one_dietary: hasPlusOneDietary, // Alias for template compatibility (snake_case)
     rsvpDeadline: formatRsvpDeadline(rsvpDeadlineValue, lang),
     email: guest.email,
     preferredLanguage: guest.preferred_language,
@@ -494,6 +527,8 @@ async function getTemplateVariables(guest, template = null, language = null) {
     // Conditional Flags
     hasPlusOne: hasPlusOne,
     has_plus_one: hasPlusOne, // Alias for template compatibility (snake_case)
+    hasPlusOneDietary: hasPlusOneDietary,
+    has_plus_one_dietary: hasPlusOneDietary, // Alias for template compatibility (snake_case)
     isPlusOne: isPlusOne,
     hasResponded,
     isAttending,
@@ -548,6 +583,8 @@ function getAvailableVariables() {
     rsvpCode: "Unique RSVP code (alias for code)",
     rsvpLink: "Full RSVP URL with language (uses website_url from settings)",
     plusOneName: "Plus one's name (if applicable)",
+    plusOneDietary: "Plus one's dietary restrictions (if applicable)",
+    hasPlusOneDietary: "Boolean: true if plus one has dietary restrictions",
     rsvpDeadline: "Formatted deadline date",
     email: "Guest's email address",
     preferredLanguage: "Guest's preferred language ('en' or 'lt')",
@@ -560,6 +597,7 @@ function getAvailableVariables() {
     
     // Conditional Flags
     hasPlusOne: "Boolean: true if guest has plus one",
+    hasPlusOneDietary: "Boolean: true if plus one has dietary restrictions",
     hasResponded: "Boolean: true if guest has responded",
     isAttending: "Boolean: true if guest is attending",
     isNotAttending: "Boolean: true if guest is not attending",
@@ -602,6 +640,7 @@ module.exports = {
   evaluateCondition,
   checkIfGuestHasPlusOne,
   getPlusOneName,
+  getPlusOneDietary,
   getSystemSettings,
   clearSettingsCache
 }; 

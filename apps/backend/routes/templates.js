@@ -673,7 +673,9 @@ router.get('/:id/preview', async (req, res) => {
         
         const siteUrl = settings.website_url || SITE_URL;
         const plusOneName = ''; // Will be empty in fallback
+        const plusOneDietary = ''; // Will be empty in fallback
         const hasPlusOne = false; // Will be false in fallback
+        const hasPlusOneDietary = false; // Will be false in fallback
         
         variables = {
           // Guest Properties
@@ -685,6 +687,10 @@ router.get('/:id/preview', async (req, res) => {
           rsvpLink: `${siteUrl}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
           plusOneName: plusOneName,
           plus_one_name: plusOneName, // Alias for template compatibility
+          plusOneDietary: plusOneDietary,
+          plus_one_dietary: plusOneDietary, // Alias for template compatibility
+          hasPlusOneDietary: hasPlusOneDietary,
+          has_plus_one_dietary: hasPlusOneDietary, // Alias for template compatibility
           rsvpDeadline: selectedGuest.rsvp_deadline ? formatRsvpDeadline(selectedGuest.rsvp_deadline) : '',
           email: selectedGuest.email || 'guest@example.com',
           preferredLanguage: selectedGuest.preferred_language || 'en',
@@ -698,6 +704,8 @@ router.get('/:id/preview', async (req, res) => {
           // Conditional Flags
           hasPlusOne: hasPlusOne,
           has_plus_one: hasPlusOne, // Alias for template compatibility
+          hasPlusOneDietary: hasPlusOneDietary,
+          has_plus_one_dietary: hasPlusOneDietary, // Alias for template compatibility
           isPlusOne: isPlusOne,
           hasResponded: !!selectedGuest.responded_at,
           isAttending: selectedGuest.rsvp_status === 'attending',
@@ -950,7 +958,9 @@ router.post('/preview', async (req, res) => {
         
         const siteUrl = settings.website_url || SITE_URL;
         const plusOneName = ''; // Will be empty in fallback
+        const plusOneDietary = ''; // Will be empty in fallback
         const hasPlusOne = false; // Will be false in fallback
+        const hasPlusOneDietary = false; // Will be false in fallback
         
         variables = {
           // Guest Properties
@@ -962,6 +972,10 @@ router.post('/preview', async (req, res) => {
           rsvpLink: `${siteUrl}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
           plusOneName: plusOneName,
           plus_one_name: plusOneName, // Alias for template compatibility
+          plusOneDietary: plusOneDietary,
+          plus_one_dietary: plusOneDietary, // Alias for template compatibility
+          hasPlusOneDietary: hasPlusOneDietary,
+          has_plus_one_dietary: hasPlusOneDietary, // Alias for template compatibility
           rsvpDeadline: selectedGuest.rsvp_deadline ? formatRsvpDeadline(selectedGuest.rsvp_deadline) : '',
           email: selectedGuest.email || 'guest@example.com',
           preferredLanguage: selectedGuest.preferred_language || 'en',
@@ -975,6 +989,8 @@ router.post('/preview', async (req, res) => {
           // Conditional Flags
           hasPlusOne: hasPlusOne,
           has_plus_one: hasPlusOne, // Alias for template compatibility
+          hasPlusOneDietary: hasPlusOneDietary,
+          has_plus_one_dietary: hasPlusOneDietary, // Alias for template compatibility
           isPlusOne: isPlusOne,
           hasResponded: !!selectedGuest.responded_at,
           isAttending: selectedGuest.rsvp_status === 'attending',
