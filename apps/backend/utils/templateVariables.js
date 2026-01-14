@@ -424,6 +424,86 @@ async function getTemplateVariables(guest, template = null, language = null) {
   const db = getDbConnection();
   const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
   
+  // Handle null guest - return empty/default variables
+  if (!guest) {
+    logger.warn('[TEMPLATE_VARS] Guest is null, returning default variables');
+    const settings = await getSystemSettings(db);
+    const senderInfoString = await getCachedSenderInfo(db);
+    const lang = language || 'en';
+    
+    // Parse senderInfo string
+    let senderName = '';
+    let senderEmail = '';
+    if (senderInfoString) {
+      const match = senderInfoString.match(/^(.+?)\s*<(.+?)>$/);
+      if (match) {
+        senderName = match[1].trim();
+        senderEmail = match[2].trim();
+      } else {
+        senderName = senderInfoString.trim();
+      }
+    }
+    
+    const siteUrl = settings.website_url || SITE_URL;
+    const rsvpDeadlineValue = settings.rsvp_deadline || null;
+    
+    return {
+      guestName: 'Guest',
+      name: 'Guest',
+      groupLabel: '',
+      code: '',
+      rsvpCode: '',
+      rsvpLink: `${siteUrl}/en/rsvp/`,
+      plusOneName: '',
+      plus_one_name: '',
+      plusOneDietary: '',
+      plus_one_dietary: '',
+      hasPlusOneDietary: false,
+      has_plus_one_dietary: false,
+      rsvpDeadline: rsvpDeadlineValue ? formatRsvpDeadline(rsvpDeadlineValue, lang) : '',
+      email: '',
+      preferredLanguage: lang,
+      attending: false,
+      rsvp_status: 'pending',
+      responded_at: '',
+      can_bring_plus_one: false,
+      dietary: '',
+      notes: '',
+      hasPlusOne: false,
+      has_plus_one: false,
+      isPlusOne: false,
+      hasResponded: false,
+      isAttending: false,
+      isNotAttending: false,
+      isPending: true,
+      isBrideFamily: false,
+      isGroomFamily: false,
+      isEnglishSpeaker: lang === 'en',
+      isLithuanianSpeaker: lang === 'lt',
+      siteUrl: siteUrl,
+      websiteUrl: siteUrl,
+      weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date, lang) : '',
+      venueName: settings.venue_name || '',
+      venueAddress: settings.venue_address || '',
+      eventStartDate: settings.event_start_date ? formatDateWithoutTime(settings.event_start_date, lang) : '',
+      eventEndDate: settings.event_end_date ? formatDateWithoutTime(settings.event_end_date, lang) : '',
+      eventTime: settings.event_time || '',
+      brideName: settings.bride_name || '',
+      groomName: settings.groom_name || '',
+      contactEmail: settings.contact_email || '',
+      contactPhone: settings.contact_phone || '',
+      rsvpDeadlineDate: settings.rsvp_deadline ? formatDateWithoutTime(settings.rsvp_deadline, lang) : '',
+      eventType: settings.event_type || '',
+      dressCode: settings.dress_code || '',
+      specialInstructions: settings.special_instructions || '',
+      appTitle: settings.app_title || 'Wedding Site',
+      senderName: senderName,
+      senderEmail: senderEmail,
+      currentDate: formatDateWithoutTime(new Date().toISOString(), lang),
+      daysUntilWedding: '',
+    };
+  }
+  
   // Determine language: use provided language, or guest's preferred language, or default to 'en'
   const lang = language || guest?.preferred_language || 'en';
   

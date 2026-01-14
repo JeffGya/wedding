@@ -201,9 +201,10 @@
             <button
               type="button"
               class="ql-custom-rsvp-code"
+              :class="{ 'ql-active': storedRsvpCodeEnabled === true }"
               @mousedown.prevent
               @click="toggleRsvpCode"
-              title="Toggle RSVP Code"
+              :title="getRsvpCodeToggleTitle()"
             >
               <i class="i-solar:key-bold"></i>
             </button>
@@ -1498,7 +1499,20 @@ function clearInfoCardLabels() {
 }
 
 // RSVP Code functions
+function getRsvpCodeToggleTitle() {
+  if (storedRsvpCodeEnabled.value === true) {
+    return 'RSVP Code: Enabled (click to disable)';
+  } else if (storedRsvpCodeEnabled.value === false) {
+    return 'RSVP Code: Disabled (click to auto)';
+  } else {
+    return 'RSVP Code: Auto (click to enable)';
+  }
+}
+
 function toggleRsvpCode() {
+  // Store previous state for logging
+  const previousState = storedRsvpCodeEnabled.value;
+  
   // Toggle between null (auto), true (enabled), false (disabled)
   if (storedRsvpCodeEnabled.value === null) {
     storedRsvpCodeEnabled.value = true;
@@ -1508,10 +1522,24 @@ function toggleRsvpCode() {
     storedRsvpCodeEnabled.value = null;
   }
   
+  // #region agent log
+  if (typeof fetch !== 'undefined') {
+    fetch('http://127.0.0.1:7242/ingest/70707881-91eb-4f95-8910-0b83b07029d3',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'RichTextEditor.vue:toggleRsvpCode',message:'RSVP code toggle clicked',data:{previousState:previousState,newState:storedRsvpCodeEnabled.value},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H7'})}).catch(()=>{});
+  }
+  // #endregion
+  
   if (editorRef.value?.quill) {
     const currentContent = editorRef.value.quill.root.innerHTML;
     const processedContent = convertButtonMarkersToHtml(currentContent);
     const contentWithMarkers = injectMarkersIntoContent(processedContent);
+    
+    // #region agent log
+    if (typeof fetch !== 'undefined') {
+      const hasRsvpMarker = contentWithMarkers.includes('<!--RSVP_CODE:');
+      const markerMatch = contentWithMarkers.match(/<!--RSVP_CODE:[^>]+-->/);
+      fetch('http://127.0.0.1:7242/ingest/70707881-91eb-4f95-8910-0b83b07029d3',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'RichTextEditor.vue:toggleRsvpCode',message:'Content after toggle',data:{hasRsvpMarker:hasRsvpMarker,markerInContent:markerMatch?.[0],storedRsvpCodeEnabled:storedRsvpCodeEnabled.value,contentLength:contentWithMarkers.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H8'})}).catch(()=>{});
+    }
+    // #endregion
     
     editorContent.value = contentWithMarkers;
     emit('update:modelValue', contentWithMarkers);
@@ -2287,5 +2315,31 @@ function saveToolbarState() {
 :deep(.ql-editor img) {
   max-width: 100% !important;
   height: auto !important;
+}
+
+.ql-custom-rsvp-code {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.ql-custom-rsvp-code:hover {
+  background-color: #e5e7eb;
+}
+
+.ql-custom-rsvp-code.ql-active {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.ql-custom-rsvp-code.ql-active:hover {
+  background-color: #bfdbfe;
+}
+
+.ql-custom-rsvp-code i {
+  display: inline-block !important;
 }
 </style>
