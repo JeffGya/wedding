@@ -56,13 +56,16 @@
             </template>
             <template #content="{ item }">
               <Panel
-                :header="item.msg.subject"
+                :header="item.msg.subject_en || item.msg.subject || 'No subject'"
                 class="mb-4 cursor-pointer hover:shadow-md transition-shadow"
                 @click="goToDetail(item.msg.id)"
               >
                 <template #header>
                   <div class="flex items-center justify-between w-full">
-                    <span class="font-semibold text-text">{{ item.msg.subject }}</span>
+                    <div class="flex flex-col">
+                      <span class="font-semibold text-text">{{ item.msg.subject_en || item.msg.subject || 'No subject' }}</span>
+                      <span v-if="item.msg.subject_lt && item.msg.subject_lt !== item.msg.subject_en" class="text-xs text-form-placeholder-text mt-1">{{ item.msg.subject_lt }}</span>
+                    </div>
                     <Tag
                       :value="getStatusLabel(item.msg.status)"
                       :severity="getStatusSeverity(item.msg.status)"

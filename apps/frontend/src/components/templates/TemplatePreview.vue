@@ -209,8 +209,6 @@ async function loadPreview() {
     loading.value = true
     const response = await previewTemplate(props.template.id, selectedGuestId.value)
     
-    console.log('Preview response:', response);
-    
     // Get the content based on the selected language
     const content = activeLanguageTab.value === 1 ? response.body_lt : response.body_en
     const emailHtml = activeLanguageTab.value === 1 ? response.email_html_lt : response.email_html_en

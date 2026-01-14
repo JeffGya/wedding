@@ -202,22 +202,18 @@ watch(() => props.visible, (newVal) => {
 async function loadInitialData() {
   try {
     const messageData = {
-      subject: props.message.subject || '',
+      subjectEn: props.message.subject_en || props.message.subject || '',
+      subjectLt: props.message.subject_lt || props.message.subject || '',
       bodyEn: props.message.bodyEn || props.message.body_en || '',
       bodyLt: props.message.bodyLt || props.message.body_lt || '',
       style: props.message.style || 'elegant',
       guestId: null // Don't select any guest initially
     }
     
-    console.log('Loading initial data with:', messageData)
-    
     const response = await previewMessage(messageData)
-    
-    console.log('Initial data response:', response)
     
     // Update sample guests if provided
     if (response.sampleGuests && response.sampleGuests.length > 0) {
-      console.log('Setting initial sample guests:', response.sampleGuests)
       sampleGuests.value = response.sampleGuests
     }
     
@@ -249,40 +245,33 @@ async function loadPreview() {
     const bodyLt = props.message.bodyLt || props.message.body_lt || ''
     
     const messageData = {
-      subject: props.message.subject || '',
+      subjectEn: props.message.subject_en || props.message.subject || '',
+      subjectLt: props.message.subject_lt || props.message.subject || '',
       bodyEn: bodyEn,
       bodyLt: bodyLt,
       style: props.message.style || 'elegant',
       guestId: selectedGuestId.value // Pass selected guest ID to backend
     }
     
-    console.log('Sending preview data:', messageData)
-    
     const response = await previewMessage(messageData)
-    
-    console.log('Preview response:', response)
-    console.log('Sample guests from response:', response.sampleGuests)
     
     // Update sample guests if provided
     if (response.sampleGuests && response.sampleGuests.length > 0) {
-      console.log('Setting sample guests:', response.sampleGuests)
       sampleGuests.value = response.sampleGuests
-    } else {
-      console.log('No sample guests in response or empty array')
     }
     
     // Update selected guest
     if (response.selectedGuest) {
-      console.log('Setting selected guest:', response.selectedGuest)
       selectedGuest.value = response.selectedGuest
     }
     
     // Get the content based on the selected language
     const content = activeLanguageTab.value === 1 ? response.body_lt : response.body_en
     const emailHtml = activeLanguageTab.value === 1 ? response.email_html_lt : response.email_html_en
+    const subject = activeLanguageTab.value === 1 ? (response.subject_lt || response.subject) : (response.subject_en || response.subject)
     
     previewData.value = {
-      subject: response.subject,
+      subject: subject,
       content: content,
       emailHtml: emailHtml,
       style: response.style || 'elegant'

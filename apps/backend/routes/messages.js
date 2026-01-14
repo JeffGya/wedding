@@ -16,20 +16,11 @@ const logger = require('../helpers/logger');
 
 // Use unified email generation service
 const { generateEmailFromMessage } = require('../helpers/emailGeneration');
-const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
+const { resolveTemplateSubject, normalizeTemplateSubjects, normalizeMessageSubjects } = require('../utils/subjectResolver');
 
 
-function formatRsvpDeadline(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
-
-// Remove the old replaceTemplateVars function (lines 41-45)
-// Remove the old formatRsvpDeadline function (lines 33-39)
+// Use formatRsvpDeadline from dateFormatter utility instead
+const { formatRsvpDeadline } = require('../utils/dateFormatter');
 
 // Protect all routes
 router.use(requireAuth);
@@ -88,10 +79,15 @@ router.use(requireAuth);
  */
 // Create a new draft message
 router.post('/', async (req, res) => {
-  const { subject, body_en, body_lt, status, scheduledAt, recipients, style = 'elegant' } = req.body;
+  const { subject, subject_en, subject_lt, body_en, body_lt, status, scheduledAt, recipients, style = 'elegant' } = req.body;
+  
+  // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
+  const finalSubjectEn = subject_en || subject || '';
+  const finalSubjectLt = subject_lt || subject || '';
+  
   // Validate required fields
-  if (!subject || !body_en || !body_lt || !status) {
-    return sendBadRequest(res, 'Subject, body_en, body_lt, and status are required.');
+  if ((!finalSubjectEn && !finalSubjectLt) || !body_en || !body_lt || !status) {
+    return sendBadRequest(res, 'Subject (or subject_en/subject_lt), body_en, body_lt, and status are required.');
   }
   // Special validation for scheduled messages
   let scheduledForFinal = null;
@@ -111,9 +107,12 @@ router.post('/', async (req, res) => {
     scheduledForFinal = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
   }
   try {
+    // Store both subjects as JSON in the subject column
+    const subjectJson = JSON.stringify({ en: finalSubjectEn, lt: finalSubjectLt });
+    
     const insertResult = await dbRun(
       `INSERT INTO messages (subject, body_en, body_lt, status, scheduled_for, style) VALUES (?, ?, ?, ?, ?, ?)`,
-      [subject, body_en, body_lt, status, scheduledForFinal, style]
+      [subjectJson, body_en, body_lt, status, scheduledForFinal, style]
     );
     const messageId = insertResult.insertId || insertResult.lastID;
     if (recipients && recipients.length) {
@@ -168,31 +167,35 @@ router.get('/', async (req, res) => {
        ORDER BY created_at DESC`,
       []
     );
+    
     // Normalize dates to ISO strings for frontend, handling both Date and string forms
     const messages = rows.map(row => {
-      if (row.scheduled_for) {
+      // Normalize message subjects
+      const normalized = normalizeMessageSubjects(row);
+      
+      if (normalized.scheduled_for) {
         let scheduledDate;
-        if (row.scheduled_for instanceof Date) {
-          scheduledDate = row.scheduled_for;
+        if (normalized.scheduled_for instanceof Date) {
+          scheduledDate = normalized.scheduled_for;
         } else {
           // Convert "YYYY-MM-DD HH:mm:ss" to ISO with Z
-          scheduledDate = new Date(row.scheduled_for.replace(' ', 'T') + 'Z');
+          scheduledDate = new Date(normalized.scheduled_for.replace(' ', 'T') + 'Z');
         }
-        row.scheduled_for = scheduledDate.toISOString();
+        normalized.scheduled_for = scheduledDate.toISOString();
       }
       // created_at
-      if (row.created_at instanceof Date) {
-        row.created_at = row.created_at.toISOString();
+      if (normalized.created_at instanceof Date) {
+        normalized.created_at = normalized.created_at.toISOString();
       } else {
-        row.created_at = new Date(row.created_at).toISOString();
+        normalized.created_at = new Date(normalized.created_at).toISOString();
       }
       // updated_at
-      if (row.updated_at instanceof Date) {
-        row.updated_at = row.updated_at.toISOString();
+      if (normalized.updated_at instanceof Date) {
+        normalized.updated_at = normalized.updated_at.toISOString();
       } else {
-        row.updated_at = new Date(row.updated_at).toISOString();
+        normalized.updated_at = new Date(normalized.updated_at).toISOString();
       }
-      return row;
+      return normalized;
     });
     res.json({ success: true, messages });
   } catch (err) {
@@ -457,16 +460,20 @@ router.get('/:id', async (req, res) => {
   try {
     const row = await dbGet(`SELECT * FROM messages WHERE id = ?`, [req.params.id]);
     if (!row) return sendNotFound(res, 'Message', req.params.id);
-    if (row.scheduled_for) {
-      const local = DateTime.fromISO(row.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
-      row.scheduled_for = local.toISO({ suppressMilliseconds: true });
+    
+    // Normalize message subjects (handles both JSON and plain text)
+    const normalizedMessage = normalizeMessageSubjects(row);
+    
+    if (normalizedMessage.scheduled_for) {
+      const local = DateTime.fromISO(normalizedMessage.scheduled_for, { zone: 'utc' }).setZone('Europe/Amsterdam');
+      normalizedMessage.scheduled_for = local.toISO({ suppressMilliseconds: true });
     }
     // Convert created_at and updated_at to ISO strings
-    if (row.created_at) {
-      row.created_at = new Date(row.created_at).toISOString();
+    if (normalizedMessage.created_at) {
+      normalizedMessage.created_at = new Date(normalizedMessage.created_at).toISOString();
     }
-    if (row.updated_at) {
-      row.updated_at = new Date(row.updated_at).toISOString();
+    if (normalizedMessage.updated_at) {
+      normalizedMessage.updated_at = new Date(normalizedMessage.updated_at).toISOString();
     }
     const recipients = await dbAll(`SELECT guest_id, delivery_status FROM message_recipients WHERE message_id = ?`, [req.params.id]);
     recipients.forEach(r => {
@@ -477,7 +484,7 @@ router.get('/:id', async (req, res) => {
     const recipientIds = recipients.map(r => r.guest_id);
     const sentCount = recipients.filter(r => r.delivery_status === 'sent').length;
     const failedCount = recipients.filter(r => r.delivery_status === 'failed').length;
-    res.json({ success: true, message: { ...row, recipients: recipientIds, sentCount, failedCount } });
+    res.json({ success: true, message: { ...normalizedMessage, recipients: recipientIds, sentCount, failedCount } });
   } catch (err) {
     return sendInternalError(res, err, 'GET /messages');
   }
@@ -517,10 +524,15 @@ router.get('/:id', async (req, res) => {
  */
 // Update a draft message
 router.put('/:id', async (req, res) => {
-  const { subject, body_en, body_lt, status, scheduledAt, recipients } = req.body;
+  const { subject, subject_en, subject_lt, body_en, body_lt, status, scheduledAt, recipients } = req.body;
+  
+  // Support both 'subject' (backward compatibility) and 'subject_en'/'subject_lt'
+  const finalSubjectEn = subject_en || subject || '';
+  const finalSubjectLt = subject_lt || subject || '';
+  
   // Basic validation
-  if (!subject || !body_en || !body_lt) {
-    return sendBadRequest(res, 'subject, body_en, and body_lt are required');
+  if ((!finalSubjectEn && !finalSubjectLt) || !body_en || !body_lt) {
+    return sendBadRequest(res, 'Subject (or subject_en/subject_lt), body_en, and body_lt are required');
   }
   try {
     // First, check if message exists and is a draft
@@ -547,11 +559,14 @@ router.put('/:id', async (req, res) => {
       // Format scheduled_for for MySQL DATETIME (YYYY-MM-DD HH:mm:ss)
       scheduled_for = dt.toUTC().toFormat('yyyy-MM-dd HH:mm:ss');
     }
+    // Store both subjects as JSON in the subject column
+    const subjectJson = JSON.stringify({ en: finalSubjectEn, lt: finalSubjectLt });
+    
     await dbRun(
       `UPDATE messages 
       SET subject = ?, body_en = ?, body_lt = ?, status = ?, scheduled_for = ?, updated_at = CURRENT_TIMESTAMP 
       WHERE id = ?`,
-      [subject, body_en, body_lt, newStatus, scheduled_for, req.params.id]
+      [subjectJson, body_en, body_lt, newStatus, scheduled_for, req.params.id]
     );
     // Update recipients if provided
     if (Array.isArray(recipients) && recipients.length > 0) {
@@ -570,10 +585,13 @@ router.put('/:id', async (req, res) => {
     }
     // Fetch updated message
     const updatedRow = await dbGet(`SELECT * FROM messages WHERE id = ?`, [req.params.id]);
+    // Normalize message subjects
+    const normalizedMessage = normalizeMessageSubjects(updatedRow);
+    
     // Return recipients too
     const recips = await dbAll(`SELECT guest_id FROM message_recipients WHERE message_id = ?`, [req.params.id]);
     const recipientIds = recips.map(r => r.guest_id);
-    res.json({ success: true, message: { ...updatedRow, recipients: recipientIds } });
+    res.json({ success: true, message: { ...normalizedMessage, recipients: recipientIds } });
   } catch (err) {
     return sendInternalError(res, err, 'GET /messages');
   }
@@ -674,10 +692,14 @@ router.post('/:id/send', async (req, res, next) => {
     : null;
   try {
     // Load the message
-    const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
-    if (!message) {
+    const rawMessage = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
+    if (!rawMessage) {
       return sendNotFound(res, 'Message', messageId);
     }
+    
+    // Normalize message subjects
+    const message = normalizeMessageSubjects(rawMessage);
+    
     if ((!message.body_en || message.body_en.trim() === '') && (!message.body_lt || message.body_lt.trim() === '')) {
       logger.error('❌ Cannot send email: message body is empty.');
       return sendBadRequest(res, 'Cannot send email: message body is empty.');
@@ -912,10 +934,19 @@ router.get('/:id/logs', async (req, res) => {
 router.post('/preview', async (req, res) => {
   try {
     const { template, guest, guestId } = req.body;
-    const subjectRaw = template?.subject ?? req.body.subject ?? '';
+    
+    // Support both new format (subject_en/subject_lt) and old format (subject)
+    const subjectEn = template?.subject_en ?? req.body.subjectEn ?? req.body.subject_en ?? req.body.subject ?? '';
+    const subjectLt = template?.subject_lt ?? req.body.subjectLt ?? req.body.subject_lt ?? req.body.subject ?? '';
+    
+    // Store as JSON for backward compatibility with email generation
+    const subjectJson = JSON.stringify({ en: subjectEn, lt: subjectLt });
+    
     const style = template?.style ?? req.body.style ?? 'elegant';
     const tpl = {
-      subject: subjectRaw,
+      subject: subjectJson, // Store as JSON for backward compatibility
+      subject_en: subjectEn,
+      subject_lt: subjectLt,
       body_en: template?.body_en ?? req.body.bodyEn ?? '',
       body_lt: template?.body_lt ?? req.body.bodyLt ?? '',
       style,
@@ -929,7 +960,8 @@ router.post('/preview', async (req, res) => {
     let sampleGuests = [];
     if (!selectedGuest) {
       sampleGuests = await dbAll(
-        `SELECT id, name, email, group_label, preferred_language, rsvp_status, can_bring_plus_one, code
+        `SELECT id, name, email, group_label, preferred_language, rsvp_status, can_bring_plus_one, code,
+                rsvp_deadline, attending, responded_at, dietary, notes
          FROM guests WHERE email IS NOT NULL ORDER BY name LIMIT 5`,
         []
       );
@@ -960,16 +992,21 @@ router.post('/preview', async (req, res) => {
     // Get processed content for preview (body_en and body_lt) - needed for editing view
     const { getEmailContent } = require('../helpers/emailGeneration');
     const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
-    const variables = await getTemplateVariables(selectedGuest, tpl);
+    // Generate variables for both languages
+    const variablesEn = await getTemplateVariables(selectedGuest, tpl, 'en');
+    const variablesLt = await getTemplateVariables(selectedGuest, tpl, 'lt');
     const { body: body_en } = await getEmailContent(tpl, selectedGuest, 'en');
     const { body: body_lt } = await getEmailContent(tpl, selectedGuest, 'lt');
-    const processedBodyEn = replaceTemplateVars(body_en, variables);
-    const processedBodyLt = replaceTemplateVars(body_lt, variables);
-    const subject = emailDataEn.subject; // Use subject from generated email
+    const processedBodyEn = replaceTemplateVars(body_en, variablesEn);
+    const processedBodyLt = replaceTemplateVars(body_lt, variablesLt);
+    const resolvedSubjectEn = emailDataEn.subject; // Use subject from generated email (English)
+    const resolvedSubjectLt = emailDataLt.subject; // Use subject from generated email (Lithuanian)
 
     return res.json({
       success: true,
-      subject,
+      subject: resolvedSubjectEn, // Keep for backward compatibility
+      subject_en: resolvedSubjectEn,
+      subject_lt: resolvedSubjectLt,
       body_en: processedBodyEn,
       body_lt: processedBodyLt,
       email_html_en: emailDataEn.html,
@@ -1028,8 +1065,12 @@ router.post('/preview', async (req, res) => {
 router.post('/:id/resend', async (req, res, next) => {
   const messageId = req.params.id;
   try {
-    const message = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
-    if (!message) return sendNotFound(res, 'Message', messageId);
+    const rawMessage = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
+    if (!rawMessage) return sendNotFound(res, 'Message', messageId);
+    
+    // Normalize message subjects
+    const message = normalizeMessageSubjects(rawMessage);
+    
     // Load failed recipients only
     const guests = await dbAll(
       `SELECT g.* FROM message_recipients mr JOIN guests g ON g.id = mr.guest_id WHERE mr.message_id = ? AND mr.delivery_status = 'failed'`,
@@ -1172,9 +1213,9 @@ router.post('/preview-template/:templateId', async (req, res) => {
       return sendNotFound(res, 'Guest', req.params.guestId);
     }
 
-    // Get enhanced variables
-    const variables = await getTemplateVariables(guest, template);
+    // Get enhanced variables with language
     const lang = guest.preferred_language === 'lt' ? 'lt' : 'en';
+    const variables = await getTemplateVariables(guest, template, lang);
 
     // Replace variables in template
     const body_en = replaceTemplateVars(template.body_en, variables);

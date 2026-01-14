@@ -647,6 +647,20 @@ import Button from 'primevue/button';
 import Select from 'primevue/select';
 import api from '@/api';
 
+// Suppress Quill warnings for custom toolbar buttons that don't use formats
+// These buttons use click handlers instead of Quill formats
+const originalWarn = console.warn;
+console.warn = function(...args) {
+  const message = args[0]?.toString() || '';
+  // Filter out Quill toolbar warnings about nonexistent custom formats
+  // These warnings are harmless - custom buttons use click handlers, not Quill formats
+  if (message.includes('quill:toolbar ignoring attaching to nonexistent format')) {
+    return; // Suppress these specific warnings
+  }
+  // Call original warn for all other messages
+  originalWarn.apply(console, args);
+};
+
 // Get Quill's built-in icons
 const QuillIcons = Quill.import('ui/icons');
 

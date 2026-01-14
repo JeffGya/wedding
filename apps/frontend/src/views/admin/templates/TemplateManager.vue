@@ -67,7 +67,7 @@
               <div class="space-y-3">
                 <div>
                   <h4 class="font-medium text-sm text-gray-700 mb-1">Subject</h4>
-                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject }}</p>
+                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject_en || template.subject || 'N/A' }}</p>
                 </div>
                 
                 <div>

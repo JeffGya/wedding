@@ -137,7 +137,7 @@ const EMAIL_TEMPLATES = {
     // Section 1: Hero
     hero: {
       padding: '24px 0',
-      spacing: '16px', // 12-16px spacing
+      spacing: '12px', // 12-16px spacing
       titleFont: "'Great Vibes', 'Brush Script MT', 'Lucida Handwriting', cursive, Georgia, 'Times New Roman', serif",
       titleSize: '64px', // Desktop: 32-36px (using 34px)
       titleSizeMobile: '30px', // Mobile: 28-32px (using 30px)
@@ -863,7 +863,7 @@ function generateDefinitiveEmailHTML(content, options = {}, style = 'elegant', f
                 </tr>
                 <!-- Content row at bottom with gradient overlay background - overlays on background-image -->
                 <tr>
-                  <td style="padding-bottom: 24px; padding-left: 24px; padding-right: 24px; text-align: center; background: linear-gradient(to top, rgba(15,15,15,0.4), transparent);">
+                  <td style="padding-bottom: 24px; padding-left: 24px; padding-right: 24px; text-align: center; background: linear-gradient(to top, rgba(15,15,15,0.75), transparent);">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align: center;">
                       <tr>
                         <td style="padding-bottom: 12px;">

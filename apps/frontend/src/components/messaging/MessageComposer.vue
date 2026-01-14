@@ -36,16 +36,25 @@
       </div>
     </div>
 
-    <!-- Subject -->
-    <div>
+    <!-- Subject Fields -->
+    <div class="space-y-4">
       <FloatLabel variant="in">
         <InputText
-          id="subject"
-          v-model="form.subject"
+          id="subjectEn"
+          v-model="form.subjectEn"
           class="w-full"
-          placeholder="Enter message subject"
+          placeholder="Enter message subject (English)"
         />
-        <label for="subject">Subject</label>
+        <label for="subjectEn">Subject (English)</label>
+      </FloatLabel>
+      <FloatLabel variant="in">
+        <InputText
+          id="subjectLt"
+          v-model="form.subjectLt"
+          class="w-full"
+          placeholder="Enter message subject (Lithuanian)"
+        />
+        <label for="subjectLt">Subject (Lithuanian)</label>
       </FloatLabel>
     </div>
 
@@ -75,7 +84,8 @@
     <SaveTemplateModal
       v-if="showSaveTemplate"
       :show="showSaveTemplate"
-      :subject="form.subject"
+      :subjectEn="form.subjectEn"
+      :subjectLt="form.subjectLt"
       :bodyEn="form.bodyEn"
       :bodyLt="form.bodyLt"
       :style="form.style"
@@ -129,7 +139,8 @@ const showSaveTemplate = ref(false)
 const previewVisible = ref(false)
 
 const form = reactive({
-  subject: '',
+  subjectEn: '',
+  subjectLt: '',
   bodyEn: '',
   bodyLt: '',
   style: 'elegant' // Default style
@@ -139,7 +150,9 @@ const styleOptions = ref([])
 
 // Computed property for the preview message
 const previewMessage = computed(() => ({
-  subject: form.subject,
+  subject: form.subjectEn, // Use English subject for preview
+  subjectEn: form.subjectEn,
+  subjectLt: form.subjectLt,
   bodyEn: form.bodyEn,
   bodyLt: form.bodyLt,
   style: form.style,
@@ -158,10 +171,11 @@ onMounted(async () => {
 function loadTemplate() {
   const selected = props.templates.find(t => t.id === parseInt(selectedTemplateId.value))
   if (selected) {
-    const hasExistingContent = form.subject || form.bodyEn || form.bodyLt
+    const hasExistingContent = form.subjectEn || form.subjectLt || form.bodyEn || form.bodyLt
     const confirmOverwrite = !hasExistingContent || window.confirm('This will replace your current message content. Continue?')
     if (confirmOverwrite) {
-      form.subject = selected.subject || ''
+      form.subjectEn = selected.subject_en || selected.subject || ''
+      form.subjectLt = selected.subject_lt || selected.subject || ''
       form.bodyEn = selected.body_en || ''
       form.bodyLt = selected.body_lt || ''
       form.style = selected.style || 'elegant' // Load template style
@@ -171,9 +185,12 @@ function loadTemplate() {
 
 watch(() => props.message, (newMsg) => {
   if (newMsg) {
-    form.subject = newMsg.subject || ''
+    // Support both new format (subject_en/subject_lt) and old format (subject)
+    form.subjectEn = newMsg.subject_en || newMsg.subject || ''
+    form.subjectLt = newMsg.subject_lt || newMsg.subject || ''
     form.bodyEn = newMsg.body_en || ''
     form.bodyLt = newMsg.body_lt || ''
+    form.style = newMsg.style || 'elegant'
   }
 }, { immediate: true })
 
@@ -186,7 +203,8 @@ watch(() => form.bodyLt, (newValue) => {
 
 const getData = () => {
   const data = {
-    subject: form.subject,
+    subject_en: form.subjectEn,
+    subject_lt: form.subjectLt,
     body_en: form.bodyEn,
     body_lt: form.bodyLt,
     style: form.style
@@ -194,8 +212,10 @@ const getData = () => {
   return data;
 }
 
-const setData = ({ subject, body_en, body_lt, style }) => {
-  form.subject = subject || ''
+const setData = ({ subject, subject_en, subject_lt, body_en, body_lt, style }) => {
+  // Support both new format (subject_en/subject_lt) and old format (subject)
+  form.subjectEn = subject_en || subject || ''
+  form.subjectLt = subject_lt || subject || ''
   form.bodyEn = body_en || ''
   form.bodyLt = body_lt || ''
   form.style = style || 'elegant'

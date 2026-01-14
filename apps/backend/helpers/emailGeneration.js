@@ -102,12 +102,12 @@ async function getEmailContent(messageOrTemplate, guest, language) {
   let body = '';
 
   if (messageOrTemplate) {
-    // Handle subject (could be single field or separate en/lt)
-    if (messageOrTemplate.subject_en && messageOrTemplate.subject_lt) {
-      subject = isLt ? messageOrTemplate.subject_lt : messageOrTemplate.subject_en;
-    } else if (messageOrTemplate.subject) {
-      subject = messageOrTemplate.subject;
-    }
+    // Use resolveTemplateSubject for proper language-based subject resolution with fallbacks
+    // This handles both new schema (subject_en/subject_lt) and old schema (JSON subject)
+    subject = resolveTemplateSubject(messageOrTemplate, lang, {
+      context: messageOrTemplate.type || 'message',
+      rsvpStatus: guest?.rsvp_status
+    });
 
     // Handle body (should have both en and lt)
     body = isLt 
@@ -127,14 +127,14 @@ async function getEmailContent(messageOrTemplate, guest, language) {
  */
 async function generateEmailForGuest(guest, content, options = {}) {
   try {
+    // Determine language first
+    const lang = guest?.preferred_language === 'lt' ? 'lt' : 'en';
+    
     // Get template variables
-    const variables = await getTemplateVariables(guest, options.message || options.template || null);
+    const variables = await getTemplateVariables(guest, options.message || options.template || null, lang);
 
     // Replace variables in content
     const processedContent = replaceTemplateVars(content, variables);
-
-    // Determine language first
-    const lang = guest?.preferred_language === 'lt' ? 'lt' : 'en';
 
     // Prepare template options with language
     const templateOptions = prepareTemplateOptions(variables, options.message || options.template || {}, lang);
@@ -182,8 +182,8 @@ async function generateEmailFromTemplate(template, guest, options = {}) {
     // Get email content
     const { subject: subjectTemplate, body, language } = await getEmailContent(template, guest, options.language);
     
-    // Get template variables
-    const variables = await getTemplateVariables(guest, template);
+    // Get template variables with language
+    const variables = await getTemplateVariables(guest, template, language);
     
     // Replace variables in subject and body
     const subject = replaceTemplateVars(subjectTemplate, variables);
@@ -235,8 +235,8 @@ async function generateEmailFromMessage(message, guest, options = {}) {
     // Get email content
     const { subject: subjectTemplate, body, language } = await getEmailContent(message, guest, options.language);
     
-    // Get template variables
-    const variables = await getTemplateVariables(guest, message);
+    // Get template variables with language
+    const variables = await getTemplateVariables(guest, message, language);
     
     // Replace variables in subject and body
     const subject = replaceTemplateVars(subjectTemplate, variables);

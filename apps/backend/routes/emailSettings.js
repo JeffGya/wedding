@@ -672,6 +672,7 @@ router.post('/test', requireAuth, async (req, res) => {
     healthCheck.apiConnectivity.endpointsAccessible = true;
 
     // Create temporary guest object (NOT saved to DB)
+    // Note: getTemplateVariables will handle rsvp_deadline and responded_at fallback logic
     const tempGuest = {
       id: 999999,
       name: guestData.name || 'Test Guest',
@@ -687,8 +688,8 @@ router.post('/test', requireAuth, async (req, res) => {
       notes: guestData.notes || null,
       plus_one_name: guestData.plus_one_name || null,
       plus_one_dietary: guestData.plus_one_dietary || null,
-      responded_at: null,
-      rsvp_deadline: null
+      responded_at: guestData.responded_at || null,
+      rsvp_deadline: guestData.rsvp_deadline || null
     };
 
     // Fetch template
@@ -700,8 +701,9 @@ router.post('/test', requireAuth, async (req, res) => {
     // Normalize template subjects (handles both new and old schemas)
     const template = normalizeTemplateSubjects(rawTemplate);
 
-    // Get template variables
-    variables = await getTemplateVariables(tempGuest, template);
+    // Get template variables with language
+    const testLanguage = tempGuest.preferred_language || 'en';
+    variables = await getTemplateVariables(tempGuest, template, testLanguage);
     
     // Health Check: Template Variables
     const variableKeys = Object.keys(variables);

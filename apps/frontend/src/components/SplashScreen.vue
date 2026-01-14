@@ -21,7 +21,7 @@
         
         <!-- Loading spinner -->
         <ProgressSpinner
-          :stroke-width="4"
+          stroke-width="4"
           class="splash-spinner"
         />
       </div>

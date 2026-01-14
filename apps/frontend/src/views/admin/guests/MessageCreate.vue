@@ -206,7 +206,8 @@
     <SaveTemplateModal
       v-if="isTemplateModalOpen"
       :show="isTemplateModalOpen"
-      :subject="composerRef?.getData()?.subject || ''"
+      :subjectEn="composerRef?.getData()?.subject_en || ''"
+      :subjectLt="composerRef?.getData()?.subject_lt || ''"
       :bodyEn="composerRef?.getData()?.body_en || ''"
       :bodyLt="composerRef?.getData()?.body_lt || ''"
       :templates="templates"
@@ -276,7 +277,8 @@ const handleComposerAction = async (actionType) => {
 
     // Always create as draft first, regardless of action type
     const messageData = {
-      subject: composerData.subject,
+      subject_en: composerData.subject_en,
+      subject_lt: composerData.subject_lt,
       body_en: composerData.body_en,
       body_lt: composerData.body_lt,
       style: composerData.style, // ensure style is persisted with the message
@@ -429,13 +431,16 @@ const loadMessageForEdit = async () => {
     const response = await fetchMessage(route.params.id)
     const messageData = response.message
     
-    // Set composer data
+    // Set composer data - use subject_en and subject_lt from normalized message
     nextTick(() => {
       if (composerRef.value) {
         composerRef.value.setData({
-          subject: messageData.subject,
+          subject_en: messageData.subject_en,
+          subject_lt: messageData.subject_lt,
+          subject: messageData.subject, // Fallback for backward compatibility
           body_en: messageData.body_en,
-          body_lt: messageData.body_lt
+          body_lt: messageData.body_lt,
+          style: messageData.style || 'elegant'
         })
       }
       

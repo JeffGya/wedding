@@ -9,6 +9,82 @@ const DEFAULT_TIMEZONE = 'Europe/Amsterdam';
 const ENABLE_LOGS = import.meta.env.VITE_ENABLE_LOGS === 'true';
 
 /**
+ * Get ordinal suffix for day (1st, 2nd, 3rd, 4th, etc.)
+ * @param {number} day - Day of month
+ * @returns {string} Ordinal suffix
+ */
+function getOrdinalSuffix(day) {
+  const j = day % 10;
+  const k = day % 100;
+  if (j === 1 && k !== 11) {
+    return 'st';
+  }
+  if (j === 2 && k !== 12) {
+    return 'nd';
+  }
+  if (j === 3 && k !== 13) {
+    return 'rd';
+  }
+  return 'th';
+}
+
+/**
+ * Format date with ordinal suffix (e.g., "May 1st 2026")
+ * Used specifically for rsvpDeadline
+ * @param {Date} dateObj - Date object
+ * @param {string} timeZone - Timezone
+ * @returns {string} Formatted date string (e.g., "May 1st 2026")
+ */
+function formatDateWithOrdinal(dateObj, timeZone) {
+  const monthFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    month: 'long'
+  });
+  const dayFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    day: 'numeric'
+  });
+  const yearFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric'
+  });
+  
+  const month = monthFormatter.format(dateObj);
+  const day = parseInt(dayFormatter.format(dateObj), 10);
+  const year = yearFormatter.format(dateObj);
+  const suffix = getOrdinalSuffix(day);
+  
+  return `${month} ${day}${suffix} ${year}`;
+}
+
+/**
+ * Format date day first without ordinal (e.g., "1 May 2026")
+ * @param {Date} dateObj - Date object
+ * @param {string} timeZone - Timezone
+ * @returns {string} Formatted date string (e.g., "1 May 2026")
+ */
+function formatDateDayFirst(dateObj, timeZone) {
+  const monthFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    month: 'long'
+  });
+  const dayFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    day: 'numeric'
+  });
+  const yearFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric'
+  });
+  
+  const month = monthFormatter.format(dateObj);
+  const day = parseInt(dayFormatter.format(dateObj), 10);
+  const year = yearFormatter.format(dateObj);
+  
+  return `${day} ${month} ${year}`;
+}
+
+/**
  * Normalize date string to ISO format for consistent parsing
  * Handles both "YYYY-MM-DD HH:mm:ss" and ISO formats
  * @param {string|Date} dateInput - Date string or Date object
@@ -41,7 +117,7 @@ function normalizeDate(dateInput) {
  * @param {string|Date|null} dateString - Date string or Date object
  * @param {Object} options - Optional formatting options
  * @param {string} options.timeZone - Timezone (default: 'Europe/Amsterdam')
- * @returns {string} Formatted date string (e.g., "December 25, 2024, 18:00")
+ * @returns {string} Formatted date string (e.g., "1 May 2026 23:00")
  */
 export function formatDateWithTime(dateString, options = {}) {
   if (!dateString) {
@@ -55,17 +131,18 @@ export function formatDateWithTime(dateString, options = {}) {
     }
     
     const timeZone = options.timeZone || DEFAULT_TIMEZONE;
-    const formatter = new Intl.DateTimeFormat('en-US', {
+    const datePart = formatDateDayFirst(dateObj, timeZone);
+    
+    const timeFormatter = new Intl.DateTimeFormat('en-US', {
       timeZone, // Automatically handles DST transitions
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
     });
     
-    return formatter.format(dateObj);
+    const timePart = timeFormatter.format(dateObj);
+    
+    return `${datePart} ${timePart}`;
   } catch (error) {
     if (ENABLE_LOGS) {
       console.warn('[DATE_FORMATTER] Error formatting date with time', {
@@ -83,7 +160,7 @@ export function formatDateWithTime(dateString, options = {}) {
  * @param {string|Date|null} dateString - Date string or Date object
  * @param {Object} options - Optional formatting options
  * @param {string} options.timeZone - Timezone (default: 'Europe/Amsterdam')
- * @returns {string} Formatted date string (e.g., "December 25, 2024")
+ * @returns {string} Formatted date string (e.g., "1 May 2026")
  */
 export function formatDateWithoutTime(dateString, options = {}) {
   if (!dateString) {
@@ -97,14 +174,7 @@ export function formatDateWithoutTime(dateString, options = {}) {
     }
     
     const timeZone = options.timeZone || DEFAULT_TIMEZONE;
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      timeZone, // Automatically handles DST transitions
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    return formatter.format(dateObj);
+    return formatDateDayFirst(dateObj, timeZone);
   } catch (error) {
     if (ENABLE_LOGS) {
       console.warn('[DATE_FORMATTER] Error formatting date without time', {
@@ -176,7 +246,7 @@ export function formatDateTimeLong(dateString, options = {}) {
  * @param {string|Date|null} dateString - Date string or Date object
  * @param {Object} options - Optional formatting options
  * @param {string} options.timeZone - Timezone (default: 'Europe/Amsterdam')
- * @returns {string} Formatted date string (e.g., "November 1, 2024")
+ * @returns {string} Formatted date string (e.g., "May 1st 2026")
  */
 export function formatRsvpDeadline(dateString, options = {}) {
   if (!dateString) {
@@ -190,14 +260,7 @@ export function formatRsvpDeadline(dateString, options = {}) {
     }
     
     const timeZone = options.timeZone || DEFAULT_TIMEZONE;
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      timeZone, // Automatically handles DST transitions
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    return formatter.format(dateObj);
+    return formatDateWithOrdinal(dateObj, timeZone);
   } catch (error) {
     if (ENABLE_LOGS) {
       console.warn('[DATE_FORMATTER] Error formatting RSVP deadline', {

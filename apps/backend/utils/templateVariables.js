@@ -3,7 +3,7 @@ const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const getSenderInfo = require('../helpers/getSenderInfo');
 const logger = require('../helpers/logger');
-const { formatDateWithoutTime, formatRsvpDeadline } = require('./dateFormatter');
+const { formatDateWithoutTime, formatRsvpDeadline, formatDateWithTime } = require('./dateFormatter');
 
 /**
  * System settings cache with TTL (5 minutes)
@@ -393,10 +393,17 @@ function templateUsesPlusOneVars(templateContent) {
 
 /**
  * Get comprehensive template variables for a guest
+ * @param {Object} guest - Guest object
+ * @param {Object} template - Template object (optional)
+ * @param {string} language - Language code ('en' or 'lt'), defaults to guest's preferred_language
+ * @returns {Promise<Object>} Template variables object
  */
-async function getTemplateVariables(guest, template = null) {
+async function getTemplateVariables(guest, template = null, language = null) {
   const db = getDbConnection();
   const SITE_URL = process.env.SITE_URL || 'http://localhost:5001';
+  
+  // Determine language: use provided language, or guest's preferred language, or default to 'en'
+  const lang = language || guest?.preferred_language || 'en';
   
   // Get system settings from cache
   const settings = await getSystemSettings(db);
@@ -452,6 +459,19 @@ async function getTemplateVariables(guest, template = null) {
   // Get the site URL from settings, fallback to environment variable
   const siteUrl = settings.website_url || SITE_URL;
   
+  // Use guest's rsvp_deadline if available, otherwise fall back to system settings
+  const rsvpDeadlineValue = guest.rsvp_deadline || settings.rsvp_deadline || null;
+  
+  // For responded_at: use guest's value if available
+  // If guest has responded (not pending) but responded_at is null, use current time
+  // This handles test emails and edge cases where status is set but timestamp is missing
+  const hasRespondedStatus = guest.rsvp_status && guest.rsvp_status !== 'pending';
+  const respondedAtValue = guest.responded_at || (hasRespondedStatus ? new Date().toISOString() : null);
+  
+  // Format days until wedding with language-specific text
+  const daysText = lang === 'lt' ? 'dienos' : 'days';
+  const daysUntilWeddingText = daysUntilWedding ? `${daysUntilWedding} ${daysText}` : '';
+  
   const variables = {
     // Guest Properties
     guestName: guest.name,
@@ -461,12 +481,12 @@ async function getTemplateVariables(guest, template = null) {
     rsvpLink: `${siteUrl}/${guest.preferred_language}/rsvp/${guest.code}`,
     plusOneName: plusOneName,
     plus_one_name: plusOneName, // Alias for template compatibility (snake_case)
-    rsvpDeadline: formatRsvpDeadline(guest.rsvp_deadline),
+    rsvpDeadline: formatRsvpDeadline(rsvpDeadlineValue, lang),
     email: guest.email,
     preferredLanguage: guest.preferred_language,
     attending: guest.attending,
     rsvp_status: guest.rsvp_status,
-    responded_at: guest.responded_at,
+    responded_at: respondedAtValue ? formatDateWithTime(respondedAtValue, lang) : '',
     can_bring_plus_one: canBringPlusOne,
     dietary: guest.dietary,
     notes: guest.notes,
@@ -487,25 +507,25 @@ async function getTemplateVariables(guest, template = null) {
     // System Properties
     siteUrl: siteUrl, // Uses website_url from settings, falls back to SITE_URL env var
     websiteUrl: siteUrl, // Alias for siteUrl (uses website_url from settings, falls back to SITE_URL env var)
-    weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date) : '',
+    weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date, lang) : '',
     venueName: settings.venue_name || '',
     venueAddress: settings.venue_address || '',
-    eventStartDate: settings.event_start_date ? formatDateWithoutTime(settings.event_start_date) : '',
-    eventEndDate: settings.event_end_date ? formatDateWithoutTime(settings.event_end_date) : '',
+    eventStartDate: settings.event_start_date ? formatDateWithoutTime(settings.event_start_date, lang) : '',
+    eventEndDate: settings.event_end_date ? formatDateWithoutTime(settings.event_end_date, lang) : '',
     eventTime: settings.event_time || '',
     brideName: settings.bride_name || '',
     groomName: settings.groom_name || '',
     contactEmail: settings.contact_email || '',
     contactPhone: settings.contact_phone || '',
-    rsvpDeadlineDate: settings.rsvp_deadline ? formatDateWithoutTime(settings.rsvp_deadline) : '',
+    rsvpDeadlineDate: settings.rsvp_deadline ? formatDateWithoutTime(settings.rsvp_deadline, lang) : '',
     eventType: settings.event_type || '',
     dressCode: settings.dress_code || '',
     specialInstructions: settings.special_instructions || '',
     appTitle: settings.app_title || 'Wedding Site',
     senderName: senderName,
     senderEmail: senderEmail,
-    currentDate: new Date().toLocaleDateString(),
-    daysUntilWedding: daysUntilWedding ? `${daysUntilWedding} days` : '',
+    currentDate: formatDateWithoutTime(new Date().toISOString(), lang),
+    daysUntilWedding: daysUntilWeddingText,
     
     // Legacy variables for backward compatibility (only variables not already in main section)
     name: guest.name // Alias for guestName

@@ -122,8 +122,53 @@ function normalizeTemplateSubjects(rawTemplate) {
   };
 }
 
+/**
+ * Normalize message subject fields (parse JSON if needed, extract language-specific)
+ * This is useful when you have a raw message from the database
+ * Messages store subjects as JSON in the 'subject' column: {"en": "...", "lt": "..."}
+ * @param {Object} rawMessage - Raw message object from database
+ * @returns {Object} Message with normalized subject_en and subject_lt fields
+ */
+function normalizeMessageSubjects(rawMessage) {
+  let subjectEn = '';
+  let subjectLt = '';
+
+  // If new schema columns exist (shouldn't happen for messages, but handle it)
+  if (rawMessage.subject_en || rawMessage.subject_lt) {
+    subjectEn = rawMessage.subject_en || '';
+    subjectLt = rawMessage.subject_lt || '';
+  } else if (rawMessage.subject) {
+    // Try parsing as JSON (new format: {"en": "...", "lt": "..."})
+    try {
+      const subjectData = JSON.parse(rawMessage.subject);
+      if (subjectData && typeof subjectData === 'object') {
+        subjectEn = subjectData.en || rawMessage.subject || '';
+        subjectLt = subjectData.lt || rawMessage.subject || '';
+      } else {
+        // Not a valid JSON object, use as plain text for both
+        subjectEn = rawMessage.subject;
+        subjectLt = rawMessage.subject;
+      }
+    } catch (e) {
+      // Not JSON, use as plain text for both languages (backward compatibility)
+      subjectEn = rawMessage.subject;
+      subjectLt = rawMessage.subject;
+    }
+  }
+
+  const normalized = {
+    ...rawMessage,
+    subject_en: subjectEn,
+    subject_lt: subjectLt,
+    subject: subjectEn // Keep backward compatibility with 'subject' field
+  };
+
+  return normalized;
+}
+
 module.exports = {
   resolveTemplateSubject,
-  normalizeTemplateSubjects
+  normalizeTemplateSubjects,
+  normalizeMessageSubjects
 };
 

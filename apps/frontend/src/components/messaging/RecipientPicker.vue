@@ -152,7 +152,6 @@ const toggleGuest = (id) => {
   } else {
     selectedGuests.value.push(id)
   }
-  console.log('Selected guests:', selectedGuests.value)
 }
 
 const toggleAll = () => {

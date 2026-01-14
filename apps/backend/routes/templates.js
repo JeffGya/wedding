@@ -6,7 +6,7 @@ const db = getDbConnection();
 const { dbGet, dbAll, dbRun } = createDbHelpers(db);
 const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
 const { detectTemplateSchema } = require('../utils/templateSchema');
-const { formatDateWithoutTime } = require('../utils/dateFormatter');
+const { formatDateWithoutTime, formatRsvpDeadline, formatDateWithTime } = require('../utils/dateFormatter');
 const { resolveTemplateSubject, normalizeTemplateSubjects } = require('../utils/subjectResolver');
 
 const requireAuth = require('../middleware/auth');
@@ -618,17 +618,21 @@ router.get('/:id/preview', async (req, res) => {
         const Guest = require('../db/models/guest');
         selectedGuest = await Guest.findById(guestId);
         if (selectedGuest) {
-          variables = await getTemplateVariables(selectedGuest);
+          // Use guest's preferred language or default to 'en'
+          const lang = selectedGuest.preferred_language || 'en';
+          variables = await getTemplateVariables(selectedGuest, null, lang);
         } else {
           if (sampleGuests.length > 0) {
             selectedGuest = sampleGuests[0];
-            variables = await getTemplateVariables(selectedGuest);
+            const lang = selectedGuest.preferred_language || 'en';
+            variables = await getTemplateVariables(selectedGuest, null, lang);
           }
         }
       } else {
         if (sampleGuests.length > 0) {
           selectedGuest = sampleGuests[0];
-          variables = await getTemplateVariables(selectedGuest);
+          const lang = selectedGuest.preferred_language || 'en';
+          variables = await getTemplateVariables(selectedGuest, null, lang);
         }
       }
     } catch (error) {
@@ -652,22 +656,48 @@ router.get('/:id/preview', async (req, res) => {
         
         // Format date helper
         
+        // Get sender info for fallback
+        const { getCachedSenderInfo } = require('../utils/templateVariables');
+        const senderInfoString = await getCachedSenderInfo(db);
+        let senderName = '';
+        let senderEmail = '';
+        if (senderInfoString) {
+          const match = senderInfoString.match(/^(.+?)\s*<(.+?)>$/);
+          if (match) {
+            senderName = match[1].trim();
+            senderEmail = match[2].trim();
+          } else {
+            senderName = senderInfoString.trim();
+          }
+        }
+        
+        const siteUrl = settings.website_url || SITE_URL;
+        const plusOneName = ''; // Will be empty in fallback
+        const hasPlusOne = false; // Will be false in fallback
+        
         variables = {
+          // Guest Properties
           guestName: selectedGuest.name || 'Guest',
+          name: selectedGuest.name || 'Guest', // Alias for guestName
           groupLabel: selectedGuest.group_label || 'Guest',
           code: selectedGuest.code || 'ABC123',
-          rsvpLink: `${settings.website_url || SITE_URL}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
-          plusOneName: '',
-          rsvpDeadline: selectedGuest.rsvp_deadline ? formatDateWithoutTime(selectedGuest.rsvp_deadline) : '',
+          rsvpCode: selectedGuest.code || 'ABC123', // Alias for code
+          rsvpLink: `${siteUrl}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
+          plusOneName: plusOneName,
+          plus_one_name: plusOneName, // Alias for template compatibility
+          rsvpDeadline: selectedGuest.rsvp_deadline ? formatRsvpDeadline(selectedGuest.rsvp_deadline) : '',
           email: selectedGuest.email || 'guest@example.com',
           preferredLanguage: selectedGuest.preferred_language || 'en',
           attending: selectedGuest.attending || false,
           rsvp_status: selectedGuest.rsvp_status || 'pending',
-          responded_at: selectedGuest.responded_at || null,
+          responded_at: selectedGuest.responded_at ? formatDateWithTime(selectedGuest.responded_at) : '',
           can_bring_plus_one: canBringPlusOne,
           dietary: selectedGuest.dietary || '',
           notes: selectedGuest.notes || '',
-          hasPlusOne: false,
+          
+          // Conditional Flags
+          hasPlusOne: hasPlusOne,
+          has_plus_one: hasPlusOne, // Alias for template compatibility
           isPlusOne: isPlusOne,
           hasResponded: !!selectedGuest.responded_at,
           isAttending: selectedGuest.rsvp_status === 'attending',
@@ -677,7 +707,10 @@ router.get('/:id/preview', async (req, res) => {
           isGroomFamily: selectedGuest.group_label === 'Groom\'s Family',
           isEnglishSpeaker: selectedGuest.preferred_language === 'en',
           isLithuanianSpeaker: selectedGuest.preferred_language === 'lt',
-          siteUrl: SITE_URL,
+          
+          // System Properties
+          siteUrl: siteUrl,
+          websiteUrl: siteUrl, // Alias for siteUrl
           weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date) : '',
           venueName: settings.venue_name || '',
           venueAddress: settings.venue_address || '',
@@ -692,11 +725,10 @@ router.get('/:id/preview', async (req, res) => {
           eventType: settings.event_type || '',
           dressCode: settings.dress_code || '',
           specialInstructions: settings.special_instructions || '',
-          websiteUrl: settings.website_url || SITE_URL,
           appTitle: settings.app_title || 'Wedding Site',
-          senderName: '',
-          senderEmail: '',
-          currentDate: new Date().toLocaleDateString(),
+          senderName: senderName,
+          senderEmail: senderEmail,
+          currentDate: formatDateWithoutTime(new Date().toISOString()),
           daysUntilWedding: settings.wedding_date ? 
             Math.ceil((new Date(settings.wedding_date) - new Date()) / (1000 * 60 * 60 * 24)) + ' days' : ''
         };
@@ -722,11 +754,13 @@ router.get('/:id/preview', async (req, res) => {
     const { getEmailContent } = require('../helpers/emailGeneration');
     // Reuse existing variables variable (already declared at line 548)
     // Note: getTemplateVariables and replaceTemplateVars are already imported at top of file
-    variables = await getTemplateVariables(selectedGuest, template);
+    // Generate variables for both languages
+    const variablesEn = await getTemplateVariables(selectedGuest, template, 'en');
+    const variablesLt = await getTemplateVariables(selectedGuest, template, 'lt');
     const { body: bodyEn } = await getEmailContent(template, selectedGuest, 'en');
     const { body: bodyLt } = await getEmailContent(template, selectedGuest, 'lt');
-    const processedBodyEn = replaceTemplateVars(bodyEn, variables);
-    const processedBodyLt = replaceTemplateVars(bodyLt, variables);
+    const processedBodyEn = replaceTemplateVars(bodyEn, variablesEn);
+    const processedBodyLt = replaceTemplateVars(bodyLt, variablesLt);
     const subject = emailDataEn.subject; // Use subject from generated email
 
     const response = {
@@ -846,7 +880,7 @@ router.post('/preview', async (req, res) => {
     const sampleGuests = await dbAll(`
       SELECT id, name, email, group_label, preferred_language, rsvp_status, 
              can_bring_plus_one, dietary, notes, code,
-             responded_at, attending
+             responded_at, attending, rsvp_deadline
       FROM guests 
       WHERE email IS NOT NULL 
       ORDER BY name 
@@ -863,17 +897,21 @@ router.post('/preview', async (req, res) => {
         const Guest = require('../db/models/guest');
         selectedGuest = await Guest.findById(guestId);
         if (selectedGuest) {
-          variables = await getTemplateVariables(selectedGuest, template);
+          // Use guest's preferred language or default to 'en'
+          const lang = selectedGuest.preferred_language || 'en';
+          variables = await getTemplateVariables(selectedGuest, template, lang);
         } else {
           if (sampleGuests.length > 0) {
             selectedGuest = sampleGuests[0];
-            variables = await getTemplateVariables(selectedGuest, template);
+            const lang = selectedGuest.preferred_language || 'en';
+            variables = await getTemplateVariables(selectedGuest, template, lang);
           }
         }
       } else {
         if (sampleGuests.length > 0) {
           selectedGuest = sampleGuests[0];
-          variables = await getTemplateVariables(selectedGuest, template);
+          const lang = selectedGuest.preferred_language || 'en';
+          variables = await getTemplateVariables(selectedGuest, template, lang);
         }
       }
     } catch (error) {
@@ -895,22 +933,48 @@ router.post('/preview', async (req, res) => {
         // Determine if guest can bring plus one (not a plus one themselves and has permission)
         const canBringPlusOne = !isPlusOne && selectedGuest.can_bring_plus_one;
         
+        // Get sender info for fallback
+        const { getCachedSenderInfo } = require('../utils/templateVariables');
+        const senderInfoString = await getCachedSenderInfo(db);
+        let senderName = '';
+        let senderEmail = '';
+        if (senderInfoString) {
+          const match = senderInfoString.match(/^(.+?)\s*<(.+?)>$/);
+          if (match) {
+            senderName = match[1].trim();
+            senderEmail = match[2].trim();
+          } else {
+            senderName = senderInfoString.trim();
+          }
+        }
+        
+        const siteUrl = settings.website_url || SITE_URL;
+        const plusOneName = ''; // Will be empty in fallback
+        const hasPlusOne = false; // Will be false in fallback
+        
         variables = {
+          // Guest Properties
           guestName: selectedGuest.name || 'Guest',
+          name: selectedGuest.name || 'Guest', // Alias for guestName
           groupLabel: selectedGuest.group_label || 'Guest',
           code: selectedGuest.code || 'ABC123',
-          rsvpLink: `${settings.website_url || SITE_URL}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
-          plusOneName: '',
-          rsvpDeadline: selectedGuest.rsvp_deadline ? formatDateWithoutTime(selectedGuest.rsvp_deadline) : '',
+          rsvpCode: selectedGuest.code || 'ABC123', // Alias for code
+          rsvpLink: `${siteUrl}/${selectedGuest.preferred_language || 'en'}/rsvp/${selectedGuest.code || 'ABC123'}`,
+          plusOneName: plusOneName,
+          plus_one_name: plusOneName, // Alias for template compatibility
+          rsvpDeadline: selectedGuest.rsvp_deadline ? formatRsvpDeadline(selectedGuest.rsvp_deadline) : '',
           email: selectedGuest.email || 'guest@example.com',
           preferredLanguage: selectedGuest.preferred_language || 'en',
           attending: selectedGuest.attending || false,
           rsvp_status: selectedGuest.rsvp_status || 'pending',
-          responded_at: selectedGuest.responded_at || null,
+          responded_at: selectedGuest.responded_at ? formatDateWithTime(selectedGuest.responded_at) : '',
           can_bring_plus_one: canBringPlusOne,
           dietary: selectedGuest.dietary || '',
           notes: selectedGuest.notes || '',
-          hasPlusOne: false,
+          
+          // Conditional Flags
+          hasPlusOne: hasPlusOne,
+          has_plus_one: hasPlusOne, // Alias for template compatibility
           isPlusOne: isPlusOne,
           hasResponded: !!selectedGuest.responded_at,
           isAttending: selectedGuest.rsvp_status === 'attending',
@@ -920,7 +984,10 @@ router.post('/preview', async (req, res) => {
           isGroomFamily: selectedGuest.group_label === 'Groom\'s Family',
           isEnglishSpeaker: selectedGuest.preferred_language === 'en',
           isLithuanianSpeaker: selectedGuest.preferred_language === 'lt',
-          siteUrl: SITE_URL,
+          
+          // System Properties
+          siteUrl: siteUrl,
+          websiteUrl: siteUrl, // Alias for siteUrl
           weddingDate: settings.wedding_date ? formatDateWithoutTime(settings.wedding_date) : '',
           venueName: settings.venue_name || '',
           venueAddress: settings.venue_address || '',
@@ -935,11 +1002,10 @@ router.post('/preview', async (req, res) => {
           eventType: settings.event_type || '',
           dressCode: settings.dress_code || '',
           specialInstructions: settings.special_instructions || '',
-          websiteUrl: settings.website_url || SITE_URL,
           appTitle: settings.app_title || 'Wedding Site',
-          senderName: '',
-          senderEmail: '',
-          currentDate: new Date().toLocaleDateString(),
+          senderName: senderName,
+          senderEmail: senderEmail,
+          currentDate: formatDateWithoutTime(new Date().toISOString()),
           daysUntilWedding: settings.wedding_date ? 
             Math.ceil((new Date(settings.wedding_date) - new Date()) / (1000 * 60 * 60 * 24)) + ' days' : ''
         };
@@ -963,11 +1029,13 @@ router.post('/preview', async (req, res) => {
 
     // Get processed content for preview (body_en and body_lt) - needed for editing view
     const { getEmailContent } = require('../helpers/emailGeneration');
-    variables = await getTemplateVariables(selectedGuest, template);
+    // Generate variables for both languages
+    const variablesEn = await getTemplateVariables(selectedGuest, template, 'en');
+    const variablesLt = await getTemplateVariables(selectedGuest, template, 'lt');
     const { body: bodyEn } = await getEmailContent(template, selectedGuest, 'en');
     const { body: bodyLt } = await getEmailContent(template, selectedGuest, 'lt');
-    const processedBodyEn = replaceTemplateVars(bodyEn, variables);
-    const processedBodyLt = replaceTemplateVars(bodyLt, variables);
+    const processedBodyEn = replaceTemplateVars(bodyEn, variablesEn);
+    const processedBodyLt = replaceTemplateVars(bodyLt, variablesLt);
     const subject = emailDataEn.subject; // Use subject from generated email
 
     const response = {

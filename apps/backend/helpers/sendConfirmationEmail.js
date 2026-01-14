@@ -6,6 +6,7 @@
 const logger = require('./logger');
 const { sendEmail } = require('./emailService');
 const { generateEmailFromTemplate } = require('../helpers/emailGeneration');
+const { normalizeTemplateSubjects } = require('../utils/subjectResolver');
 
 /**
  * Send confirmation email to guest after RSVP submission
@@ -36,11 +37,14 @@ async function sendConfirmationEmail(db, guestData) {
     }
     
     // Fetch the appropriate template
-    const template = await dbGet("SELECT * FROM templates WHERE name = ?", [templateName]);
-    if (!template) {
+    const rawTemplate = await dbGet("SELECT * FROM templates WHERE name = ?", [templateName]);
+    if (!rawTemplate) {
       logger.error(`[SEND_CONFIRMATION_EMAIL] Failed to load template: ${templateName}`);
       return;
     }
+    
+    // Normalize template subjects (handles both new and old schemas)
+    const template = normalizeTemplateSubjects(rawTemplate);
     
     // Use unified email generation service
     const emailData = await generateEmailFromTemplate(template, guestData, {

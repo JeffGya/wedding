@@ -41,9 +41,15 @@
         <template #content>
           <div class="space-y-6">
             <!-- Subject -->
-            <div>
-              <label class="text-sm font-semibold text-form-placeholder-text">Subject</label>
-              <p class="text-lg text-text mt-1">{{ message.subject }}</p>
+            <div class="space-y-3">
+              <div>
+                <label class="text-sm font-semibold text-form-placeholder-text">Subject (English)</label>
+                <p class="text-lg text-text mt-1">{{ message.subject_en || message.subject || '—' }}</p>
+              </div>
+              <div>
+                <label class="text-sm font-semibold text-form-placeholder-text">Subject (Lithuanian)</label>
+                <p class="text-lg text-text mt-1">{{ message.subject_lt || message.subject || '—' }}</p>
+              </div>
             </div>
 
             <!-- Status -->

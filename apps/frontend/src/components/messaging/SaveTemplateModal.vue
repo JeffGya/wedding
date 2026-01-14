@@ -50,7 +50,16 @@
 
       <div>
         <label class="block text-sm font-semibold text-form-placeholder-text mb-2">Subject Preview</label>
-        <div class="p-3 bg-card-bg border border-form-border rounded text-sm">{{ subject }}</div>
+        <div class="space-y-2">
+          <div>
+            <span class="text-xs text-form-placeholder-text">English:</span>
+            <div class="p-3 bg-card-bg border border-form-border rounded text-sm mt-1">{{ subjectEn || subject || '' }}</div>
+          </div>
+          <div>
+            <span class="text-xs text-form-placeholder-text">Lithuanian:</span>
+            <div class="p-3 bg-card-bg border border-form-border rounded text-sm mt-1">{{ subjectLt || subject || '' }}</div>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -89,7 +98,9 @@ import { getTemplateStyles } from '@/api/templates'
 import { useToastService } from '@/utils/toastService'
 
 const props = defineProps({
-  subject: String,
+  subject: String, // Backward compatibility
+  subjectEn: String,
+  subjectLt: String,
   bodyEn: String,
   bodyLt: String,
   style: String, // Add style prop

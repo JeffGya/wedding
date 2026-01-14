@@ -157,6 +157,8 @@
                 v-model="form.event_time"
                 placeholder="e.g., 2:00 PM - 11:00 PM"
                 class="w-full"
+                type="text"
+                autocomplete="off"
               />
             </div>
 
