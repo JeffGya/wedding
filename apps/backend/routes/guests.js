@@ -111,6 +111,7 @@ router.get('/', async (req, res) => {
  *                   properties:
  *                     total:
  *                       type: integer
+ *                       description: Total number of guests
  *                     attending:
  *                       type: integer
  *                     not_attending:
@@ -127,6 +128,9 @@ router.get('/', async (req, res) => {
  *                   type: integer
  *                 avg_response_time_days:
  *                   type: number
+ *                 emailsSent:
+ *                   type: integer
+ *                   description: Total number of emails successfully sent (from message_recipients table)
  */
 router.get('/analytics', async (req, res) => {
   try {
@@ -442,6 +446,12 @@ router.post('/rsvp', async (req, res) => {
       return sendBadRequest(res, businessValidation.errors[0]);
     }
     
+    // Ensure group_id is set for primary guest (before RSVP update)
+    if (!guest.group_id) {
+      await Guest.update(guest.id, { group_id: guest.id });
+      guest.group_id = guest.id;
+    }
+    
     // Update RSVP
     await Guest.updateRsvp(id, {
       attending,
@@ -561,6 +571,12 @@ router.put('/:id/rsvp', async (req, res) => {
         return sendForbidden(res, businessValidation.errors[0]);
       }
       return sendBadRequest(res, businessValidation.errors[0]);
+    }
+
+    // Ensure group_id is set for primary guest (before RSVP update)
+    if (!guest.group_id) {
+      await Guest.update(guest.id, { group_id: guest.id });
+      guest.group_id = guest.id;
     }
 
     // Update RSVP

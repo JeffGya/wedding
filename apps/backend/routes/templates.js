@@ -620,19 +620,22 @@ router.get('/:id/preview', async (req, res) => {
         if (selectedGuest) {
           // Use guest's preferred language or default to 'en'
           const lang = selectedGuest.preferred_language || 'en';
-          variables = await getTemplateVariables(selectedGuest, null, lang);
+          // Pass template object so plus-one data is loaded if needed
+          variables = await getTemplateVariables(selectedGuest, template, lang);
         } else {
           if (sampleGuests.length > 0) {
             selectedGuest = sampleGuests[0];
             const lang = selectedGuest.preferred_language || 'en';
-            variables = await getTemplateVariables(selectedGuest, null, lang);
+            // Pass template object so plus-one data is loaded if needed
+            variables = await getTemplateVariables(selectedGuest, template, lang);
           }
         }
       } else {
         if (sampleGuests.length > 0) {
           selectedGuest = sampleGuests[0];
           const lang = selectedGuest.preferred_language || 'en';
-          variables = await getTemplateVariables(selectedGuest, null, lang);
+          // Pass template object so plus-one data is loaded if needed
+          variables = await getTemplateVariables(selectedGuest, template, lang);
         }
       }
     } catch (error) {

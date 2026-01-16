@@ -512,7 +512,18 @@ async function getTemplateVariables(guest, template = null, language = null) {
   const senderInfoString = await getCachedSenderInfo(db);
   
   // Check if we need plus-one data (lazy loading)
-  const templateContent = template ? (template.body_en || template.body_lt || template.body || '') : '';
+  // Use the template body for the language that will be rendered
+  let templateContent = '';
+  if (template) {
+    if (lang === 'lt' && template.body_lt) {
+      templateContent = template.body_lt;
+    } else if (lang === 'en' && template.body_en) {
+      templateContent = template.body_en;
+    } else {
+      // Fallback: check both or use generic body field
+      templateContent = template.body_en || template.body_lt || template.body || '';
+    }
+  }
   const needsPlusOneData = templateUsesPlusOneVars(templateContent);
   
   // Parse senderInfo string (format: "Name <email@example.com>")
@@ -535,14 +546,19 @@ async function getTemplateVariables(guest, template = null, language = null) {
   // Determine if guest can bring plus one (not a plus one themselves and has permission)
   const canBringPlusOne = !isPlusOne && guest.can_bring_plus_one;
   
-  // Get plus one information (lazy load - only if needed)
+  // Get plus one information
+  // Always load hasPlusOne (it's a fundamental guest property needed for conditionals)
+  // Only load plusOneName/plusOneDietary if the template actually uses them (lazy loading optimization)
   let hasPlusOne = false;
   let plusOneName = '';
   let plusOneDietary = '';
   let hasPlusOneDietary = false;
   
+  // Always check if guest has plus one (needed for {{#if hasPlusOne}} conditionals)
+  hasPlusOne = await checkIfGuestHasPlusOne(db, guest.id);
+  
+  // Only load plus-one name/dietary if template uses those specific variables (lazy loading)
   if (needsPlusOneData) {
-    hasPlusOne = await checkIfGuestHasPlusOne(db, guest.id);
     plusOneName = await getPlusOneName(db, guest.id);
     plusOneDietary = await getPlusOneDietary(db, guest.id);
     // Calculate hasPlusOneDietary: true only if dietary exists and is not empty after trimming

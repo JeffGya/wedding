@@ -144,18 +144,40 @@ async function getAverageResponseTime(db) {
 }
 
 /**
+ * Get count of emails sent (from message_recipients table)
+ * @param {Object} db - Database connection
+ * @returns {Promise<number>} Count of successfully sent emails
+ */
+async function getEmailsSentCount(db) {
+  try {
+    const { dbGet } = createDbHelpers(db);
+    
+    const sql = `SELECT COUNT(*) AS emails_sent
+                 FROM message_recipients
+                 WHERE delivery_status = 'sent';`;
+    
+    const row = await dbGet(sql, []);
+    return row?.emails_sent || 0;
+  } catch (err) {
+    logger.error('[GUEST_ANALYTICS] Error calculating emails sent count:', err);
+    return 0;
+  }
+}
+
+/**
  * Get all guest analytics
  * @param {Object} db - Database connection
  * @returns {Promise<Object>} Complete analytics object
  */
 async function getGuestAnalytics(db) {
   try {
-    const [stats, dietary, no_shows, late_responses, avg_response_time_days] = await Promise.all([
+    const [stats, dietary, no_shows, late_responses, avg_response_time_days, emailsSent] = await Promise.all([
       getRsvpStatusCounts(db),
       getDietaryBreakdown(db),
       getNoShowsCount(db),
       getLateResponsesCount(db),
-      getAverageResponseTime(db)
+      getAverageResponseTime(db),
+      getEmailsSentCount(db)
     ]);
     
     return {
@@ -163,7 +185,8 @@ async function getGuestAnalytics(db) {
       dietary,
       no_shows,
       late_responses,
-      avg_response_time_days
+      avg_response_time_days,
+      emailsSent
     };
   } catch (err) {
     logger.error('[GUEST_ANALYTICS] Error fetching guest analytics:', err);
@@ -173,7 +196,8 @@ async function getGuestAnalytics(db) {
       dietary: {},
       no_shows: 0,
       late_responses: 0,
-      avg_response_time_days: 0.0
+      avg_response_time_days: 0.0,
+      emailsSent: 0
     };
   }
 }
@@ -184,6 +208,7 @@ module.exports = {
   getDietaryBreakdown,
   getNoShowsCount,
   getLateResponsesCount,
-  getAverageResponseTime
+  getAverageResponseTime,
+  getEmailsSentCount
 };
 

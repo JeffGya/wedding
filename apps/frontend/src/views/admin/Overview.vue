@@ -90,7 +90,7 @@ const stats = ref({ attending: 0, not_attending: 0, pending: 0 })
 onMounted(async () => {
   try {
     const res = await fetchGuestAnalytics()
-    emailsSent.value = res.stats.total
+    emailsSent.value = res.emailsSent || 0
     stats.value.attending = res.stats.attending
     stats.value.not_attending = res.stats.not_attending
     stats.value.pending = res.stats.pending

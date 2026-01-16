@@ -71,7 +71,7 @@ router.get('/:id/stats', async (req, res) => {
  *       - cookieAuth: []
  *     responses:
  *       '200':
- *         description: Statistics for the latest message
+ *         description: Statistics for the latest message, or zero stats if no messages exist
  *         content:
  *           application/json:
  *             schema:
@@ -81,6 +81,7 @@ router.get('/:id/stats', async (req, res) => {
  *                   type: boolean
  *                 message_id:
  *                   type: integer
+ *                   nullable: true
  *                 sentCount:
  *                   type: integer
  *                 failedCount:
@@ -100,8 +101,14 @@ router.get('/latest-delivery', async (req, res) => {
   try {
     const latest = await dbGet(sql, []);
     if (!latest) {
-      logger.error('📉 Failed to find latest message ID');
-      return sendInternalError(res, err, 'GET /messages/stats/latest');
+      // No messages exist yet - return zero stats gracefully
+      return res.json({
+        success: true,
+        message_id: null,
+        sentCount: 0,
+        failedCount: 0,
+        total: 0
+      });
     }
     const statsSql = `
       SELECT 

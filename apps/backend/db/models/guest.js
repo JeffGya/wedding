@@ -60,9 +60,16 @@ const Guest = {
       );
 
       const insertId = process.env.DB_TYPE === 'mysql' ? result.insertId : result.lastID;
+      
+      // Ensure group_id is set for primary guests (set to their own ID if not provided)
+      if (is_primary && !group_id) {
+        await dbRun('UPDATE guests SET group_id = ? WHERE id = ?', [insertId, insertId]);
+        logger.info('[GUEST_MODEL] Set group_id for new primary guest', { id: insertId, group_id: insertId });
+      }
+      
       logger.info('[GUEST_MODEL] Guest created', { id: insertId, name, code });
       
-      return { id: insertId, ...guestData };
+      return { id: insertId, ...guestData, group_id: group_id || (is_primary ? insertId : null) };
     } catch (error) {
       logger.error('[GUEST_MODEL] Error creating guest', { error: error.message, guestData: { ...guestData, email: guestData.email ? '[REDACTED]' : null } });
       throw error;
@@ -83,7 +90,39 @@ const Guest = {
         return null;
       }
 
+      // Ensure group_id is set for primary guests (backfill for existing data)
+      if (row.is_primary && !row.group_id) {
+        await dbRun('UPDATE guests SET group_id = ? WHERE id = ?', [id, id]);
+        row.group_id = id;
+        logger.info('[GUEST_MODEL] Set group_id for existing primary guest', { id, group_id: id });
+      }
+
       const formatted = this.formatGuestData(row, options);
+      
+      // Add plus one information if this is a primary guest
+      if (formatted.is_primary && formatted.group_id) {
+        const plusOne = await this.findPlusOne(formatted.group_id);
+        if (plusOne) {
+          formatted.plus_one = {
+            id: plusOne.id,
+            name: plusOne.name,
+            dietary: plusOne.dietary
+          };
+          formatted.has_plus_one = true;
+          formatted.plus_one_name = plusOne.name;
+          formatted.plus_one_dietary = plusOne.dietary;
+        } else {
+          formatted.plus_one = null;
+          formatted.has_plus_one = false;
+          formatted.plus_one_name = null;
+          formatted.plus_one_dietary = null;
+        }
+      } else {
+        formatted.plus_one = null;
+        formatted.has_plus_one = false;
+        formatted.plus_one_name = null;
+        formatted.plus_one_dietary = null;
+      }
       
       return formatted;
     } catch (error) {
@@ -100,7 +139,19 @@ const Guest = {
    */
   async findByCode(code, options = {}) {
     try {
-      const row = await dbGet('SELECT * FROM guests WHERE code = ? AND is_primary = 1', [code]);
+      // Normalize code: trim whitespace and handle case sensitivity
+      const normalizedCode = code ? String(code).trim() : '';
+      if (!normalizedCode) {
+        return null;
+      }
+      
+      // Use case-insensitive comparison for both MySQL and SQLite
+      // For MySQL: LOWER() ensures case-insensitive match regardless of collation
+      // For SQLite: LOWER() is safe and maintains consistency
+      const row = await dbGet(
+        'SELECT * FROM guests WHERE LOWER(TRIM(code)) = LOWER(?) AND is_primary = 1',
+        [normalizedCode]
+      );
       
       if (!row) {
         return null;
@@ -313,10 +364,19 @@ const Guest = {
    */
   async findByCodeWithPlusOne(code) {
     try {
+      // Normalize code: trim whitespace and handle case sensitivity
+      const normalizedCode = code ? String(code).trim() : '';
+      if (!normalizedCode) {
+        return null;
+      }
+      
+      // Use case-insensitive comparison for both MySQL and SQLite
+      // For MySQL: LOWER() ensures case-insensitive match regardless of collation
+      // For SQLite: LOWER() is safe and maintains consistency
       const rows = await dbAll(
         `SELECT id, group_label, name, email, code, is_primary, can_bring_plus_one, dietary, notes, attending, rsvp_status, rsvp_deadline 
-         FROM guests WHERE code = ? OR (group_id = (SELECT group_id FROM guests WHERE code = ?) AND is_primary = 0)`,
-        [code, code]
+         FROM guests WHERE LOWER(TRIM(code)) = LOWER(?) OR (group_id = (SELECT group_id FROM guests WHERE LOWER(TRIM(code)) = LOWER(?)) AND is_primary = 0)`,
+        [normalizedCode, normalizedCode]
       );
 
       if (!rows || rows.length === 0) {
@@ -465,6 +525,37 @@ const Guest = {
 
       const rows = await dbAll(query, queryParams);
       
+      // Backfill group_id for primary guests that don't have it (on-the-fly, no migration needed)
+      const guestsNeedingGroupId = rows.filter(r => r.is_primary && !r.group_id);
+      if (guestsNeedingGroupId.length > 0) {
+        for (const guest of guestsNeedingGroupId) {
+          await dbRun('UPDATE guests SET group_id = ? WHERE id = ?', [guest.id, guest.id]);
+          guest.group_id = guest.id;
+        }
+        logger.info('[GUEST_MODEL] Backfilled group_id for primary guests', { count: guestsNeedingGroupId.length });
+      }
+      
+      // Get all plus ones grouped by group_id for efficient lookup
+      const groupIds = [...new Set(rows.map(r => r.group_id).filter(id => id !== null))];
+      const plusOnesByGroup = {};
+      if (groupIds.length > 0) {
+        const placeholders = groupIds.map(() => '?').join(',');
+        const plusOneRows = await dbAll(
+          `SELECT id, group_id, name, dietary FROM guests WHERE group_id IN (${placeholders}) AND is_primary = 0`,
+          groupIds
+        );
+        plusOneRows.forEach(po => {
+          if (!plusOnesByGroup[po.group_id]) {
+            plusOnesByGroup[po.group_id] = [];
+          }
+          plusOnesByGroup[po.group_id].push({
+            id: po.id,
+            name: po.name,
+            dietary: po.dietary
+          });
+        });
+      }
+      
       // Format dates as human-readable strings (for list view)
       const formattedGuests = rows.map(row => {
         const formatted = { ...row };
@@ -480,6 +571,21 @@ const Guest = {
         if (formatted.attending !== null && formatted.attending !== undefined) {
           formatted.attending = Boolean(formatted.attending);
         }
+        
+        // Add plus one information for primary guests
+        if (formatted.is_primary && formatted.group_id && plusOnesByGroup[formatted.group_id]) {
+          const plusOnes = plusOnesByGroup[formatted.group_id];
+          formatted.plus_one = plusOnes.length > 0 ? plusOnes[0] : null; // Take first plus one
+          formatted.has_plus_one = plusOnes.length > 0;
+          formatted.plus_one_name = plusOnes.length > 0 ? plusOnes[0].name : null;
+          formatted.plus_one_dietary = plusOnes.length > 0 ? plusOnes[0].dietary : null;
+        } else {
+          formatted.plus_one = null;
+          formatted.has_plus_one = false;
+          formatted.plus_one_name = null;
+          formatted.plus_one_dietary = null;
+        }
+        
         return formatted;
       });
 
