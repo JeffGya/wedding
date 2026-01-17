@@ -5,8 +5,10 @@
 
 const logger = require('./logger');
 const { sendEmail } = require('./emailService');
-const { generateEmailFromTemplate } = require('../helpers/emailGeneration');
+const { generateEmailFromTemplate, getEmailContent } = require('../helpers/emailGeneration');
 const { normalizeTemplateSubjects } = require('../utils/subjectResolver');
+const { getTemplateVariables, replaceTemplateVars } = require('../utils/templateVariables');
+const { DateTime } = require('luxon');
 
 /**
  * Send confirmation email to guest after RSVP submission
@@ -21,9 +23,9 @@ async function sendConfirmationEmail(db, guestData) {
       return;
     }
     
-    // Create dbGet helper function
+    // Create db helpers
     const { createDbHelpers } = require('../db/queryHelpers');
-    const { dbGet } = createDbHelpers(db);
+    const { dbGet, dbRun } = createDbHelpers(db);
     
     // Determine which template to use based on RSVP status
     let templateName;
@@ -46,10 +48,33 @@ async function sendConfirmationEmail(db, guestData) {
     // Normalize template subjects (handles both new and old schemas)
     const template = normalizeTemplateSubjects(rawTemplate);
     
-    // Use unified email generation service
+    // Determine RSVP type for marker
+    const rsvpType = guestData.rsvp_status === 'attending' ? 'attending' : 'not_attending';
+    const marker = `<!-- RSVP_CONFIRMATION_TYPE:${rsvpType} -->`;
+    
+    // Generate email for guest's preferred language (for sending)
     const emailData = await generateEmailFromTemplate(template, guestData, {
       style: template.style || 'elegant'
     });
+    
+    // Get email content for both languages (for message record)
+    
+    const emailContentEn = await getEmailContent(template, guestData, 'en');
+    const emailContentLt = await getEmailContent(template, guestData, 'lt');
+    
+    // Get template variables for both languages
+    const variablesEn = await getTemplateVariables(guestData, template, 'en');
+    const variablesLt = await getTemplateVariables(guestData, template, 'lt');
+    
+    // Replace variables in subjects and bodies
+    const subjectEn = replaceTemplateVars(emailContentEn.subject, variablesEn);
+    const subjectLt = replaceTemplateVars(emailContentLt.subject, variablesLt);
+    const bodyEn = replaceTemplateVars(emailContentEn.body, variablesEn);
+    const bodyLt = replaceTemplateVars(emailContentLt.body, variablesLt);
+    
+    // Add marker to bodies
+    const bodyEnWithMarker = marker + '\n' + bodyEn;
+    const bodyLtWithMarker = marker + '\n' + (bodyLt || bodyEn);
     
     // Send via unified email service
     const result = await sendEmail({
@@ -60,7 +85,36 @@ async function sendConfirmationEmail(db, guestData) {
     });
     
     if (result.success) {
-      logger.info("[SEND_CONFIRMATION_EMAIL] Sent", { guestCode: guestData.code, messageId: result.messageId });
+      // Create message record in database for tracking
+      try {
+        const subjectJson = JSON.stringify({ en: subjectEn, lt: subjectLt });
+        const insertResult = await dbRun(
+          `INSERT INTO messages (subject, body_en, body_lt, status) VALUES (?, ?, ?, 'sent')`,
+          [subjectJson, bodyEnWithMarker, bodyLtWithMarker]
+        );
+        const messageId = process.env.DB_TYPE === 'mysql' ? insertResult.insertId : insertResult.lastID;
+        
+        // Create message_recipients record
+        const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
+        await dbRun(
+          `INSERT INTO message_recipients (message_id, guest_id, email, language, delivery_status, sent_at, status, resend_message_id) 
+           VALUES (?, ?, ?, ?, 'sent', ?, 'sent', ?)`,
+          [messageId, guestData.id, guestData.email, emailData.language || 'en', sentAt, result.messageId]
+        );
+        
+        logger.info("[SEND_CONFIRMATION_EMAIL] Sent and tracked", { 
+          guestCode: guestData.code, 
+          messageId: result.messageId,
+          dbMessageId: messageId
+        });
+      } catch (dbError) {
+        // Log but don't fail - email was sent successfully
+        logger.error("[SEND_CONFIRMATION_EMAIL] Failed to track message in database", { 
+          guestCode: guestData.code,
+          error: dbError.message,
+          stack: dbError.stack
+        });
+      }
     } else {
       logger.error("[SEND_CONFIRMATION_EMAIL] Failed", { guestCode: guestData.code, error: result.error });
     }

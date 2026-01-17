@@ -4,6 +4,7 @@ const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const logger = require('../helpers/logger');
 const { sendInternalError } = require('../utils/errorHandler');
+const { getMessageStatsByType } = require('../helpers/guestAnalytics');
 const db = getDbConnection();
 const { dbGet, dbAll } = createDbHelpers(db);
 const requireAuth = require('../middleware/auth');
@@ -123,6 +124,88 @@ router.get('/latest-delivery', async (req, res) => {
   } catch (err) {
     logger.error('📉 Failed to fetch latest delivery stats:', err.message);
     return sendInternalError(res, err, 'GET /messages/stats/latest-delivery');
+  }
+});
+
+/**
+ * @openapi
+ * /message-stats/by-type:
+ *   get:
+ *     summary: Get message statistics grouped by type (Custom, RSVP Attending, RSVP Not Attending)
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page_custom
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for custom messages
+ *       - in: query
+ *         name: page_rsvpAttending
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for RSVP attending messages
+ *       - in: query
+ *         name: page_rsvpNotAttending
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for RSVP not attending messages
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page for each type
+ *     responses:
+ *       '200':
+ *         description: Message statistics grouped by type with pagination
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     custom:
+ *                       type: object
+ *                       properties:
+ *                         messages:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                         pagination:
+ *                           type: object
+ *                     rsvpAttending:
+ *                       type: object
+ *                     rsvpNotAttending:
+ *                       type: object
+ *       '500':
+ *         description: Failed to fetch message statistics
+ */
+router.get('/by-type', async (req, res) => {
+  try {
+    const options = {
+      page_custom: req.query.page_custom,
+      page_rsvpAttending: req.query.page_rsvpAttending,
+      page_rsvpNotAttending: req.query.page_rsvpNotAttending,
+      limit: req.query.limit
+    };
+    
+    const stats = await getMessageStatsByType(db, options);
+    
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (err) {
+    logger.error('📉 Failed to fetch message stats by type:', err.message);
+    return sendInternalError(res, err, 'GET /message-stats/by-type');
   }
 });
 

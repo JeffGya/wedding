@@ -185,11 +185,27 @@ async function sendEmailWithTracking(options) {
       const { createDbHelpers } = require('../db/queryHelpers');
       const { dbRun } = createDbHelpers(db);
       const sentAt = DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss');
-      await dbRun(
-        `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status, resend_message_id) 
-         VALUES (?, ?, 'sent', ?, 'sent', ?)`,
-        [messageId, guestId, sentAt, result.messageId]
-      );
+      try {
+        await dbRun(
+          `INSERT INTO message_recipients (message_id, guest_id, delivery_status, sent_at, status, resend_message_id) 
+           VALUES (?, ?, 'sent', ?, 'sent', ?)`,
+          [messageId, guestId, sentAt, result.messageId]
+        );
+      } catch (insertError) {
+        // If INSERT fails (e.g., due to unique constraint), try UPDATE instead
+        try {
+          await dbRun(
+            `UPDATE message_recipients 
+             SET delivery_status = 'sent', sent_at = ?, status = 'sent', resend_message_id = ?, updated_at = CURRENT_TIMESTAMP
+             WHERE message_id = ? AND guest_id = ?`,
+            [sentAt, result.messageId, messageId, guestId]
+          );
+        } catch (updateError) {
+          // Log but don't throw - email was sent successfully
+          const logger = require('./logger');
+          logger.error('[EMAIL_SERVICE] Failed to track recipient record', { messageId, guestId, error: updateError.message });
+        }
+      }
     }
     
     return {
@@ -205,11 +221,27 @@ async function sendEmailWithTracking(options) {
       // Default tracking: log failure
       const { createDbHelpers } = require('../db/queryHelpers');
       const { dbRun } = createDbHelpers(db);
-      await dbRun(
-        `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) 
-         VALUES (?, ?, 'failed', ?)`,
-        [messageId, guestId, result.error]
-      );
+      try {
+        await dbRun(
+          `INSERT INTO message_recipients (message_id, guest_id, delivery_status, error_message) 
+           VALUES (?, ?, 'failed', ?)`,
+          [messageId, guestId, result.error]
+        );
+      } catch (insertError) {
+        // If INSERT fails, try UPDATE instead
+        try {
+          await dbRun(
+            `UPDATE message_recipients 
+             SET delivery_status = 'failed', error_message = ?, updated_at = CURRENT_TIMESTAMP
+             WHERE message_id = ? AND guest_id = ?`,
+            [result.error, messageId, guestId]
+          );
+        } catch (updateError) {
+          // Log but don't throw
+          const logger = require('./logger');
+          logger.error('[EMAIL_SERVICE] Failed to track failed recipient record', { messageId, guestId, error: updateError.message });
+        }
+      }
     }
     
     return {

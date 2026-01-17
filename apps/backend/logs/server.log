@@ -1,19 +1,206 @@
-[2026-01-15T22:13:16.696Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-16T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-15T22:13:16.923Z] [INFO][staging] Server is running on port 5001
-[2026-01-15T22:13:16.932Z] [INFO][staging] ✅ Connected to MySQL database.
-[2026-01-15T22:13:33.140Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-16T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-15T22:13:33.353Z] [INFO][staging] Server is running on port 5001
-[2026-01-15T22:13:33.362Z] [INFO][staging] ✅ Connected to MySQL database.
-[2026-01-15T22:13:43.453Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-16T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-15T22:13:43.624Z] [INFO][staging] Server is running on port 5001
-[2026-01-15T22:13:43.631Z] [INFO][staging] ✅ Connected to MySQL database.
-[2026-01-15T22:13:52.045Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-16T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-15T22:13:52.214Z] [INFO][staging] Server is running on port 5001
-[2026-01-15T22:13:52.220Z] [INFO][staging] ✅ Connected to MySQL database.
-[2026-01-15T22:15:08.781Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-16T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-15T22:15:08.990Z] [INFO][staging] Server is running on port 5001
-[2026-01-15T22:15:08.998Z] [INFO][staging] ✅ Connected to MySQL database.
-[2026-01-16T00:00:53.826Z] [INFO][staging] [QUOTA_TRACKER] Daily quota reset {"previousCount":0,"newResetTime":"2026-01-17T00:00:00.999Z"}
-[2026-01-16T13:04:16.650Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
-[2026-01-16T13:04:17.351Z] [INFO][staging] Server is running on port 5001
-[2026-01-16T13:04:17.860Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:07:41.135Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:07:41.336Z] [ERROR][staging] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/helpers/sendConfirmationEmail.js:61
+    const { createDbHelpers } = require('../db/queryHelpers');
+            ^
+
+SyntaxError: Identifier 'createDbHelpers' has already been declared
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/guests.js:8:35)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-16T19:07:41.348Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:07:44.234Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:07:44.398Z] [ERROR][staging] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/helpers/sendConfirmationEmail.js:61
+    const { createDbHelpers } = require('../db/queryHelpers');
+            ^
+
+SyntaxError: Identifier 'createDbHelpers' has already been declared
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/guests.js:8:35)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-16T19:07:44.410Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:07:49.432Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:07:49.586Z] [ERROR][staging] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/helpers/sendConfirmationEmail.js:61
+    const { createDbHelpers } = require('../db/queryHelpers');
+            ^
+
+SyntaxError: Identifier 'createDbHelpers' has already been declared
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/guests.js:8:35)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-16T19:07:49.598Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:07:54.422Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:07:54.633Z] [ERROR][staging] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/helpers/sendConfirmationEmail.js:61
+    const { createDbHelpers } = require('../db/queryHelpers');
+            ^
+
+SyntaxError: Identifier 'createDbHelpers' has already been declared
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/guests.js:8:35)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-16T19:07:54.649Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:08:07.575Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:08:07.723Z] [ERROR][staging] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/helpers/sendConfirmationEmail.js:61
+    const { createDbHelpers } = require('../db/queryHelpers');
+            ^
+
+SyntaxError: Identifier 'createDbHelpers' has already been declared
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/guests.js:8:35)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-16T19:08:07.736Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:08:18.733Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:08:18.886Z] [ERROR][staging] UncaughtException: /Users/jeffreygyamfi/Sites/wedding-site/apps/backend/helpers/sendConfirmationEmail.js:61
+    const { createDbHelpers } = require('../db/queryHelpers');
+            ^
+
+SyntaxError: Identifier 'createDbHelpers' has already been declared
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/jeffreygyamfi/Sites/wedding-site/apps/backend/routes/guests.js:8:35)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+[2026-01-16T19:08:18.900Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:08:51.514Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:08:51.687Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:08:51.697Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:09:06.113Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:09:06.288Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:09:06.298Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:09:35.045Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:09:35.210Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:09:35.220Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:09:37.336Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:09:37.493Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:09:37.505Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:09:38.508Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-16T19:09:42.475Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:09:42.632Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:09:42.642Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:09:47.951Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:09:48.109Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:09:48.120Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T19:09:48.629Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-16T19:09:59.863Z] [INFO][staging] [GUEST_MODEL] RSVP updated {"id":29,"rsvpStatus":"attending"}
+[2026-01-16T19:09:59.864Z] [INFO][staging] [RSVP_ROUTE] RSVP PUBLIC UPDATE: code=ayi4o6vi {"attending":true,"rsvp_status":"attending","plus_one_name":null,"dietary":"Test","notes":"Testing"}
+[2026-01-16T19:09:59.866Z] [INFO][staging] [RSVP_ROUTE] RSVP email decision: send_email=true (type: boolean), shouldSendEmail=true, code=ayi4o6vi
+[2026-01-16T19:10:00.339Z] [INFO][staging] [EMAIL_SERVICE] Email sent {"to":"Jeffogya@gmail.com","messageId":"37129901-fddd-4062-8236-d0c24d8378dd"}
+[2026-01-16T19:10:00.342Z] [INFO][staging] [SEND_CONFIRMATION_EMAIL] Sent and tracked {"guestCode":"ayi4o6vi","messageId":"37129901-fddd-4062-8236-d0c24d8378dd","dbMessageId":18}
+[2026-01-16T19:10:00.352Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-16T19:10:02.166Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T19:10:02.319Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T19:10:02.326Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T20:55:26.151Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T20:55:26.366Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T20:55:26.377Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T20:58:37.115Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T20:58:37.332Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T20:58:37.342Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T20:58:47.634Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T20:58:47.858Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T20:58:47.866Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T20:58:58.874Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T20:58:59.085Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T20:58:59.095Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:00:56.412Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-16T21:01:04.307Z] [INFO][staging] [GUEST_MODEL] RSVP updated {"id":29,"rsvpStatus":"attending"}
+[2026-01-16T21:01:04.309Z] [INFO][staging] [RSVP_ROUTE] RSVP PUBLIC UPDATE: code=ayi4o6vi {"attending":true,"rsvp_status":"attending","plus_one_name":null,"dietary":"Test","notes":"Testing"}
+[2026-01-16T21:01:04.311Z] [INFO][staging] [RSVP_ROUTE] RSVP email decision: send_email=true (type: boolean), shouldSendEmail=true, code=ayi4o6vi
+[2026-01-16T21:01:04.720Z] [INFO][staging] [EMAIL_SERVICE] Email sent {"to":"Jeffogya@gmail.com","messageId":"956b08d7-edb6-473a-8e4a-44d5d538bb59"}
+[2026-01-16T21:01:04.724Z] [INFO][staging] [SEND_CONFIRMATION_EMAIL] Sent and tracked {"guestCode":"ayi4o6vi","messageId":"956b08d7-edb6-473a-8e4a-44d5d538bb59","dbMessageId":19}
+[2026-01-16T21:01:04.736Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-16T21:02:40.784Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:02:40.988Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:02:40.998Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:02:54.774Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:02:55.075Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:02:55.083Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:03:09.416Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:03:09.586Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:03:09.593Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:03:17.803Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:03:18.054Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:03:18.062Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:04:44.257Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:04:44.432Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:04:44.440Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:10:55.977Z] [INFO][staging] [GUEST_ANALYTICS] getMessageStatsByType called {"options":{"page_custom":"1","page_rsvpAttending":"1","page_rsvpNotAttending":"1","limit":"10"}}
+[2026-01-16T21:10:55.979Z] [INFO][staging] [GUEST_ANALYTICS] Recent messages in DB {"count":10,"messages":[{"id":19,"status":"sent","created_at":"2026-01-16T21:01:04.000Z"},{"id":18,"status":"sent","created_at":"2026-01-16T19:10:00.000Z"},{"id":17,"status":"sent","created_at":"2026-01-13T19:56:47.000Z"},{"id":16,"status":"sent","created_at":"2026-01-13T19:51:55.000Z"},{"id":15,"status":"sent","created_at":"2026-01-13T19:44:28.000Z"},{"id":13,"status":"sent","created_at":"2026-01-04T17:59:11.000Z"},{"id":12,"status":"sent","created_at":"2026-01-03T22:44:41.000Z"},{"id":11,"status":"sent","created_at":"2026-01-03T21:37:05.000Z"},{"id":10,"status":"sent","created_at":"2026-01-03T21:16:14.000Z"},{"id":9,"status":"sent","created_at":"2026-01-03T21:14:58.000Z"}]}
+[2026-01-16T21:10:55.980Z] [INFO][staging] [GUEST_ANALYTICS] Message recipients by status {"recipients":[{"message_id":1,"delivery_status":"sent","count":1},{"message_id":1,"delivery_status":"failed","count":1},{"message_id":2,"delivery_status":"sent","count":2},{"message_id":3,"delivery_status":"sent","count":2},{"message_id":4,"delivery_status":"sent","count":2},{"message_id":5,"delivery_status":"sent","count":1},{"message_id":6,"delivery_status":"sent","count":1},{"message_id":7,"delivery_status":"sent","count":4},{"message_id":9,"delivery_status":"sent","count":6},{"message_id":10,"delivery_status":"sent","count":1},{"message_id":11,"delivery_status":"sent","count":1},{"message_id":12,"delivery_status":"sent","count":1},{"message_id":13,"delivery_status":"sent","count":10},{"message_id":15,"delivery_status":"sent","count":2},{"message_id":16,"delivery_status":"sent","count":2},{"message_id":17,"delivery_status":"sent","count":1},{"message_id":18,"delivery_status":"sent","count":1},{"message_id":19,"delivery_status":"sent","count":1}]}
+[2026-01-16T21:10:55.985Z] [INFO][staging] [GUEST_ANALYTICS] Query returned messages {"count":40,"messageIds":[19,18,17,16,15,13,12,11,10,9,7,6,5,4,3,2,1]}
+[2026-01-16T21:10:58.522Z] [INFO][staging] [GUEST_ANALYTICS] getMessageStatsByType called {"options":{"page_custom":"1","page_rsvpAttending":"1","page_rsvpNotAttending":"1","limit":"10"}}
+[2026-01-16T21:10:58.523Z] [INFO][staging] [GUEST_ANALYTICS] Recent messages in DB {"count":10,"messages":[{"id":19,"status":"sent","created_at":"2026-01-16T21:01:04.000Z"},{"id":18,"status":"sent","created_at":"2026-01-16T19:10:00.000Z"},{"id":17,"status":"sent","created_at":"2026-01-13T19:56:47.000Z"},{"id":16,"status":"sent","created_at":"2026-01-13T19:51:55.000Z"},{"id":15,"status":"sent","created_at":"2026-01-13T19:44:28.000Z"},{"id":13,"status":"sent","created_at":"2026-01-04T17:59:11.000Z"},{"id":12,"status":"sent","created_at":"2026-01-03T22:44:41.000Z"},{"id":11,"status":"sent","created_at":"2026-01-03T21:37:05.000Z"},{"id":10,"status":"sent","created_at":"2026-01-03T21:16:14.000Z"},{"id":9,"status":"sent","created_at":"2026-01-03T21:14:58.000Z"}]}
+[2026-01-16T21:10:58.523Z] [INFO][staging] [GUEST_ANALYTICS] Message recipients by status {"recipients":[{"message_id":1,"delivery_status":"sent","count":1},{"message_id":1,"delivery_status":"failed","count":1},{"message_id":2,"delivery_status":"sent","count":2},{"message_id":3,"delivery_status":"sent","count":2},{"message_id":4,"delivery_status":"sent","count":2},{"message_id":5,"delivery_status":"sent","count":1},{"message_id":6,"delivery_status":"sent","count":1},{"message_id":7,"delivery_status":"sent","count":4},{"message_id":9,"delivery_status":"sent","count":6},{"message_id":10,"delivery_status":"sent","count":1},{"message_id":11,"delivery_status":"sent","count":1},{"message_id":12,"delivery_status":"sent","count":1},{"message_id":13,"delivery_status":"sent","count":10},{"message_id":15,"delivery_status":"sent","count":2},{"message_id":16,"delivery_status":"sent","count":2},{"message_id":17,"delivery_status":"sent","count":1},{"message_id":18,"delivery_status":"sent","count":1},{"message_id":19,"delivery_status":"sent","count":1}]}
+[2026-01-16T21:10:58.526Z] [INFO][staging] [GUEST_ANALYTICS] Query returned messages {"count":40,"messageIds":[19,18,17,16,15,13,12,11,10,9,7,6,5,4,3,2,1]}
+[2026-01-16T21:11:00.118Z] [INFO][staging] [GUEST_ANALYTICS] getMessageStatsByType called {"options":{"page_custom":"1","page_rsvpAttending":"1","page_rsvpNotAttending":"1","limit":"10"}}
+[2026-01-16T21:11:00.119Z] [INFO][staging] [GUEST_ANALYTICS] Recent messages in DB {"count":10,"messages":[{"id":19,"status":"sent","created_at":"2026-01-16T21:01:04.000Z"},{"id":18,"status":"sent","created_at":"2026-01-16T19:10:00.000Z"},{"id":17,"status":"sent","created_at":"2026-01-13T19:56:47.000Z"},{"id":16,"status":"sent","created_at":"2026-01-13T19:51:55.000Z"},{"id":15,"status":"sent","created_at":"2026-01-13T19:44:28.000Z"},{"id":13,"status":"sent","created_at":"2026-01-04T17:59:11.000Z"},{"id":12,"status":"sent","created_at":"2026-01-03T22:44:41.000Z"},{"id":11,"status":"sent","created_at":"2026-01-03T21:37:05.000Z"},{"id":10,"status":"sent","created_at":"2026-01-03T21:16:14.000Z"},{"id":9,"status":"sent","created_at":"2026-01-03T21:14:58.000Z"}]}
+[2026-01-16T21:11:00.120Z] [INFO][staging] [GUEST_ANALYTICS] Message recipients by status {"recipients":[{"message_id":1,"delivery_status":"sent","count":1},{"message_id":1,"delivery_status":"failed","count":1},{"message_id":2,"delivery_status":"sent","count":2},{"message_id":3,"delivery_status":"sent","count":2},{"message_id":4,"delivery_status":"sent","count":2},{"message_id":5,"delivery_status":"sent","count":1},{"message_id":6,"delivery_status":"sent","count":1},{"message_id":7,"delivery_status":"sent","count":4},{"message_id":9,"delivery_status":"sent","count":6},{"message_id":10,"delivery_status":"sent","count":1},{"message_id":11,"delivery_status":"sent","count":1},{"message_id":12,"delivery_status":"sent","count":1},{"message_id":13,"delivery_status":"sent","count":10},{"message_id":15,"delivery_status":"sent","count":2},{"message_id":16,"delivery_status":"sent","count":2},{"message_id":17,"delivery_status":"sent","count":1},{"message_id":18,"delivery_status":"sent","count":1},{"message_id":19,"delivery_status":"sent","count":1}]}
+[2026-01-16T21:11:00.122Z] [INFO][staging] [GUEST_ANALYTICS] Query returned messages {"count":40,"messageIds":[19,18,17,16,15,13,12,11,10,9,7,6,5,4,3,2,1]}
+[2026-01-16T21:12:08.419Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:12:08.650Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:12:08.658Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:12:09.063Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:12:08.886Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:12:09.072Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:12:14.513Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:12:14.337Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:12:14.521Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:12:20.359Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:12:20.525Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:12:20.533Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:12:21.448Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:12:21.656Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:12:21.664Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-16T21:12:23.440Z] [INFO][staging] [QUOTA_TRACKER] Initialized {"dailyReset":"2026-01-17T00:00:00.999Z","monthlyReset":"2026-02-01T00:00:00.999Z"}
+[2026-01-16T21:12:23.614Z] [INFO][staging] Server is running on port 5001
+[2026-01-16T21:12:23.622Z] [INFO][staging] ✅ Connected to MySQL database.
+[2026-01-17T00:02:55.934Z] [INFO][staging] [QUOTA_TRACKER] Daily quota reset {"previousCount":0,"newResetTime":"2026-01-18T00:00:00.999Z"}
+[2026-01-17T15:55:16.743Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T15:55:23.474Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T15:55:58.574Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T15:56:08.361Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T15:56:10.448Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T15:56:15.911Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T16:01:17.499Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T16:02:13.630Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T16:02:14.391Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
+[2026-01-17T16:02:18.702Z] [INFO][staging] [GUEST_MODEL] Guests listed {"count":13,"total":13,"page":1,"perPage":40}
