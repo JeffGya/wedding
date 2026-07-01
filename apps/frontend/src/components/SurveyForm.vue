@@ -91,6 +91,7 @@ import Button from 'primevue/button';
 import Banner from '@/components/ui/Banner.vue';
 import { createSurveyResponse } from '@/api/publicSurveys';
 import { useI18n } from 'vue-i18n';
+import { conditionalLog } from '@/loggingGuard';
 
 const { t } = useI18n();
 
@@ -130,7 +131,7 @@ async function onSubmit() {
 
     // Send to backend
     const resp = await createSurveyResponse(props.survey.id, payload);
-    console.log('Survey submit response:', resp);
+    conditionalLog('Survey submit response:', resp);
 
     // Show thank-you
     responded.value = true;

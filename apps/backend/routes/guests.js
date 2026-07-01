@@ -68,7 +68,7 @@ router.use(requireAuth);
  */
 router.get('/', async (req, res) => {
   try {
-    const { attending, group_id, rsvp_status, sort_by, page = 1, per_page = 40 } = req.query;
+    const { attending, group_id, rsvp_status, sort_by, page = 1, per_page = 100 } = req.query;
 
     const filters = {};
     if (attending !== undefined) filters.attending = attending;

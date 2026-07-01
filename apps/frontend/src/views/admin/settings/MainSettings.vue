@@ -132,7 +132,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium mb-2">Event Start Date</label>
-                <Calendar
+                <DatePicker
                   v-model="eventStartDate"
                   dateFormat="yy-mm-dd"
                   class="w-full"
@@ -141,7 +141,7 @@
               </div>
               <div>
                 <label class="block text-sm font-medium mb-2">Event End Date</label>
-                <Calendar
+                <DatePicker
                   v-model="eventEndDate"
                   dateFormat="yy-mm-dd"
                   class="w-full"
@@ -165,7 +165,7 @@
             <!-- Event Type -->
             <div>
               <label class="block text-sm font-medium mb-2">Event Type</label>
-              <Dropdown
+              <Select
                 v-model="form.event_type"
                 :options="eventTypeOptions"
                 optionLabel="label"

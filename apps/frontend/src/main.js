@@ -48,7 +48,6 @@ import Skeleton from 'primevue/skeleton';
 import Tag from 'primevue/tag';
 import Tooltip from 'primevue/tooltip';
 import Timeline from 'primevue/timeline';
-import Calendar from 'primevue/calendar';
 import SelectButton from 'primevue/selectbutton';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
@@ -71,10 +70,7 @@ import { localize } from '@vee-validate/i18n';
 import i18n from '@/i18n';
 import * as rules from '@vee-validate/rules';
 
-// Silence console logs in production unless explicitly enabled
-if (import.meta.env.PROD && !import.meta.env.VITE_ENABLE_LOGS) {
-  ['log','debug','info','table'].forEach(m => (console[m] = () => {}));
-}
+// Console silencing is handled by loggingGuard.js - no need to duplicate here
 
 // Register all built-in rules, skipping any non-function exports (e.g., the 'all' JSON object)
 Object.keys(rules).forEach(name => {
@@ -91,6 +87,15 @@ configure({
 
 const app = createApp(App)
 const head = createHead()
+
+// Configure Vue warnHandler to suppress warnings when VITE_ENABLE_LOGS is false
+const enableLogs = String(import.meta.env.VITE_ENABLE_LOGS || '').trim().toLowerCase() === 'true';
+if (!enableLogs) {
+  app.config.warnHandler = () => {
+    // Suppress all Vue warnings when logs are disabled
+    return;
+  };
+}
 
 const MyPreset = definePreset(Aura, {
   components: {
@@ -175,7 +180,6 @@ app.component('InputNumber', InputNumber);
 app.component('Skeleton', Skeleton);
 app.component('Tag', Tag);
 app.component('Timeline', Timeline);
-app.component('Calendar', Calendar);
 app.component('SelectButton', SelectButton);
 app.component('ProgressSpinner', ProgressSpinner);
 app.component('Toast', Toast);

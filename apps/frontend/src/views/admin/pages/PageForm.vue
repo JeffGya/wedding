@@ -259,6 +259,7 @@ import {
 import pageFormSchema from '@/validation/pageForm.schema.js';
 import { useLoading } from '@/composables/useLoading';
 import { useErrorHandler } from '@/composables/useErrorHandler';
+import { conditionalLog } from '@/loggingGuard';
 
 defineExpose({ components: { Dialog, BlockRenderer } });
 
@@ -488,7 +489,7 @@ const validateContent = async () => {
 const savePage = async () => {
   saving.value = true;
   try {
-    console.log('Saving page...', page.value, blocks.value, pageTranslations.value);
+    conditionalLog('Saving page...', page.value, blocks.value, pageTranslations.value);
     // Build page payload including translations
     const fullPayload = {
       slug: page.value.slug,

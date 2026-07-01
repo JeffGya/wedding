@@ -38,6 +38,7 @@ import { useI18n } from 'vue-i18n';
 import { useLangStore } from '@/store/lang';
 import { useRouter, useRoute } from 'vue-router';
 import { defineComponent, ref, computed, watch } from 'vue';
+import { conditionalLog } from '@/loggingGuard';
 
 import { IconGb, IconLt } from '@iconify-prerendered/vue-circle-flags';
 
@@ -86,7 +87,7 @@ export default defineComponent({
 
     // Use the existing changeLanguage function
     const changeLanguage = (lang) => {
-      console.log(`Attempting to change language to: ${lang}`);
+      conditionalLog(`Attempting to change language to: ${lang}`);
       langStore.setLanguage(lang);
       // correctly set reactive locale
       i18n.global.locale.value = lang;
@@ -100,7 +101,7 @@ export default defineComponent({
       segments[1] = lang;
       const newPath = segments.join('/') + searchHash;
 
-      console.log(`Navigating to: ${newPath}`);
+      conditionalLog(`Navigating to: ${newPath}`);
       router.push(newPath).catch((err) => {
         // ignore redundant navigation errors
         if (err.name !== 'NavigationDuplicated' && err.message.indexOf('Avoided redundant navigation') === -1) {

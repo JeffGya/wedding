@@ -59,6 +59,7 @@ import BlockRenderer from '@/components/BlockRenderer.vue';
 import RsvpGate from '@/components/RsvpGate.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { useLoading } from '@/composables/useLoading';
+import { conditionalLog } from '@/loggingGuard';
 
 const route = useRoute();
 const router = useRouter();
@@ -94,7 +95,7 @@ async function loadPage() {
     // Handle RSVP-protected pages by capturing the gate reason
     if (err.response?.status === 403) {
       const reason = err.response.data.reason || 'no_session';
-      console.log('RSVP gate triggered:', reason, err.response.data);
+      conditionalLog('RSVP gate triggered:', reason, err.response.data);
       rsvpGate.value = reason;
       return;
     }

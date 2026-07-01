@@ -160,6 +160,7 @@ import FloatLabel from 'primevue/floatlabel';
 import { useToastService } from '@/utils/toastService';
 import { getRSVPStatusLabel, getRSVPSeverity } from '@/utils/rsvpStatus';
 import { useErrorHandler } from '@/composables/useErrorHandler';
+import { conditionalLog } from '@/loggingGuard';
 
 const guests = ref([]);
 const totalGuests = ref(0);
@@ -221,13 +222,13 @@ const fetchGuests = async () => {
   }
 
   try {
-    console.log("Fetching guests with params:", params);
+    conditionalLog("Fetching guests with params:", params);
     const response = await api.get('/guests', { params });
-    console.log('Full URL:', api.defaults.baseURL + '/guests');
-    console.log("API Response:", response.data);
+    conditionalLog('Full URL:', api.defaults.baseURL + '/guests');
+    conditionalLog("API Response:", response.data);
     guests.value = response.data.guests || [];
     totalGuests.value = response.data.total || 0;
-    console.log("Guests data updated:", guests.value);
+    conditionalLog("Guests data updated:", guests.value);
   } catch (error) {
     handleError(error, 'Failed to fetch guest data');
   }
@@ -236,7 +237,7 @@ const fetchGuests = async () => {
 const totalPages = computed(() => Math.max(1, Math.ceil(totalGuests.value / guestsPerPage)));
 
 const filteredGuests = computed(() => {
-  console.log('Filtered Guests:', guests.value);
+  conditionalLog('Filtered Guests:', guests.value);
   return guests.value;
 });
 
@@ -264,7 +265,7 @@ const onPage = (event) => {
 watch(
   () => [filters.attending, filters.rsvp_status],
   () => {
-    console.log("Filters updated:", filters);
+    conditionalLog("Filters updated:", filters);
     currentPage.value = 1;
     fetchGuests();
   }

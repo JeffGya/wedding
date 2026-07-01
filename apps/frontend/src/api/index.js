@@ -30,6 +30,26 @@ api.interceptors.response.use(
     if (error.config?.meta?.showLoader) {
       useLoaderStore().finish();
     }
+    
+    // Silently handle 401/403 errors for specific endpoints (expected when no session exists)
+    const enableLogs = String(import.meta.env.VITE_ENABLE_LOGS || '').trim().toLowerCase() === 'true';
+    const status = error.response?.status;
+    const url = error.config?.url || '';
+    
+    // Endpoints that should have silent 401/403 errors
+    const silentEndpoints = ['/api/me', '/api/rsvp/session'];
+    const isSilentEndpoint = silentEndpoints.some(endpoint => url.includes(endpoint));
+    
+    if ((status === 401 || status === 403) && isSilentEndpoint) {
+      // Only log if VITE_ENABLE_LOGS is enabled
+      if (enableLogs) {
+        console.error(`[API] ${status} ${url}:`, error.response?.data || error.message);
+      }
+      // Still reject the promise, but silently
+      return Promise.reject(error);
+    }
+    
+    // For all other errors, log normally
     return Promise.reject(error);
   }
 );

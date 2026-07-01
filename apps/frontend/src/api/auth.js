@@ -1,12 +1,13 @@
 const API = import.meta.env.VITE_API_URL;
 import { useLoaderStore } from '@/store/loader';
+import { conditionalLog } from '@/loggingGuard';
 
 export async function login({ email, password }) {
   const loader = useLoaderStore();
   loader.start();
   try {
-    console.log('🟢 [auth] calling:', `${API}/login`);
-    console.log('Payload:', { email, password });
+    conditionalLog('🟢 [auth] calling:', `${API}/login`);
+    conditionalLog('Payload:', { email, password });
     const res = await fetch(`${API}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
