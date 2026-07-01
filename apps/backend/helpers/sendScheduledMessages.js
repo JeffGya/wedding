@@ -143,10 +143,16 @@ async function sendScheduledMessages() {
         }
       }
 
-      await dbRun(
-        `UPDATE messages SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        ['sent', message.id]
-      );
+      const hasRateLimited = sendResults.some(r => r.status === 'rate_limited');
+
+      if (!hasRateLimited) {
+        await dbRun(
+          `UPDATE messages SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+          ['sent', message.id]
+        );
+      }
+      // If any recipient is rate_limited, leave messages.status as 'scheduled'
+      // so the next scheduler run re-selects this message and retries them.
     }
     
     // Only log summary if there were messages processed or failures
