@@ -16,9 +16,18 @@ const mysql = require('mysql2/promise');
   await connection.query(`USE \`${process.env.DB_NAME}\``);
 
   // Define your users to seed
+  const seedAdminPassword1 = process.env.SEED_ADMIN_PASSWORD_1;
+  const seedAdminPassword2 = process.env.SEED_ADMIN_PASSWORD_2;
+  if (!seedAdminPassword1 || !seedAdminPassword2) {
+    throw new Error(
+      'Missing required env vars SEED_ADMIN_PASSWORD_1 and/or SEED_ADMIN_PASSWORD_2. ' +
+      'Set them before running the seed script.'
+    );
+  }
+
   const users = [
-    { name: 'Future Husband Jeffrey', email: 'jeffogya@gmail.com', password: 'Fbjqp4H6woww9' },
-    { name: 'Future Wife Brigita', email: 'brigitabruno@gmail.com', password: '6B2jt5qy8WHqm' }
+    { name: 'Future Husband Jeffrey', email: 'jeffogya@gmail.com', password: seedAdminPassword1 },
+    { name: 'Future Wife Brigita', email: 'brigitabruno@gmail.com', password: seedAdminPassword2 }
   ];
 
   for (const u of users) {

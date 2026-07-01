@@ -4,6 +4,7 @@ const router = express.Router();
 const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
 const { sendInternalError } = require('../utils/errorHandler');
+const requireAuth = require('../middleware/auth');
 const db = getDbConnection();
 const { dbGet, dbRun } = createDbHelpers(db);
 
@@ -99,7 +100,7 @@ router.get('/', async (req, res) => {
  *         description: Internal server error
  */
 // POST /api/settings/guests
-router.post('/', async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const { rsvp_open, rsvp_deadline } = req.body;
   try {
     const existing = await dbGet('SELECT id FROM guest_settings LIMIT 1', []);

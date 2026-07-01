@@ -19,9 +19,18 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
   };
 
   // Users
+  const seedAdminPassword1 = process.env.SEED_ADMIN_PASSWORD_1;
+  const seedAdminPassword2 = process.env.SEED_ADMIN_PASSWORD_2;
+  if (!seedAdminPassword1 || !seedAdminPassword2) {
+    throw new Error(
+      'Missing required env vars SEED_ADMIN_PASSWORD_1 and/or SEED_ADMIN_PASSWORD_2. ' +
+      'Set them before running the seed script.'
+    );
+  }
+
   const users = [
-    { name: 'Jeffrey', email: 'jeffrey@example.com', password: 'password123' },
-    { name: 'Brigita', email: 'brigita@example.com', password: 'wedding2024' }
+    { name: 'Jeffrey', email: 'jeffrey@example.com', password: seedAdminPassword1 },
+    { name: 'Brigita', email: 'brigita@example.com', password: seedAdminPassword2 }
   ];
   for (const user of users) {
     const hash = await bcrypt.hash(user.password, 10);
