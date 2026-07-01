@@ -472,3 +472,18 @@ hr {
 .p-progressspinner svg circle {
   stroke: var(--acc-base) !important;
 }
+
+/*
+ * ConfirmDialog header override — enforce sans-serif per admin dashboard
+ * redesign design tokens. PrimeVue's default Aura theme does not
+ * guarantee Open Sans here, so this is scoped globally to .p-confirmdialog
+ * (rendered via Teleport, so a component-scoped style cannot reach it).
+ * Extend this block rather than adding a second ConfirmDialog override.
+ * Used by: apps/frontend/src/composables/useConfirmDialog.js
+ */
+.p-confirmdialog .p-dialog-header,
+.p-confirmdialog .p-dialog-title {
+  font-family: 'Open Sans', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+}

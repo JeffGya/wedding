@@ -1,66 +1,78 @@
 <template>
-  <AdminPageWrapper 
-    title="Settings" 
+  <AdminPageWrapper
+    title="Settings"
     description="Manage site-wide settings such as email templates, contact info, and visibility options"
   >
-    <!-- Tab Navigation -->
-    <Card>
-      <template #content>
-        <div class="flex justify-center mb-6">
-          <SelectButton
-            v-model="activeTab"
-            :options="tabOptions"
-            optionLabel="label"
-            optionValue="value"
-            class="w-full max-w-md"
-          />
-        </div>
+    <UnsavedChangesBanner
+      v-if="isDirty"
+      class="mb-6"
+      @discard="onDiscardAll"
+      @save="onSaveAll"
+    />
 
-        <!-- Tab Content -->
-        <div class="mt-6">
-          <Transition name="fade" mode="out-in">
-            <div v-if="activeTab === 'main'" key="main">
-              <MainSettings />
-            </div>
-            <div v-else-if="activeTab === 'email'" key="email">
-              <EmailSettings />
-            </div>
-            <div v-else-if="activeTab === 'guests'" key="guests">
-              <GuestSettings />
-            </div>
-          </Transition>
-        </div>
-      </template>
-    </Card>
+    <div>
+      <ResendQuotaStatus />
+      <MainSettings ref="mainSettingsRef" />
+      <EmailSettings ref="emailSettingsRef" />
+      <GuestSettings ref="guestSettingsRef" />
+    </div>
+
+    <LeaveConfirmModal
+      :visible="!!pendingNavigation"
+      @update:visible="(val) => { if (!val && pendingNavigation) resolveNavigation('stay') }"
+      @stay="() => resolveNavigation('stay')"
+      @discard="() => resolveNavigation('discard')"
+      @save="async () => { await onSaveAll(); resolveNavigation('discard') }"
+    />
   </AdminPageWrapper>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import EmailSettings from './settings/EmailSettings.vue'
 import GuestSettings from './settings/GuestSettings.vue'
 import MainSettings from './settings/MainSettings.vue'
-import SelectButton from 'primevue/selectbutton'
-import Card from 'primevue/card'
+import ResendQuotaStatus from '@/components/ui/ResendQuotaStatus.vue'
+import UnsavedChangesBanner from '@/components/ui/UnsavedChangesBanner.vue'
+import LeaveConfirmModal from '@/components/ui/LeaveConfirmModal.vue'
+import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
 
-const activeTab = ref('main')
+const mainSettingsRef = ref(null)
+const emailSettingsRef = ref(null)
+const guestSettingsRef = ref(null)
 
-const tabOptions = [
-  { label: 'Main Settings', value: 'main' },
-  { label: 'Email Settings', value: 'email' },
-  { label: 'Guest Settings', value: 'guests' }
-]
+const { isDirty, markDirty, markClean, pendingNavigation, resolveNavigation } = useUnsavedChanges()
+
+const childRefs = computed(() => [mainSettingsRef.value, emailSettingsRef.value, guestSettingsRef.value].filter(Boolean))
+
+const anyChildDirty = computed(() => childRefs.value.some((child) => child.isDirty))
+
+watch(anyChildDirty, (dirty) => {
+  if (dirty) {
+    markDirty()
+  } else {
+    markClean()
+  }
+})
+
+function syncDirtyState() {
+  if (anyChildDirty.value) {
+    markDirty()
+  } else {
+    markClean()
+  }
+}
+
+async function onSaveAll() {
+  const dirtyChildren = childRefs.value.filter((child) => child.isDirty)
+  await Promise.all(dirtyChildren.map((child) => child.save()))
+  syncDirtyState()
+}
+
+async function onDiscardAll() {
+  const dirtyChildren = childRefs.value.filter((child) => child.isDirty)
+  await Promise.all(dirtyChildren.map((child) => child.reset()))
+  syncDirtyState()
+}
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
