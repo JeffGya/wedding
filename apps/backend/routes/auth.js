@@ -3,11 +3,23 @@ const logger = require('../helpers/logger');
 const bcrypt = require('bcryptjs');
 const getDbConnection = require('../db/connection');
 const { createDbHelpers } = require('../db/queryHelpers');
+const { createRateLimiter } = require('../middleware/rateLimiter');
 const { sendBadRequest, sendUnauthorized, sendInternalError } = require('../utils/errorHandler');
 const db = getDbConnection();
 const { dbGet } = createDbHelpers(db);
 
 const router = express.Router();
+
+// Rate limiter for login route (IP-based, configurable via env)
+const LOGIN_WINDOW_MS = Number(process.env.AUTH_LOGIN_WINDOW_MS) || 15 * 60 * 1000;
+const LOGIN_MAX_REQ = Number(process.env.AUTH_LOGIN_MAX) || 10;
+const loginRateLimit = createRateLimiter({
+  windowMs: LOGIN_WINDOW_MS,
+  max: LOGIN_MAX_REQ,
+  keyGenerator: (req) => req.ip,
+  errorCode: 'RATE_LIMITED',
+  errorMessage: 'Too many login attempts. Try again later.'
+});
 
 /**
  * @openapi
@@ -47,7 +59,7 @@ const router = express.Router();
  *       '500':
  *         description: Database error
  */
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimit, async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return sendBadRequest(res, 'Email and password are required.');
