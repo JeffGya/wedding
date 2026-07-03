@@ -104,11 +104,12 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch, onMounted } from 'vue'
+import { computed, reactive, ref, watch, onMounted, nextTick } from 'vue'
 import { getTemplateStyles } from '@/api/templates'
 import RichTextEditor from '@/components/forms/RichTextEditor.vue'
 import SaveTemplateModal from '@/components/messaging/SaveTemplateModal.vue'
 import MessagePreview from '@/components/messaging/MessagePreview.vue'
+import { useConfirmDialog } from '@/composables/useConfirmDialog'
 
 const languageOptions = [
   { label: 'English', value: 'en' },
@@ -133,6 +134,8 @@ const emit = defineEmits([
   'templateSaved'
 ])
 
+const { confirmDialog } = useConfirmDialog()
+
 const selectedTemplateId = ref('')
 const tab = ref('en')
 const showSaveTemplate = ref(false)
@@ -145,6 +148,21 @@ const form = reactive({
   bodyLt: '',
   style: 'elegant' // Default style
 })
+
+// Dirty tracking for the parent's unsaved-changes guard. suppressDirty
+// prevents programmatic loads (setData / the message-prop watcher) from
+// counting as user edits.
+const isDirty = ref(false)
+const suppressDirty = ref(false)
+
+watch(form, () => {
+  if (suppressDirty.value) return
+  isDirty.value = true
+}, { deep: true })
+
+const markClean = () => {
+  isDirty.value = false
+}
 
 const styleOptions = ref([])
 
@@ -170,27 +188,43 @@ onMounted(async () => {
 
 function loadTemplate() {
   const selected = props.templates.find(t => t.id === parseInt(selectedTemplateId.value))
-  if (selected) {
-    const hasExistingContent = form.subjectEn || form.subjectLt || form.bodyEn || form.bodyLt
-    const confirmOverwrite = !hasExistingContent || window.confirm('This will replace your current message content. Continue?')
-    if (confirmOverwrite) {
-      form.subjectEn = selected.subject_en || selected.subject || ''
-      form.subjectLt = selected.subject_lt || selected.subject || ''
-      form.bodyEn = selected.body_en || ''
-      form.bodyLt = selected.body_lt || ''
-      form.style = selected.style || 'elegant' // Load template style
-    }
+  if (!selected) return
+
+  const applyTemplate = () => {
+    form.subjectEn = selected.subject_en || selected.subject || ''
+    form.subjectLt = selected.subject_lt || selected.subject || ''
+    form.bodyEn = selected.body_en || ''
+    form.bodyLt = selected.body_lt || ''
+    form.style = selected.style || 'elegant' // Load template style
   }
+
+  const hasExistingContent = form.subjectEn || form.subjectLt || form.bodyEn || form.bodyLt
+  if (!hasExistingContent) {
+    applyTemplate()
+    return
+  }
+
+  confirmDialog({
+    header: 'Replace message content?',
+    message: 'This will replace your current message content. Continue?',
+    acceptLabel: 'Replace content',
+    onAccept: applyTemplate
+  })
 }
 
 watch(() => props.message, (newMsg) => {
   if (newMsg) {
+    suppressDirty.value = true
     // Support both new format (subject_en/subject_lt) and old format (subject)
     form.subjectEn = newMsg.subject_en || newMsg.subject || ''
     form.subjectLt = newMsg.subject_lt || newMsg.subject || ''
     form.bodyEn = newMsg.body_en || ''
     form.bodyLt = newMsg.body_lt || ''
     form.style = newMsg.style || 'elegant'
+    nextTick(() => {
+      suppressDirty.value = false
+      isDirty.value = false
+    })
   }
 }, { immediate: true })
 
@@ -213,12 +247,17 @@ const getData = () => {
 }
 
 const setData = ({ subject, subject_en, subject_lt, body_en, body_lt, style }) => {
+  suppressDirty.value = true
   // Support both new format (subject_en/subject_lt) and old format (subject)
   form.subjectEn = subject_en || subject || ''
   form.subjectLt = subject_lt || subject || ''
   form.bodyEn = body_en || ''
   form.bodyLt = body_lt || ''
   form.style = style || 'elegant'
+  nextTick(() => {
+    suppressDirty.value = false
+    isDirty.value = false
+  })
 }
 
 function handleTemplateSaved() {
@@ -233,5 +272,7 @@ function openPreview() {
 defineExpose({
   getData,
   setData,
+  isDirty,
+  markClean,
 })
 </script>

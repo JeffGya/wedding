@@ -1,50 +1,56 @@
 <template>
-  <div>
-    <!-- Filters -->
-    <div class="mb-4 space-x-4">
-      <FloatLabel variant="in">
-        <InputText
-          id="search"
-          v-model="search"
-          type="text"
-        />
-        <label for="search">Search by name</label>
-      </FloatLabel>
- 
-      <FloatLabel variant="in">
-        <Select
-          id="rsvpFilter"
-          v-model="rsvpFilter"
-          :options="[
-            { label: 'All RSVP', value: 'all' },
-            { label: 'Attending', value: 'attending' },
-            { label: 'Not Attending', value: 'not_attending' },
-            { label: 'Pending', value: 'pending' }
-          ]"
-          optionLabel="label"
-          optionValue="value"
-        />
-        <label for="rsvpFilter">RSVP Status</label>
-      </FloatLabel>
- 
-      <FloatLabel variant="in">
-        <Select
-          id="languageFilter"
-          v-model="languageFilter"
-          :options="[
-            { label: 'All Languages', value: 'all' },
-            { label: 'English', value: 'en' },
-            { label: 'Lithuanian', value: 'lt' }
-          ]"
-          optionLabel="label"
-          optionValue="value"
-        />
-        <label for="languageFilter">Language</label>
-      </FloatLabel>
-    </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Left: filters + candidate list -->
+    <div>
+      <!-- Filters -->
+      <div class="mb-4 space-y-4">
+        <FloatLabel variant="in">
+          <InputText
+            id="search"
+            v-model="search"
+            type="text"
+            class="w-full"
+          />
+          <label for="search">Search by name</label>
+        </FloatLabel>
 
-    <!-- Guest List -->
-    <div class="mb-4">
+        <div class="flex gap-4">
+          <FloatLabel variant="in" class="flex-1">
+            <Select
+              id="rsvpFilter"
+              v-model="rsvpFilter"
+              :options="[
+                { label: 'All RSVP', value: 'all' },
+                { label: 'Attending', value: 'attending' },
+                { label: 'Not Attending', value: 'not_attending' },
+                { label: 'Pending', value: 'pending' }
+              ]"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+            />
+            <label for="rsvpFilter">RSVP Status</label>
+          </FloatLabel>
+
+          <FloatLabel variant="in" class="flex-1">
+            <Select
+              id="languageFilter"
+              v-model="languageFilter"
+              :options="[
+                { label: 'All Languages', value: 'all' },
+                { label: 'English', value: 'en' },
+                { label: 'Lithuanian', value: 'lt' }
+              ]"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+            />
+            <label for="languageFilter">Language</label>
+          </FloatLabel>
+        </div>
+      </div>
+
+      <!-- Guest List -->
       <div class="mb-4 flex items-center">
         <ToggleSwitch
           id="allSelected"
@@ -53,13 +59,10 @@
           @change="toggleAll"
           class="mr-2"
         />
-        <label> Select All </label>
+        <label for="allSelected">Select all {{ filteredGuests.length }} shown</label>
       </div>
-      <!-- Summary -->
-      <p class="text-sm">
-        {{ selectedGuests.length }} recipient(s) selected.
-      </p>
-      <div v-if="filteredGuests.length === 0" class="text-sm">
+
+      <div v-if="filteredGuests.length === 0" class="text-sm text-[#7A6B55]">
         No guests match your filters.
       </div>
       <Listbox
@@ -83,6 +86,45 @@
           </div>
         </template>
       </Listbox>
+    </div>
+
+    <!-- Right: persistent selection, independent of the active filter -->
+    <div class="bg-form-bg border border-form-border rounded-lg p-16 self-start">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-bold text-txt">Selected — {{ selectedGuests.length }}</span>
+        <Button
+          v-if="selectedGuests.length > 0"
+          label="Clear all"
+          severity="secondary"
+          text
+          size="small"
+          @click="clearSelection"
+        />
+      </div>
+
+      <p v-if="selectedGuests.length === 0" class="text-sm text-[#7A6B55]">
+        No recipients selected yet. Everyone you select stays listed here, even
+        when you change the filters on the left.
+      </p>
+
+      <ul v-else class="space-y-2 max-h-96 overflow-y-auto">
+        <li
+          v-for="guest in selectedGuestObjects"
+          :key="guest.id"
+          class="flex items-center justify-between gap-2 text-sm text-txt"
+        >
+          <span>{{ guest.name }}</span>
+          <Button
+            icon="pi pi-times"
+            severity="secondary"
+            text
+            rounded
+            size="small"
+            @click="removeSelected(guest.id)"
+            :aria-label="`Remove ${guest.name} from recipients`"
+          />
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -146,6 +188,13 @@ const filteredGuests = computed(() => {
   })
 })
 
+// The true selection as guest objects, independent of the active filter —
+// this drives the persistent "Selected" panel so filtered-out selections
+// never become invisible.
+const selectedGuestObjects = computed(() => {
+  return guests.value.filter(g => selectedGuests.value.includes(g.id))
+})
+
 const toggleGuest = (id) => {
   if (selectedGuests.value.includes(id)) {
     selectedGuests.value = selectedGuests.value.filter(g => g !== id)
@@ -154,11 +203,20 @@ const toggleGuest = (id) => {
   }
 }
 
+const removeSelected = (id) => {
+  selectedGuests.value = selectedGuests.value.filter(g => g !== id)
+}
+
+// "Select all shown" only operates on the currently-filtered guests:
+// selecting adds them to the existing selection (never replaces it), and
+// deselecting removes only the shown subset (never wipes selections made
+// under other filters).
 const toggleAll = () => {
+  const shownIds = filteredGuests.value.map(g => g.id)
   if (allSelected.value) {
-    selectedGuests.value = []
+    selectedGuests.value = selectedGuests.value.filter(id => !shownIds.includes(id))
   } else {
-    selectedGuests.value = filteredGuests.value.map(g => g.id)
+    selectedGuests.value = [...new Set([...selectedGuests.value, ...shownIds])]
   }
 }
 
@@ -172,6 +230,10 @@ const getSelectedRecipients = () => {
   return selectedGuests.value
 }
 
+const getSelectedGuestObjects = () => {
+  return selectedGuestObjects.value
+}
+
 const setSelectedRecipients = (ids) => {
   selectedGuests.value = Array.isArray(ids) ? ids : []
 }
@@ -182,6 +244,7 @@ const clearSelection = () => {
 
 defineExpose({
   getSelectedRecipients,
+  getSelectedGuestObjects,
   setSelectedRecipients,
   clearSelection,
   selectedGuests
