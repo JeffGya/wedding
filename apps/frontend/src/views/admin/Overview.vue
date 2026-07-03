@@ -204,7 +204,7 @@
             label="Add Guest" 
             icon="pi pi-user-plus" 
             severity="primary"
-            @click="$router.push('/admin/guests/overview')"
+            @click="$router.push('/admin/guests')"
             class="h-12"
           />
           <Button 

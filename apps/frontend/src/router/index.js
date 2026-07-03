@@ -178,8 +178,7 @@ const routes = [
       {
         path: 'guests',
         children: [
-          { path: 'overview', name: 'admin-guests-overview', component: () => import('@/views/admin/guests/Overview.vue') },
-          { path: 'rsvps', name: 'admin-guests-rsvps', component: () => import('@/views/admin/guests/RSVPs.vue') },
+          { path: '', name: 'admin-guests', component: () => import('@/views/admin/guests/Guests.vue') },
           {
             path: 'messages',
             name: 'admin-guests-messages',
@@ -192,6 +191,9 @@ const routes = [
       }
     ]
   },
+  // Redirects for the old separate Guests/RSVPs screens (merged into one)
+  { path: '/admin/guests/overview', redirect: '/admin/guests' },
+  { path: '/admin/guests/rsvps', redirect: '/admin/guests' },
   // Catch-all for undefined routes
   {
     path: '/:pathMatch(.*)*',

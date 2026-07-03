@@ -108,12 +108,7 @@ const menuItems = [
       {
         label: 'Guests',
         icon: 'pi pi-user',
-        command: () => router.push('/admin/guests/overview')
-      },
-      {
-        label: 'RSVPs',
-        icon: 'pi pi-check-circle',
-        command: () => router.push('/admin/guests/rsvps')
+        command: () => router.push('/admin/guests')
       },
       {
         label: 'Messages',
