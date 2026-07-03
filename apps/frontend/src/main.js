@@ -112,6 +112,28 @@ const MyPreset = definePreset(Aura, {
       },
     }
   },
+  semantic: {
+    colorScheme: {
+      light: {
+        overlay: {
+          modal: {
+            background: 'var(--card-bg)',
+            borderColor: 'var(--form-border)',
+            color: 'var(--text)'
+          }
+        }
+      },
+      dark: {
+        overlay: {
+          modal: {
+            background: 'var(--card-bg)',
+            borderColor: 'var(--form-border)',
+            color: 'var(--text)'
+          }
+        }
+      }
+    }
+  }
 });
 
 app.use(createPinia())

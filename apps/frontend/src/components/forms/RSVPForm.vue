@@ -155,8 +155,10 @@ import { computed, ref, reactive, watch } from 'vue';
 import Banner from '@/components/ui/Banner.vue';
 import CountdownTimer from '@/components/ui/CountdownTimer.vue';
 import { useI18n } from 'vue-i18n';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 
 const { t } = useI18n();
+const { confirmDialog } = useConfirmDialog();
 
 const props = defineProps({
   guest: {
@@ -314,12 +316,15 @@ async function onSubmit() {
     }
     
     if (isRemovingPlusOne) {
-      const confirmDelete = window.confirm(t('rsvp.confirmDeletePlusOne'));
-      if (!confirmDelete) {
-        return;
-      }
+      confirmDialog({
+        header: 'Remove plus-one?',
+        message: t('rsvp.confirmDeletePlusOne'),
+        acceptLabel: 'Remove plus-one',
+        onAccept: () => emit('submit', payload),
+      });
+      return;
     }
-    
+
     emit('submit', payload);
   } catch (err) {
     formError.value = err.response?.data?.message || err.message || 'Submission failed';

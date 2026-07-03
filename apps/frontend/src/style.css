@@ -487,3 +487,19 @@ hr {
   font-weight: 700 !important;
   font-size: 17px !important;
 }
+
+/*
+ * Dialog / ConfirmDialog theming — PrimeVue's runtime-generated
+ * --p-dialog-* CSS variables don't dynamically track .dark-mode toggles
+ * (confirmed via live inspection: they stay frozen at their initial
+ * resolved value). Pin them directly to the app's own tokens here,
+ * which DO correctly update via .dark-mode (defined in uno.config.js).
+ * Declared on body (not :root) so var(--card-bg) etc. resolve against
+ * the element that actually carries the .dark-mode class.
+ */
+body {
+  --p-dialog-background: var(--card-bg) !important;
+  --p-dialog-border-color: var(--form-border) !important;
+  --p-dialog-color: var(--text) !important;
+  --p-confirmdialog-icon-color: var(--text) !important;
+}
