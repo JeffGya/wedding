@@ -15,27 +15,37 @@
     </header>
 
     <div class="flex h-screen">
-      <!-- Sidebar -->
-      <aside 
+      <!-- Sidebar (floating full-height card) -->
+      <aside
         :class="[
           'sidebar transition-transform duration-300 ease-in-out',
-          'fixed md:relative z-50 h-full',
-          'w-64 transform',
+          'fixed md:relative z-50 h-full md:h-auto',
+          'w-64 transform flex flex-col overflow-y-auto',
+          'bg-card-bg md:m-16 rounded-[12px]',
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         ]"
       >
         <!-- Desktop Header -->
-        <div class="hidden md:block p-6 border-b border-form-border">
-          <h1 class="text-xl font-semibold text-text">Admin Dashboard</h1>
+        <div class="hidden md:block px-5 pt-5 pb-4 border-b border-form-border">
+          <h1 class="font-serif text-[19px] font-semibold text-text">Admin Dashboard</h1>
         </div>
 
         <!-- Navigation Menu -->
-        <nav class="p-4">
-          <Menu 
-            :model="menuItems" 
-            class="w-full border-none"
-          />
-        </nav>
+        <Menu
+          :model="menuItems"
+          class="admin-nav w-full border-none"
+        >
+          <template #item="{ item }">
+            <a
+              class="admin-nav-item"
+              :class="{ 'admin-nav-item--active': isActive(item) }"
+              @click="item.command"
+            >
+              <span class="admin-nav-dot"></span>
+              <span class="admin-nav-label">{{ item.label }}</span>
+            </a>
+          </template>
+        </Menu>
       </aside>
 
       <!-- Mobile Overlay -->
@@ -62,10 +72,21 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 const mobileMenuOpen = ref(false);
+
+function isActive(item) {
+  const p = route.path;
+  // Guests must NOT light up when on the Messages sub-path
+  if (item.path === '/admin/guests') {
+    return p === '/admin/guests' ||
+      (p.startsWith('/admin/guests') && !p.startsWith('/admin/guests/messages'));
+  }
+  return p.startsWith(item.path);
+}
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
@@ -93,54 +114,42 @@ onUnmounted(() => {
 const menuItems = [
   {
     label: 'Overview',
-    icon: 'pi pi-home',
+    path: '/admin/overview',
     command: () => router.push('/admin/overview')
   },
   {
+    label: 'Guests',
+    path: '/admin/guests',
+    command: () => router.push('/admin/guests')
+  },
+  {
+    label: 'Messages',
+    path: '/admin/guests/messages',
+    command: () => router.push('/admin/guests/messages')
+  },
+  {
+    label: 'Templates',
+    path: '/admin/templates',
+    command: () => router.push('/admin/templates')
+  },
+  {
+    label: 'Surveys',
+    path: '/admin/surveys',
+    command: () => router.push('/admin/surveys')
+  },
+  {
+    label: 'Pages',
+    path: '/admin/pages',
+    command: () => router.push('/admin/pages')
+  },
+  {
     label: 'Media',
-    icon: 'pi pi-images',
+    path: '/admin/media',
     command: () => router.push('/admin/media')
   },
   {
-    label: 'Guests Management',
-    icon: 'pi pi-users',
-    items: [
-      {
-        label: 'Guests',
-        icon: 'pi pi-user',
-        command: () => router.push('/admin/guests')
-      },
-      {
-        label: 'Messages',
-        icon: 'pi pi-inbox',
-        command: () => router.push('/admin/guests/messages')
-      },
-      {
-        label: 'Templates',
-        icon: 'pi pi-file-edit',
-        command: () => router.push('/admin/templates')
-      }
-    ]
-  },
-  {
-    label: 'Pages & Surveys',
-    icon: 'pi pi-file',
-    items: [
-      {
-        label: 'Pages',
-        icon: 'pi pi-file-edit',
-        command: () => router.push('/admin/pages')
-      },
-      {
-        label: 'Surveys',
-        icon: 'pi pi-list',
-        command: () => router.push('/admin/surveys')
-      }
-    ]
-  },
-  {
     label: 'Settings',
-    icon: 'pi pi-cog',
+    path: '/admin/settings',
     command: () => router.push('/admin/settings')
   }
 ];
@@ -152,7 +161,92 @@ const menuItems = [
 }
 
 .sidebar {
-  @apply shadow-lg md:shadow-none;
+  @apply shadow-lg;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    box-shadow: 0 4px 16px rgba(68, 39, 39, 0.18);
+  }
+}
+
+/* Navigation list container spacing (matches design: padding 14px 10px, gap 2px) */
+.admin-nav {
+  padding: 14px 10px;
+}
+
+/* Neutralize PrimeVue's own item wrapper so .admin-nav-item owns all
+ * padding / background / hover — the #item slot content lives inside
+ * .p-menu-item-content, which has its own default padding + focus bg. */
+.admin-nav :deep(.p-menu-list) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-nav :deep(.p-menu-item-content),
+.admin-nav :deep(.p-menu-item) {
+  padding: 0;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.admin-nav :deep(.p-menu-item-content:hover),
+.admin-nav :deep(.p-menu-item.p-focus > .p-menu-item-content) {
+  background: transparent;
+}
+
+/* Custom nav item */
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--int-base);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.admin-nav-item:hover {
+  background: var(--form-background-hover);
+}
+
+.admin-nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--form-border);
+  flex-shrink: 0;
+  transition: background-color 150ms ease;
+}
+
+.admin-nav-label {
+  line-height: 1.2;
+}
+
+/* Active item */
+.admin-nav-item--active {
+  background: var(--form-background);
+  color: var(--int-base);
+  font-weight: 700;
+  border-left-color: var(--acc-base);
+}
+
+.admin-nav-item--active:hover {
+  background: var(--form-background);
+}
+
+.admin-nav-item--active .admin-nav-dot {
+  background: var(--acc-base);
 }
 
 /* Custom scrollbar for main content */

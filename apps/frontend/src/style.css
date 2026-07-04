@@ -503,3 +503,22 @@ body {
   --p-dialog-color: var(--text) !important;
   --p-confirmdialog-icon-color: var(--text) !important;
 }
+
+/*
+ * Sidebar Menu theming — the standalone PrimeVue <Menu> in AdminLayout uses
+ * --p-menu-* variables (distinct from the --p-menubar-* set already themed
+ * above), which otherwise fall back to Aura's default grays. Pin them to the
+ * app's tokens, matching the Menubar override values. Declared on body (not
+ * :root) so var(--int-base) etc. resolve against the .dark-mode-carrying
+ * element and track light/dark correctly.
+ */
+body {
+  --p-menu-background:            transparent !important;
+  --p-menu-border-color:          var(--form-border) !important;
+  --p-menu-color:                 var(--text) !important;
+  --p-menu-item-color:            var(--int-base) !important;
+  --p-menu-item-focus-color:      var(--int-hover) !important;
+  --p-menu-item-focus-background: transparent !important;
+  --p-menu-item-icon-color:       var(--int-base) !important;
+  --p-menu-item-icon-focus-color: var(--int-hover) !important;
+}
