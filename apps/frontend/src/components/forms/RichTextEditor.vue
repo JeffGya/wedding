@@ -1994,18 +1994,8 @@ onMounted(() => {
         if (props.modelValue) {
           // Extract markers from initial content (Quill would strip them)
           const markers = extractMarkersFromContent(props.modelValue);
-          storedTopOverlayImageUrl.value = markers.topOverlayImage;
-          storedPreheader.value = markers.preheader;
-          storedHeroImageUrl.value = markers.heroImage;
-          storedHeroSubtitle.value = markers.heroSubtitle;
-          storedEmailTitle.value = markers.emailTitle;
-          storedInfoCardEnabled.value = markers.infoCardEnabled;
-          storedInfoCardLabels.value = markers.infoCardLabels;
-          storedRsvpCodeEnabled.value = markers.rsvpCodeEnabled;
-          storedSecondaryInfo.value = markers.secondaryInfo;
-          storedButton.value = markers.button;
-          storedToolbarState.value = markers.toolbarState || { header: null, size: null, font: null };
-          
+          applyStoredMarkers(markers);
+
           const cleanedContent = markers.cleanedContent;
           
           // Set cleaned content to Quill (without markers)
@@ -2068,17 +2058,8 @@ watch(() => props.modelValue, (newValue) => {
     
     // Extract markers from new content
     const extractedMarkers = extractMarkersFromContent(newValue);
-    storedTopOverlayImageUrl.value = extractedMarkers.topOverlayImage;
-    storedPreheader.value = extractedMarkers.preheader;
-    storedHeroImageUrl.value = extractedMarkers.heroImage;
-    storedHeroSubtitle.value = extractedMarkers.heroSubtitle;
-    storedEmailTitle.value = extractedMarkers.emailTitle;
-    storedInfoCardEnabled.value = extractedMarkers.infoCardEnabled;
-    storedInfoCardLabels.value = extractedMarkers.infoCardLabels;
-    storedRsvpCodeEnabled.value = extractedMarkers.rsvpCodeEnabled;
-    storedSecondaryInfo.value = extractedMarkers.secondaryInfo;
-    storedToolbarState.value = extractedMarkers.toolbarState || { header: null, size: null, font: null };
-    
+    applyStoredMarkers(extractedMarkers);
+
     editorContent.value = newValue || '';
     htmlContent.value = newValue || '';
     
@@ -2095,6 +2076,22 @@ watch(() => props.modelValue, (newValue) => {
   }
 });
 
+// Apply extracted markers to all stored refs (shared by onMounted and the modelValue watch)
+// so the two restore paths can never drift out of sync.
+function applyStoredMarkers(m) {
+  storedTopOverlayImageUrl.value = m.topOverlayImage;
+  storedPreheader.value = m.preheader;
+  storedHeroImageUrl.value = m.heroImage;
+  storedHeroSubtitle.value = m.heroSubtitle;
+  storedEmailTitle.value = m.emailTitle;
+  storedInfoCardEnabled.value = m.infoCardEnabled;
+  storedInfoCardLabels.value = m.infoCardLabels;
+  storedRsvpCodeEnabled.value = m.rsvpCodeEnabled;
+  storedSecondaryInfo.value = m.secondaryInfo;
+  storedButton.value = m.button;
+  storedToolbarState.value = m.toolbarState || { header: null, size: null, font: null };
+}
+
 // Function to restore toolbar state from stored values
 function restoreToolbarState() {
   if (!toolbarRef.value || !editorRef.value?.quill) return;
@@ -2104,35 +2101,46 @@ function restoreToolbarState() {
   
   // Use setTimeout to ensure toolbar is fully rendered
   setTimeout(() => {
-    // Restore header selection
-    if (storedToolbarState.value.header) {
-      const headerSelect = toolbar.querySelector('.ql-header');
-      if (headerSelect) {
-        headerSelect.value = storedToolbarState.value.header;
-        // Trigger change event to update Quill and visual state
-        const changeEvent = new Event('change', { bubbles: true });
-        headerSelect.dispatchEvent(changeEvent);
+    // Suppress the self-triggering re-emit: dispatching synthetic 'change' events on the
+    // toolbar selects fires saveToolbarState -> handleTextChange -> emit. handleTextChange
+    // no-ops while isInternalUpdate is true, so restoring the toolbar UI updates Quill's
+    // format without emitting content (which previously raced and corrupted toolbar state).
+    // Preserve the prior flag value so we don't clobber a concurrent internal update.
+    const prevInternalUpdate = isInternalUpdate.value;
+    isInternalUpdate.value = true;
+    try {
+      // Restore header selection
+      if (storedToolbarState.value.header) {
+        const headerSelect = toolbar.querySelector('.ql-header');
+        if (headerSelect) {
+          headerSelect.value = storedToolbarState.value.header;
+          // Trigger change event to update Quill and visual state
+          const changeEvent = new Event('change', { bubbles: true });
+          headerSelect.dispatchEvent(changeEvent);
+        }
       }
-    }
-    
-    // Restore size selection
-    if (storedToolbarState.value.size) {
-      const sizeSelect = toolbar.querySelector('.ql-size');
-      if (sizeSelect) {
-        sizeSelect.value = storedToolbarState.value.size;
-        const changeEvent = new Event('change', { bubbles: true });
-        sizeSelect.dispatchEvent(changeEvent);
+
+      // Restore size selection
+      if (storedToolbarState.value.size) {
+        const sizeSelect = toolbar.querySelector('.ql-size');
+        if (sizeSelect) {
+          sizeSelect.value = storedToolbarState.value.size;
+          const changeEvent = new Event('change', { bubbles: true });
+          sizeSelect.dispatchEvent(changeEvent);
+        }
       }
-    }
-    
-    // Restore font selection
-    if (storedToolbarState.value.font) {
-      const fontSelect = toolbar.querySelector('.ql-font');
-      if (fontSelect) {
-        fontSelect.value = storedToolbarState.value.font;
-        const changeEvent = new Event('change', { bubbles: true });
-        fontSelect.dispatchEvent(changeEvent);
+
+      // Restore font selection
+      if (storedToolbarState.value.font) {
+        const fontSelect = toolbar.querySelector('.ql-font');
+        if (fontSelect) {
+          fontSelect.value = storedToolbarState.value.font;
+          const changeEvent = new Event('change', { bubbles: true });
+          fontSelect.dispatchEvent(changeEvent);
+        }
       }
+    } finally {
+      isInternalUpdate.value = prevInternalUpdate;
     }
   }, 100);
 }
