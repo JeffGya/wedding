@@ -41,7 +41,14 @@
         </div>
       </template>
       <template #content>
-        <div v-if="messages.length > 0">
+        <ErrorState
+          v-if="loadError"
+          title="Couldn't load messages"
+          description="Something went wrong loading your messages. Please try again."
+          @retry="fetchMessages"
+        />
+
+        <div v-else-if="messages.length > 0">
           <Timeline :value="events" class="w-full">
             <template #opposite="{ item }">
               <div class="text-sm text-form-placeholder-text">
@@ -117,7 +124,7 @@
           </Timeline>
         </div>
         
-        <div v-else class="text-center py-12">
+        <div v-else-if="!loadError" class="text-center py-12">
           <i class="pi pi-envelope text-6xl text-form-placeholder-text mb-4"></i>
           <h3 class="text-xl font-semibold text-text mb-2">No Messages Yet</h3>
           <p class="text-form-placeholder-text mb-4">Start by creating your first message to guests</p>
@@ -150,16 +157,20 @@ import { useRouter } from 'vue-router'
 import api from '@/api'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
+import ErrorState from '@/components/ui/ErrorState.vue'
 import { useToastService } from '@/utils/toastService'
 import { formatDateTimeShort } from '@/utils/dateFormatter'
 import { useLoading } from '@/composables/useLoading'
 import { useErrorHandler } from '@/composables/useErrorHandler'
+import { useConfirmDialog } from '@/composables/useConfirmDialog'
 
 const router = useRouter()
 const { showSuccess, showError, showWarning } = useToastService()
 const { loading } = useLoading()
 const { handleError: handleApiError } = useErrorHandler({ showToast: true })
+const { confirmDialog } = useConfirmDialog()
 const messages = ref([])
+const loadError = ref(false)
 
 // Stats computation
 const draftCount = computed(() => messages.value.filter(m => m.status === 'draft').length)
@@ -217,6 +228,7 @@ const formatDate = (dateValue) => {
 
 const fetchMessages = async () => {
   loading.value = true
+  loadError.value = false
   try {
     const response = await api.get('/messages')
     
@@ -231,6 +243,7 @@ const fetchMessages = async () => {
       messages.value = []
     }
   } catch (error) {
+    loadError.value = true
     handleApiError(error, 'Failed to load messages')
     messages.value = []
   } finally {
@@ -239,15 +252,20 @@ const fetchMessages = async () => {
 }
 
 const deleteMessage = async (id) => {
-  if (!confirm('Are you sure you want to delete this message?')) return
-  
-  try {
-    await api.delete(`/messages/${id}`)
-    messages.value = messages.value.filter(m => m.id !== id)
-    showSuccess('Success', 'Message deleted successfully')
-  } catch (error) {
-    handleApiError(error, 'Failed to delete message')
-  }
+  confirmDialog({
+    header: 'Delete message',
+    message: 'Are you sure you want to delete this message? This cannot be undone.',
+    acceptLabel: 'Delete message',
+    onAccept: async () => {
+      try {
+        await api.delete(`/messages/${id}`)
+        messages.value = messages.value.filter(m => m.id !== id)
+        showSuccess('Success', 'Message deleted successfully')
+      } catch (error) {
+        handleApiError(error, 'Failed to delete message')
+      }
+    }
+  })
 }
 
 const resendFailed = async (id) => {

@@ -106,8 +106,10 @@ import { fetchAllSurveys, deleteSurvey } from '@/api/pages';
 import { fetchPages } from '@/api/pages';
 import { useLoading } from '@/composables/useLoading';
 import { useErrorHandler } from '@/composables/useErrorHandler';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 
 const router = useRouter();
+const { confirmDialog } = useConfirmDialog();
 const surveys = ref([]);
 const { loading } = useLoading();
 const { loading: pageLoading } = useLoading();
@@ -164,12 +166,18 @@ const navigateToEdit = (survey) => {
 };
 
 const deleteSurveyById = async (id) => {
-  if (!confirm('Are you sure you want to delete this survey?')) return;
-  try {
-    await deleteSurvey(id);
-    await fetchData();
-  } catch (err) {
-    handleError(err, 'Failed to delete survey');
-  }
+  confirmDialog({
+    header: 'Delete survey',
+    message: 'Are you sure you want to delete this survey? This is permanent and cannot be undone.',
+    acceptLabel: 'Delete survey',
+    onAccept: async () => {
+      try {
+        await deleteSurvey(id);
+        await fetchData();
+      } catch (err) {
+        handleError(err, 'Failed to delete survey');
+      }
+    }
+  });
 };
 </script>

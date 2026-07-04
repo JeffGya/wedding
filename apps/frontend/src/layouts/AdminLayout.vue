@@ -114,6 +114,11 @@ const menuItems = [
         label: 'Messages',
         icon: 'pi pi-inbox',
         command: () => router.push('/admin/guests/messages')
+      },
+      {
+        label: 'Templates',
+        icon: 'pi pi-file-edit',
+        command: () => router.push('/admin/templates')
       }
     ]
   },

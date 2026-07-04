@@ -17,7 +17,7 @@
     </div>
 
     <div v-else-if="templates.length === 0" class="text-center py-8">
-      <div class="text-gray-500 mb-4">
+      <div class="text-[#7A6B55] mb-4">
         <i class="pi pi-file-edit text-4xl mb-2"></i>
         <p class="text-lg">No templates found</p>
         <p class="text-sm">Create your first template to get started</p>
@@ -35,8 +35,8 @@
       <div class="prebuilt-templates">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h2 class="text-2xl font-bold text-gray-900">Pre-built Templates</h2>
-            <p class="text-gray-600 mt-1">Ready-to-use templates for common wedding communications</p>
+            <h2 class="text-2xl font-bold text-txt">Pre-built Templates</h2>
+            <p class="text-[#7A6B55] mt-1">Ready-to-use templates for common wedding communications</p>
           </div>
           <Button 
             label="Seed Templates" 
@@ -58,7 +58,7 @@
             <template #title>
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-lg font-semibold text-gray-900">{{ template.name }}</h3>
+                  <h3 class="text-lg font-semibold text-txt">{{ template.name }}</h3>
                 </div>
               </div>
             </template>
@@ -66,13 +66,13 @@
             <template #content>
               <div class="space-y-3">
                 <div>
-                  <h4 class="font-medium text-sm text-gray-700 mb-1">Subject</h4>
-                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject_en || template.subject || 'N/A' }}</p>
+                  <h4 class="font-medium text-sm text-[#7A6B55] mb-1">Subject</h4>
+                  <p class="text-sm text-[#7A6B55] bg-form-bg border border-form-border p-2 rounded">{{ template.subject_en || template.subject || 'N/A' }}</p>
                 </div>
                 
                 <div>
-                  <h4 class="font-medium text-sm text-gray-700 mb-1">Preview</h4>
-                  <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded max-h-20 overflow-hidden">
+                  <h4 class="font-medium text-sm text-[#7A6B55] mb-1">Preview</h4>
+                  <div class="text-sm text-[#7A6B55] bg-form-bg border border-form-border p-2 rounded max-h-20 overflow-hidden">
                     {{ getTemplatePreview(template.body_en) }}
                   </div>
                 </div>
@@ -99,8 +99,8 @@
           </Card>
         </div>
 
-        <div v-else class="text-center py-8 bg-gray-50 rounded-lg">
-          <div class="text-gray-500 mb-4">
+        <div v-else class="text-center py-8 bg-card-bg border border-form-border rounded-lg">
+          <div class="text-[#7A6B55] mb-4">
             <i class="pi pi-file-edit text-4xl mb-2"></i>
             <p class="text-lg">No pre-built templates</p>
             <p class="text-sm">Click "Seed Templates" to add common wedding email templates</p>
@@ -112,13 +112,13 @@
       <div class="custom-templates">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h2 class="text-2xl font-bold text-gray-900">Custom Templates</h2>
-            <p class="text-gray-600 mt-1">Your custom email templates</p>
+            <h2 class="text-2xl font-bold text-txt">Custom Templates</h2>
+            <p class="text-[#7A6B55] mt-1">Your custom email templates</p>
           </div>
         </div>
 
         <div v-if="customTemplates.length === 0" class="text-center py-8">
-          <div class="text-gray-500 mb-4">
+          <div class="text-[#7A6B55] mb-4">
             <i class="pi pi-file-edit text-4xl mb-2"></i>
             <p class="text-lg">No custom templates</p>
             <p class="text-sm">Create your first custom template</p>
@@ -141,7 +141,7 @@
             <template #title>
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-lg font-semibold text-gray-900">{{ template.name }}</h3>
+                  <h3 class="text-lg font-semibold text-txt">{{ template.name }}</h3>
                 </div>
               </div>
             </template>
@@ -150,28 +150,28 @@
               <div class="space-y-3">
                 <!-- English Subject -->
                 <div>
-                  <h4 class="font-medium text-sm text-gray-700 mb-1">Subject (English)</h4>
-                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject_en || template.subject || 'N/A' }}</p>
+                  <h4 class="font-medium text-sm text-[#7A6B55] mb-1">Subject (English)</h4>
+                  <p class="text-sm text-[#7A6B55] bg-form-bg border border-form-border p-2 rounded">{{ template.subject_en || template.subject || 'N/A' }}</p>
                 </div>
                 
                 <!-- Lithuanian Subject -->
                 <div>
-                  <h4 class="font-medium text-sm text-gray-700 mb-1">Subject (Lithuanian)</h4>
-                  <p class="text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ template.subject_lt || template.subject || 'N/A' }}</p>
+                  <h4 class="font-medium text-sm text-[#7A6B55] mb-1">Subject (Lithuanian)</h4>
+                  <p class="text-sm text-[#7A6B55] bg-form-bg border border-form-border p-2 rounded">{{ template.subject_lt || template.subject || 'N/A' }}</p>
                 </div>
                 
                 <!-- English Preview -->
                 <div>
-                  <h4 class="font-medium text-sm text-gray-700 mb-1">Preview (English)</h4>
-                  <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded max-h-20 overflow-hidden">
+                  <h4 class="font-medium text-sm text-[#7A6B55] mb-1">Preview (English)</h4>
+                  <div class="text-sm text-[#7A6B55] bg-form-bg border border-form-border p-2 rounded max-h-20 overflow-hidden">
                     {{ getTemplatePreview(template.body_en) }}
                   </div>
                 </div>
                 
                 <!-- Lithuanian Preview -->
                 <div>
-                  <h4 class="font-medium text-sm text-gray-700 mb-1">Preview (Lithuanian)</h4>
-                  <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded max-h-20 overflow-hidden">
+                  <h4 class="font-medium text-sm text-[#7A6B55] mb-1">Preview (Lithuanian)</h4>
+                  <div class="text-sm text-[#7A6B55] bg-form-bg border border-form-border p-2 rounded max-h-20 overflow-hidden">
                     {{ getTemplatePreview(template.body_lt) }}
                   </div>
                 </div>
@@ -214,9 +214,6 @@
       </div>
     </div>
 
-    <!-- Confirmation Dialog -->
-    <ConfirmDialog />
-    
     <!-- Template Preview Dialog -->
     <TemplatePreview
       v-model:visible="previewDialog.visible"
@@ -230,7 +227,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useConfirm } from 'primevue/useconfirm'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import { fetchTemplates, deleteTemplate as deleteTemplateApi, seedTemplates as seedTemplatesApi } from '@/api/templates'
 import { getTemplatePreviewWithSample } from '@/utils/htmlTemplates'
@@ -238,9 +234,10 @@ import TemplatePreview from '@/components/templates/TemplatePreview.vue'
 import { useToastService } from '@/utils/toastService'
 import { useLoading } from '@/composables/useLoading'
 import { useErrorHandler } from '@/composables/useErrorHandler'
+import { useConfirmDialog } from '@/composables/useConfirmDialog'
 
 const router = useRouter()
-const confirm = useConfirm()
+const { confirmDialog } = useConfirmDialog()
 const { showSuccess, showWarning } = useToastService()
 const { loading } = useLoading()
 const { handleError } = useErrorHandler({ showToast: true })
@@ -322,11 +319,11 @@ async function loadTemplates() {
 }
 
 async function deleteTemplate(id) {
-  confirm.require({
-    message: 'Are you sure you want to delete this template?',
-    header: 'Delete Template',
-    icon: 'pi pi-exclamation-triangle',
-    accept: async () => {
+  confirmDialog({
+    header: 'Delete template',
+    message: 'Are you sure you want to delete this template? This cannot be undone.',
+    acceptLabel: 'Delete template',
+    onAccept: async () => {
       try {
         await deleteTemplateApi(id)
         templates.value = templates.value.filter(t => t.id !== id)

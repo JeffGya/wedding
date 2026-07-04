@@ -13,7 +13,16 @@
       />
     </template>
 
-    <div v-if="message" class="space-y-6">
+    <LoadingState v-if="loading" label="Loading message details…" />
+
+    <ErrorState
+      v-else-if="loadError"
+      title="Couldn't load this message"
+      description="Something went wrong loading the message details. Please try again."
+      @retry="fetchMessage"
+    />
+
+    <div v-else-if="message" class="space-y-6">
       <!-- Message Stats -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard
@@ -167,11 +176,6 @@
       </Card>
     </div>
 
-    <div v-else class="text-center py-12">
-      <i class="pi pi-spin pi-spinner text-4xl text-form-placeholder-text mb-4"></i>
-      <p class="text-form-placeholder-text">Loading message details...</p>
-    </div>
-
     <!-- Action Buttons - Fixed to respect sidebar -->
     <div v-if="message" class="fixed bottom-0 z-10 bg-bg-glass backdrop-blur-sm border-t border-form-border p-4 transition-all duration-300"
          :class="[
@@ -218,17 +222,23 @@ import { useRoute, useRouter } from 'vue-router'
 import api from '@/api'
 import AdminPageWrapper from '@/components/AdminPageWrapper.vue'
 import StatCard from '@/components/ui/StatCard.vue'
+import LoadingState from '@/components/ui/LoadingState.vue'
+import ErrorState from '@/components/ui/ErrorState.vue'
 import { useToastService } from '@/utils/toastService'
 import { formatDateWithTime, formatDateTimeShort } from '@/utils/dateFormatter'
 import { useErrorHandler } from '@/composables/useErrorHandler'
+import { useConfirmDialog } from '@/composables/useConfirmDialog'
 
 const route = useRoute()
 const router = useRouter()
 const { showSuccess, showWarning } = useToastService()
 const { handleError } = useErrorHandler({ showToast: true })
+const { confirmDialog } = useConfirmDialog()
 
 const message = ref(null)
 const deliveryLogs = ref([])
+const loading = ref(true)
+const loadError = ref(false)
 const filters = ref({
   global: null
 })
@@ -284,28 +294,38 @@ const formatDate = (dateValue) => {
 }
 
 const fetchMessage = async () => {
+  loading.value = true
+  loadError.value = false
   try {
     const response = await api.get(`/messages/${route.params.id}`)
     message.value = response.data.message
-    
+
     // Fetch delivery logs
     const logsResponse = await api.get(`/messages/${route.params.id}/logs`)
     deliveryLogs.value = logsResponse.data.logs
   } catch (error) {
+    loadError.value = true
     handleError(error, 'Failed to load message details')
+  } finally {
+    loading.value = false
   }
 }
 
 const deleteMessage = async (id) => {
-  if (!confirm('Are you sure you want to delete this message?')) return
-  
-  try {
-    await api.delete(`/messages/${id}`)
-    showSuccess('Success', 'Message deleted successfully')
-    router.push('/admin/guests/messages')
-  } catch (error) {
-    handleError(error, 'Failed to delete message')
-  }
+  confirmDialog({
+    header: 'Delete message',
+    message: 'Are you sure you want to delete this message? This cannot be undone.',
+    acceptLabel: 'Delete message',
+    onAccept: async () => {
+      try {
+        await api.delete(`/messages/${id}`)
+        showSuccess('Success', 'Message deleted successfully')
+        router.push('/admin/guests/messages')
+      } catch (error) {
+        handleError(error, 'Failed to delete message')
+      }
+    }
+  })
 }
 
 const resendFailed = async () => {
