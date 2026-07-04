@@ -2167,6 +2167,20 @@ function saveToolbarState() {
     handleTextChange(null, null, 'user');
   }
 }
+
+// Insert plain text at the current caret; append at end if the editor has no
+// known selection (never focused). Uses the 'user' source so Quill fires
+// @text-change -> handleTextChange, which emits the updated modelValue.
+function insertText(text) {
+  const quill = editorRef.value?.quill;
+  if (!quill || !text) return;
+  const range = quill.getSelection();
+  const index = range ? range.index : quill.getLength();
+  quill.insertText(index, text, 'user');
+  quill.setSelection(index + text.length, 0);
+}
+
+defineExpose({ insertText });
 </script>
 
 <style scoped>

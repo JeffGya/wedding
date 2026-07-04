@@ -96,6 +96,7 @@
                     English Content
                   </label>
                   <RichTextEditor
+                    ref="activeEditorRef"
                     v-model="form.body_en"
                     :context="'email'"
                     placeholder="Enter English content..."
@@ -108,6 +109,7 @@
                     Lithuanian Content
                   </label>
                   <RichTextEditor
+                    ref="activeEditorRef"
                     v-model="form.body_lt"
                     :context="'email'"
                     placeholder="Enter Lithuanian content..."
@@ -180,9 +182,19 @@
             <div>
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Guest Properties</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div v-for="(description, varName) in guestProperties" :key="varName" class="border rounded-lg p-3 bg-gray-50">
+                <div
+                  v-for="(description, varName) in guestProperties"
+                  :key="varName"
+                  role="button"
+                  tabindex="0"
+                  v-tooltip.top="'Click to insert'"
+                  class="border border-form-border rounded-lg p-3 bg-form-bg cursor-pointer transition-colors hover:bg-form-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-form-border-focus"
+                  @click="insertVariable(formatVariableName(varName))"
+                  @keydown.enter.prevent="insertVariable(formatVariableName(varName))"
+                  @keydown.space.prevent="insertVariable(formatVariableName(varName))"
+                >
                   <code class="text-sm font-mono text-acc-base block mb-1">{{ formatVariableName(varName) }}</code>
-                  <p class="text-sm text-gray-600">{{ description }}</p>
+                  <p class="text-sm text-[#7A6B55]">{{ description }}</p>
                 </div>
               </div>
             </div>
@@ -191,9 +203,19 @@
             <div>
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Conditional Flags</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div v-for="(description, varName) in conditionalFlags" :key="varName" class="border rounded-lg p-3 bg-gray-50">
+                <div
+                  v-for="(description, varName) in conditionalFlags"
+                  :key="varName"
+                  role="button"
+                  tabindex="0"
+                  v-tooltip.top="'Click to insert'"
+                  class="border border-form-border rounded-lg p-3 bg-form-bg cursor-pointer transition-colors hover:bg-form-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-form-border-focus"
+                  @click="insertVariable(formatVariableName(varName))"
+                  @keydown.enter.prevent="insertVariable(formatVariableName(varName))"
+                  @keydown.space.prevent="insertVariable(formatVariableName(varName))"
+                >
                   <code class="text-sm font-mono text-acc-base block mb-1">{{ formatVariableName(varName) }}</code>
-                  <p class="text-sm text-gray-600">{{ description }}</p>
+                  <p class="text-sm text-[#7A6B55]">{{ description }}</p>
                 </div>
               </div>
             </div>
@@ -202,9 +224,19 @@
             <div>
               <h3 class="text-lg font-semibold text-gray-800 mb-3">System Properties</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div v-for="(description, varName) in systemProperties" :key="varName" class="border rounded-lg p-3 bg-gray-50">
+                <div
+                  v-for="(description, varName) in systemProperties"
+                  :key="varName"
+                  role="button"
+                  tabindex="0"
+                  v-tooltip.top="'Click to insert'"
+                  class="border border-form-border rounded-lg p-3 bg-form-bg cursor-pointer transition-colors hover:bg-form-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-form-border-focus"
+                  @click="insertVariable(formatVariableName(varName))"
+                  @keydown.enter.prevent="insertVariable(formatVariableName(varName))"
+                  @keydown.space.prevent="insertVariable(formatVariableName(varName))"
+                >
                   <code class="text-sm font-mono text-acc-base block mb-1">{{ formatVariableName(varName) }}</code>
-                  <p class="text-sm text-gray-600">{{ description }}</p>
+                  <p class="text-sm text-[#7A6B55]">{{ description }}</p>
                 </div>
               </div>
             </div>
@@ -213,9 +245,19 @@
             <div v-if="conditionalExamples && Object.keys(conditionalExamples).length > 0">
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Conditional Examples</h3>
               <div class="space-y-3">
-                <div v-for="(description, example) in conditionalExamples" :key="example" class="border rounded-lg p-3 bg-blue-50">
-                  <code class="text-sm font-mono text-acc-base block mb-1">{{ example }}</code>
-                  <p class="text-sm text-gray-600">{{ description }}</p>
+                <div
+                  v-for="(description, example) in conditionalExamples"
+                  :key="example"
+                  role="button"
+                  tabindex="0"
+                  v-tooltip.top="'Click to insert'"
+                  class="border border-form-border rounded-lg p-3 bg-form-bg cursor-pointer transition-colors hover:bg-form-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-form-border-focus"
+                  @click="insertVariable(example)"
+                  @keydown.enter.prevent="insertVariable(example)"
+                  @keydown.space.prevent="insertVariable(example)"
+                >
+                  <code class="text-sm font-mono text-acc-base block mb-1 whitespace-pre-wrap">{{ example }}</code>
+                  <p class="text-sm text-[#7A6B55]">{{ description }}</p>
                 </div>
               </div>
             </div>
@@ -247,6 +289,16 @@ const { handleError } = useErrorHandler({ showToast: true })
 const isEditMode = computed(() => route.params.id !== undefined)
 const saving = ref(false)
 const activeTab = ref('en')
+
+// Ref to the currently mounted RichTextEditor. Both language editors are behind
+// v-if (only one is mounted at a time), so this single shared ref always resolves
+// to the active-language editor instance.
+const activeEditorRef = ref(null)
+
+// Insert a chip's text into the active-language editor at the caret (append if unfocused).
+function insertVariable(text) {
+  activeEditorRef.value?.insertText?.(text)
+}
 const availableStyles = ref([]);
 
 const styleOptions = ref([])
