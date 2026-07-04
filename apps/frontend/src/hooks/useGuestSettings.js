@@ -46,9 +46,17 @@ export function useGuestSettings() {
     return false
   }
 
+  function deadlinePassed() {
+    const dl = settings.value.rsvp_deadline
+    if (!dl) return false
+    const d = new Date(dl)
+    return !isNaN(d.getTime()) && new Date() > d
+  }
+
   return {
     settings,
     loading,
-    isClosed
+    isClosed,
+    deadlinePassed
   }
 }

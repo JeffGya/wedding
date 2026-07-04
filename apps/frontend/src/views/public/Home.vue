@@ -47,7 +47,7 @@
           size="normal" 
           icon="i-solar:alarm-sleep-bold"
           class="w-full md:w-fit m-auto">
-          {{ $t('home.rsvpClosed') }}
+          {{ $t(deadlinePassed() ? 'home.rsvpClosedPassed' : 'home.rsvpClosed') }}
         </Message>
       </div>
       <WeddingCountdown 
@@ -247,7 +247,7 @@ import ScrollTop from 'primevue/scrolltop'
 import Typed from 'typed.js'
 
 const { t } = useI18n()
-const { settings, loading, isClosed } = useGuestSettings()
+const { settings, loading, isClosed, deadlinePassed } = useGuestSettings()
 const route = useRoute()
 const router = useRouter()
 const lang = route.params.lang || 'en'
